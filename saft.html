@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAFT - EthosLife Seed Round</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #e4dfd5;
+            color: #2d2418;
+            line-height: 1.5;
+            font-size: 9.5pt;
+        }
+        
+        .document-container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .page {
+            background: #e4dfd5;
+            padding: 25px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            page-break-after: always;
+        }
+        
+        .page:last-child {
+            page-break-after: avoid;
+        }
+        
+        /* Neumorphic header */
+        .header-box {
+            background: linear-gradient(145deg, #dcd3c6, #c2b8a9);
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            box-shadow: 
+                8px 8px 16px #b8ae9f,
+                -8px -8px 16px #ffffff,
+                inset 1px 1px 2px rgba(255,255,255,0.8);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+        
+        .section-box {
+            background: linear-gradient(145deg, #e8e2d5, #dcd3c6);
+            border-radius: 12px;
+            padding: 15px 18px;
+            margin-bottom: 12px;
+            box-shadow: 
+                4px 4px 10px #b8ae9f,
+                -4px -4px 10px #ffffff,
+                inset 1px 1px 2px rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .field-row {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 4px;
+            border-bottom: 1px dotted #8c7a6b;
+            padding-bottom: 2px;
+        }
+        
+        .field-label {
+            font-weight: 600;
+            color: #5c5243;
+            min-width: 140px;
+            flex-shrink: 0;
+        }
+        
+        .field-value {
+            flex: 1;
+            font-weight: 400;
+        }
+        
+        .field-line {
+            flex: 1;
+            border-bottom: 1px solid #8c7a6b;
+            min-width: 100px;
+            height: 14px;
+        }
+        
+        h1 {
+            font-size: 16pt;
+            font-weight: 700;
+            color: #2d2418;
+            text-align: center;
+            margin: 0 0 8px 0;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        
+        h2 {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #3d3226;
+            margin: 0 0 10px 0;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #5c5243;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        
+        h3 {
+            font-size: 10pt;
+            font-weight: 600;
+            color: #5c5243;
+            margin: 12px 0 8px 0;
+        }
+        
+        h4 {
+            font-size: 9.5pt;
+            font-weight: 600;
+            color: #3d3226;
+            margin: 10px 0 6px 0;
+        }
+        
+        p {
+            margin: 6px 0;
+            text-align: justify;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 11pt;
+            font-weight: 600;
+            color: #5c5243;
+            margin-bottom: 15px;
+        }
+        
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 8.5pt;
+            color: #5c5243;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #8c7a6b;
+        }
+        
+        .checkbox {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 1.5px solid #5c5243;
+            border-radius: 2px;
+            margin-right: 6px;
+            vertical-align: middle;
+            background: #f5f3ef;
+        }
+        
+        ul, ol {
+            margin: 6px 0;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(145deg, #5c5243, #3d3226);
+            color: #e4dfd5;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin: 10px 0;
+        }
+        
+        .highlight-box h4 {
+            color: #e4dfd5;
+            margin-top: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 9pt;
+        }
+        
+        th, td {
+            border: 1px solid #8c7a6b;
+            padding: 6px 8px;
+            text-align: left;
+        }
+        
+        th {
+            background: #5c5243;
+            color: #e4dfd5;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background: rgba(140, 122, 107, 0.1);
+        }
+        
+        .signature-block {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #5c5243;
+        }
+        
+        .signature-line {
+            border-bottom: 1px solid #2d2418;
+            min-height: 30px;
+            margin-bottom: 4px;
+        }
+        
+        .signature-label {
+            font-size: 8pt;
+            color: #5c5243;
+            margin-bottom: 15px;
+        }
+        
+        .exhibit-header {
+            background: #5c5243;
+            color: #e4dfd5;
+            padding: 8px 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 6px 6px 0 0;
+            margin-top: 15px;
+        }
+        
+        .exhibit-content {
+            background: rgba(220, 211, 198, 0.5);
+            border: 1px solid #8c7a6b;
+            border-top: none;
+            padding: 12px;
+            border-radius: 0 0 6px 6px;
+        }
+        
+        .small-text {
+            font-size: 8pt;
+            color: #5c5243;
+        }
+        
+        .terms-list {
+            counter-reset: terms;
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .terms-list li {
+            counter-increment: terms;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 8px;
+        }
+        
+        .terms-list li::before {
+            content: counter(terms) ".";
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+            color: #5c5243;
+        }
+        
+        .letter-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .letter-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 4px;
+        }
+        
+        .letter-list li::before {
+            content: "(" attr(data-letter) ")";
+            position: absolute;
+            left: 0;
+            font-weight: 600;
+            color: #5c5243;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .page {
+                box-shadow: none;
+                margin: 0;
+                padding: 15px 20px;
+            }
+            .document-container {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container">
+        <!-- PAGE 1 -->
+        <div class="page">
+            <div class="header-box">
+                <h1>Simple Agreement for Future Tokens (SAFT)</h1>
+                <div class="subtitle">EthosLife Seed Round</div>
+                <div class="meta-info">
+                    <span><strong>Version:</strong> 1.1 – Seed Round with Early Staking Benefits</span>
+                    <span><strong>Date:</strong> _________________________________</span>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <p class="small-text" style="margin-top: 0;"><strong>Governing Law:</strong> [Cayman Islands / Cyprus / UAE RAK DAO / Other] (to be determined prior to first closing)</p>
+            </div>
+
+            <h2>1. The Parties</h2>
+            
+            <div class="section-box">
+                <h4>THE COMPANY:</h4>
+                <div class="field-row">
+                    <span class="field-label">Name:</span>
+                    <span class="field-value">EthosLife _________________________________ (Name to be registered)</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Incorporation:</span>
+                    <span class="field-value">_____________________________________________</span>
+                </div>
+                <p class="small-text" style="margin: 5px 0 0 0;">(Selected from: Cayman Islands / Republic of Cyprus / UAE (RAK DAO) / Other jurisdiction as mutually agreed upon by the Parties)</p>
+                <div class="field-row" style="margin-top: 8px;">
+                    <span class="field-label">Registered Address:</span>
+                    <span class="field-line"></span>
+                </div>
+                
+                <h4 style="margin-top: 12px;">Represented by:</h4>
+                <div class="field-row">
+                    <span class="field-label">Name:</span>
+                    <span class="field-line"></span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Title:</span>
+                    <span class="field-value">Founder & Chief Architect</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Passport/ID No.:</span>
+                    <span class="field-line"></span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Issued by:</span>
+                    <span class="field-line"></span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Date of Birth:</span>
+                    <span class="field-line"></span>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <h4>THE INVESTOR:</h4>
+                <div class="field-row">
+                    <span class="field-label">Full Legal Name:</span>
+                    <span class="field-line"></span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Residential Address:</span>
+                    <span class="field-line"></span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Passport/ID Number:</span>
+                    <span class="field-line"></span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Issued by (Country):</span>
+                    <span class="field-line"></span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Date of Birth:</span>
+                    <span class="field-line"></span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Nationality:</span>
+                    <span class="field-line"></span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Contact Email:</span>
+                    <span class="field-line"></span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Telegram/Phone:</span>
+                    <span class="field-line"></span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">ERC-20 Wallet:</span>
+                    <span class="field-line"></span>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <h4>Accredited/Sophisticated Investor Status (check applicable):</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+                    <div><span class="checkbox"></span> Individual Investor (Private)</div>
+                    <div><span class="checkbox"></span> Corporate Entity</div>
+                    <div><span class="checkbox"></span> Accredited Investor</div>
+                    <div><span class="checkbox"></span> Sophisticated Investor</div>
+                </div>
+            </div>
+
+            <h2>2. Definitions</h2>
+            
+            <div class="section-box">
+                <p><strong>"TGE"</strong> (Token Generation Event) means the date on which UNITY utility tokens are minted and deployed on the Ethereum blockchain (or Layer 2 solution), estimated to occur within 90 days of the date hereof, but in no event later than 180 days from the date of this Agreement.</p>
+                
+                <p><strong>"UNITY"</strong> means the ERC-20 utility token issued by the Company, providing access to the EthosLife Human Operating System platform, governance participation rights in the EthosLife DAO (upon launch), and eligibility for platform staking mechanisms.</p>
+                
+                <p><strong>"Staking Boost Voucher"</strong> means a non-transferable digital right granted to early investors as compensation for the waiting period prior to TGE, entitling the holder to an enhanced Annual Percentage Yield (APY) of 25% (instead of the standard 15% target APY) during the first 6 months following the completion of the Cliff Period.</p>
+                
+                <p><strong>"Jurisdiction Election"</strong> means the final selection of the Company's incorporation jurisdiction, which shall be determined by the Founder within 30 days of the first investment closing, selected from: Cayman Islands, Republic of Cyprus, UAE (RAK DAO or similar blockchain-friendly zone), or another jurisdiction mutually acceptable to the Parties.</p>
+                
+                <p><strong>"Vesting Commencement Date"</strong> means the TGE.</p>
+                
+                <p><strong>"Cliff Period"</strong> means 6 months from the Vesting Commencement Date.</p>
+                
+                <p><strong>"Vesting Period"</strong> means 18 months following the Cliff Period (24 months total from TGE).</p>
+            </div>
+        </div>
+
+        <!-- PAGE 2 -->
+        <div class="page">
+            <h2>3. Purchase of Future Tokens & Early Bird Benefits</h2>
+            
+            <div class="section-box">
+                <p>The Investor hereby subscribes for and agrees to purchase, and the Company agrees to issue upon TGE, UNITY tokens ("Tokens") subject to the terms herein.</p>
+                
+                <div class="highlight-box">
+                    <h4>Token Pricing</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div><strong>Token Price:</strong> USD $0.05 per UNITY</div>
+                        <div><strong>Minimum Investment:</strong> USD $5,000</div>
+                        <div><strong>Maximum Investment:</strong> USD $50,000 (Standard)</div>
+                        <div><strong>Strategic:</strong> Above $50,000 (subject to approval)</div>
+                    </div>
+                </div>
+                
+                <h4>Calculation:</h4>
+                <p style="background: rgba(140, 122, 107, 0.15); padding: 8px 12px; border-radius: 6px; font-family: monospace;">
+                    Investment Amount ÷ $0.05 = Number of UNITY Tokens<br>
+                    <strong>Example:</strong> $10,000 ÷ $0.05 = 200,000 UNITY
+                </p>
+            </div>
+
+            <div class="section-box">
+                <h4>Early Participation Benefits (Pre-TGE):</h4>
+                <p style="margin-top: 0;">As compensation for the waiting period between the date of this Agreement and the TGE (estimated 90 days), the Investor shall receive:</p>
+                
+                <ul style="margin: 8px 0;">
+                    <li><strong>Staking Boost Voucher:</strong> A preferential right to earn 25% APY (target rate) during the first 6 months of staking eligibility (Months 6-12 post-TGE), compared to the standard 15% APY. This voucher is non-transferable and linked to the Investor's wallet address.</li>
+                    <li><strong>Lifetime Premium Access:</strong> Immediate access to EthosLife Premium tier features upon platform launch (prior to token issuance), valid for the lifetime of the Investor's account.</li>
+                    <li><strong>Price Lock:</strong> Guaranteed allocation at $0.05 per token, regardless of future pricing in subsequent rounds.</li>
+                </ul>
+            </div>
+
+            <h2>4. Payment & Escrow Procedures</h2>
+            
+            <h4>4.1 Payment Method:</h4>
+            <div class="section-box">
+                <p style="margin-top: 0;">The Investor shall transfer the Investment Amount within 5 business days of executing this Agreement to one of the following (as instructed by the Company):</p>
+                
+                <div class="two-col">
+                    <div>
+                        <h4>Option A – Escrow Attorney</h4>
+                        <div class="field-row">
+                            <span class="field-label">Escrow Agent:</span>
+                            <span class="field-line"></span>
+                        </div>
+                        <div class="field-row">
+                            <span class="field-label">Law Firm:</span>
+                            <span class="field-line"></span>
+                        </div>
+                        <div class="field-row">
+                            <span class="field-label">Crypto Address:</span>
+                            <span class="field-line"></span>
+                        </div>
+                        <p class="small-text">Funds held until Company incorporation is completed</p>
+                    </div>
+                    <div>
+                        <h4>Option B – Corporate Account</h4>
+                        <div class="field-row">
+                            <span class="field-label">Company Name:</span>
+                            <span class="field-line"></span>
+                        </div>
+                        <div class="field-row">
+                            <span class="field-label">Bank/Wallet:</span>
+                            <span class="field-line"></span>
+                        </div>
+                        <div class="field-row">
+                            <span class="field-label">Account/Address:</span>
+                            <span class="field-line"></span>
+                        </div>
+                        <p class="small-text">To be provided within 5 days of Company registration</p>
+                    </div>
+                </div>
+                
+                <h4 style="margin-top: 12px;">Accepted Currencies:</h4>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                    <div><span class="checkbox"></span> USDC (ERC-20)</div>
+                    <div><span class="checkbox"></span> USDT (ERC-20)</div>
+                    <div><span class="checkbox"></span> ETH</div>
+                    <div><span class="checkbox"></span> BTC</div>
+                </div>
+                
+                <div class="field-row" style="margin-top: 10px;">
+                    <span class="field-label">Transaction Hash/Reference:</span>
+                    <span class="field-line"></span>
+                </div>
+            </div>
+
+            <h4>4.2 Jurisdiction Flexibility:</h4>
+            <div class="section-box">
+                <p style="margin-top: 0;">The Founder shall notify the Investor of the selected Jurisdiction Election within 30 days of the first closing. Upon such election, this Agreement shall be governed by the laws of the selected jurisdiction, and the Company shall be incorporated accordingly. All rights and obligations hereunder shall automatically transfer to the newly formed legal entity upon registration.</p>
+            </div>
+
+            <h4>4.3 Use of Proceeds Bridge:</h4>
+            <div class="section-box">
+                <p style="margin-top: 0;">If immediate funds are required for incorporation costs prior to Company formation, the Investor may, at their discretion, transfer up to USD $3,000 directly to the registered agent/incorporation service as an advance against the total Investment Amount, with the balance due upon Company formation.</p>
+            </div>
+        </div>
+
+        <!-- PAGE 3 -->
+        <div class="page">
+            <h2>5. Vesting, Staking & Boost Mechanics</h2>
+            
+            <h4>5.1 Token Issuance:</h4>
+            <div class="section-box">
+                <p style="margin-top: 0;">Tokens shall be minted and delivered to the Investor's designated wallet within 14 days of TGE, subject to vesting restrictions.</p>
+            </div>
+
+            <h4>5.2 Vesting Schedule:</h4>
+            <div class="section-box">
+                <table>
+                    <tr>
+                        <th>Milestone</th>
+                        <th>Tokens Unlocked</th>
+                        <th>Cumulative</th>
+                    </tr>
+                    <tr>
+                        <td>Month 0 (TGE)</td>
+                        <td>0% (Cliff in effect)</td>
+                        <td>0%</td>
+                    </tr>
+                    <tr>
+                        <td>Month 6 (End of Cliff)</td>
+                        <td>25% of total tokens</td>
+                        <td>25%</td>
+                    </tr>
+                    <tr>
+                        <td>Months 7-24</td>
+                        <td>4.166% per month</td>
+                        <td>Linear progression</td>
+                    </tr>
+                </table>
+                <p class="small-text">Remaining 75% unlock linearly on a monthly basis over 18 months</p>
+            </div>
+
+            <h4>5.3 Staking & Boost Activation:</h4>
+            <div class="section-box">
+                <table>
+                    <tr>
+                        <th>Period</th>
+                        <th>Status</th>
+                        <th>APY</th>
+                    </tr>
+                    <tr>
+                        <td>Months 0-5</td>
+                        <td>No staking possible; no yield accrues</td>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Month 6 onwards</td>
+                        <td>Vested tokens may be staked</td>
+                        <td>—</td>
+                    </tr>
+                    <tr style="background: rgba(92, 82, 67, 0.2);">
+                        <td><strong>Months 6-12 (Boost Period)</strong></td>
+                        <td>Enhanced yield with Staking Boost Voucher</td>
+                        <td><strong>25% target</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Post Month 12</td>
+                        <td>Standard staking rate applies</td>
+                        <td>15% target</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h4>5.4 Transfer Restrictions:</h4>
+            <div class="section-box">
+                <p style="margin-top: 0;">Unvested tokens are non-transferable. Vested tokens may be transferred freely subject to applicable securities laws and exchange lock-up periods.</p>
+            </div>
+
+            <h2>6. Representations of Investor</h2>
+            
+            <div class="section-box">
+                <p style="margin-top: 0;">The Investor represents that:</p>
+                <ul class="letter-list">
+                    <li data-letter="a">They are acquiring Tokens for their own account, for investment purposes, and not with a view to immediate resale;</li>
+                    <li data-letter="b">They understand the tokens are utility tokens, not securities, equity, or debt instruments;</li>
+                    <li data-letter="c">They acknowledge the substantial risk of total loss of investment;</li>
+                    <li data-letter="d">They have sufficient knowledge and experience to evaluate the risks;</li>
+                    <li data-letter="e">Funds are derived from legal sources and comply with AML/CFT regulations.</li>
+                </ul>
+            </div>
+
+            <h2>7. Company Covenants</h2>
+            
+            <div class="section-box">
+                <p style="margin-top: 0;"><strong>(a) Best Efforts:</strong> The Company shall use commercially reasonable efforts to achieve TGE within 90 days and platform launch within 12 months.</p>
+                
+                <p><strong>(b) No Guarantees:</strong> The Company does not guarantee exchange listings, token price appreciation, or specific yield rates (APYs are targets, not guarantees).</p>
+                
+                <p><strong>(c) Token Utility:</strong> Upon launch, UNITY will confer platform access, governance rights, and staking eligibility as described in the Whitepaper.</p>
+            </div>
+        </div>
+
+        <!-- PAGE 4 -->
+        <div class="page">
+            <h2>8. Refund & Termination</h2>
+            
+            <div class="section-box">
+                <p style="margin-top: 0;">If TGE has not occurred within 180 days, the Investor may elect:</p>
+                <ul>
+                    <li><strong>(a) Full Refund:</strong> Return of Investment Amount in the original cryptocurrency (or USD equivalent at spot rate); or</li>
+                    <li><strong>(b) Equity Conversion:</strong> Conversion into equity securities of the Company at a $2.5M pre-money valuation (subject to Company acceptance).</li>
+                </ul>
+            </div>
+
+            <h2>9. Limitation of Liability</h2>
+            
+            <div class="section-box">
+                <p style="margin-top: 0;">Company liability is capped at the Investment Amount received. The Founder has no personal liability beyond this amount. This Agreement does not constitute investment advice.</p>
+            </div>
+
+            <h2>10. Governing Law</h2>
+            
+            <div class="section-box">
+                <p style="margin-top: 0;">This Agreement shall be governed by the laws of the jurisdiction selected under Section 4.2 (Jurisdiction Election) above. Disputes shall be resolved by arbitration under LCIA rules in London.</p>
+            </div>
+
+            <h2>11. Signatures</h2>
+            
+            <div class="two-col" style="margin-top: 15px;">
+                <div class="section-box">
+                    <h4>THE COMPANY:</h4>
+                    <div class="signature-line"></div>
+                    <div class="signature-label">Signature</div>
+                    
+                    <div class="field-row">
+                        <span class="field-label">Name:</span>
+                        <span class="field-line"></span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Title:</span>
+                        <span class="field-line"></span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Date:</span>
+                        <span class="field-line"></span>
+                    </div>
+                </div>
+                
+                <div class="section-box">
+                    <h4>THE INVESTOR:</h4>
+                    <div class="signature-line"></div>
+                    <div class="signature-label">Signature</div>
+                    
+                    <div class="field-row">
+                        <span class="field-label">Name:</span>
+                        <span class="field-line"></span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Date:</span>
+                        <span class="field-line"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-box" style="margin-top: 15px;">
+                <h4>WITNESS (if required):</h4>
+                <div class="two-col">
+                    <div>
+                        <div class="signature-line"></div>
+                        <div class="signature-label">Signature</div>
+                    </div>
+                    <div>
+                        <div class="field-row">
+                            <span class="field-label">Name:</span>
+                            <span class="field-line"></span>
+                        </div>
+                        <div class="field-row">
+                            <span class="field-label">Date:</span>
+                            <span class="field-line"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exhibit-header">Exhibit A – Investment Details</div>
+            <div class="exhibit-content">
+                <table>
+                    <tr>
+                        <td style="width: 50%;"><strong>Investment Amount (USD)</strong></td>
+                        <td>$_____________________</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Currency Deposited</strong></td>
+                        <td><span class="checkbox"></span> USDC <span class="checkbox"></span> USDT <span class="checkbox"></span> ETH <span class="checkbox"></span> BTC</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Price per Token</strong></td>
+                        <td>$0.05</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Tokens Allocated</strong></td>
+                        <td>_____________________ UNITY</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Staking Boost Voucher</strong></td>
+                        <td><span class="checkbox"></span> YES (25% APY Months 6-12)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Strategic Benefits ($50K+)</strong></td>
+                        <td><span class="checkbox"></span> Advisory Board <span class="checkbox"></span> 15% Bonus</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Investor Wallet Address</strong></td>
+                        <td>____________________________</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Transaction Reference</strong></td>
+                        <td>____________________________</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="exhibit-header">Exhibit B – Acknowledgment of Risks</div>
+            <div class="exhibit-content">
+                <p style="margin-top: 0;">The Investor acknowledges receipt of the EthosLife Whitepaper and understands the following risks:</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div><span class="checkbox"></span> Technology risk (smart contract vulnerabilities)</div>
+                    <div><span class="checkbox"></span> Regulatory risk (potential security classification)</div>
+                    <div><span class="checkbox"></span> Liquidity risk (no secondary market for 6-24 months)</div>
+                    <div><span class="checkbox"></span> Total loss risk (blockchain projects are experimental)</div>
+                    <div style="grid-column: span 2;"><span class="checkbox"></span> No guaranteed yield (APYs are targets, not obligations)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

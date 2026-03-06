@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EthosLife — Human Operating System | Health is a Daily Habit</title>
+    <meta name="description" content="EthosLife creates a new market: Human Operating System. Health is a daily habit.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "bone": "#e4dfd5",
+                        "bone-dark": "#c2b8a9",
+                        "ink": "#2d2418",
+                        "ink-light": "#4a3e32",
+                        "sand": "#dcd3c6",
+                        "clay": "#8c7a6b",
+                        "stone": "#5c5243"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "mono": ["Courier Prime", "monospace"]
+                    }
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        .texture-bone {
+            background-color: #dcd3c6;
+            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 0.15 0' /%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)'/%3E%3C/svg%3E"), 
+            radial-gradient(circle at 20% 30%, rgba(200, 190, 175, 0.4) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(180, 170, 155, 0.3) 0%, transparent 60%);
+        }
+        
+        .deep-bay {
+            background: #d0c6b8;
+            box-shadow: inset 12px 12px 24px #b8ae9f, inset -12px -12px 24px #e8decf;
+            border-radius: 2.5rem;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+        }
+        
+        @media (max-width: 768px) {
+            .deep-bay { border-radius: 1.5rem; padding: 6px; }
+        }
+        
+        .module-ivory {
+            background: #e4dfd5;
+            box-shadow: 8px 8px 16px #a8a093, -8px -8px 16px #ffffff, inset 1px 1px 3px rgba(255,255,255,0.9), inset -1px -1px 4px rgba(0,0,0,0.05);
+            border-radius: 2rem;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+        
+        .module-bakelite {
+            background: #c2b8a9;
+            box-shadow: 6px 6px 14px #9b9183, -6px -6px 14px #e9dfcf, inset 1px 1px 2px rgba(255,255,255,0.5), inset -1px -1px 3px rgba(0,0,0,0.1);
+            border-radius: 1.8rem;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .module-plastic {
+            background: #d8d0c3;
+            box-shadow: 10px 10px 20px #a69e90, -8px -8px 18px #fffff5, inset 2px 2px 5px rgba(255,255,255,0.7);
+            border-radius: 1.5rem;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        
+        .text-stamped { color: #3d3226; text-shadow: 1px 1px 0px rgba(255,255,255,0.9); letter-spacing: 0.08em; font-weight: 600; }
+        .text-engraved { color: #2d2418; text-shadow: 0px 1px 1px rgba(255,255,255,0.8); font-weight: 700; }
+        
+        .screw-matte {
+            position: absolute; width: 10px; height: 10px; background: #b8ae9f;
+            border-radius: 50%; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.3), 1px 1px 1px rgba(255,255,255,0.6);
+            display: flex; justify-content: center; align-items: center;
+        }
+        .screw-matte::after { content: ''; width: 60%; height: 2px; background: rgba(0,0,0,0.5); transform: rotate(45deg); }
+        .screw-tl { top: 14px; left: 14px; transform: rotate(15deg); }
+        .screw-tr { top: 14px; right: 14px; transform: rotate(-25deg); }
+        .screw-bl { bottom: 14px; left: 14px; transform: rotate(80deg); }
+        .screw-br { bottom: 14px; right: 14px; transform: rotate(-10deg); }
+        
+        .matte-bar {
+            background: #d4ccb8; border-top: 1px solid rgba(255,255,255,0.6);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.05), inset 0 2px 4px rgba(255,255,255,0.5);
+        }
+        
+        .nav-btn {
+            background: #e4dfd5; box-shadow: 4px 4px 8px #a8a093, -4px -4px 8px #ffffff;
+            border-radius: 50%; transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.6);
+        }
+        .nav-btn:active { box-shadow: inset 2px 2px 5px #a8a093, inset -2px -2px 5px #ffffff; transform: scale(0.95); }
+        
+        .btn-matte {
+            background: linear-gradient(145deg, #e8e2d5, #c2b8a9);
+            box-shadow: 6px 6px 12px #a8a093, -6px -6px 12px #ffffff;
+            border-radius: 1rem; transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.5);
+            color: #2d2418; font-weight: 600;
+        }
+        .btn-matte:hover { box-shadow: 8px 8px 16px #a8a093, -8px -8px 16px #ffffff; transform: translateY(-2px); }
+        .btn-matte:active { box-shadow: inset 4px 4px 8px #a8a093, inset -4px -4px 8px #ffffff; transform: scale(0.98); }
+        
+        .btn-primary-matte {
+            background: linear-gradient(145deg, #5c5243, #3d3226);
+            box-shadow: 6px 6px 12px #a8a093, -6px -6px 12px #ffffff;
+            color: #e4dfd5; font-weight: 600;
+        }
+        .btn-primary-matte:hover { box-shadow: 8px 8px 16px #a8a093, -8px -8px 16px #ffffff; }
+        
+        .gauge-bezel {
+            background: #2d2418; border-radius: 50%; padding: 16px;
+            box-shadow: 12px 12px 24px rgba(0,0,0,0.2), -4px -4px 10px rgba(255,255,255,0.4), inset 2px 2px 8px rgba(0,0,0,0.6);
+        }
+        
+        .gauge-face {
+            background: #e8e2d5; border-radius: 50%;
+            box-shadow: inset 8px 8px 16px rgba(0,0,0,0.15), inset -8px -8px 16px rgba(255,255,255,0.8);
+        }
+        
+        .progress-track { background: #b5aa9a; box-shadow: inset 2px 2px 4px rgba(0,0,0,0.2); border-radius: 10px; }
+        .progress-fill { background: linear-gradient(90deg, #5c5243, #3d3226); border-radius: 10px; }
+        
+        .tab-active { background: #e4dfd5; box-shadow: inset 3px 3px 6px #a8a093, inset -3px -3px 6px #ffffff; color: #2d2418; font-weight: 700; }
+        .tab-inactive { background: transparent; color: #5c5243; }
+        
+        .status-badge { background: #5c5243; color: #e4dfd5; border-radius: 50px; font-weight: 600; }
+        .status-completed { background: #5c5243; color: #e4dfd5; }
+        .status-active { background: #3d3226; color: #e4dfd5; }
+        
+        .dot-indicator { height: 6px; border-radius: 3px; background: #c2b8a9; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2); }
+        .dot-indicator.active { background: #5c5243; box-shadow: 0 0 6px rgba(92,82,67,0.4); }
+        
+        .input-matte {
+            background: #d4ccb8; box-shadow: inset 3px 3px 6px #a8a093, inset -2px -2px 4px rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; color: #2d2418;
+        }
+        
+        .mobile-menu-overlay { background: rgba(45,36,24,0.85); backdrop-filter: blur(6px); }
+        
+        .section-matte { padding: 5rem 1rem; }
+        @media (max-width: 768px) { .section-matte { padding: 3rem 0.75rem; } }
+        
+        .container-matte { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+        
+        /* Language switcher */
+        .lang-btn { transition: all 0.3s; }
+        .lang-btn.active { background: #5c5243; color: #e4dfd5; }
+        
+        /* Hide non-active language content */
+        [data-lang] { display: none; }
+        [data-lang].active { display: block; }
+        [data-lang="en"] { display: block; }
+        
+        /* Icon sizes */
+        .icon-lg { font-size: 2rem; }
+        .icon-xl { font-size: 2.5rem; }
+        
+        /* Team Cards */
+        .team-card .module-ivory {
+            transition: all 0.3s ease;
+            padding-bottom: 3.5rem;
+        }
+        .team-card:hover .module-ivory {
+            transform: translateY(-2px);
+            box-shadow: 8px 8px 16px rgba(0,0,0,0.12), -4px -4px 12px rgba(255,255,255,0.7);
+        }
+        .team-card:active .module-ivory {
+            transform: translateY(0);
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.1), inset -2px -2px 6px rgba(255,255,255,0.5);
+        }
+        .team-card:hover .team-arrow-btn {
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.15), -2px -2px 4px rgba(255,255,255,0.6);
+        }
+        .team-card:active .team-arrow-btn {
+            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.15), inset -1px -1px 2px rgba(255,255,255,0.5);
+        }
+        .team-details {
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="texture-bone font-display text-ink antialiased min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 matte-bar">
+        <div class="flex items-center justify-between px-4 py-4 max-w-7xl mx-auto">
+            <!-- Left menu button -->
+            <div class="deep-bay rounded-full p-1">
+                <button class="flex size-11 items-center justify-center nav-btn" onclick="toggleMobileMenu()">
+                    <span class="material-symbols-outlined text-ink text-xl">menu</span>
+                </button>
+            </div>
+            
+            <!-- Logo -->
+            <div class="text-center">
+                <h1 class="text-xl font-bold tracking-widest text-stamped uppercase">Ethos<span class="text-ink">Life</span></h1>
+                <span class="text-[10px] tracking-[0.3em] text-ink-light uppercase font-semibold">Bespoke H.O.S.</span>
+            </div>
+            
+            <!-- Wallet button -->
+            <div class="deep-bay rounded-full p-1">
+                <a href="#investment" class="flex items-center justify-center size-11 nav-btn">
+                    <span class="material-symbols-outlined text-ink text-xl">account_balance_wallet</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileOverlay" class="mobile-menu-overlay fixed inset-0 z-40 hidden" onclick="toggleMobileMenu()"></div>
+    
+    <!-- Mobile Menu - LEFT SIDE -->
+    <div id="mobileMenu" class="fixed top-0 left-0 bottom-0 w-80 z-50 bg-[#e4dfd5] shadow-2xl transform -translate-x-full transition-transform duration-300">
+        <div class="p-8 h-full flex flex-col">
+            <div class="flex justify-between items-center mb-10">
+                <span class="text-xl font-bold text-ink">Menu</span>
+                <button onclick="toggleMobileMenu()" class="text-ink p-2">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
+            
+            <div class="flex flex-col gap-3 flex-1">
+                <a href="#problem" onclick="toggleMobileMenu()" class="module-ivory p-4 text-ink font-semibold flex items-center gap-3">
+                    <span class="material-symbols-outlined">error</span>
+                    <span data-lang="en">Problem</span>
+                    <span data-lang="ru">Проблема</span>
+                </a>
+                <a href="#solution" onclick="toggleMobileMenu()" class="module-ivory p-4 text-ink font-semibold flex items-center gap-3">
+                    <span class="material-symbols-outlined">lightbulb</span>
+                    <span data-lang="en">Solution</span>
+                    <span data-lang="ru">Решение</span>
+                </a>
+                <a href="#subscription" onclick="toggleMobileMenu()" class="module-ivory p-4 text-ink font-semibold flex items-center gap-3">
+                    <span class="material-symbols-outlined">card_membership</span>
+                    <span data-lang="en">Subscriptions</span>
+                    <span data-lang="ru">Подписки</span>
+                </a>
+                <a href="#projecthub" onclick="toggleMobileMenu()" class="module-ivory p-4 text-ink font-semibold flex items-center gap-3">
+                    <span class="material-symbols-outlined">hub</span>
+                    <span data-lang="en">ProjectHub</span>
+                    <span data-lang="ru">ProjectHub</span>
+                </a>
+                <a href="#tokenomics" onclick="toggleMobileMenu()" class="module-ivory p-4 text-ink font-semibold flex items-center gap-3">
+                    <span class="material-symbols-outlined">token</span>
+                    <span data-lang="en">Tokenomics</span>
+                    <span data-lang="ru">Токеномика</span>
+                </a>
+                <a href="#roadmap" onclick="toggleMobileMenu()" class="module-ivory p-4 text-ink font-semibold flex items-center gap-3">
+                    <span class="material-symbols-outlined">map</span>
+                    <span data-lang="en">Roadmap</span>
+                    <span data-lang="ru">Roadmap</span>
+                </a>
+                <a href="#team" onclick="toggleMobileMenu()" class="module-ivory p-4 text-ink font-semibold flex items-center gap-3">
+                    <span class="material-symbols-outlined">groups</span>
+                    <span data-lang="en">Team</span>
+                    <span data-lang="ru">Команда</span>
+                </a>
+                <a href="#investment" onclick="toggleMobileMenu()" class="btn-primary-matte p-4 text-center font-bold mt-2 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">rocket_launch</span>
+                    <span data-lang="en">Invest</span>
+                    <span data-lang="ru">Инвестировать</span>
+                </a>
+            </div>
+            
+            <!-- Language Switcher at bottom -->
+            <div class="mt-6 pt-6 border-t border-[#c2b8a9]">
+                <p class="text-xs text-ink-light font-semibold mb-3 uppercase tracking-wider" data-lang="en">Language</p>
+                <p class="text-xs text-ink-light font-semibold mb-3 uppercase tracking-wider" data-lang="ru">Язык</p>
+                <div class="flex gap-2">
+                    <button onclick="setLanguage('en')" id="lang-en" class="lang-btn active flex-1 py-2 rounded-lg font-semibold text-sm">EN</button>
+                    <button onclick="setLanguage('ru')" id="lang-ru" class="lang-btn flex-1 py-2 rounded-lg font-semibold text-sm bg-[#d0c6b8] text-ink">RU</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="section-matte pt-28">
+        <div class="container-matte">
+            <div class="deep-bay mb-8">
+                <div class="module-ivory p-8 md:p-12 relative text-center">
+                    <div class="screw-matte screw-tl"></div>
+                    <div class="screw-matte screw-tr"></div>
+                    <div class="screw-matte screw-bl"></div>
+                    <div class="screw-matte screw-br"></div>
+                    
+
+                    
+                    <!-- Main Gauge -->
+                    <div class="gauge-bezel relative size-48 md:size-64 mx-auto mt-10 mb-8 flex items-center justify-center">
+                        <div class="gauge-face absolute inset-3 flex items-center justify-center p-4">
+                            <div class="absolute inset-2 rounded-full border-[8px] border-dashed border-[#b8ae9f]/40 rotate-12"></div>
+                            <svg class="absolute inset-0 w-full h-full -rotate-90 drop-shadow-md" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" fill="none" r="42" stroke="#d0c6b8" stroke-width="4"></circle>
+                                <circle cx="50" cy="50" fill="none" r="42" stroke="#5c5243" stroke-dasharray="263.8" stroke-dashoffset="50" stroke-linecap="round" stroke-width="7"></circle>
+                            </svg>
+                            <div class="relative z-20 flex flex-col items-center text-engraved">
+                                <span class="text-5xl md:text-6xl font-bold tracking-tighter">82<span class="text-2xl md:text-3xl text-[#5c5243]">%</span></span>
+                                <span class="text-xs md:text-sm uppercase tracking-widest mt-2 text-[#5c5243] font-bold">
+                                    <span data-lang="en">MVP Ready</span>
+                                    <span data-lang="ru">MVP готов</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Title -->
+                    <h2 class="text-3xl md:text-5xl font-bold text-engraved mb-4 leading-tight">
+                        <span data-lang="en">Health is a<br>Daily Habit</span>
+                        <span data-lang="ru">Здоровье — это<br>ежедневная привычка</span>
+                    </h2>
+                    <p class="text-base md:text-lg text-ink-light max-w-2xl mx-auto mb-8 leading-relaxed font-medium">
+                        <strong class="text-ink" data-lang="en">Your unified health center.</strong>
+                        <strong class="text-ink" data-lang="ru">Твой единый центр здоровья.</strong>
+                        <span data-lang="en"> We are creating a new market: a Human Operating System that unites the entire spectrum of tools, specialists, and products.</span>
+                        <span data-lang="ru"> Мы создаём новый рынок: Операционная система, объединяющая весь спектр инструментов, специалистов и продуктов.</span>
+                    </p>
+                    
+                    <!-- Stats -->
+                    <div class="flex justify-center gap-6 md:gap-10 mb-8">
+                        <div class="text-center max-w-[100px]">
+                            <div class="text-lg md:text-xl font-bold text-ink leading-tight" data-lang="en">Unified<br>Center</div>
+                            <div class="text-lg md:text-xl font-bold text-ink leading-tight" data-lang="ru">Единый<br>центр</div>
+                        </div>
+                        <div class="w-px bg-[#8c7a6b]"></div>
+                        <div class="text-center max-w-[100px]">
+                            <div class="text-lg md:text-xl font-bold text-ink leading-tight" data-lang="en">7 Modules<br>Full Cycle</div>
+                            <div class="text-lg md:text-xl font-bold text-ink leading-tight" data-lang="ru">7 модулей<br>полный цикл</div>
+                        </div>
+                        <div class="w-px bg-[#8c7a6b]"></div>
+                        <div class="text-center max-w-[120px]">
+                            <div class="text-lg md:text-xl font-bold text-ink leading-tight" data-lang="en">Complete<br>Integration</div>
+                            <div class="text-lg md:text-xl font-bold text-ink leading-tight" data-lang="ru">Полная<br>интеграция</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Seed Round Alert -->
+                    <div class="deep-bay mb-6 max-w-2xl mx-auto">
+                        <div class="bg-[#5c5243] rounded-2xl p-4 text-[#e4dfd5] relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-20 h-20 bg-[#8c7a6b] rounded-full -mr-10 -mt-10 opacity-30"></div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="material-symbols-outlined text-2xl">schedule</span>
+                                <span class="text-xs font-bold uppercase tracking-wider" data-lang="en">Limited Time Offer</span>
+                                <span class="text-xs font-bold uppercase tracking-wider" data-lang="ru">Ограниченное предложение</span>
+                            </div>
+                            <p class="text-sm font-medium mb-3" data-lang="en"><strong>Seed Round begins March 10.</strong> Unique opportunity to purchase at PreSeed price <strong>$0.01</strong> (instead of $0.05) — only <strong>$50,000</strong> allocation available!</p>
+                            <p class="text-sm font-medium mb-3" data-lang="ru"><strong>Seed Round начинается 10 марта.</strong> Уникальная возможность выкупить по цене PreSeed <strong>$0.01</strong> (вместо $0.05) — доступно всего <strong>$50,000</strong>!</p>
+                            <div class="flex items-center gap-2 text-xs">
+                                <span class="material-symbols-outlined text-sm">timer</span>
+                                <span id="seed-countdown" class="font-mono font-bold">Until March 10</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#investment" class="btn-primary-matte px-8 py-4 font-bold text-base md:text-lg flex items-center justify-center gap-3">
+                            <span class="material-symbols-outlined">rocket_launch</span>
+                            <span data-lang="en">Buy at $0.01</span>
+                            <span data-lang="ru">Купить по $0.01</span>
+                        </a>
+                        <a href="docs/WHITEPAPER.pdf" download class="btn-matte px-8 py-4 font-bold text-base md:text-lg flex items-center justify-center gap-3">
+                            <span class="material-symbols-outlined">description</span>
+                            <span data-lang="en">Whitepaper</span>
+                            <span data-lang="ru">Whitepaper</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Problem Section -->
+    <section class="section-matte" id="problem">
+        <div class="container-matte">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="en">The Problem</span>
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="ru">Проблема</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="en">Health is Fragmented</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="ru">Здоровье раздроблено</h2>
+                <p class="text-base text-ink-light mt-4 max-w-xl mx-auto font-medium" data-lang="en">Modern people use an average of 7 different apps to manage their health</p>
+                <p class="text-base text-ink-light mt-4 max-w-xl mx-auto font-medium" data-lang="ru">Современный человек использует в среднем 7 различных приложений для управления здоровьем</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+                <div class="deep-bay">
+                    <div class="module-bakelite p-5 md:p-6 relative card-hover">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="mb-4"><span class="material-symbols-outlined icon-xl text-ink">extension</span></div>
+                        <h3 class="text-sm md:text-base font-bold text-ink uppercase tracking-wider mb-2" data-lang="en">Fragmentation</h3>
+                        <h3 class="text-sm md:text-base font-bold text-ink uppercase tracking-wider mb-2" data-lang="ru">Фрагментация</h3>
+                        <p class="text-xs md:text-sm text-ink-light leading-relaxed font-medium" data-lang="en">Apps for sports, nutrition, AI chats — everything in different places</p>
+                        <p class="text-xs md:text-sm text-ink-light leading-relaxed font-medium" data-lang="ru">Приложения для спорта, питания, ИИ-чаты — всё в разных местах</p>
+                    </div>
+                </div>
+                
+                <div class="deep-bay">
+                    <div class="module-bakelite p-5 md:p-6 relative card-hover">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="mb-4"><span class="material-symbols-outlined icon-xl text-ink">link_off</span></div>
+                        <h3 class="text-sm md:text-base font-bold text-ink uppercase tracking-wider mb-2" data-lang="en">Lost Connections</h3>
+                        <h3 class="text-sm md:text-base font-bold text-ink uppercase tracking-wider mb-2" data-lang="ru">Потеря связей</h3>
+                        <p class="text-xs md:text-sm text-ink-light leading-relaxed font-medium" data-lang="en">No one sees how sleep affects nutrition, stress — immunity</p>
+                        <p class="text-xs md:text-sm text-ink-light leading-relaxed font-medium" data-lang="ru">Никто не видит, как сон влияет на питание, стресс — на иммунитет</p>
+                    </div>
+                </div>
+                
+                <div class="deep-bay">
+                    <div class="module-bakelite p-5 md:p-6 relative card-hover">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="mb-4"><span class="material-symbols-outlined icon-xl text-ink">payments</span></div>
+                        <h3 class="text-sm md:text-base font-bold text-ink uppercase tracking-wider mb-2" data-lang="en">High Cost</h3>
+                        <h3 class="text-sm md:text-base font-bold text-ink uppercase tracking-wider mb-2" data-lang="ru">Высокая цена</h3>
+                        <p class="text-xs md:text-sm text-ink-light leading-relaxed font-medium" data-lang="en">AI coaching, specialists — $50-200/month per service</p>
+                        <p class="text-xs md:text-sm text-ink-light leading-relaxed font-medium" data-lang="ru">AI-коучинг, специалисты — $50-200/мес за каждую услугу</p>
+                    </div>
+                </div>
+                
+                <div class="deep-bay">
+                    <div class="module-bakelite p-5 md:p-6 relative card-hover">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="mb-4"><span class="material-symbols-outlined icon-xl text-ink">person_off</span></div>
+                        <h3 class="text-sm md:text-base font-bold text-ink uppercase tracking-wider mb-2" data-lang="en">Isolation</h3>
+                        <h3 class="text-sm md:text-base font-bold text-ink uppercase tracking-wider mb-2" data-lang="ru">Изолированность</h3>
+                        <p class="text-xs md:text-sm text-ink-light leading-relaxed font-medium" data-lang="en">Therapist, nutritionist and trainer work in isolation</p>
+                        <p class="text-xs md:text-sm text-ink-light leading-relaxed font-medium" data-lang="ru">Терапевт, нутрициолог и тренер работают в вакууме</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section-matte" id="solution">
+        <div class="container-matte">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="en">The Solution</span>
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="ru">Решение</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="en">Unified Ecosystem</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="ru">Единая экосистема</h2>
+            </div>
+            
+            <div class="deep-bay mb-8">
+                <div class="module-ivory p-6 md:p-10 relative">
+                    <div class="screw-matte screw-tl"></div>
+                    <div class="screw-matte screw-tr"></div>
+                    <div class="screw-matte screw-bl"></div>
+                    <div class="screw-matte screw-br"></div>
+                    <div class="text-center max-w-3xl mx-auto">
+                        <p class="text-lg md:text-xl font-light italic text-ink mb-4 leading-relaxed">
+                            "<strong class="font-bold" data-lang="en">Health is a daily habit.</strong><strong class="font-bold" data-lang="ru">Здоровье — это ежедневная привычка.</strong><span data-lang="en"> EthosLife makes this habit easy, profitable, and effective.</span><span data-lang="ru"> EthosLife делает эту привычку лёгкой, выгодной и эффективной.</span>"
+                        </p>
+                        <p class="text-base text-ink-light font-semibold" data-lang="en">7 modules. 1 platform. 0 switches.</p>
+                        <p class="text-base text-ink-light font-semibold" data-lang="ru">7 модулей. 1 платформа. 0 переключений.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Three Levels -->
+            <div class="grid md:grid-cols-3 gap-5 mb-8">
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative card-hover">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="absolute top-4 right-4 text-4xl font-bold text-[#c2b8a9]/50">01</div>
+                        <span class="inline-block bg-[#5c5243]/20 text-[#2d2418] text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg mb-4" data-lang="en">Micro-world</span>
+                        <span class="inline-block bg-[#5c5243]/20 text-[#2d2418] text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg mb-4" data-lang="ru">Микро-мир</span>
+                        <h3 class="text-lg font-bold text-engraved mb-2" data-lang="en">Personal Biology</h3>
+                        <h3 class="text-lg font-bold text-engraved mb-2" data-lang="ru">Личная Биология</h3>
+                        <p class="text-sm text-ink-light mb-4 font-medium" data-lang="en">Genetics, microbiome, sensors</p>
+                        <p class="text-sm text-ink-light mb-4 font-medium" data-lang="ru">Генетика, микробиом, сенсоры</p>
+                        <ul class="space-y-2">
+                            <li class="flex items-center gap-3 text-sm text-ink-light font-medium"><span class="material-symbols-outlined text-base text-[#5c5243]">check_circle</span><span data-lang="en">DNA tests & epigenetics</span><span data-lang="ru">ДНК-тесты & эпигенетика</span></li>
+                            <li class="flex items-center gap-3 text-sm text-ink-light font-medium"><span class="material-symbols-outlined text-base text-[#5c5243]">check_circle</span><span data-lang="en">Gut microbiome</span><span data-lang="ru">Микробиом кишечника</span></li>
+                            <li class="flex items-center gap-3 text-sm text-ink-light font-medium"><span class="material-symbols-outlined text-base text-[#5c5243]">check_circle</span><span data-lang="en">Digital eye health</span><span data-lang="ru">Цифровое здоровье глаз</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative card-hover">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="absolute top-4 right-4 text-4xl font-bold text-[#c2b8a9]/50">02</div>
+                        <span class="inline-block bg-[#8c7a6b]/30 text-[#2d2418] text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg mb-4" data-lang="en">Meso-world</span>
+                        <span class="inline-block bg-[#8c7a6b]/30 text-[#2d2418] text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg mb-4" data-lang="ru">Мезо-мир</span>
+                        <h3 class="text-lg font-bold text-engraved mb-2" data-lang="en">Environment</h3>
+                        <h3 class="text-lg font-bold text-engraved mb-2" data-lang="ru">Среда</h3>
+                        <p class="text-sm text-ink-light mb-4 font-medium" data-lang="en">Ecology, toxins, digital</p>
+                        <p class="text-sm text-ink-light mb-4 font-medium" data-lang="ru">Экология, токсины, digital</p>
+                        <ul class="space-y-2">
+                            <li class="flex items-center gap-3 text-sm text-ink-light font-medium"><span class="material-symbols-outlined text-base text-[#5c5243]">check_circle</span><span data-lang="en">Air & water quality</span><span data-lang="ru">Качество воздуха & воды</span></li>
+                            <li class="flex items-center gap-3 text-sm text-ink-light font-medium"><span class="material-symbols-outlined text-base text-[#5c5243]">check_circle</span><span data-lang="en">Household toxicology</span><span data-lang="ru">Токсикология быта</span></li>
+                            <li class="flex items-center gap-3 text-sm text-ink-light font-medium"><span class="material-symbols-outlined text-base text-[#5c5243]">check_circle</span><span data-lang="en">Digital hygiene</span><span data-lang="ru">Цифровая гигиена</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative card-hover">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="absolute top-4 right-4 text-4xl font-bold text-[#c2b8a9]/50">03</div>
+                        <span class="inline-block bg-[#d0c6b8]/60 text-[#2d2418] text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg mb-4" data-lang="en">Macro-world</span>
+                        <span class="inline-block bg-[#d0c6b8]/60 text-[#2d2418] text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg mb-4" data-lang="ru">Макро-мир</span>
+                        <h3 class="text-lg font-bold text-engraved mb-2" data-lang="en">Society</h3>
+                        <h3 class="text-lg font-bold text-engraved mb-2" data-lang="ru">Социум</h3>
+                        <p class="text-sm text-ink-light mb-4 font-medium" data-lang="en">Ikigai, finances, DAO</p>
+                        <p class="text-sm text-ink-light mb-4 font-medium" data-lang="ru">Ikigai, финансы, DAO</p>
+                        <ul class="space-y-2">
+                            <li class="flex items-center gap-3 text-sm text-ink-light font-medium"><span class="material-symbols-outlined text-base text-[#5c5243]">check_circle</span><span data-lang="en">Professional happiness</span><span data-lang="ru">Профессиональное счастье</span></li>
+                            <li class="flex items-center gap-3 text-sm text-ink-light font-medium"><span class="material-symbols-outlined text-base text-[#5c5243]">check_circle</span><span data-lang="en">Financial health</span><span data-lang="ru">Финансовое здоровье</span></li>
+                            <li class="flex items-center gap-3 text-sm text-ink-light font-medium"><span class="material-symbols-outlined text-base text-[#5c5243]">check_circle</span><span data-lang="en">Ecological footprint</span><span data-lang="ru">Экологический след</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Matrix 4 Vectors -->
+            <div class="deep-bay">
+                <div class="module-plastic p-6 md:p-8 relative">
+                    <div class="screw-matte screw-tl"></div>
+                    <div class="screw-matte screw-tr"></div>
+                    <div class="screw-matte screw-bl"></div>
+                    <div class="screw-matte screw-br"></div>
+                    <div class="text-center mb-6">
+                        <h3 class="text-lg md:text-xl font-bold text-stamped uppercase tracking-widest" data-lang="en">Matrix 4 Vectors</h3>
+                        <h3 class="text-lg md:text-xl font-bold text-stamped uppercase tracking-widest" data-lang="ru">Матрица 4 Векторов</h3>
+                        <p class="text-sm text-ink-light font-medium" data-lang="en">Comprehensive well-being</p>
+                        <p class="text-sm text-ink-light font-medium" data-lang="ru">Комплексное благополучие</p>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-[#d0c6b8]/60 rounded-xl p-4">
+                            <div class="flex items-center gap-3 mb-3 pb-3 border-b border-[#8c7a6b]/30">
+                                <span class="material-symbols-outlined text-2xl text-[#5c5243]">favorite</span>
+                                <span class="text-sm font-bold text-engraved" data-lang="en">Body</span>
+                                <span class="text-sm font-bold text-engraved" data-lang="ru">Тело</span>
+                            </div>
+                            <ul class="space-y-1.5 text-xs text-ink-light font-medium">
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Medicine</span><span data-lang="ru">Медицина</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Genetics</span><span data-lang="ru">Генетика</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Nutrition</span><span data-lang="ru">Питание</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Movement</span><span data-lang="ru">Движение</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#d0c6b8]/60 rounded-xl p-4">
+                            <div class="flex items-center gap-3 mb-3 pb-3 border-b border-[#8c7a6b]/30">
+                                <span class="material-symbols-outlined text-2xl text-[#5c5243]">psychology</span>
+                                <span class="text-sm font-bold text-engraved" data-lang="en">Mind</span>
+                                <span class="text-sm font-bold text-engraved" data-lang="ru">Разум</span>
+                            </div>
+                            <ul class="space-y-1.5 text-xs text-ink-light font-medium">
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Psychology</span><span data-lang="ru">Психология</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Sleep</span><span data-lang="ru">Сон</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Cognition</span><span data-lang="ru">Когниция</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Digital</span><span data-lang="ru">Digital</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#d0c6b8]/60 rounded-xl p-4">
+                            <div class="flex items-center gap-3 mb-3 pb-3 border-b border-[#8c7a6b]/30">
+                                <span class="material-symbols-outlined text-2xl text-[#5c5243]">eco</span>
+                                <span class="text-sm font-bold text-engraved" data-lang="en">Environment</span>
+                                <span class="text-sm font-bold text-engraved" data-lang="ru">Среда</span>
+                            </div>
+                            <ul class="space-y-1.5 text-xs text-ink-light font-medium">
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Home</span><span data-lang="ru">Дом</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Ecology</span><span data-lang="ru">Экология</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Biochemistry</span><span data-lang="ru">Биохимия</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Toxins</span><span data-lang="ru">Токсины</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-[#d0c6b8]/60 rounded-xl p-4">
+                            <div class="flex items-center gap-3 mb-3 pb-3 border-b border-[#8c7a6b]/30">
+                                <span class="material-symbols-outlined text-2xl text-[#5c5243]">groups</span>
+                                <span class="text-sm font-bold text-engraved" data-lang="en">Society</span>
+                                <span class="text-sm font-bold text-engraved" data-lang="ru">Социум</span>
+                            </div>
+                            <ul class="space-y-1.5 text-xs text-ink-light font-medium">
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Relationships</span><span data-lang="ru">Отношения</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Career</span><span data-lang="ru">Карьера</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">Finance</span><span data-lang="ru">Финансы</span></li>
+                                <li class="flex items-center gap-2"><span class="w-1 h-1 bg-[#5c5243] rounded-full"></span><span data-lang="en">DAO</span><span data-lang="ru">DAO</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Subscriptions Section -->
+    <section class="section-matte" id="subscription">
+        <div class="container-matte">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="en">Pricing</span>
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="ru">Тарифы</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="en">Choose Your Plan</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="ru">Выберите подписку</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Free -->
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative h-full flex flex-col">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="text-center mb-4">
+                            <span class="material-symbols-outlined text-4xl text-[#8c7a6b] mb-2">card_giftcard</span>
+                            <h3 class="text-xl font-bold text-engraved" data-lang="en">Free</h3>
+                            <h3 class="text-xl font-bold text-engraved" data-lang="ru">Бесплатный</h3>
+                            <div class="text-3xl font-bold text-[#5c5243] mt-2">$0</div>
+                        </div>
+                        <ul class="space-y-3 mb-6 flex-1">
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Health audit across all directions</span>
+                                <span data-lang="ru">Аудит состояния здоровья по всем направлениям</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Gift: 21-day personal plan</span>
+                                <span data-lang="ru">Подарок: персональный план на 21 день</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Access to all knowledge bases</span>
+                                <span data-lang="ru">Доступ ко всем базам знаний и методологиям</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">5 AI requests + 1 rec/day</span>
+                                <span data-lang="ru">5 запросов в ИИ и 1 рекомендация в день</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Manual program selection</span>
+                                <span data-lang="ru">Ручной выбор методик и программ</span>
+                            </li>
+                        </ul>
+                        <button onclick="showModal()" class="btn-matte w-full py-3 font-bold text-sm" data-lang="en">Get Started</button>
+                        <button onclick="showModal()" class="btn-matte w-full py-3 font-bold text-sm" data-lang="ru">Начать</button>
+                    </div>
+                </div>
+                
+                <!-- Pro -->
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative h-full flex flex-col border-2 border-[#8c7a6b]">
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+                            <span class="bg-[#8c7a6b] text-[#e4dfd5] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" data-lang="en">Popular</span>
+                            <span class="bg-[#8c7a6b] text-[#e4dfd5] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" data-lang="ru">Популярный</span>
+                        </div>
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="text-center mb-4 pt-2">
+                            <span class="material-symbols-outlined text-4xl text-[#5c5243] mb-2">stars</span>
+                            <h3 class="text-xl font-bold text-engraved">Pro</h3>
+                            <div class="text-3xl font-bold text-[#5c5243] mt-2">$29<span class="text-sm font-normal text-ink-light">/mo</span></div>
+                            <p class="text-xs text-ink-light mt-1" data-lang="en">Yearly subscription discount + token bonuses</p>
+                            <p class="text-xs text-ink-light mt-1" data-lang="ru">Скидка за год + бонусы за токены</p>
+                        </div>
+                        <ul class="space-y-3 mb-6 flex-1">
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Full AI LLM access</span>
+                                <span data-lang="ru">Полный доступ к AI LLM</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">AI & Health Center sync</span>
+                                <span data-lang="ru">Синхронизация AI и центра здоровья</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">5 personalized recommendations</span>
+                                <span data-lang="ru">5 рекомендаций по выбору методологии</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Gift: 1 specialist consultation</span>
+                                <span data-lang="ru">Подарок: консультация со специалистом</span>
+                            </li>
+                        </ul>
+                        <button onclick="showModal()" class="btn-primary-matte w-full py-3 font-bold text-sm" data-lang="en">Subscribe Pro</button>
+                        <button onclick="showModal()" class="btn-primary-matte w-full py-3 font-bold text-sm" data-lang="ru">Подписаться Pro</button>
+                    </div>
+                </div>
+                
+                <!-- Premium -->
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative h-full flex flex-col">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="text-center mb-4">
+                            <span class="material-symbols-outlined text-4xl text-[#5c5243] mb-2">diamond</span>
+                            <h3 class="text-xl font-bold text-engraved">Premium</h3>
+                            <div class="text-3xl font-bold text-[#5c5243] mt-2">$59<span class="text-sm font-normal text-ink-light">/mo</span></div>
+                            <p class="text-xs text-ink-light mt-1" data-lang="en">Yearly discount + token payment bonuses</p>
+                            <p class="text-xs text-ink-light mt-1" data-lang="ru">Скидка за год + бонусы за токены</p>
+                        </div>
+                        <ul class="space-y-3 mb-6 flex-1">
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Unlimited AI recommendations</span>
+                                <span data-lang="ru">Безлимитные AI рекомендации</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Full AI chat integration</span>
+                                <span data-lang="ru">Полная интеграция чата AI и центра здоровья</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">50% off widgets & programs</span>
+                                <span data-lang="ru">50% скидка на все виджеты и программы</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Gift: 1 month Pro for 2 friends</span>
+                                <span data-lang="ru">Подарок: месяц Pro для 2 друзей</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">1 hour consultation per module</span>
+                                <span data-lang="ru">Час консультации по каждому модулю</span>
+                            </li>
+                        </ul>
+                        <button onclick="showModal()" class="btn-primary-matte w-full py-3 font-bold text-sm" data-lang="en">Subscribe Premium</button>
+                        <button onclick="showModal()" class="btn-primary-matte w-full py-3 font-bold text-sm" data-lang="ru">Подписаться Premium</button>
+                    </div>
+                </div>
+                
+                <!-- Specialist -->
+                <div class="deep-bay">
+                    <div class="module-bakelite p-6 relative h-full flex flex-col">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="text-center mb-4">
+                            <span class="material-symbols-outlined text-4xl text-[#5c5243] mb-2">verified</span>
+                            <h3 class="text-xl font-bold text-engraved" data-lang="en">Specialist</h3>
+                            <h3 class="text-xl font-bold text-engraved" data-lang="ru">Специалист</h3>
+                            <div class="text-lg font-bold text-[#5c5243] mt-2" data-lang="en">Pro / Premium tiers</div>
+                            <div class="text-lg font-bold text-[#5c5243] mt-2" data-lang="ru">Тарифы Про / Премиум</div>
+                        </div>
+                        <ul class="space-y-3 mb-6 flex-1">
+                            <li class="flex items-start gap-2 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en"><strong>Pro:</strong> Create subscription & product showcases</span>
+                                <span data-lang="ru"><strong>Про:</strong> Создание витрин подписок и продуктов</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en"><strong>Premium:</strong> Client access in AI chat</span>
+                                <span data-lang="ru"><strong>Премиум:</strong> Доступ к клиентам в чате AI</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Safe collaborative goal management</span>
+                                <span data-lang="ru">Совместное управление планами</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Referral: 5 Premium clients = Free Premium</span>
+                                <span data-lang="ru">Рефералка: 5 клиентов Премиум = Премиум</span>
+                            </li>
+                        </ul>
+                        <button onclick="showModal()" class="btn-matte w-full py-3 font-bold text-sm" data-lang="en">Apply as Specialist</button>
+                        <button onclick="showModal()" class="btn-matte w-full py-3 font-bold text-sm" data-lang="ru">Подать заявку</button>
+                    </div>
+                </div>
+                
+                <!-- Shop -->
+                <div class="deep-bay">
+                    <div class="module-bakelite p-6 relative h-full flex flex-col">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="text-center mb-4">
+                            <span class="material-symbols-outlined text-4xl text-[#5c5243] mb-2">store</span>
+                            <h3 class="text-xl font-bold text-engraved" data-lang="en">Shop</h3>
+                            <h3 class="text-xl font-bold text-engraved" data-lang="ru">Магазин</h3>
+                            <div class="text-sm font-bold text-[#5c5243] mt-2" data-lang="en">For product sellers</div>
+                            <div class="text-sm font-bold text-[#5c5243] mt-2" data-lang="ru">Для продавцов товаров</div>
+                        </div>
+                        <ul class="space-y-3 mb-6 flex-1">
+                            <li class="flex items-start gap-2 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Fixed subscription or % of sales</span>
+                                <span data-lang="ru">Фикс подписка или % от продаж</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Referral program included</span>
+                                <span data-lang="ru">Реферальная программа</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Cashback programs</span>
+                                <span data-lang="ru">Кэшбэк программы</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Advertising for promotion</span>
+                                <span data-lang="ru">Реклама для продвижения</span>
+                            </li>
+                        </ul>
+                        <button onclick="showModal()" class="btn-matte w-full py-3 font-bold text-sm" data-lang="en">Open Shop</button>
+                        <button onclick="showModal()" class="btn-matte w-full py-3 font-bold text-sm" data-lang="ru">Открыть магазин</button>
+                    </div>
+                </div>
+                
+                <!-- Centers -->
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative h-full flex flex-col border-2 border-[#5c5243]">
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+                            <span class="bg-[#5c5243] text-[#e4dfd5] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" data-lang="en">Enterprise</span>
+                            <span class="bg-[#5c5243] text-[#e4dfd5] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" data-lang="ru">Бизнес</span>
+                        </div>
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="text-center mb-4 pt-2">
+                            <span class="material-symbols-outlined text-4xl text-[#5c5243] mb-2">business</span>
+                            <h3 class="text-xl font-bold text-engraved" data-lang="en">Centers</h3>
+                            <h3 class="text-xl font-bold text-engraved" data-lang="ru">Центры</h3>
+                            <div class="text-3xl font-bold text-[#5c5243] mt-2">$790<span class="text-sm font-normal text-ink-light">/mo</span></div>
+                            <p class="text-xs text-ink-light mt-1" data-lang="en">Yearly subscription discount</p>
+                            <p class="text-xs text-ink-light mt-1" data-lang="ru">Скидка за подписку на год</p>
+                        </div>
+                        <ul class="space-y-3 mb-6 flex-1">
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span>CRM system included</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">10 Pro specialist accounts</span>
+                                <span data-lang="ru">10 аккаунтов специалистов Про</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Referral & discount system</span>
+                                <span data-lang="ru">Реферальная и скидочная система</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
+                                <span data-lang="en">Cashback for specialists & clients</span>
+                                <span data-lang="ru">Кэшбэк для специалистов и клиентов</span>
+                            </li>
+                        </ul>
+                        <button onclick="showModal()" class="btn-primary-matte w-full py-3 font-bold text-sm" data-lang="en">Contact Sales</button>
+                        <button onclick="showModal()" class="btn-primary-matte w-full py-3 font-bold text-sm" data-lang="ru">Связаться с отделом продаж</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ProjectHub Section -->
+    <section class="section-matte" id="projecthub">
+        <div class="container-matte">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped">ProjectHub</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="en">Projects & Products</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="ru">Проекты и Продукты</h2>
+                <p class="text-base text-ink-light mt-4 max-w-xl mx-auto font-medium" data-lang="en">Each project has an open staking pool. Invest in specific development directions.</p>
+                <p class="text-base text-ink-light mt-4 max-w-xl mx-auto font-medium" data-lang="ru">Каждый проект имеет открытый стейкинг-пул. Инвестируйте в развитие конкретных направлений.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-5">
+                <!-- PostureAI Pro -->
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative h-full flex flex-col">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="mb-4"><span class="material-symbols-outlined icon-xl text-[#5c5243]">accessibility</span></div>
+                        <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="en">Research Stage</span>
+                        <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="ru">Стадия исследования</span>
+                        <h3 class="text-lg font-bold text-engraved mb-3">PostureAI Pro</h3>
+                        <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="en">Device and software for tracking back position. Real-time posture correction via AI.</p>
+                        <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="ru">Устройство и программа отслеживания положения спины. Коррекция осанки в реальном времени через ИИ.</p>
+                        <div class="grid grid-cols-2 gap-3 mb-5">
+                            <div class="bg-[#d0c6b8]/60 rounded-xl p-3 text-center">
+                                <div class="text-lg font-bold text-ink">78%</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="en">Ready</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="ru">Готовность</div>
+                            </div>
+                            <div class="bg-[#d0c6b8]/60 rounded-xl p-3 text-center">
+                                <div class="text-lg font-bold text-[#5c5243]">15%</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold">APY</div>
+                            </div>
+                        </div>
+                        <a href="#investment" class="btn-primary-matte py-3 text-center text-sm font-bold" data-lang="en">Invest</a>
+                        <a href="#investment" class="btn-primary-matte py-3 text-center text-sm font-bold" data-lang="ru">Инвестировать</a>
+                    </div>
+                </div>
+                
+                <!-- SleepSync -->
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative h-full flex flex-col">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="mb-4"><span class="material-symbols-outlined icon-xl text-[#5c5243]">bedtime</span></div>
+                        <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="en">Research Stage</span>
+                        <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="ru">Стадия исследования</span>
+                        <h3 class="text-lg font-bold text-engraved mb-3">SleepSync</h3>
+                        <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="en">Sleep tracking device and app. Smart alarm with sleep phases and biological cycles.</p>
+                        <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="ru">Устройство и приложение для отслеживания сна. Умный будильник с фазами сна и биологическими циклами.</p>
+                        <div class="grid grid-cols-2 gap-3 mb-5">
+                            <div class="bg-[#d0c6b8]/60 rounded-xl p-3 text-center">
+                                <div class="text-lg font-bold text-ink">65%</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="en">Ready</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="ru">Готовность</div>
+                            </div>
+                            <div class="bg-[#d0c6b8]/60 rounded-xl p-3 text-center">
+                                <div class="text-lg font-bold text-[#5c5243]">15%</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold">APY</div>
+                            </div>
+                        </div>
+                        <a href="#investment" class="btn-primary-matte py-3 text-center text-sm font-bold" data-lang="en">Invest</a>
+                        <a href="#investment" class="btn-primary-matte py-3 text-center text-sm font-bold" data-lang="ru">Инвестировать</a>
+                    </div>
+                </div>
+                
+                <!-- LLM HealthCore -->
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative h-full flex flex-col">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="mb-4"><span class="material-symbols-outlined icon-xl text-[#5c5243]">neurology</span></div>
+                        <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="en">Research Stage</span>
+                        <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="ru">Стадия исследования</span>
+                        <h3 class="text-lg font-bold text-engraved mb-3">LLM HealthCore</h3>
+                        <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="en">Programs and methodologies for LLM training. Proprietary datasets from health experts.</p>
+                        <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="ru">Программы и методологии для обучения LLM. Проприетарные датасеты от экспертов в области здоровья.</p>
+                        <div class="grid grid-cols-2 gap-3 mb-5">
+                            <div class="bg-[#d0c6b8]/60 rounded-xl p-3 text-center">
+                                <div class="text-lg font-bold text-ink">45%</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="en">Ready</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="ru">Готовность</div>
+                            </div>
+                            <div class="bg-[#d0c6b8]/60 rounded-xl p-3 text-center">
+                                <div class="text-lg font-bold text-[#5c5243]">15%</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold">APY</div>
+                            </div>
+                        </div>
+                        <a href="#investment" class="btn-primary-matte py-3 text-center text-sm font-bold" data-lang="en">Invest</a>
+                        <a href="#investment" class="btn-primary-matte py-3 text-center text-sm font-bold" data-lang="ru">Инвестировать</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="section-matte" id="roadmap">
+        <div class="container-matte">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="en">Development Path</span>
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="ru">Путь развития</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3">4 Stages</h2>
+                <p class="text-base text-ink-light mt-4" data-lang="en">From concept to global health ecosystem</p>
+                <p class="text-base text-ink-light mt-4" data-lang="ru">От концепции к глобальной экосистеме здоровья</p>
+            </div>
+            
+            <!-- Stage 1: Pre-Seed Final Allocation -->
+            <div class="deep-bay mb-5">
+                <div class="module-ivory p-6 relative border-2 border-[#8c7a6b]">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+                        <span class="bg-[#8c7a6b] text-[#e4dfd5] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">schedule</span>
+                            <span data-lang="en">Until March 10</span>
+                            <span data-lang="ru">До 10 марта</span>
+                        </span>
+                    </div>
+                    <div class="screw-matte screw-tl"></div>
+                    <div class="screw-matte screw-tr"></div>
+                    <div class="flex items-start gap-5 pt-2">
+                        <div class="deep-bay !p-1.5 !rounded-xl shrink-0">
+                            <div class="bg-[#8c7a6b] text-[#e4dfd5] w-14 h-14 rounded-lg flex items-center justify-center text-2xl font-bold">1</div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-1 flex-wrap">
+                                <h3 class="text-lg font-bold text-engraved">Pre-Seed</h3>
+                                <span class="bg-[#8c7a6b] text-[#e4dfd5] text-xs px-3 py-1 rounded-full font-bold" data-lang="en">$50K Available</span>
+                                <span class="bg-[#8c7a6b] text-[#e4dfd5] text-xs px-3 py-1 rounded-full font-bold" data-lang="ru">$50K доступно</span>
+                            </div>
+                            <div class="text-xl font-bold text-[#5c5243] mb-2">$140,000 <span class="text-sm font-normal text-ink-light">+ $50K at $0.01</span></div>
+                            <p class="text-sm text-ink-light mb-3 leading-relaxed font-medium" data-lang="en">Founder invested $140K. Final allocation: $50,000 at $0.01/token until March 10. Last chance before Seed Round at $0.05.</p>
+                            <p class="text-sm text-ink-light mb-3 leading-relaxed font-medium" data-lang="ru">Основатель вложил $140K. Финальная аллокация: $50,000 по $0.01/токен до 10 марта. Последний шанс до Seed Round по $0.05.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-[#8c7a6b]/30 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">check</span> 245 components
+                                </span>
+                                <span class="bg-[#8c7a6b]/30 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">check</span> 84 pages
+                                </span>
+                                <span class="bg-[#8c7a6b]/30 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">check</span> MVP 82%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stage 2: Active -->
+            <div class="deep-bay mb-5">
+                <div class="module-ivory p-6 relative border-2 border-[#5c5243]">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+                        <span class="bg-[#5c5243] text-[#e4dfd5] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">rocket_launch</span>
+                            <span data-lang="en">Applications Open</span>
+                            <span data-lang="ru">Открыт приём заявок</span>
+                        </span>
+                    </div>
+                    <div class="screw-matte screw-tl"></div>
+                    <div class="screw-matte screw-tr"></div>
+                    <div class="flex items-start gap-5 pt-2">
+                        <div class="deep-bay !p-1.5 !rounded-xl shrink-0">
+                            <div class="bg-[#3d3226] text-[#e4dfd5] w-14 h-14 rounded-lg flex items-center justify-center text-2xl font-bold shadow-lg">2</div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-1 flex-wrap">
+                                <h3 class="text-lg font-bold text-engraved">Seed</h3>
+                                <span class="status-active text-xs px-3 py-1 rounded-full font-bold" data-lang="en">Starts March 10</span>
+                                <span class="status-active text-xs px-3 py-1 rounded-full font-bold" data-lang="ru">Старт 10 марта</span>
+                            </div>
+                            <div class="text-xl font-bold text-[#3d3226] mb-2">$350K – $650K</div>
+                            <div class="bg-[#8c7a6b]/20 rounded-lg p-2 mb-3 inline-block">
+                                <span class="text-sm font-bold text-[#3d3226]" data-lang="en">Token price: $0.05 (5x from current $0.01)</span>
+                                <span class="text-sm font-bold text-[#3d3226]" data-lang="ru">Цена токена: $0.05 (5x от текущей $0.01)</span>
+                            </div>
+                            <p class="text-sm text-ink-light mb-4 leading-relaxed font-medium" data-lang="en">Transforming technological protocol into a mass product. Full mobile ecosystem release.</p>
+                            <p class="text-sm text-ink-light mb-4 leading-relaxed font-medium" data-lang="ru">Превращение технологического протокола в массовый продукт. Полноценный релиз мобильной экосистемы.</p>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-[#d0c6b8]/60 rounded-xl p-3">
+                                    <div class="text-sm font-bold text-engraved flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-base">smartphone</span> Product
+                                    </div>
+                                    <div class="text-xs text-ink-light font-medium" data-lang="en">iOS/Android Release</div>
+                                    <div class="text-xs text-ink-light font-medium" data-lang="ru">Релиз iOS/Android</div>
+                                </div>
+                                <div class="bg-[#d0c6b8]/60 rounded-xl p-3">
+                                    <div class="text-sm font-bold text-engraved flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-base">handshake</span> B2B
+                                    </div>
+                                    <div class="text-xs text-ink-light font-medium" data-lang="en">Partnerships</div>
+                                    <div class="text-xs text-ink-light font-medium" data-lang="ru">Партнёрства</div>
+                                </div>
+                                <div class="bg-[#d0c6b8]/60 rounded-xl p-3">
+                                    <div class="text-sm font-bold text-engraved flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-base">neurology</span> AI
+                                    </div>
+                                    <div class="text-xs text-ink-light font-medium" data-lang="en">Expert LLM Training</div>
+                                    <div class="text-xs text-ink-light font-medium" data-lang="ru">Обучение LLM экспертов</div>
+                                </div>
+                                <div class="bg-[#d0c6b8]/60 rounded-xl p-3">
+                                    <div class="text-sm font-bold text-engraved flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-base">account_balance</span> DAO
+                                    </div>
+                                    <div class="text-xs text-ink-light font-medium">Knowledge Hub</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stage 3 -->
+            <div class="deep-bay mb-5">
+                <div class="module-ivory p-6 relative opacity-80">
+                    <div class="screw-matte screw-tl"></div>
+                    <div class="screw-matte screw-tr"></div>
+                    <div class="flex items-start gap-5">
+                        <div class="deep-bay !p-1.5 !rounded-xl shrink-0">
+                            <div class="bg-[#8c7a6b] text-[#e4dfd5] w-14 h-14 rounded-lg flex items-center justify-center text-2xl font-bold">3</div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-1">
+                                <h3 class="text-lg font-bold text-engraved">Series A</h3>
+                                <span class="bg-[#c2b8a9]/60 text-[#3d3226] text-xs px-3 py-1 rounded-full font-bold" data-lang="en">Next Stage</span>
+                                <span class="bg-[#c2b8a9]/60 text-[#3d3226] text-xs px-3 py-1 rounded-full font-bold" data-lang="ru">Следующий</span>
+                            </div>
+                            <div class="text-xl font-bold text-[#5c5243] mb-2">$1.5M – $2.5M</div>
+                            <p class="text-sm text-ink-light mb-3 leading-relaxed font-medium" data-lang="en">Capturing international market and creating infrastructure. Scaling to high-check regions.</p>
+                            <p class="text-sm text-ink-light mb-3 leading-relaxed font-medium" data-lang="ru">Захват международного рынка и создание инфраструктуры. Масштабирование на регионы с высоким чеком.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-[#c2b8a9]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">public</span> Global Scaling
+                                </span>
+                                <span class="bg-[#c2b8a9]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">watch</span> Hardware
+                                </span>
+                                <span class="bg-[#c2b8a9]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">school</span> Knowledge
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stage 4 -->
+            <div class="deep-bay">
+                <div class="module-ivory p-6 relative opacity-70">
+                    <div class="screw-matte screw-tl"></div>
+                    <div class="screw-matte screw-tr"></div>
+                    <div class="flex items-start gap-5">
+                        <div class="deep-bay !p-1.5 !rounded-xl shrink-0">
+                            <div class="bg-[#b8ae9f] text-[#e4dfd5] w-14 h-14 rounded-lg flex items-center justify-center text-2xl font-bold">4</div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-1">
+                                <h3 class="text-lg font-bold text-engraved">Series B+</h3>
+                                <span class="bg-[#d0c6b8]/60 text-[#3d3226] text-xs px-3 py-1 rounded-full font-bold" data-lang="en">Scaling</span>
+                                <span class="bg-[#d0c6b8]/60 text-[#3d3226] text-xs px-3 py-1 rounded-full font-bold" data-lang="ru">Масштабирование</span>
+                            </div>
+                            <div class="text-xl font-bold text-[#5c5243] mb-2">$10M+</div>
+                            <p class="text-sm text-ink-light mb-3 leading-relaxed font-medium" data-lang="en">Creating "Health-Metaverse" and market absorption. Institutional integration.</p>
+                            <p class="text-sm text-ink-light mb-3 leading-relaxed font-medium" data-lang="ru">Создание «Health-Metaverse» и поглощение рынков. Институциональная интеграция.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-[#d0c6b8]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">local_hospital</span> Institutional
+                                </span>
+                                <span class="bg-[#d0c6b8]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">rocket_launch</span> M&A
+                                </span>
+                                <span class="bg-[#d0c6b8]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">hub</span> Expansion
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MVP Preview Section -->
+    <section class="section-matte">
+        <div class="container-matte">
+            <div class="deep-bay">
+                <div class="module-ivory p-8 md:p-12 relative text-center">
+                    <div class="screw-matte screw-tl"></div>
+                    <div class="screw-matte screw-tr"></div>
+                    <div class="screw-matte screw-bl"></div>
+                    <div class="screw-matte screw-br"></div>
+                    
+                    <span class="material-symbols-outlined text-5xl text-[#5c5243] mb-4">visibility</span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-engraved mb-4" data-lang="en">Try the MVP</h2>
+                    <h2 class="text-2xl md:text-3xl font-bold text-engraved mb-4" data-lang="ru">Попробовать MVP</h2>
+                    <p class="text-base text-ink-light mb-6 max-w-lg mx-auto font-medium" data-lang="en">Experience the Human Operating System in action. Early access to core features.</p>
+                    <p class="text-base text-ink-light mb-6 max-w-lg mx-auto font-medium" data-lang="ru">Испытайте Операционную систему человека в действии. Ранний доступ к основным функциям.</p>
+                    
+                    <a href="https://etholife.onrender.com/" target="_blank" class="btn-primary-matte px-10 py-4 font-bold text-lg inline-flex items-center gap-3">
+                        <span class="material-symbols-outlined">open_in_new</span>
+                        <span data-lang="en">View MVP</span>
+                        <span data-lang="ru">Смотреть MVP</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="section-matte" id="team">
+        <div class="container-matte">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="en">The People</span>
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="ru">Команда</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="en">Core Team</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="ru">Основатели</h2>
+                <p class="text-base text-ink-light mt-4 max-w-xl mx-auto font-medium" data-lang="en">Six visionaries building the Human Operating System</p>
+                <p class="text-base text-ink-light mt-4 max-w-xl mx-auto font-medium" data-lang="ru">Шесть визионеров, создающих Операционную систему человека</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Timur -->
+                <div class="deep-bay team-card" onclick="toggleTeamCard(this)">
+                    <div class="module-ivory p-6 relative cursor-pointer hover:shadow-lg transition-shadow">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-[#5c5243] flex items-center justify-center text-[#e4dfd5] deep-bay !p-0"><span class="material-symbols-outlined text-2xl">account_circle</span></div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-engraved">Timur</h3>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="en">Founder & Chief Architect</p>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="ru">Основатель и Главный архитектор</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="en">Strategist and visionary behind the entire EthosLife ecosystem.</p>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="ru">Стратег и визионер всей экосистемы EthosLife.</p>
+                        
+                        <div class="team-details hidden mt-4 pt-4 border-t border-[#d0c6b8]">
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="en">Architect of tokenomics, technical platform, and product strategy. 7+ years in Creative Product Architecture across international corporations.</p>
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="ru">Архитектор токеномики, технической платформы и продуктовой стратегии. 7+ лет в Creative Product Architecture в международных корпорациях.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Tokenomics</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Full-stack</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">M.Sc. Economics</span>
+                            </div>
+                        </div>
+
+                        <!-- Expand Button -->
+                        <div class="absolute bottom-4 right-4">
+                            <div class="w-8 h-8 rounded-lg bg-[#d0c6b8] shadow-[2px_2px_4px_rgba(0,0,0,0.1),-1px_-1px_2px_rgba(255,255,255,0.5)] flex items-center justify-center team-arrow-btn transition-all">
+                                <span class="material-symbols-outlined text-[#5c5243] text-lg team-arrow-icon transition-transform">arrow_forward</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Maria -->
+                <div class="deep-bay team-card" onclick="toggleTeamCard(this)">
+                    <div class="module-ivory p-6 relative cursor-pointer hover:shadow-lg transition-shadow">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-[#5c5243] flex items-center justify-center text-[#e4dfd5] deep-bay !p-0"><span class="material-symbols-outlined text-2xl">public</span></div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-engraved">Maria</h3>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="en">Chief of Staff</p>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="ru">Chief of Staff</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="en">Driving international expansion and LLM product strategy.</p>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="ru">Международная экспансия и стратегия AI-продуктов.</p>
+                        
+                        <div class="team-details hidden mt-4 pt-4 border-t border-[#d0c6b8]">
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="en">Strategic partner to the Founder, bridging high-level business negotiations and LLM technical architecture. 3+ years full-cycle project management.</p>
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="ru">Стратегический партнер Основателя, связующее звено между бизнес-переговорами и технической архитектурой LLM. 3+ года управления проектами.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">LLM Architecture</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">International Relations</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Digital Linguistics</span>
+                            </div>
+                        </div>
+
+                        <!-- Expand Button -->
+                        <div class="absolute bottom-4 right-4">
+                            <div class="w-8 h-8 rounded-lg bg-[#d0c6b8] shadow-[2px_2px_4px_rgba(0,0,0,0.1),-1px_-1px_2px_rgba(255,255,255,0.5)] flex items-center justify-center team-arrow-btn transition-all">
+                                <span class="material-symbols-outlined text-[#5c5243] text-lg team-arrow-icon transition-transform">arrow_forward</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boris -->
+                <div class="deep-bay team-card" onclick="toggleTeamCard(this)">
+                    <div class="module-ivory p-6 relative cursor-pointer hover:shadow-lg transition-shadow">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-[#5c5243] flex items-center justify-center text-[#e4dfd5] deep-bay !p-0"><span class="material-symbols-outlined text-2xl">fitness_center</span></div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-engraved">Boris</h3>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="en">Sports Medicine Lead</p>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="ru">Руководитель спортивной медицины</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="en">Internationally recognized expert in physical rehabilitation.</p>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="ru">Признанный эксперт международного уровня в реабилитации.</p>
+                        
+                        <div class="team-details hidden mt-4 pt-4 border-t border-[#d0c6b8]">
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="en">Olympic Team Expert (Israel), Wingate Institute Specialist. Scientific validation of physical health methodologies for EthosLife AI.</p>
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="ru">Эксперт Олимпийской сборной (Израиль), специалист института Wingate. Научная валидация методологий физического здоровья для ИИ EthosLife.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Olympic Experience</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Recovery Protocols</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Sports Innovation</span>
+                            </div>
+                        </div>
+
+                        <!-- Expand Button -->
+                        <div class="absolute bottom-4 right-4">
+                            <div class="w-8 h-8 rounded-lg bg-[#d0c6b8] shadow-[2px_2px_4px_rgba(0,0,0,0.1),-1px_-1px_2px_rgba(255,255,255,0.5)] flex items-center justify-center team-arrow-btn transition-all">
+                                <span class="material-symbols-outlined text-[#5c5243] text-lg team-arrow-icon transition-transform">arrow_forward</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dmitry -->
+                <div class="deep-bay team-card" onclick="toggleTeamCard(this)">
+                    <div class="module-ivory p-6 relative cursor-pointer hover:shadow-lg transition-shadow">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-[#5c5243] flex items-center justify-center text-[#e4dfd5] deep-bay !p-0"><span class="material-symbols-outlined text-2xl">nutrition</span></div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-engraved">Dmitry</h3>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="en">Nutrition & Performance</p>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="ru">Нутрициология и перформанс</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="en">Preventive medicine and biohacking expert with 10+ years experience.</p>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="ru">Эксперт в превентивной медицине и биохакинге, 10+ лет стажа.</p>
+                        
+                        <div class="team-details hidden mt-4 pt-4 border-t border-[#d0c6b8]">
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="en">Develops personalized nutrition and training programs integrated into LLM training. Global Education Partner for longevity standards.</p>
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="ru">Разрабатывает персональные программы питания и тренировок, интегрированные в обучение LLM. Партнер глобальных образовательных платформ.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">10+ Years Experience</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">LLM Training</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Biohacking</span>
+                            </div>
+                        </div>
+
+                        <!-- Expand Button -->
+                        <div class="absolute bottom-4 right-4">
+                            <div class="w-8 h-8 rounded-lg bg-[#d0c6b8] shadow-[2px_2px_4px_rgba(0,0,0,0.1),-1px_-1px_2px_rgba(255,255,255,0.5)] flex items-center justify-center team-arrow-btn transition-all">
+                                <span class="material-symbols-outlined text-[#5c5243] text-lg team-arrow-icon transition-transform">arrow_forward</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daniel -->
+                <div class="deep-bay team-card" onclick="toggleTeamCard(this)">
+                    <div class="module-ivory p-6 relative cursor-pointer hover:shadow-lg transition-shadow">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-[#5c5243] flex items-center justify-center text-[#e4dfd5] deep-bay !p-0"><span class="material-symbols-outlined text-2xl">link</span></div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-engraved">Daniel Mervel</h3>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="en">Blockchain & Hardware</p>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="ru">Блокчейн и оборудование</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="en">Decentralized systems and real-sector technology integration.</p>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="ru">Децентрализованные системы и интеграция технологий.</p>
+                        
+                        <div class="team-details hidden mt-4 pt-4 border-t border-[#d0c6b8]">
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="en">Web3 & DAO architecture, smart contract development and auditing. R&D in wearable sensors and blockchain protocol integration.</p>
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="ru">Архитектура Web3 и DAO, разработка и аудит смарт-контрактов. R&D носимых сенсоров и интеграция с блокчейн-протоколами.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Web3 Architecture</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Smart Contracts</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Hardware R&D</span>
+                            </div>
+                        </div>
+
+                        <!-- Expand Button -->
+                        <div class="absolute bottom-4 right-4">
+                            <div class="w-8 h-8 rounded-lg bg-[#d0c6b8] shadow-[2px_2px_4px_rgba(0,0,0,0.1),-1px_-1px_2px_rgba(255,255,255,0.5)] flex items-center justify-center team-arrow-btn transition-all">
+                                <span class="material-symbols-outlined text-[#5c5243] text-lg team-arrow-icon transition-transform">arrow_forward</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Serge -->
+                <div class="deep-bay team-card" onclick="toggleTeamCard(this)">
+                    <div class="module-ivory p-6 relative cursor-pointer hover:shadow-lg transition-shadow">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-[#5c5243] flex items-center justify-center text-[#e4dfd5] deep-bay !p-0"><span class="material-symbols-outlined text-2xl">psychology</span></div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-engraved">Serge</h3>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="en">Psychology & Mind-Body</p>
+                                <p class="text-sm text-[#5c5243] font-semibold" data-lang="ru">Психология и сознание</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="en">Developer of psychotyping programs and habit correction methodologies.</p>
+                        <p class="text-sm text-ink-light font-medium mb-6" data-lang="ru">Разработчик программ психотипизации и коррекции привычек.</p>
+                        
+                        <div class="team-details hidden mt-4 pt-4 border-t border-[#d0c6b8]">
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="en">Creates behavioral algorithms for long-term healthy habits. Develops consciousness-body therapy programs integrated into EthosLife interface.</p>
+                            <p class="text-sm text-ink-light mb-3 font-medium" data-lang="ru">Создает алгоритмы поведения для долгосрочных здоровых привычек. Разрабатывает программы терапии сознания и тела в интерфейсе EthosLife.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Behavioral Modeling</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Psychotype Therapy</span>
+                                <span class="bg-[#5c5243]/10 text-[#2d2418] text-xs px-2 py-1 rounded font-medium">Mindfulness</span>
+                            </div>
+                        </div>
+
+                        <!-- Expand Button -->
+                        <div class="absolute bottom-4 right-4">
+                            <div class="w-8 h-8 rounded-lg bg-[#d0c6b8] shadow-[2px_2px_4px_rgba(0,0,0,0.1),-1px_-1px_2px_rgba(255,255,255,0.5)] flex items-center justify-center team-arrow-btn transition-all">
+                                <span class="material-symbols-outlined text-[#5c5243] text-lg team-arrow-icon transition-transform">arrow_forward</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DreamSoft Partner Note -->
+            <div class="deep-bay mt-8">
+                <div class="module-ivory p-6 text-center">
+                    <div class="flex items-center justify-center gap-3 mb-3">
+                        <span class="material-symbols-outlined text-2xl text-[#5c5243]">handshake</span>
+                        <h3 class="text-lg font-bold text-engraved" data-lang="en">Strategic Engineering Partner</h3>
+                        <h3 class="text-lg font-bold text-engraved" data-lang="ru">Стратегический инжиниринг-партнер</h3>
+                    </div>
+                    <p class="text-base text-ink-light font-medium" data-lang="en"><strong>DreamSoft</strong> — 30+ engineers ready to scale the product through Seed and Series A stages.</p>
+                    <p class="text-base text-ink-light font-medium" data-lang="ru"><strong>DreamSoft</strong> — 30+ инженеров, готовых к масштабированию продукта на стадиях Seed и Series A.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investment Section -->
+    <section class="section-matte" id="investment">
+        <div class="container-matte">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="en">Participation</span>
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="ru">Участие</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="en">Join the Ecosystem</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="ru">Присоединиться к экосистеме</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-5">
+                <!-- Seed Investor -->
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative">
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <h3 class="text-lg font-bold text-ink mb-2">Seed Investor</h3>
+                        <div class="text-3xl font-bold text-ink mb-5">$5K - $50K</div>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-3 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243]">check_circle</span>
+                                <span data-lang="en">Price $0.05 (5x from current)</span>
+                                <span data-lang="ru">Цена $0.05 (5x от текущей)</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243]">check_circle</span>
+                                <span data-lang="en">Vesting: 6 mo. cliff, 18 mo.</span>
+                                <span data-lang="ru">Vesting: 6 мес. cliff, 18 мес.</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243]">check_circle</span>
+                                <span data-lang="en">Lifetime Premium</span>
+                                <span data-lang="ru">Пожизненный Premium</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243]">check_circle</span>
+                                <span data-lang="en">Private Discord access</span>
+                                <span data-lang="ru">Доступ к закрытому Discord</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243]">check_circle</span>
+                                <span data-lang="en">Quarterly reports</span>
+                                <span data-lang="ru">Ежеквартальные отчёты</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Strategic Partner -->
+                <div class="deep-bay">
+                    <div class="module-ivory p-6 relative border-2 border-[#5c5243]">
+                        <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+                            <span class="bg-[#5c5243] text-[#e4dfd5] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">star</span>
+                                <span data-lang="en">Recommended</span>
+                                <span data-lang="ru">Рекомендуется</span>
+                            </span>
+                        </div>
+                        <div class="screw-matte screw-tl"></div>
+                        <div class="screw-matte screw-tr"></div>
+                        <h3 class="text-lg font-bold text-ink mb-2 mt-2">Strategic Partner</h3>
+                        <div class="text-3xl font-bold text-ink mb-5">$50K+</div>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-3 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243]">check_circle</span>
+                                <span data-lang="en">All Seed benefits</span>
+                                <span data-lang="ru">Все преимущества Seed</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243]">check_circle</span>
+                                <span data-lang="en">+15% token bonus</span>
+                                <span data-lang="ru">Бонус токенов +15%</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243]">check_circle</span>
+                                <span data-lang="en">Advisory Board seat</span>
+                                <span data-lang="ru">Место в Advisory Board</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243]">check_circle</span>
+                                <span data-lang="en">Direct CEO contact</span>
+                                <span data-lang="ru">Прямой контакт с CEO</span>
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-ink font-medium">
+                                <span class="material-symbols-outlined text-[#5c5243]">check_circle</span>
+                                <span data-lang="en">Early feature access</span>
+                                <span data-lang="ru">Ранний доступ к функциям</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MVP Button in Investment Section -->
+            <div class="mt-8 text-center">
+                <a href="https://etholife.onrender.com/" target="_blank" class="btn-matte px-8 py-4 font-bold text-base inline-flex items-center gap-3">
+                    <span class="material-symbols-outlined">visibility</span>
+                    <span data-lang="en">View MVP Before Investing</span>
+                    <span data-lang="ru">Смотреть MVP перед инвестицией</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Telegram Contact Section -->
+    <section class="section-matte pb-10">
+        <div class="container-matte">
+            <div class="deep-bay">
+                <div class="module-ivory p-8 relative text-center">
+                    <div class="screw-matte screw-tl"></div>
+                    <div class="screw-matte screw-tr"></div>
+                    <div class="screw-matte screw-bl"></div>
+                    <div class="screw-matte screw-br"></div>
+                    
+                    <h3 class="text-xl font-bold text-engraved mb-4" data-lang="en">Connect With Us</h3>
+                    <h3 class="text-xl font-bold text-engraved mb-4" data-lang="ru">Свяжитесь с нами</h3>
+                    <p class="text-sm text-ink-light mb-6 font-medium" data-lang="en">Have questions? Reach out directly on Telegram</p>
+                    <p class="text-sm text-ink-light mb-6 font-medium" data-lang="ru">Есть вопросы? Напишите нам напрямую в Telegram</p>
+                    
+                    <a href="https://t.me/foxampy" target="_blank" class="btn-primary-matte px-8 py-4 font-bold text-base inline-flex items-center gap-3">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                        <span>@foxampy</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="matte-bar">
+        <div class="container-matte py-10">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div class="md:col-span-1">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="deep-bay !p-1 !rounded-lg">
+                            <div class="bg-gradient-to-br from-[#5c5243] to-[#3d3226] w-10 h-10 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[#e4dfd5] text-xl">genetics</span>
+                            </div>
+                        </div>
+                        <span class="text-xl font-bold text-engraved">EthosLife</span>
+                    </div>
+                    <p class="text-sm text-ink-light leading-relaxed font-medium" data-lang="en">Human Operating System. Health is a daily habit.</p>
+                    <p class="text-sm text-ink-light leading-relaxed font-medium" data-lang="ru">Операционная система для человеческого здоровья. Здоровье — это ежедневная привычка.</p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-engraved uppercase tracking-wider mb-4" data-lang="en">Product</h4>
+                    <h4 class="text-sm font-bold text-engraved uppercase tracking-wider mb-4" data-lang="ru">Продукт</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#solution" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium" data-lang="en">Modules</span><span data-lang="ru">Модули</span></a></li>
+                        <li><a href="#" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium" data-lang="en">AI Coach</span><span data-lang="ru">AI-Коуч</span></a></li>
+                        <li><a href="#subscription" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium" data-lang="en">Pricing</span><span data-lang="ru">Тарифы</span></a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-engraved uppercase tracking-wider mb-4" data-lang="en">Economy</h4>
+                    <h4 class="text-sm font-bold text-engraved uppercase tracking-wider mb-4" data-lang="ru">Экономика</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#tokenomics" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium">UNITY Token</a></li>
+                        <li><a href="#" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium">DAO</a></li>
+                        <li><a href="docs/WHITEPAPER.pdf" download class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium">Whitepaper</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-engraved uppercase tracking-wider mb-4" data-lang="en">Contact</h4>
+                    <h4 class="text-sm font-bold text-engraved uppercase tracking-wider mb-4" data-lang="ru">Контакты</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://t.me/foxampy" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium">Telegram: @foxampy</a></li>
+                        <li><a href="https://ethoslife.onrender.com" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium">ethoslife.onrender.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-[#8c7a6b]/30 pt-6 flex flex-col md:flex-row justify-between items-center gap-3">
+                <p class="text-xs text-ink-light font-medium">© 2026 EthosLife Inc. All rights reserved.</p>
+                <p class="text-xs text-ink-light font-medium" data-lang="en">Confidential</p>
+                <p class="text-xs text-ink-light font-medium" data-lang="ru">Конфиденциально</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center mobile-menu-overlay">
+        <div class="bg-[#e4dfd5] rounded-2xl p-8 max-w-md w-[90%] mx-4 shadow-2xl">
+            <div class="text-center">
+                <span class="material-symbols-outlined text-5xl text-[#5c5243] mb-4">rocket_launch</span>
+                <h3 class="text-xl font-bold text-engraved mb-3" data-lang="en">Coming Soon!</h3>
+                <h3 class="text-xl font-bold text-engraved mb-3" data-lang="ru">Скоро открытие!</h3>
+                <p class="text-sm text-ink-light mb-6 font-medium" data-lang="en">Registration is open. Leave your email to be notified when trading begins.</p>
+                <p class="text-sm text-ink-light mb-6 font-medium" data-lang="ru">Регистрация открыта. Оставьте email для уведомления о начале торгов.</p>
+                <input type="email" placeholder="your@email.com" class="input-matte w-full px-5 py-4 text-sm font-medium mb-4">
+                <button onclick="closeModal()" class="btn-primary-matte w-full py-4 font-bold" data-lang="en">Notify Me</button>
+                <button onclick="closeModal()" class="btn-primary-matte w-full py-4 font-bold" data-lang="ru">Уведомить меня</button>
+                <button onclick="closeModal()" class="mt-4 text-sm text-ink-light hover:text-[#5c5243] font-medium" data-lang="en">Close</button>
+                <button onclick="closeModal()" class="mt-4 text-sm text-ink-light hover:text-[#5c5243] font-medium" data-lang="ru">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language switching
+        let currentLang = 'en';
+        
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Update buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('lang-' + lang).classList.add('active');
+            
+            // Update content visibility
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                if (el.getAttribute('data-lang') === lang) {
+                    el.style.display = 'block';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+        }
+        
+        // Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileOverlay');
+            menu.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+            document.body.style.overflow = menu.classList.contains('-translate-x-full') ? '' : 'hidden';
+        }
+        
+        // Modal
+        function showModal() {
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('modal').classList.remove('flex');
+        }
+        
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+        
+        // Seed Round Countdown - March 10, 2026
+        function updateSeedCountdown() {
+            const targetDate = new Date('2026-03-10T00:00:00');
+            const now = new Date();
+            const diff = targetDate - now;
+            
+            const countdownEl = document.getElementById('seed-countdown');
+            if (!countdownEl) return;
+            
+            if (diff <= 0) {
+                countdownEl.innerHTML = '<span data-lang="en">Seed Round is LIVE!</span><span data-lang="ru">Seed Round начался!</span>';
+                return;
+            }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            
+            if (currentLang === 'en') {
+                countdownEl.textContent = days + ' days ' + hours + ' hours until price $0.05';
+            } else {
+                countdownEl.textContent = days + ' дн. ' + hours + ' ч. до цены $0.05';
+            }
+        }
+        
+        updateSeedCountdown();
+        setInterval(updateSeedCountdown, 60000);
+        
+        // Initialize
+        setLanguage('en');
+
+        // Team Cards Toggle
+        function toggleTeamCard(card) {
+            const details = card.querySelector('.team-details');
+            const arrowIcon = card.querySelector('.team-arrow-icon');
+            const arrowBtn = card.querySelector('.team-arrow-btn');
+            const isOpening = details.classList.contains('hidden');
+            
+            // Close all other cards first
+            document.querySelectorAll('.team-details').forEach(d => d.classList.add('hidden'));
+            document.querySelectorAll('.team-arrow-icon').forEach(a => {
+                a.style.transform = 'rotate(0deg)';
+                a.textContent = 'arrow_forward';
+            });
+            document.querySelectorAll('.team-arrow-btn').forEach(b => {
+                b.classList.remove('bg-[#5c5243]');
+                b.classList.add('bg-[#d0c6b8]');
+            });
+            
+            if (isOpening) {
+                // Open clicked card
+                details.classList.remove('hidden');
+                arrowIcon.style.transform = 'rotate(90deg)';
+                arrowBtn.classList.remove('bg-[#d0c6b8]');
+                arrowBtn.classList.add('bg-[#5c5243]');
+                arrowIcon.classList.remove('text-[#5c5243]');
+                arrowIcon.classList.add('text-[#e4dfd5]');
+            } else {
+                // Reset styles for closed state
+                arrowIcon.classList.add('text-[#5c5243]');
+                arrowIcon.classList.remove('text-[#e4dfd5]');
+            }
+        }
+    </script>
+</body>
+</html>

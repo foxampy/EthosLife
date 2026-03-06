@@ -1,0 +1,56 @@
+1) Timur — Founder & Chief Product Architect (CEO)
+Executive Summary:
+Стратег и визионер, объединяющий глубокую экономическую экспертизу с передовыми технологическими решениями. Тимур является архитектором всей экосистемы EthosLife, отвечая за экономическую модель (Tokenomics), техническую архитектуру платформы и продуктовую стратегию.
+Experience & Key Competencies:
+7+ Years in Creative Product Architecture: Опыт работы в международных корпорациях по созданию сложных цифровых продуктов и выводу их на глобальные рынки.
+Economic & Market Engineering: Проектирование дефляционных моделей и токеномики DAO на стыке маркетинга, социологии и логистики.
+Full-stack Development Oversight: Личное руководство разработкой MVP, от проектирования ядра AI до развертывания интерфейсов (React 19/TS).
+R&D Management: Проведение междисциплинарных исследований для формирования уникального набора метрик здоровья в системе EthosLife.
+Education:
+M.Sc. in Economics: Магистерская степень с фокусом на маркетинге, социологии и логистических процессах.
+2) Maria — Chief of Staff (Product & Growth)
+Maria — Chief of Staff (Product & Growth)
+Executive Summary:
+A multidisciplinary professional driving international expansion and AI product strategy. Maria acts as a strategic partner to the Founder, bridging the gap between high-level business negotiations and technical LLM architecture. She oversees the full project lifecycle, from global market entry to the structural development of AI solutions.
+Experience & Key Competencies:
+Strategic Operations: Leading international business development and representing the company in high-stakes negotiations and global missions.
+AI & Product Architecture: Designing and optimizing LLM (Large Language Model) frameworks, leveraging a background in computational linguistics.
+Full-Cycle Project Management: 3+ years of end-to-end tender management, including sourcing, procurement, logistics coordination, and contract delivery.
+Founder’s Associate: Serving as a primary point of contact and strategic advisor to the Founder on all operational and growth matters.
+Education:
+B.A. in International Relations: Providing a solid foundation in global politics, economics, and cross-cultural communication.
+B.A. in Digital Linguistics: Specialized expertise in NLP (Natural Language Processing), human-computer interaction, and AI systems.
+3) Boris — Strategic Partner (Sports Medicine & Recovery)
+Executive Summary:
+Признанный эксперт международного уровня в области физической реабилитации и спортивной медицины. Борис отвечает за научную валидацию методологий физического здоровья и восстановления в рамках экосистемы.
+Experience & Key Competencies:
+Olympic Team Expert: Работа со сборной Израиля (Олимпийские игры), обеспечение пиковых показателей атлетов через высокотехнологичные методы восстановления.
+Wingate Institute Specialist: Ведущий специалист национального центра физической культуры и спорта Израиля — ключевого хаба спортивных инноваций.
+Methodology Development: Разработка протоколов мониторинга физического состояния для внедрения в алгоритмы ИИ-ассистента EthosLife.
+4) Dmitry — Expert Lead (Nutrition & Performance Coaching)
+Executive Summary:
+Эксперт в области превентивной медицины и биохакинга с более чем 10-летним стажем. Дмитрий курирует разработку персональных программ питания и тренировочных режимов, интегрируемых в LLM-обучение платформы.
+Experience & Key Competencies:
+10+ Years of Sports Medicine: Опыт работы фитнес-тренером и нутрициологом с глубоким пониманием физиологии восстановления.
+Global Education Partner: Партнер международных образовательных платформ, транслирующий передовые стандарты активного долголетия.
+LLM Training Integration: Формирование датасетов и правил для ИИ-советника в модулях «Питание» и «Движение».
+5) Daniel Mervel — Blockchain & Hardware Strategy Partner
+Executive Summary:
+Специалист по децентрализованным системам и интеграции технологий в реальный сектор. Даниель курирует блокчейн-инфраструктуру DAO и исследования в области Hardware-продуктов (носимых устройств) для экосистемы.
+Experience & Key Competencies:
+Web3 & DAO Architecture: Опыт разработки и аудита смарт-контрактов, проектирование систем коллективного управления.
+R&D Hardware Integration: Исследование и разработка носимых датчиков для точного сбора биометрических данных и их интеграции с блокчейн-протоколами.
+Scientific Research: Участие в междисциплинарных разработках на стыке инженерии и биомедицины.
+6) Serge — Psychological Profiling & Mind-Body Lead
+Executive Summary:
+Разработчик инновационных программ психотипизации и коррекции привычек. Серж отвечает за модули «Психология» и «Привычки», выстраивая мост между ментальным состоянием и физическим здоровьем.
+Experience & Key Competencies:
+Behavioral Modeling: Создание алгоритмов на основе психологического анализа для формирования долгосрочных здоровых привычек.
+Psychotype-based Therapy: Разработка программ терапии сознания и тела, адаптированных под индивидуальные особенности личности пользователя.
+Core Systems of Consciousness: Интеграция методов осознанности в ежедневную рутину пользователя через интерфейс EthosLife.
+Твой вопрос: «Этого достаточно?»
+Мой вердикт: Для Seed-раунда этого более чем достаточно.
+У тебя есть Техническое и Стратегическое ядро (Ты + Мария).
+У тебя есть Научно-практическая база (Борис + Дмитрий + Серж).
+У тебя есть Инфраструктурный блок (Даниель).
+Важный нюанс: Когда будешь подавать это инвестору, добавь в конце этого списка упоминание DreamSoft как Strategic Engineering Partner. Это покажет, что помимо этих 6 лидеров, за вами стоит еще 30+ инженеров, готовых к масштабированию.

@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EthosLife SAFT - Seed Round</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew&family=Noto+Sans+Arabic&family=Noto+Sans+KR&family=Noto+Sans+JP&family=Noto+Sans+SC&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bone: #e4dfd5;
+            --bone-dark: #c2b8a9;
+            --ink: #2d2418;
+            --ink-light: #4a3e32;
+            --sand: #dcd3c6;
+            --clay: #8c7a6b;
+            --stone: #5c5243;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bone);
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 0.15 0' /%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)'/%3E%3C/svg%3E"),
+                radial-gradient(circle at 20% 30%, rgba(200, 190, 175, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(180, 170, 155, 0.3) 0%, transparent 60%);
+            color: var(--ink);
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        /* RTL support */
+        body[dir="rtl"] {
+            direction: rtl;
+        }
+        
+        body[dir="rtl"] .form-row,
+        body[dir="rtl"] .checkbox-group,
+        body[dir="rtl"] .calc-result {
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        /* Language Selector */
+        .lang-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        body[dir="rtl"] .lang-selector {
+            right: auto;
+            left: 20px;
+        }
+        
+        .lang-btn {
+            background: linear-gradient(145deg, var(--sand), var(--bone-dark));
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 
+                4px 4px 8px #b8ae9f,
+                -4px -4px 8px #ffffff;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 
+                6px 6px 12px #b8ae9f,
+                -6px -6px 12px #ffffff;
+        }
+        
+        .lang-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: var(--bone);
+            border-radius: 12px;
+            box-shadow: 
+                8px 8px 16px #b8ae9f,
+                -4px -4px 12px #ffffff;
+            padding: 10px;
+            min-width: 200px;
+            display: none;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        body[dir="rtl"] .lang-dropdown {
+            right: auto;
+            left: 0;
+        }
+        
+        .lang-dropdown.active {
+            display: block;
+        }
+        
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        
+        .lang-option:hover {
+            background: var(--sand);
+        }
+        
+        .lang-option.active {
+            background: var(--stone);
+            color: var(--bone);
+        }
+        
+        .lang-flag {
+            font-size: 20px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(145deg, var(--sand), var(--bone-dark));
+            border-radius: 20px;
+            box-shadow: 
+                8px 8px 16px #b8ae9f,
+                -8px -8px 16px #ffffff,
+                inset 1px 1px 2px rgba(255,255,255,0.8);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            color: var(--ink);
+        }
+        
+        .header .subtitle {
+            font-size: 16px;
+            color: var(--stone);
+            font-weight: 600;
+        }
+        
+        /* Price Widget */
+        .price-widget {
+            background: linear-gradient(145deg, var(--stone), var(--ink));
+            color: var(--bone);
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 
+                8px 8px 20px rgba(45, 36, 24, 0.3),
+                -4px -4px 12px rgba(255,255,255,0.5);
+        }
+        
+        .price-widget.frozen {
+            background: linear-gradient(145deg, #2d5a3d, #1a3d26);
+        }
+        
+        .price-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        
+        .current-price {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .price-per-token {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .countdown {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(228, 223, 213, 0.2);
+        }
+        
+        .countdown-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+        
+        .countdown-timer {
+            font-size: 24px;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .freeze-info {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        
+        .freeze-timer {
+            font-weight: 700;
+            color: #90EE90;
+        }
+        
+        .progress-container {
+            margin: 15px 0;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #90EE90, #FFD700);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+        
+        /* Form Sections */
+        .form-section {
+            background: linear-gradient(145deg, var(--bone), var(--sand));
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 
+                6px 6px 12px #b8ae9f,
+                -6px -6px 12px #ffffff,
+                inset 1px 1px 2px rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--stone);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--stone);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--stone);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        
+        input, select, textarea {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #d4ccb8, #e8e2d5);
+            box-shadow: 
+                inset 3px 3px 6px #b8ae9f,
+                inset -2px -2px 4px rgba(255,255,255,0.6);
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--ink);
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            box-shadow: 
+                inset 4px 4px 8px #b8ae9f,
+                inset -2px -2px 4px rgba(255,255,255,0.6),
+                0 0 0 2px var(--clay);
+        }
+        
+        input::placeholder {
+            color: var(--clay);
+            opacity: 0.7;
+        }
+        
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        @media (max-width: 600px) {
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        body[dir="rtl"] .checkbox-item {
+            flex-direction: row-reverse;
+        }
+        
+        .checkbox-item input[type="checkbox"],
+        .checkbox-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--stone);
+            box-shadow: none;
+            flex-shrink: 0;
+        }
+        
+        .calculator {
+            background: linear-gradient(145deg, var(--sand), var(--bone-dark));
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .calc-result {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 600px) {
+            .calc-result {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .calc-item {
+            text-align: center;
+            padding: 15px;
+            background: var(--bone);
+            border-radius: 10px;
+            box-shadow: 
+                4px 4px 8px #b8ae9f,
+                -4px -4px 8px #ffffff;
+        }
+        
+        .calc-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--stone);
+        }
+        
+        .calc-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--clay);
+            margin-top: 5px;
+        }
+        
+        .submit-section {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(145deg, var(--stone), var(--ink));
+            color: var(--bone);
+            border: none;
+            padding: 18px 50px;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 
+                8px 8px 16px #b8ae9f,
+                -8px -8px 16px #ffffff;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                10px 10px 20px #b8ae9f,
+                -10px -10px 20px #ffffff;
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 
+                inset 4px 4px 8px rgba(0,0,0,0.3),
+                inset -2px -2px 4px rgba(255,255,255,0.1);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(45, 36, 24, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--bone);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 
+                20px 20px 60px rgba(0,0,0,0.3),
+                -10px -10px 30px rgba(255,255,255,0.5);
+        }
+        
+        .modal-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .modal h2 {
+            margin-bottom: 15px;
+            color: var(--stone);
+        }
+        
+        .modal p {
+            margin-bottom: 25px;
+            color: var(--ink-light);
+        }
+        
+        .btn-close {
+            background: var(--stone);
+            color: var(--bone);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+        }
+        
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .success-icon {
+            animation: checkmark 0.5s ease;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            color: #c0392b;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .success-message {
+            color: #27ae60;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .field-error {
+            color: #c0392b;
+            font-size: 11px;
+            margin-top: 4px;
+            min-height: 16px;
+        }
+        
+        .field-hint {
+            color: #8c7a6b;
+            font-size: 11px;
+            margin-top: 4px;
+            font-style: italic;
+        }
+        
+        input.error {
+            box-shadow: 
+                inset 3px 3px 6px #b8ae9f,
+                inset -2px -2px 4px rgba(255,255,255,0.6),
+                0 0 0 2px #c0392b !important;
+        }
+        
+        input.valid {
+            box-shadow: 
+                inset 3px 3px 6px #b8ae9f,
+                inset -2px -2px 4px rgba(255,255,255,0.6),
+                0 0 0 2px #27ae60 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="lang-selector">
+        <button class="lang-btn" id="langBtn" title="Select Language">🌐</button>
+        <div class="lang-dropdown" id="langDropdown"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 data-i18n="title">Simple Agreement for Future Tokens</h1>
+            <div class="subtitle" data-i18n="subtitle">EthosLife Seed Round</div>
+        </div>
+        
+        <!-- Price Widget -->
+        <div class="price-widget" id="priceWidget">
+            <div class="price-label" data-i18n="currentPrice">Current Token Price</div>
+            <div class="current-price" id="currentPrice">$0.0100</div>
+            <div class="price-per-token" data-i18n="perToken">per UNITY token</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="progress-labels">
+                    <span data-i18n="progressStart">$0.01</span>
+                    <span id="progressPercent">0%</span>
+                    <span data-i18n="progressEnd">$0.05</span>
+                </div>
+            </div>
+            
+            <div class="countdown" id="countdownSection">
+                <div class="countdown-label" data-i18n="priceIncrease">Price increases to $0.05 in:</div>
+                <div class="countdown-timer" id="countdown">--:--:--:--</div>
+            </div>
+            
+            <div class="freeze-info" id="freezeInfo" style="display: none;">
+                <span data-i18n="priceFrozen">Price Frozen!</span> <span data-i18n="freezeText">Your price is locked for</span>
+                <span class="freeze-timer" id="freezeTimer">59:59</span>
+            </div>
+        </div>
+        
+        <!-- Investment Calculator -->
+        <div class="form-section">
+            <div class="section-title" data-i18n="calculatorTitle">Investment Calculator</div>
+            
+            <div class="form-group full-width">
+                <label data-i18n="investmentAmount">Investment Amount (USD)</label>
+                <input type="number" id="investmentAmount" min="5000" step="100" placeholder="Minimum $5,000" data-i18n-placeholder="minInvestment">
+                <div class="error-message" id="amountError"></div>
+            </div>
+            
+            <div class="calculator">
+                <div class="calc-result">
+                    <div class="calc-item">
+                        <div class="calc-value" id="calcTokens">0</div>
+                        <div class="calc-label" data-i18n="tokens">UNITY Tokens</div>
+                    </div>
+                    <div class="calc-item">
+                        <div class="calc-value" id="calcPrice">$0.00</div>
+                        <div class="calc-label" data-i18n="pricePerToken">Price per Token</div>
+                    </div>
+                    <div class="calc-item">
+                        <div class="calc-value" id="calcBonus">25%</div>
+                        <div class="calc-label" data-i18n="stakingAPY">Staking APY (6-12m)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Investor Information -->
+        <form id="saftForm">
+            <div class="form-section">
+                <div class="section-title" data-i18n="investorInfo">Investor Information</div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-i18n="fullName">Full Legal Name *</label>
+                        <input type="text" name="fullName" required data-i18n-placeholder="fullNamePlaceholder">
+                        <div class="field-error" id="error-fullName"></div>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="dob">Date of Birth *</label>
+                        <input type="date" name="dob" required max="2005-12-31">
+                        <div class="field-error" id="error-dob"></div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-i18n="nationality">Nationality *</label>
+                        <input type="text" name="nationality" required data-i18n-placeholder="nationalityPlaceholder">
+                        <div class="field-error" id="error-nationality"></div>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="passportNumber">Passport/ID Number *</label>
+                        <input type="text" name="passportNumber" required data-i18n-placeholder="passportPlaceholder">
+                        <div class="field-error" id="error-passportNumber"></div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-i18n="issuedBy">Issued By (Country) *</label>
+                        <input type="text" name="issuedBy" required data-i18n-placeholder="issuedByPlaceholder">
+                        <div class="field-error" id="error-issuedBy"></div>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="email">Contact Email *</label>
+                        <input type="email" name="email" required data-i18n-placeholder="emailPlaceholder">
+                        <div class="field-error" id="error-email"></div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-i18n="phone">Telegram/Phone *</label>
+                        <input type="text" name="phone" required data-i18n-placeholder="phonePlaceholder">
+                        <div class="field-error" id="error-phone"></div>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="address">Residential Address *</label>
+                        <input type="text" name="address" required data-i18n-placeholder="addressPlaceholder">
+                        <div class="field-error" id="error-address"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group full-width" style="margin-top: 15px;">
+                    <label data-i18n="walletAddress">ERC-20 Wallet Address (for token delivery) *</label>
+                    <input type="text" name="walletAddress" id="walletAddress" required 
+                           placeholder="0x..." 
+                           pattern="0x[a-fA-F0-9]{40}">
+                    <div class="field-error" id="error-walletAddress"></div>
+                    <p class="field-hint" data-i18n="walletHint">Double-check this address - tokens cannot be recovered if sent to wrong address</p>
+                </div>
+            </div>
+            
+            <!-- Investor Status -->
+            <div class="form-section">
+                <div class="section-title" data-i18n="investorStatus">Investor Status</div>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="radio" name="investorStatus" value="individual" checked>
+                        <span data-i18n="individual">Individual Investor (Private)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="radio" name="investorStatus" value="corporate">
+                        <span data-i18n="corporate">Corporate Entity</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="radio" name="investorStatus" value="accredited">
+                        <span data-i18n="accredited">Accredited Investor</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="radio" name="investorStatus" value="sophisticated">
+                        <span data-i18n="sophisticated">Sophisticated Investor</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Payment Method -->
+            <div class="form-section">
+                <div class="section-title" data-i18n="paymentMethod">Payment Method</div>
+                
+                <div class="form-group">
+                    <label data-i18n="currency">Currency for Deposit *</label>
+                    <select name="currency" required>
+                        <option value="USDC" data-i18n="usdc">USDC (ERC-20) - Preferred</option>
+                        <option value="USDT" data-i18n="usdt">USDT (ERC-20)</option>
+                        <option value="ETH" data-i18n="eth">ETH (converted at spot rate)</option>
+                        <option value="BTC" data-i18n="btc">BTC (via institutional custody)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Risk Acknowledgment -->
+            <div class="form-section">
+                <div class="section-title" data-i18n="riskTitle">Risk Acknowledgment</div>
+                <p style="font-size: 13px; color: var(--ink-light); margin-bottom: 15px;" data-i18n="riskIntro">
+                    I acknowledge receipt of the EthosLife Whitepaper and understand the following risks:
+                </p>
+                <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="riskTech" required>
+                        <span data-i18n="riskTech">Technology risk (smart contract vulnerabilities)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="riskRegulatory" required>
+                        <span data-i18n="riskRegulatory">Regulatory risk (potential security classification)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="riskLiquidity" required>
+                        <span data-i18n="riskLiquidity">Liquidity risk (no secondary market for 6-24 months)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="riskLoss" required>
+                        <span data-i18n="riskLoss">Total loss risk (blockchain projects are experimental)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="riskYield" required>
+                        <span data-i18n="riskYield">No guaranteed yield (APYs are targets, not obligations)</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Submit -->
+            <div class="submit-section">
+                <button type="submit" class="btn-primary" id="submitBtn" data-i18n="submit">
+                    Submit SAFT Agreement
+                </button>
+                <p style="margin-top: 15px; font-size: 12px; color: var(--clay);" data-i18n="submitAgreement">
+                    By submitting, you agree to the SAFT terms and your price will be frozen for 1 hour.
+                </p>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success-icon">✅</div>
+            <h2 data-i18n="successTitle">SAFT Submitted Successfully!</h2>
+            <p id="successText">
+                Your agreement has been sent to the founder for review.<br>
+                Your token price of <strong id="frozenPrice">$0.0000</strong> is frozen for 1 hour.<br><br>
+                Please complete your payment within this time.
+            </p>
+            <button class="btn-close" onclick="closeModal()" data-i18n="close">Close</button>
+        </div>
+    </div>
+    
+    <!-- Error Modal -->
+    <div class="modal" id="errorModal">
+        <div class="modal-content">
+            <div class="modal-icon">❌</div>
+            <h2 data-i18n="errorTitle">Submission Failed</h2>
+            <p id="errorText">Something went wrong. Please try again.</p>
+            <button class="btn-close" onclick="closeErrorModal()" data-i18n="close">Close</button>
+        </div>
+    </div>
+
+    <script src="i18n.js"></script>
+    <script>
+        // ==================== LANGUAGE SWITCHER ====================
+        let currentLang = localStorage.getItem('saftLanguage') || 'en';
+        
+        function initLanguageSelector() {
+            const dropdown = document.getElementById('langDropdown');
+            
+            // Build language options
+            Object.entries(LANGUAGES).forEach(([code, info]) => {
+                const option = document.createElement('div');
+                option.className = 'lang-option' + (code === currentLang ? ' active' : '');
+                option.innerHTML = `<span class="lang-flag">${info.flag}</span><span>${info.name}</span>`;
+                option.onclick = () => setLanguage(code);
+                dropdown.appendChild(option);
+            });
+            
+            // Toggle dropdown
+            document.getElementById('langBtn').onclick = (e) => {
+                e.stopPropagation();
+                dropdown.classList.toggle('active');
+            };
+            
+            // Close on outside click
+            document.addEventListener('click', () => {
+                dropdown.classList.remove('active');
+            });
+        }
+        
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('saftLanguage', lang);
+            
+            // Update UI
+            document.querySelectorAll('.lang-option').forEach(el => {
+                el.classList.toggle('active', el.textContent.includes(LANGUAGES[lang].name));
+            });
+            
+            // Update direction
+            document.body.setAttribute('dir', LANGUAGES[lang].dir);
+            document.documentElement.lang = lang;
+            
+            // Update all translatable elements
+            updateTranslations();
+            
+            // Update placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                el.placeholder = t(key, currentLang);
+            });
+            
+            // Update success text if modal is open
+            updateSuccessText();
+        }
+        
+        function updateTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const text = t(key, currentLang);
+                if (text !== key) {
+                    el.textContent = text;
+                }
+            });
+        }
+        
+        function updateSuccessText() {
+            const price = document.getElementById('frozenPrice').textContent;
+            const text = t('successText', currentLang, { price });
+            document.querySelector('#successModal p').innerHTML = text.replace(/\n/g, '<br>');
+        }
+        
+        // ==================== CONFIGURATION ====================
+        const CONFIG = {
+            END_DATE: new Date('2026-03-10T01:00:00Z'),
+            START_PRICE: 0.01,
+            END_PRICE: 0.05,
+            MIN_INVESTMENT: 5000,
+            API_URL: window.location.origin
+        };
+        
+        // ==================== STATE ====================
+        let sessionId = localStorage.getItem('saftSessionId') || generateSessionId();
+        let currentPrice = CONFIG.START_PRICE;
+        let isPriceFrozen = false;
+        
+        function generateSessionId() {
+            const id = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('saftSessionId', id);
+            return id;
+        }
+        
+        // ==================== PRICE CALCULATION ====================
+        function calculatePrice() {
+            const now = new Date();
+            const startDate = new Date(now);
+            startDate.setHours(startDate.getHours() - 1);
+            
+            if (now >= CONFIG.END_DATE) {
+                return CONFIG.END_PRICE;
+            }
+            
+            if (now <= CONFIG.START_DATE) {
+                return CONFIG.START_PRICE;
+            }
+            
+            const totalDuration = CONFIG.END_DATE - startDate;
+            const elapsed = now - startDate;
+            const progress = Math.min(1, Math.max(0, elapsed / totalDuration));
+            
+            const price = CONFIG.START_PRICE + (CONFIG.END_PRICE - CONFIG.START_PRICE) * progress;
+            return Math.round(price * 10000) / 10000;
+        }
+        
+        function updatePriceDisplay() {
+            if (isPriceFrozen) return;
+            
+            currentPrice = calculatePrice();
+            document.getElementById('currentPrice').textContent = '$' + currentPrice.toFixed(4);
+            
+            const progress = ((currentPrice - CONFIG.START_PRICE) / (CONFIG.END_PRICE - CONFIG.START_PRICE)) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+            
+            calculateTokens();
+        }
+        
+        // ==================== COUNTDOWN ====================
+        function updateCountdown() {
+            const now = new Date();
+            const diff = CONFIG.END_DATE - now;
+            
+            if (diff <= 0) {
+                document.getElementById('countdown').textContent = t('priceAtMax', currentLang);
+                return;
+            }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('countdown').textContent = 
+                `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // ==================== FREEZE TIMER ====================
+        let freezeEndTime = null;
+        
+        function startFreezeTimer(expiresAt) {
+            isPriceFrozen = true;
+            freezeEndTime = new Date(expiresAt);
+            
+            document.getElementById('priceWidget').classList.add('frozen');
+            document.getElementById('freezeInfo').style.display = 'block';
+            document.getElementById('countdownSection').style.display = 'none';
+            document.getElementById('frozenPrice').textContent = '$' + currentPrice.toFixed(4);
+            
+            updateFreezeTimer();
+            updateSuccessText();
+            setInterval(updateFreezeTimer, 1000);
+        }
+        
+        function updateFreezeTimer() {
+            if (!freezeEndTime) return;
+            
+            const now = new Date();
+            const diff = freezeEndTime - now;
+            
+            if (diff <= 0) {
+                document.getElementById('freezeTimer').textContent = 'EXPIRED';
+                isPriceFrozen = false;
+                location.reload();
+                return;
+            }
+            
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('freezeTimer').textContent = 
+                `${hours > 0 ? hours + ':' : ''}${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // ==================== CALCULATOR ====================
+        function calculateTokens() {
+            const amount = parseFloat(document.getElementById('investmentAmount').value) || 0;
+            
+            if (amount < CONFIG.MIN_INVESTMENT) {
+                document.getElementById('amountError').textContent = 
+                    amount > 0 ? t('minInvestmentError', currentLang) : '';
+                document.getElementById('calcTokens').textContent = '0';
+                document.getElementById('calcPrice').textContent = '$' + currentPrice.toFixed(4);
+                return;
+            }
+            
+            document.getElementById('amountError').textContent = '';
+            const tokens = Math.floor(amount / currentPrice);
+            document.getElementById('calcTokens').textContent = tokens.toLocaleString();
+            document.getElementById('calcPrice').textContent = '$' + currentPrice.toFixed(4);
+        }
+        
+        document.getElementById('investmentAmount').addEventListener('input', calculateTokens);
+        
+        // ==================== API INTEGRATION ====================
+        async function fetchPrice() {
+            try {
+                const response = await fetch(`${CONFIG.API_URL}/api/price?sessionId=${sessionId}`);
+                const data = await response.json();
+                
+                currentPrice = data.currentPrice;
+                document.getElementById('currentPrice').textContent = '$' + currentPrice.toFixed(4);
+                
+                if (data.frozen && data.freezeExpiresAt) {
+                    startFreezeTimer(data.freezeExpiresAt);
+                }
+                
+                const progress = ((currentPrice - CONFIG.START_PRICE) / (CONFIG.END_PRICE - CONFIG.START_PRICE)) * 100;
+                document.getElementById('progressFill').style.width = progress + '%';
+                document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+                
+                calculateTokens();
+            } catch (err) {
+                console.log('Using local price calculation');
+                updatePriceDisplay();
+            }
+        }
+        
+        // ==================== VALIDATION ====================
+        function validateWallet(address) {
+            return /^0x[a-fA-F0-9]{40}$/.test(address);
+        }
+        
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+        
+        function showFieldError(fieldName, message) {
+            const errorEl = document.getElementById(`error-${fieldName}`);
+            const inputEl = document.querySelector(`[name="${fieldName}"]`);
+            if (errorEl) errorEl.textContent = message;
+            if (inputEl) {
+                inputEl.classList.add('error');
+                inputEl.classList.remove('valid');
+            }
+        }
+        
+        function clearFieldError(fieldName) {
+            const errorEl = document.getElementById(`error-${fieldName}`);
+            const inputEl = document.querySelector(`[name="${fieldName}"]`);
+            if (errorEl) errorEl.textContent = '';
+            if (inputEl) {
+                inputEl.classList.remove('error');
+                inputEl.classList.add('valid');
+            }
+        }
+        
+        function clearAllErrors() {
+            document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+            document.querySelectorAll('input').forEach(el => el.classList.remove('error', 'valid'));
+        }
+        
+        document.getElementById('walletAddress').addEventListener('blur', function() {
+            if (this.value && !validateWallet(this.value)) {
+                showFieldError('walletAddress', t('invalidWallet', currentLang));
+            } else if (this.value) {
+                clearFieldError('walletAddress');
+            }
+        });
+        
+        document.querySelector('[name="email"]').addEventListener('blur', function() {
+            if (this.value && !validateEmail(this.value)) {
+                showFieldError('email', t('invalidEmail', currentLang));
+            } else if (this.value) {
+                clearFieldError('email');
+            }
+        });
+        
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('error');
+                const fieldName = this.name;
+                const errorEl = document.getElementById(`error-${fieldName}`);
+                if (errorEl) errorEl.textContent = '';
+            });
+        });
+        
+        // ==================== FORM SUBMISSION ====================
+        document.getElementById('saftForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearAllErrors();
+            
+            const formData = new FormData(e.target);
+            const investmentAmount = parseFloat(document.getElementById('investmentAmount').value);
+            const walletAddress = formData.get('walletAddress');
+            const email = formData.get('email');
+            
+            let hasErrors = false;
+            
+            if (!investmentAmount || investmentAmount < CONFIG.MIN_INVESTMENT) {
+                document.getElementById('amountError').textContent = t('minInvestmentError', currentLang);
+                hasErrors = true;
+            }
+            
+            if (!validateWallet(walletAddress)) {
+                showFieldError('walletAddress', t('invalidWallet', currentLang));
+                hasErrors = true;
+            }
+            
+            if (!validateEmail(email)) {
+                showFieldError('email', t('invalidEmail', currentLang));
+                hasErrors = true;
+            }
+            
+            const requiredFields = ['fullName', 'dob', 'nationality', 'passportNumber', 'issuedBy', 'phone', 'address'];
+            for (const field of requiredFields) {
+                if (!formData.get(field) || formData.get(field).trim() === '') {
+                    showFieldError(field, t('required', currentLang));
+                    hasErrors = true;
+                }
+            }
+            
+            if (hasErrors) {
+                const firstError = document.querySelector('.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = t('submitting', currentLang) + ' <span class="loading"></span>';
+            
+            const data = {
+                sessionId,
+                investmentAmount,
+                currency: formData.get('currency'),
+                walletAddress,
+                investorData: {
+                    fullName: formData.get('fullName'),
+                    dob: formData.get('dob'),
+                    nationality: formData.get('nationality'),
+                    passportNumber: formData.get('passportNumber'),
+                    issuedBy: formData.get('issuedBy'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    address: formData.get('address'),
+                    investorStatus: formData.get('investorStatus')
+                }
+            };
+            
+            try {
+                const response = await fetch(`${CONFIG.API_URL}/api/submit-saft`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    startFreezeTimer(result.freezeExpiresAt);
+                    showSuccess();
+                    localStorage.setItem('lastSubmissionId', result.submissionId);
+                } else if (result.errors) {
+                    result.errors.forEach(err => {
+                        if (err.includes('email')) showFieldError('email', err);
+                        else if (err.includes('wallet')) showFieldError('walletAddress', err);
+                        else if (err.includes('amount')) document.getElementById('amountError').textContent = err;
+                        else showError(err);
+                    });
+                } else {
+                    showError(result.error || 'Submission failed');
+                }
+            } catch (err) {
+                console.error(err);
+                showError('Network error. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = t('submit', currentLang);
+            }
+        });
+        
+        // ==================== MODALS ====================
+        function showSuccess() {
+            document.getElementById('successModal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+        
+        function showError(message) {
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorModal').classList.add('active');
+        }
+        
+        function closeErrorModal() {
+            document.getElementById('errorModal').classList.remove('active');
+        }
+        
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+        
+        // ==================== INITIALIZATION ====================
+        initLanguageSelector();
+        setLanguage(currentLang);
+        
+        setInterval(updateCountdown, 1000);
+        setInterval(() => {
+            if (!isPriceFrozen) updatePriceDisplay();
+        }, 60000);
+        
+        fetchPrice();
+        updateCountdown();
+        updatePriceDisplay();
+    </script>
+</body>
+</html>
