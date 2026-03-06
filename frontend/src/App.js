@@ -12,6 +12,12 @@ import Fitness from './pages/Health/Fitness';
 import Sleep from './pages/Health/Sleep';
 import Mental from './pages/Health/Mental';
 import Medical from './pages/Health/Medical';
+import Body from './pages/Health/Body';
+import Environment from './pages/Health/Environment';
+import Fitness from './pages/Health/Fitness';
+import Sleep from './pages/Health/Sleep';
+import Mental from './pages/Health/Mental';
+import Medical from './pages/Health/Medical';
 import SocialFeed from './pages/Social/Feed';
 import AIChat from './pages/AI/Chat';
 import Profile from './pages/Profile/Profile';
@@ -49,6 +55,11 @@ function App() {
             <Route path="/health" element={<HealthCenter />} />
             <Route path="/health/nutrition" element={<Nutrition />} />
             <Route path="/health/fitness" element={<Fitness />} />
+            <Route path="/health/sleep" element={<Sleep />} />
+            <Route path="/health/mental" element={<Mental />} />
+            <Route path="/health/medical" element={<Medical />} />
+            <Route path="/health/body" element={<Body />} />
+            <Route path="/health/environment" element={<Environment />} />
             <Route path="/health/sleep" element={<Sleep />} />
             <Route path="/health/mental" element={<Mental />} />
             <Route path="/health/medical" element={<Medical />} />
