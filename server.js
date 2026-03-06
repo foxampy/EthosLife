@@ -16,6 +16,11 @@ const path = require('path');
 const { generateSAFTHTML } = require('./pdf-generator');
 const db = require('./database');
 
+// Import routes
+const authRoutes = require('./routes/auth');
+const healthRoutes = require('./routes/health');
+const aiRoutes = require('./routes/ai');
+
 require('dotenv').config();
 
 const app = express();
@@ -90,6 +95,11 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/health', healthRoutes);
+app.use('/api/ai', aiRoutes);
 
 // ==================== DATABASE INIT ====================
 
