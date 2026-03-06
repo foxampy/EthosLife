@@ -21,10 +21,10 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Security: Validate required environment variables
-function requireEnv(name) {
+// Environment variables helper
+function getEnv(name, required = false) {
   const value = process.env[name];
-  if (!value && process.env.NODE_ENV === 'production') {
+  if (!value && required && process.env.NODE_ENV === 'production') {
     console.error(`❌ ERROR: Required environment variable ${name} is not set!`);
     process.exit(1);
   }
@@ -44,9 +44,9 @@ const CONFIG = {
   // Price freeze duration (1 hour в миллисекундах)
   FREEZE_DURATION_MS: 60 * 60 * 1000,
   
-  // Telegram - безопасно из env
-  TELEGRAM_BOT_TOKEN: requireEnv('TELEGRAM_BOT_TOKEN'),
-  FOUNDER_CHAT_ID: requireEnv('FOUNDER_CHAT_ID'),
+  // Telegram - опционально (приложение работает без бота)
+  TELEGRAM_BOT_TOKEN: getEnv('TELEGRAM_BOT_TOKEN'),
+  FOUNDER_CHAT_ID: getEnv('FOUNDER_CHAT_ID'),
   ADMIN_CHAT_IDS: process.env.ADMIN_CHAT_IDS ? process.env.ADMIN_CHAT_IDS.split(',') : [],
   
   // Investment limits
@@ -55,7 +55,7 @@ const CONFIG = {
   MAX_INVESTMENT_STRATEGIC: 500000,
   
   // Security
-  ADMIN_KEY: process.env.ADMIN_KEY || 'dev-key-change-in-production'
+  ADMIN_KEY: process.env.ADMIN_KEY || 'default-admin-key-change-in-production'
 };
 
 // In-memory cache (PostgreSQL is primary storage)
@@ -64,21 +64,25 @@ const submissions = new Map();  // sessionId -> submission data (cache)
 
 // Initialize Telegram Bot
 let bot = null;
-if (CONFIG.TELEGRAM_BOT_TOKEN) {
-  bot = new TelegramBot(CONFIG.TELEGRAM_BOT_TOKEN, { polling: true });
-  console.log('🤖 Telegram bot initialized');
-  
-  // Handle /start command
-  bot.onText(/\/start/, (msg) => {
-    const chatId = msg.chat.id;
-    bot.sendMessage(chatId, 
-      '👋 Welcome to EthosLife SAFT Bot!\n\n' +
-      'Use this bot to receive SAFT agreements.\n' +
-      'Your Chat ID: ' + chatId
-    );
-  });
+if (CONFIG.TELEGRAM_BOT_TOKEN && CONFIG.TELEGRAM_BOT_TOKEN !== 'your_bot_token_here') {
+  try {
+    bot = new TelegramBot(CONFIG.TELEGRAM_BOT_TOKEN, { polling: true });
+    console.log('🤖 Telegram bot initialized');
+    
+    // Handle /start command
+    bot.onText(/\/start/, (msg) => {
+      const chatId = msg.chat.id;
+      bot.sendMessage(chatId, 
+        '👋 Welcome to EthosLife SAFT Bot!\n\n' +
+        'Use this bot to receive SAFT agreements.\n' +
+        'Your Chat ID: ' + chatId
+      );
+    });
+  } catch (err) {
+    console.error('❌ Failed to initialize Telegram bot:', err.message);
+  }
 } else {
-  console.warn('⚠️ Telegram bot token not set. Bot functionality disabled.');
+  console.log('ℹ️ Telegram bot not configured. Set TELEGRAM_BOT_TOKEN and FOUNDER_CHAT_ID env vars to enable.');
 }
 
 // Middleware
@@ -402,6 +406,10 @@ app.post('/api/submit-saft', validateSubmission, async (req, res) => {
   if (bot) {
     const chatIds = [CONFIG.FOUNDER_CHAT_ID, ...CONFIG.ADMIN_CHAT_IDS].filter(Boolean);
     
+    if (chatIds.length === 0) {
+      console.log('ℹ️ No Telegram chat IDs configured. Skipping notifications.');
+    } else {
+    
     for (const chatId of chatIds) {
       try {
         const message = 
@@ -449,8 +457,9 @@ app.post('/api/submit-saft', validateSubmission, async (req, res) => {
       } catch (err) {
         console.error(`Failed to send Telegram notification to ${chatId}:`, err.message);
       }
-    }
-  }
+    } // end for...of
+    } // end if (chatIds.length > 0)
+  } // end if (bot)
   
   // Update with Telegram message ID
   if (dbInitialized && dbSubmission && telegramMessageId) {
