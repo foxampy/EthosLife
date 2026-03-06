@@ -36,6 +36,7 @@ import Gamification2 from './pages/Gamification/Gamification2';
 import Specialists2 from './pages/Specialists/Specialists2';
 import Centers2 from './pages/Centers/Centers2';
 import Settings2 from './pages/Settings/Settings2';
+import InvestorDemo from './pages/InvestorDemo';
 
 // Health V1 Modules - Nutrition
 import NutritionV1 from './pages/Health/V1/NutritionV1';
@@ -103,9 +104,12 @@ function App() {
         <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} />
         <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} />
 
-        {/* Guest Access Routes - Open for Investor Demo */}
+        {/* Guest Access Routes - Open for Investor Demo - ALL PAGES AVAILABLE WITHOUT REGISTRATION */}
         <Route element={<GuestAccessRoute />}>
           <Route element={<Layout />}>
+            {/* Root landing page with Layout (shows header with navigation) */}
+            <Route path="/" element={<LandingV1 />} />
+            
             {/* Landing V1 Pages - OPEN FOR GUESTS */}
             <Route path="/v1" element={<LandingV1 />} />
             <Route path="/features-v1" element={<FeaturesV1 />} />
@@ -179,12 +183,17 @@ function App() {
           </Route>
         </Route>
 
-        {/* Public Demo Route */}
-        <Route path="/demo" element={<InvestorDemo />} />
+        {/* V2 Landing Page (Investor Demo as V2 homepage) */}
+        <Route path="/v2" element={<InvestorDemo />} />
+        
+        {/* Redirect old /demo to /v2 */}
+        <Route path="/demo" element={<Navigate to="/v2" replace />} />
 
-        {/* Default redirect - Show Investor Demo for guests */}
-        <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/demo"} />} />
-        <Route path="*" element={<Navigate to="/demo" />} />
+        {/* Default redirect - Show Landing V1 for guests */}
+        <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <LandingV1 />} />
+        
+        {/* 404 - Redirect to home */}
+        <Route path="*" element={<Navigate to="/" />}
       </Routes>
     </Router>
   );

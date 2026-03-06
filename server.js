@@ -94,7 +94,10 @@ if (CONFIG.TELEGRAM_BOT_TOKEN && CONFIG.TELEGRAM_BOT_TOKEN !== 'your_bot_token_h
 app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+
+// Static files - SAFT form available at /saft, not at root
+app.use('/saft', express.static('public'));
+app.use('/i18n.js', express.static('public/i18n.js'));
 
 // API Routes
 app.use('/api/auth', authRoutes);
@@ -189,6 +192,22 @@ app.get('/api/health', (req, res) => {
     status: 'ok', 
     timestamp: new Date().toISOString(),
     currentPrice: getCurrentPrice()
+  });
+});
+
+// Root route - API info (React app is served separately by ethoslife-web service)
+app.get('/', (req, res) => {
+  res.json({
+    name: 'EthosLife API',
+    version: '1.0.0',
+    status: 'running',
+    endpoints: {
+      api: '/api',
+      health: '/api/health',
+      price: '/api/price',
+      saft: '/saft'
+    },
+    message: 'Frontend available at ethoslife-web service'
   });
 });
 

@@ -1,0 +1,38 @@
+{
+  "common": {
+    "appName": "EthosLife",
+    "tagline": "Human Operating System für Gesundheit",
+    "loading": "Laden...",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "language": "Sprache",
+    "selectLanguage": "Sprache wählen"
+  },
+  "nav": {
+    "home": "Startseite",
+    "dashboard": "Dashboard",
+    "health": "Gesundheit",
+    "nutrition": "Ernährung",
+    "fitness": "Fitness",
+    "sleep": "Schlaf",
+    "mental": "Mentale Gesundheit",
+    "medical": "Medizinisch",
+    "social": "Sozial",
+    "aiCoach": "AI Coach",
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden",
+    "v1": "V1 Klassisch",
+    "v2": "V2 Neu",
+    "investorDemo": "Investor Demo",
+    "buyTokens": "Tokens kaufen"
+  },
+  "landing": {
+    "hero": {
+      "title": "Die Zukunft der Gesundheitstechnologie",
+      "subtitle": "Umfassendes Gesundheitsökosystem mit KI-gestützten Erkenntnissen, Gamification und professionellem Gesundheitsmarktplatz"
+    }
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "common": {
+    "appName": "EthosLife",
+    "tagline": "Human Operating System for Health",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "close": "Close",
+    "open": "Open",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "continue": "Continue",
+    "skip": "Skip",
+    "done": "Done",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info",
+    "required": "Required",
+    "optional": "Optional",
+    "language": "Language",
+    "selectLanguage": "Select Language"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "dashboardV1": "Dashboard V1",
+    "dashboardV2": "Dashboard V2",
+    "health": "Health",
+    "healthV2": "Health V2",
+    "nutrition": "Nutrition",
+    "fitness": "Fitness",
+    "sleep": "Sleep",
+    "mental": "Mental Health",
+    "medical": "Medical",
+    "body": "Body",
+    "environment": "Environment",
+    "movement": "Movement",
+    "psychology": "Psychology",
+    "medicine": "Medicine",
+    "relationships": "Relationships",
+    "habits": "Habits",
+    "social": "Social",
+    "community": "Community",
+    "aiCoach": "AI Coach",
+    "profile": "Profile",
+    "settings": "Settings",
+    "analytics": "Analytics",
+    "gamification": "Gamification",
+    "specialists": "Specialists",
+    "centers": "Centers",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "v1": "V1 Classic",
+    "v2": "V2 New",
+    "investorDemo": "Investor Demo",
+    "buyTokens": "Buy Tokens",
+    "whitepaper": "Whitepaper",
+    "features": "Features",
+    "pricing": "Pricing",
+    "tokenomics": "Tokenomics",
+    "roadmap": "Roadmap",
+    "explore": "Explore",
+    "viewDemo": "View Demo",
+    "landing": "Landing",
+    "platform": "Platform",
+    "notifications": "Notifications"
+  },
+  "dashboard": {
+    "overview": "Overview",
+    "wallet": "Wallet",
+    "activity": "Activity",
+    "achievements": "Achievements"
+  },
+  "health": {
+    "center": "Health Center"
+  }
+  "landing": {
+    "hero": {
+      "title": "The Future of Health Technology",
+      "subtitle": "Comprehensive health ecosystem with AI-powered insights, gamification, and professional healthcare marketplace",
+      "ctaPrimary": "Explore Live Demo",
+      "ctaSecondary": "View Whitepaper",
+      "stats": {
+        "users": "Users",
+        "modules": "Health Modules",
+        "uptime": "Uptime",
+        "support": "Support",
+        "countries": "Countries",
+        "analyses": "Analyses"
+      }
+    },
+    "modules": {
+      "title": "Comprehensive Health Modules",
+      "subtitle": "Each module offers deep functionality with AI integration, advanced analytics, and professional-grade tracking capabilities",
+      "nutrition": {
+        "title": "Nutrition",
+        "description": "AI-powered meal tracking with photo recognition, recipes, and macro analysis"
+      },
+      "fitness": {
+        "title": "Fitness",
+        "description": "Complete fitness ecosystem with workout logger and recovery tracking"
+      },
+      "sleep": {
+        "title": "Sleep",
+        "description": "Smart sleep optimization with phases tracking and chronotype analysis"
+      },
+      "mental": {
+        "title": "Mental Health",
+        "description": "Mental wellness with clinical assessments and CBT tools"
+      },
+      "medical": {
+        "title": "Medical",
+        "description": "Digital health records with medication tracking and lab results"
+      },
+      "body": {
+        "title": "Body",
+        "description": "Biometric tracking with body composition and measurements"
+      },
+      "environment": {
+        "title": "Environment",
+        "description": "Monitor air quality, water, noise levels and lighting"
+      }
+    },
+    "platform": {
+      "title": "Advanced Platform Capabilities",
+      "subtitle": "AI-powered insights, social features, marketplace, and gamification create a complete health ecosystem"
+    },
+    "investment": {
+      "title": "Investment Opportunity",
+      "subtitle": "Join the health tech revolution with a platform that combines AI, community, and professional healthcare",
+      "market": {
+        "title": "Market Opportunity",
+        "description": "$4.2T global wellness market growing at 9.9% CAGR. Digital health adoption accelerated post-pandemic."
+      },
+      "advantage": {
+        "title": "Competitive Advantage",
+        "description": "7-module integrated ecosystem vs single-purpose apps. AI insights across all health dimensions."
+      },
+      "revenue": {
+        "title": "Revenue Model",
+        "description": "Freemium + Premium subscriptions + B2B marketplace commission + Enterprise licensing."
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to continue your health journey",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot Password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign Up"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Start your personalized health journey today",
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "agreeTerms": "I agree to the Terms of Service and Privacy Policy",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign In"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "healthScore": "Health Score",
+    "dailyInsights": "Daily Insights",
+    "quickActions": "Quick Actions",
+    "recentActivity": "Recent Activity",
+    "upcoming": "Upcoming",
+    "goals": "Goals",
+    "achievements": "Achievements"
+  },
+  "health": {
+    "modules": "Health Modules",
+    "trackers": "Trackers",
+    "analysis": "Analysis",
+    "recommendations": "Recommendations",
+    "logActivity": "Log Activity",
+    "viewHistory": "View History",
+    "setGoal": "Set Goal"
+  },
+  "footer": {
+    "copyright": "© 2026 EthosLife. All rights reserved.",
+    "contact": "Contact us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  }
+}

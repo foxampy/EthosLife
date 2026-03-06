@@ -89,6 +89,7 @@ interface ScheduledDose {
   skipped: boolean;
   withFood: 'with' | 'without' | 'either';
   color: string;
+  pillsRemaining?: number;
 }
 
 interface SymptomEntry {
@@ -1516,7 +1517,7 @@ export default function Medicine2() {
   const timelineEvents: TimelineEvent[] = useMemo(() => {
     const events: TimelineEvent[] = [];
     
-    todaySchedule.filter(d => d.taken).forEach(dose => ({
+    todaySchedule.filter(d => d.taken).map(dose => ({
       id: dose.id,
       type: 'medication',
       title: `Took ${dose.medicationName}`,

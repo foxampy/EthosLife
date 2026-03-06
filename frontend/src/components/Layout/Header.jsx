@@ -1,9 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
 import BurgerMenu from './BurgerMenu';
+import LanguageSelector from './LanguageSelector';
 
 const Header = () => {
+  const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -12,7 +15,7 @@ const Header = () => {
   
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
+  const { user, logout, isAuthenticated } = useAuthStore();
   
   const searchRef = useRef(null);
   const userMenuRef = useRef(null);
@@ -66,11 +69,11 @@ const Header = () => {
   };
 
   const navItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: '📊' },
-    { path: '/health', label: 'Health', icon: '❤️' },
-    { path: '/ai-chat', label: 'AI Coach', icon: '🤖' },
-    { path: '/social', label: 'Community', icon: '👥' },
-    { path: '/profile', label: 'Profile', icon: '👤' },
+    { path: '/dashboard', label: t('nav.dashboard'), icon: '📊' },
+    { path: '/health', label: t('nav.health'), icon: '❤️' },
+    { path: '/ai-chat', label: t('nav.aiCoach'), icon: '🤖' },
+    { path: '/social', label: t('nav.community'), icon: '👥' },
+    { path: '/profile', label: t('nav.profile'), icon: '👤' },
   ];
 
   const isActive = (path) => {
@@ -85,12 +88,12 @@ const Header = () => {
             
             {/* Logo */}
             <Link 
-              to="/dashboard" 
+              to="/" 
               className="flex items-center space-x-2 group"
               aria-label="EthosLife Home"
             >
               <span className="text-3xl transform group-hover:scale-110 transition-transform duration-200">🌱</span>
-              <span className="text-xl font-bold text-ink tracking-tight">EthosLife</span>
+              <span className="text-xl font-bold text-ink tracking-tight hidden sm:inline">EthosLife</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -111,27 +114,58 @@ const Header = () => {
               ))}
             </nav>
 
-            {/* Right Section: Search, Notifications, User, Burger */}
-            <div className="flex items-center space-x-2">
+            {/* V2 & Investor Demo Buttons */}
+            <div className="hidden lg:flex items-center space-x-2">
+              <Link
+                to="/v2"
+                className={`flex items-center space-x-1 px-3 py-2 rounded-xl text-sm font-bold transition-all duration-200
+                  ${location.pathname === '/v2' || location.pathname.startsWith('/v2/')
+                    ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-md'
+                    : 'bg-gradient-to-r from-emerald-100 to-cyan-100 text-emerald-700 hover:shadow-sm'
+                  }`}
+                title={t('nav.v2')}
+              >
+                <span>✨</span>
+                <span>V2</span>
+              </Link>
+              
+              <Link
+                to="/saft"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-1 px-3 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-100 to-orange-100 text-amber-700 hover:shadow-sm transition-all duration-200"
+                title={t('nav.investorDemo')}
+              >
+                <span>💎</span>
+                <span className="hidden xl:inline">{t('nav.investorDemo')}</span>
+                <span className="xl:hidden">{t('nav.buyTokens')}</span>
+              </Link>
+            </div>
+
+            {/* Right Section: Language, Search, Notifications, User, Burger */}
+            <div className="flex items-center space-x-1 sm:space-x-2">
+              
+              {/* Language Selector */}
+              <LanguageSelector />
               
               {/* Search */}
-              <div ref={searchRef} className="relative">
+              <div ref={searchRef} className="relative hidden sm:block">
                 {isSearchOpen ? (
                   <form onSubmit={handleSearch} className="flex items-center">
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search..."
+                      placeholder={t('common.search') + "..."}
                       className="w-48 sm:w-64 px-4 py-2 rounded-xl bg-bone border border-stone/30 text-ink placeholder-stone/50 focus:outline-none focus:ring-2 focus:ring-stone/50 focus:border-transparent shadow-neu-inset text-sm"
                       autoFocus
-                      aria-label="Search"
+                      aria-label={t('common.search')}
                     />
                     <button
                       type="button"
                       onClick={() => setIsSearchOpen(false)}
                       className="ml-2 p-2 rounded-xl hover:bg-sand/50 text-stone"
-                      aria-label="Close search"
+                      aria-label={t('common.close')}
                     >
                       ✕
                     </button>
@@ -140,7 +174,7 @@ const Header = () => {
                   <button
                     onClick={() => setIsSearchOpen(true)}
                     className="p-2 rounded-xl hover:bg-sand/50 text-stone hover:text-ink transition-all duration-200 hover:shadow-sm"
-                    aria-label="Open search"
+                    aria-label={t('common.search')}
                   >
                     🔍
                   </button>
@@ -149,8 +183,8 @@ const Header = () => {
 
               {/* Notifications */}
               <button
-                className="relative p-2 rounded-xl hover:bg-sand/50 text-stone hover:text-ink transition-all duration-200 hover:shadow-sm"
-                aria-label={`Notifications (${notificationCount} unread)`}
+                className="relative p-2 rounded-xl hover:bg-sand/50 text-stone hover:text-ink transition-all duration-200 hover:shadow-sm hidden sm:flex"
+                aria-label={`${t('nav.notifications')} (${notificationCount})`}
               >
                 🔔
                 {notificationCount > 0 && (
@@ -161,56 +195,73 @@ const Header = () => {
               </button>
 
               {/* User Menu - Desktop */}
-              <div ref={userMenuRef} className="hidden md:block relative">
-                <button
-                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-2 p-2 rounded-xl hover:bg-sand/50 transition-all duration-200 hover:shadow-sm"
-                  aria-label="User menu"
-                  aria-expanded={isUserMenuOpen}
-                >
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-stone to-ink flex items-center justify-center text-bone font-bold text-sm shadow-md">
-                    {user?.fullName?.charAt(0)?.toUpperCase() || 'U'}
-                  </div>
-                  <span className="text-sm font-medium text-ink-light max-w-[100px] truncate">
-                    {user?.fullName || 'User'}
-                  </span>
-                  <span className={`transform transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`}>
-                    ▾
-                  </span>
-                </button>
+              {isAuthenticated ? (
+                <div ref={userMenuRef} className="hidden md:block relative">
+                  <button
+                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                    className="flex items-center space-x-2 p-2 rounded-xl hover:bg-sand/50 transition-all duration-200 hover:shadow-sm"
+                    aria-label="User menu"
+                    aria-expanded={isUserMenuOpen}
+                  >
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-stone to-ink flex items-center justify-center text-bone font-bold text-sm shadow-md">
+                      {user?.fullName?.charAt(0)?.toUpperCase() || 'U'}
+                    </div>
+                    <span className="text-sm font-medium text-ink-light max-w-[100px] truncate hidden lg:inline">
+                      {user?.fullName || 'User'}
+                    </span>
+                    <span className={`transform transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`}>
+                      ▾
+                    </span>
+                  </button>
 
-                {/* Dropdown Menu */}
-                {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-bone rounded-xl shadow-neu border border-stone/20 py-2 z-50 animate-fadeIn">
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-2 text-sm text-ink hover:bg-sand/50 hover:text-ink-light transition-colors"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      👤 Profile
-                    </Link>
-                    <Link
-                      to="/settings"
-                      className="block px-4 py-2 text-sm text-ink hover:bg-sand/50 hover:text-ink-light transition-colors"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      ⚙️ Settings
-                    </Link>
-                    <hr className="my-2 border-stone/20" />
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-stone hover:bg-sand/50 hover:text-ink-light transition-colors"
-                    >
-                      🚪 Logout
-                    </button>
-                  </div>
-                )}
-              </div>
+                  {/* Dropdown Menu */}
+                  {isUserMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-bone rounded-xl shadow-neu border border-stone/20 py-2 z-50 animate-fadeIn">
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 text-sm text-ink hover:bg-sand/50 hover:text-ink-light transition-colors"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        👤 {t('nav.profile')}
+                      </Link>
+                      <Link
+                        to="/settings"
+                        className="block px-4 py-2 text-sm text-ink hover:bg-sand/50 hover:text-ink-light transition-colors"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        ⚙️ {t('nav.settings')}
+                      </Link>
+                      <hr className="my-2 border-stone/20" />
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 text-sm text-stone hover:bg-sand/50 hover:text-ink-light transition-colors"
+                      >
+                        🚪 {t('nav.logout')}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="hidden md:flex items-center space-x-2">
+                  <Link
+                    to="/login"
+                    className="px-4 py-2 rounded-xl text-sm font-medium text-ink hover:bg-sand/50 transition-all duration-200"
+                  >
+                    {t('nav.login')}
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="px-4 py-2 rounded-xl text-sm font-medium bg-stone text-bone hover:bg-ink transition-all duration-200"
+                  >
+                    {t('nav.register')}
+                  </Link>
+                </div>
+              )}
 
               {/* Burger Button - Mobile/Tablet */}
               <button
                 onClick={() => setIsMenuOpen(true)}
-                className="lg:hidden p-2 rounded-xl hover:bg-sand/50 text-stone hover:text-ink transition-all duration-200 hover:shadow-sm ml-2"
+                className="lg:hidden p-2 rounded-xl hover:bg-sand/50 text-stone hover:text-ink transition-all duration-200 hover:shadow-sm"
                 aria-label="Open menu"
                 aria-expanded={isMenuOpen}
               >
@@ -236,8 +287,6 @@ const Header = () => {
           aria-hidden="true"
         />
       )}
-
-      {/* Mobile User Menu - показываем только в бургере */}
     </>
   );
 };

@@ -52,6 +52,7 @@ import {
   Share2,
   Maximize2,
   Minimize2,
+  Flame,
 } from 'lucide-react';
 
 // ==================== Types ====================

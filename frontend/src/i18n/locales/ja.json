@@ -1,0 +1,38 @@
+{
+  "common": {
+    "appName": "EthosLife",
+    "tagline": "健康のための人間のオペレーティングシステム",
+    "loading": "読み込み中...",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "language": "言語",
+    "selectLanguage": "言語を選択"
+  },
+  "nav": {
+    "home": "ホーム",
+    "dashboard": "ダッシュボード",
+    "health": "健康",
+    "nutrition": "栄養",
+    "fitness": "フィットネス",
+    "sleep": "睡眠",
+    "mental": "メンタルヘルス",
+    "medical": "医療",
+    "social": "ソーシャル",
+    "aiCoach": "AIコーチ",
+    "profile": "プロフィール",
+    "settings": "設定",
+    "login": "ログイン",
+    "register": "登録",
+    "logout": "ログアウト",
+    "v1": "V1 クラシック",
+    "v2": "V2 新しい",
+    "investorDemo": "投資家向けデモ",
+    "buyTokens": "トークンを購入"
+  },
+  "landing": {
+    "hero": {
+      "title": "ヘルステックの未来",
+      "subtitle": "AI主導の洞察、ゲーミフィケーション、プロの医療マーケットプレイスを備えた包括的なヘルスケアエコシステム"
+    }
+  }
+}

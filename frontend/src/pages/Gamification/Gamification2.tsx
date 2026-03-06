@@ -52,7 +52,7 @@ interface Challenge {
   timeRemaining: string;
   joined: boolean;
   participants: number;
-  category: 'activity' | 'nutrition' | 'sleep' | 'mental' | 'social';
+  category: 'activity' | 'nutrition' | 'sleep' | 'mental' | 'social' | 'streaks';
 }
 
 interface Reward {

@@ -1,0 +1,38 @@
+{
+  "common": {
+    "appName": "EthosLife",
+    "tagline": "人类健康操作系统",
+    "loading": "加载中...",
+    "save": "保存",
+    "cancel": "取消",
+    "language": "语言",
+    "selectLanguage": "选择语言"
+  },
+  "nav": {
+    "home": "首页",
+    "dashboard": "仪表板",
+    "health": "健康",
+    "nutrition": "营养",
+    "fitness": "健身",
+    "sleep": "睡眠",
+    "mental": "心理健康",
+    "medical": "医疗",
+    "social": "社交",
+    "aiCoach": "AI教练",
+    "profile": "个人资料",
+    "settings": "设置",
+    "login": "登录",
+    "register": "注册",
+    "logout": "退出",
+    "v1": "V1 经典",
+    "v2": "V2 新版",
+    "investorDemo": "投资者演示",
+    "buyTokens": "购买代币"
+  },
+  "landing": {
+    "hero": {
+      "title": "健康科技的未来",
+      "subtitle": "综合健康生态系统，配备AI驱动洞察、游戏化和专业医疗保健市场"
+    }
+  }
+}

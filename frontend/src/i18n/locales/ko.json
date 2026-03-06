@@ -1,0 +1,38 @@
+{
+  "common": {
+    "appName": "EthosLife",
+    "tagline": "건강을 위한 휴먼 운영 체제",
+    "loading": "로딩 중...",
+    "save": "저장",
+    "cancel": "취소",
+    "language": "언어",
+    "selectLanguage": "언어 선택"
+  },
+  "nav": {
+    "home": "홈",
+    "dashboard": "대시보드",
+    "health": "건강",
+    "nutrition": "영양",
+    "fitness": "피트니스",
+    "sleep": "수면",
+    "mental": "정신 건강",
+    "medical": "의료",
+    "social": "소셜",
+    "aiCoach": "AI 코치",
+    "profile": "프로필",
+    "settings": "설정",
+    "login": "로그인",
+    "register": "회원가입",
+    "logout": "로그아웃",
+    "v1": "V1 클래식",
+    "v2": "V2 새로운",
+    "investorDemo": "투자자 데모",
+    "buyTokens": "토큰 구매"
+  },
+  "landing": {
+    "hero": {
+      "title": "헬스테크의 미래",
+      "subtitle": "AI 기반 인사이트, 게이미피케이션 및 전문 헬스케어 마켓플레이스를 갖춘 종합 헬스케어 생태계"
+    }
+  }
+}

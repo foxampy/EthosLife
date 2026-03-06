@@ -24,7 +24,6 @@ import {
   ResponsiveContainer,
   ReferenceLine,
   ComposedChart,
-  BoxPlot,
 } from 'recharts';
 import {
   Calendar,

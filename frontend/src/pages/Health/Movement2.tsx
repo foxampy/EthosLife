@@ -290,7 +290,7 @@ const RestTimer: React.FC<{ isActive: boolean; onComplete: () => void }> = ({ is
   const [initialTime, setInitialTime] = useState(90);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft((prev) => {
@@ -448,7 +448,7 @@ export default function Movement2() {
 
   // Workout timer effect
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isWorkoutActive) {
       interval = setInterval(() => {
         setWorkoutTimer((prev) => prev + 1);

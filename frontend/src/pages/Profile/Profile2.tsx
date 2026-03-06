@@ -2003,7 +2003,7 @@ export default function Profile2() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         <button 
           className="absolute bottom-4 right-4 p-2 rounded-xl bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
-          onClick={() => toast.info('Cover photo upload coming soon!')}
+          onClick={() => toast('Cover photo upload coming soon!')}
         >
           <Camera size={20} />
         </button>

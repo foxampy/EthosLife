@@ -1,0 +1,38 @@
+{
+  "common": {
+    "appName": "EthosLife",
+    "tagline": "Sistema Operacional Humano para Saúde",
+    "loading": "Carregando...",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "language": "Idioma",
+    "selectLanguage": "Selecionar Idioma"
+  },
+  "nav": {
+    "home": "Início",
+    "dashboard": "Painel",
+    "health": "Saúde",
+    "nutrition": "Nutrição",
+    "fitness": "Fitness",
+    "sleep": "Sono",
+    "mental": "Saúde Mental",
+    "medical": "Médico",
+    "social": "Social",
+    "aiCoach": "Coach IA",
+    "profile": "Perfil",
+    "settings": "Configurações",
+    "login": "Entrar",
+    "register": "Cadastrar",
+    "logout": "Sair",
+    "v1": "V1 Clássico",
+    "v2": "V2 Novo",
+    "investorDemo": "Demo para Investidores",
+    "buyTokens": "Comprar Tokens"
+  },
+  "landing": {
+    "hero": {
+      "title": "O Futuro da Tecnologia da Saúde",
+      "subtitle": "Ecossistema completo de saúde com insights de IA, gamificação e marketplace de saúde profissional"
+    }
+  }
+}

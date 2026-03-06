@@ -61,7 +61,7 @@ interface FoodItem {
   fat: number;
   fiber: number;
   sugar: number;
-  time: string;
+  time?: string;
   image?: string;
 }
 

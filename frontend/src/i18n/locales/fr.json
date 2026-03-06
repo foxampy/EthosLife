@@ -1,0 +1,38 @@
+{
+  "common": {
+    "appName": "EthosLife",
+    "tagline": "Système d'Exploitation Humain pour la Santé",
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "language": "Langue",
+    "selectLanguage": "Choisir la langue"
+  },
+  "nav": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "health": "Santé",
+    "nutrition": "Nutrition",
+    "fitness": "Fitness",
+    "sleep": "Sommeil",
+    "mental": "Santé Mentale",
+    "medical": "Médical",
+    "social": "Social",
+    "aiCoach": "Coach IA",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "logout": "Déconnexion",
+    "v1": "V1 Classique",
+    "v2": "V2 Nouveau",
+    "investorDemo": "Démo Investisseur",
+    "buyTokens": "Acheter des Tokens"
+  },
+  "landing": {
+    "hero": {
+      "title": "L'Avenir de la Technologie de Santé",
+      "subtitle": "Écosystème de santé complet avec analyses IA, gamification et marketplace de soins professionnels"
+    }
+  }
+}

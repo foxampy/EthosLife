@@ -1,10 +1,41 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
+import LanguageSelector from './LanguageSelector';
 
 const BurgerMenu = ({ isOpen, onClose, isActive }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
+  const location = useLocation();
+  const { user, logout, isAuthenticated } = useAuthStore();
+  const [activeVersion, setActiveVersion] = useState('v1'); // 'v1' or 'v2'
+
+  // Определяем активную версию на основе текущего пути
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.startsWith('/v2') || 
+        path === '/dashboard2' ||
+        path === '/analytics2' ||
+        path === '/gamification2' ||
+        path === '/specialists2' ||
+        path === '/centers2' ||
+        path === '/profile2' ||
+        path === '/settings2' ||
+        path === '/ai-chat2' ||
+        path === '/social2' ||
+        path.includes('/health/nutrition2') ||
+        path.includes('/health/movement2') ||
+        path.includes('/health/sleep2') ||
+        path.includes('/health/psychology2') ||
+        path.includes('/health/medicine2') ||
+        path.includes('/health/relationships2') ||
+        path.includes('/health/habits2')) {
+      setActiveVersion('v2');
+    } else {
+      setActiveVersion('v1');
+    }
+  }, [location.pathname]);
 
   // Блокировка скролла при открытом меню
   useEffect(() => {
@@ -24,101 +55,107 @@ const BurgerMenu = ({ isOpen, onClose, isActive }) => {
     onClose();
   };
 
-  // Категории навигации
-  const menuCategories = [
+  // V1 Menu Categories (Classic)
+  const v1MenuCategories = [
     {
-      title: 'Landing',
+      title: t('nav.landing'),
       items: [
-        { path: '/', label: 'Home', icon: '🏠' },
-        { path: '/#features', label: 'Features', icon: '✨' },
-        { path: '/#pricing', label: 'Pricing', icon: '💎' },
-        { path: '/#tokenomics', label: 'Tokenomics', icon: '📈' },
-        { path: '/#roadmap', label: 'Roadmap', icon: '🗺️' },
-        { path: '/whitepaper', label: 'Whitepaper', icon: '📄' },
+        { path: '/', label: t('nav.home') + ' V1', icon: '🏠' },
+        { path: '/v1', label: 'Landing V1', icon: '🌟' },
+        { path: '/features-v1', label: t('nav.features'), icon: '✨' },
+        { path: '/pricing-v1', label: t('nav.pricing'), icon: '💎' },
+        { path: '/tokenomics-v1', label: t('nav.tokenomics'), icon: '📈' },
+        { path: '/roadmap-v1', label: t('nav.roadmap'), icon: '🗺️' },
+        { path: '/whitepaper', label: t('nav.whitepaper'), icon: '📄' },
       ]
     },
     {
-      title: 'Dashboard v2 (New)',
+      title: t('nav.dashboardV1'),
       items: [
-        { path: '/dashboard2', label: '✨ Dashboard 2.0', icon: '📊' },
-        { path: '/analytics2', label: '📈 Analytics 2.0', icon: '📉' },
-        { path: '/gamification2', label: '🎮 Gamification 2.0', icon: '🏆' },
+        { path: '/dashboard-v1', label: t('nav.dashboard') + ' V1', icon: '📊' },
+        { path: '/overview-v1', label: t('dashboard.overview'), icon: '📋' },
+        { path: '/wallet-v1', label: t('dashboard.wallet'), icon: '💰' },
+        { path: '/notifications-v1', label: t('nav.notifications'), icon: '🔔' },
+        { path: '/activity-v1', label: t('dashboard.activity'), icon: '📈' },
+        { path: '/achievements-v1', label: t('dashboard.achievements'), icon: '🏆' },
       ]
     },
     {
-      title: 'Dashboard (Classic)',
+      title: t('nav.health') + ' V1',
       items: [
-        { path: '/dashboard', label: 'Overview', icon: '📊' },
+        { path: '/health', label: t('health.center'), icon: '🏥' },
+        { path: '/health/nutrition', label: '🥗 ' + t('nav.nutrition'), icon: '' },
+        { path: '/health/fitness', label: '💪 ' + t('nav.fitness'), icon: '' },
+        { path: '/health/sleep', label: '😴 ' + t('nav.sleep'), icon: '' },
+        { path: '/health/mental', label: '🧠 ' + t('nav.mental'), icon: '' },
+        { path: '/health/medical', label: '🏥 ' + t('nav.medical'), icon: '' },
+        { path: '/health/body', label: '🧬 ' + t('nav.body'), icon: '' },
+        { path: '/health/environment', label: '🌿 ' + t('nav.environment'), icon: '' },
       ]
     },
     {
-      title: 'Health Modules v2 (New)',
+      title: t('nav.social') + ' V1',
       items: [
-        { path: '/health/nutrition2', label: '🥗 Nutrition 2.0', icon: '✨' },
-        { path: '/health/movement2', label: '💪 Movement 2.0', icon: '✨' },
-        { path: '/health/sleep2', label: '😴 Sleep 2.0', icon: '✨' },
-        { path: '/health/psychology2', label: '🧠 Psychology 2.0', icon: '✨' },
-        { path: '/health/medicine2', label: '🏥 Medicine 2.0', icon: '✨' },
-        { path: '/health/relationships2', label: '💕 Relationships 2.0', icon: '✨' },
-        { path: '/health/habits2', label: '🔥 Habits 2.0', icon: '✨' },
+        { path: '/social', label: t('nav.social') + ' Feed', icon: '📰' },
       ]
     },
     {
-      title: 'Health Modules (Classic)',
+      title: t('nav.profile') + ' V1',
       items: [
-        { path: '/health/nutrition', label: '🥗 Nutrition', icon: '' },
-        { path: '/health/fitness', label: '💪 Fitness', icon: '' },
-        { path: '/health/sleep', label: '😴 Sleep', icon: '' },
-        { path: '/health/mental', label: '🧠 Mental Health', icon: '' },
-        { path: '/health/medical', label: '🏥 Medical', icon: '' },
-      ]
-    },
-    {
-      title: 'Social & Community v2 (New)',
-      items: [
-        { path: '/social2', label: '✨ Social Feed 2.0', icon: '📰' },
-      ]
-    },
-    {
-      title: 'Social (Classic)',
-      items: [
-        { path: '/social', label: 'Feed', icon: '📰' },
-        { path: '/social/groups', label: 'Groups', icon: '👥' },
-        { path: '/social/challenges', label: 'Challenges', icon: '🏆' },
-        { path: '/social/messages', label: 'Messages', icon: '💬' },
-      ]
-    },
-    {
-      title: 'Specialists & Centers v2 (New)',
-      items: [
-        { path: '/specialists2', label: '✨ Specialists 2.0', icon: '👨‍⚕️' },
-        { path: '/centers2', label: '✨ Centers 2.0', icon: '🏢' },
-      ]
-    },
-    {
-      title: 'Specialists (Classic)',
-      items: [
-        { path: '/specialists', label: 'Find Specialists', icon: '👨‍⚕️' },
-        { path: '/appointments', label: 'Appointments', icon: '📅' },
-      ]
-    },
-    {
-      title: 'Profile & AI v2 (New)',
-      items: [
-        { path: '/profile2', label: '✨ Profile 2.0', icon: '👤' },
-        { path: '/settings2', label: '✨ Settings 2.0', icon: '⚙️' },
-        { path: '/ai-chat2', label: '✨ AI Coach 2.0', icon: '🤖' },
-      ]
-    },
-    {
-      title: 'Profile & Settings (Classic)',
-      items: [
-        { path: '/profile', label: 'Profile', icon: '👤' },
-        { path: '/settings', label: 'Settings', icon: '⚙️' },
-        { path: '/ai-chat', label: 'AI Coach', icon: '🤖' },
+        { path: '/profile', label: t('nav.profile'), icon: '👤' },
+        { path: '/settings', label: t('nav.settings'), icon: '⚙️' },
+        { path: '/ai-chat', label: t('nav.aiCoach'), icon: '🤖' },
       ]
     },
   ];
+
+  // V2 Menu Categories (New)
+  const v2MenuCategories = [
+    {
+      title: 'V2 ' + t('nav.platform'),
+      items: [
+        { path: '/v2', label: t('nav.home') + ' V2', icon: '🚀' },
+        { path: '/dashboard2', label: '✨ ' + t('nav.dashboard') + ' 2.0', icon: '📊' },
+        { path: '/analytics2', label: '📈 ' + t('nav.analytics') + ' 2.0', icon: '📉' },
+        { path: '/gamification2', label: '🎮 ' + t('nav.gamification') + ' 2.0', icon: '🏆' },
+      ]
+    },
+    {
+      title: t('nav.health') + ' V2',
+      items: [
+        { path: '/health/nutrition2', label: '🥗 ' + t('nav.nutrition') + ' 2.0', icon: '✨' },
+        { path: '/health/movement2', label: '💪 ' + t('nav.movement') + ' 2.0', icon: '✨' },
+        { path: '/health/sleep2', label: '😴 ' + t('nav.sleep') + ' 2.0', icon: '✨' },
+        { path: '/health/psychology2', label: '🧠 ' + t('nav.psychology') + ' 2.0', icon: '✨' },
+        { path: '/health/medicine2', label: '🏥 ' + t('nav.medicine') + ' 2.0', icon: '✨' },
+        { path: '/health/relationships2', label: '💕 ' + t('nav.relationships') + ' 2.0', icon: '✨' },
+        { path: '/health/habits2', label: '🔥 ' + t('nav.habits') + ' 2.0', icon: '✨' },
+      ]
+    },
+    {
+      title: t('nav.social') + ' V2',
+      items: [
+        { path: '/social2', label: '✨ ' + t('nav.social') + ' Feed 2.0', icon: '📰' },
+      ]
+    },
+    {
+      title: t('nav.specialists') + ' & ' + t('nav.centers') + ' V2',
+      items: [
+        { path: '/specialists2', label: '✨ ' + t('nav.specialists') + ' 2.0', icon: '👨‍⚕️' },
+        { path: '/centers2', label: '✨ ' + t('nav.centers') + ' 2.0', icon: '🏢' },
+      ]
+    },
+    {
+      title: t('nav.profile') + ' & AI V2',
+      items: [
+        { path: '/profile2', label: '✨ ' + t('nav.profile') + ' 2.0', icon: '👤' },
+        { path: '/settings2', label: '✨ ' + t('nav.settings') + ' 2.0', icon: '⚙️' },
+        { path: '/ai-chat2', label: '✨ ' + t('nav.aiCoach') + ' 2.0', icon: '🤖' },
+      ]
+    },
+  ];
+
+  const currentCategories = activeVersion === 'v1' ? v1MenuCategories : v2MenuCategories;
 
   return (
     <>
@@ -140,10 +177,42 @@ const BurgerMenu = ({ isOpen, onClose, isActive }) => {
           <button
             onClick={onClose}
             className="p-2 rounded-xl hover:bg-sand/50 text-stone hover:text-ink transition-all duration-200 hover:shadow-sm"
-            aria-label="Close menu"
+            aria-label={t('common.close')}
           >
             ✕
           </button>
+        </div>
+
+        {/* Version Toggle */}
+        <div className="px-6 py-4 border-b border-stone/20 bg-sand/20">
+          <div className="flex bg-sand/50 rounded-xl p-1">
+            <button
+              onClick={() => {
+                setActiveVersion('v1');
+                navigate('/');
+              }}
+              className={`flex-1 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
+                ${activeVersion === 'v1'
+                  ? 'bg-white text-ink shadow-sm'
+                  : 'text-stone hover:text-ink'
+                }`}
+            >
+              {t('nav.v1')}
+            </button>
+            <button
+              onClick={() => {
+                setActiveVersion('v2');
+                navigate('/v2');
+              }}
+              className={`flex-1 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
+                ${activeVersion === 'v2'
+                  ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-sm'
+                  : 'text-stone hover:text-ink'
+                }`}
+            >
+              ✨ {t('nav.v2')}
+            </button>
+          </div>
         </div>
 
         {/* User Info */}
@@ -163,7 +232,7 @@ const BurgerMenu = ({ isOpen, onClose, isActive }) => {
 
         {/* Navigation Categories */}
         <nav className="px-4 py-6 space-y-6">
-          {menuCategories.map((category, categoryIndex) => (
+          {currentCategories.map((category, categoryIndex) => (
             <div key={categoryIndex}>
               <h3 className="text-xs font-bold text-stone uppercase tracking-wider mb-3 px-2">
                 {category.title}
@@ -193,16 +262,52 @@ const BurgerMenu = ({ isOpen, onClose, isActive }) => {
           ))}
         </nav>
 
-        {/* Logout Button */}
-        <div className="sticky bottom-0 bg-bone border-t border-stone/20 px-4 py-4">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-gradient-to-r from-stone to-ink text-bone font-semibold shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200"
+        {/* Language Selector */}
+        <LanguageSelector variant="burger" />
+
+        {/* Investment Link */}
+        <div className="px-4 py-4 border-t border-stone/20">
+          <a
+            href="/saft"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center space-x-3 px-4 py-3 rounded-xl bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 hover:shadow-sm transition-all duration-200"
           >
-            <span>🚪</span>
-            <span>Logout</span>
-          </button>
+            <span className="text-lg">💎</span>
+            <span className="font-medium text-sm">{t('nav.buyTokens')} (SAFT)</span>
+            <span className="ml-auto text-xs">↗</span>
+          </a>
         </div>
+
+        {/* Auth Buttons */}
+        {isAuthenticated ? (
+          <div className="sticky bottom-0 bg-bone border-t border-stone/20 px-4 py-4">
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-gradient-to-r from-stone to-ink text-bone font-semibold shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200"
+            >
+              <span>🚪</span>
+              <span>{t('nav.logout')}</span>
+            </button>
+          </div>
+        ) : (
+          <div className="sticky bottom-0 bg-bone border-t border-stone/20 px-4 py-4 space-y-2">
+            <Link
+              to="/login"
+              onClick={onClose}
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl border-2 border-stone text-stone font-semibold hover:bg-stone/10 transition-all duration-200"
+            >
+              <span>{t('nav.login')}</span>
+            </Link>
+            <Link
+              to="/register"
+              onClick={onClose}
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-gradient-to-r from-stone to-ink text-bone font-semibold shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200"
+            >
+              <span>{t('nav.register')}</span>
+            </Link>
+          </div>
+        )}
       </aside>
 
       {/* Анимация появления */}

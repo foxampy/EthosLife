@@ -1,0 +1,38 @@
+{
+  "common": {
+    "appName": "EthosLife",
+    "tagline": "Sağlık İçin İnsan İşletim Sistemi",
+    "loading": "Yükleniyor...",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "language": "Dil",
+    "selectLanguage": "Dil Seçin"
+  },
+  "nav": {
+    "home": "Ana Sayfa",
+    "dashboard": "Panel",
+    "health": "Sağlık",
+    "nutrition": "Beslenme",
+    "fitness": "Fitness",
+    "sleep": "Uyku",
+    "mental": "Mental Sağlık",
+    "medical": "Tıbbi",
+    "social": "Sosyal",
+    "aiCoach": "AI Koç",
+    "profile": "Profil",
+    "settings": "Ayarlar",
+    "login": "Giriş",
+    "register": "Kayıt Ol",
+    "logout": "Çıkış",
+    "v1": "V1 Klasik",
+    "v2": "V2 Yeni",
+    "investorDemo": "Yatırımcı Demosu",
+    "buyTokens": "Token Satın Al"
+  },
+  "landing": {
+    "hero": {
+      "title": "Sağlık Teknolojisinin Geleceği",
+      "subtitle": "AI destekli içgörüler, oyunlaştırma ve profesyonel sağlık pazaryeri ile kapsamlı sağlık ekosistemi"
+    }
+  }
+}

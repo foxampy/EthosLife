@@ -457,7 +457,7 @@ export default function Psychology2() {
 
   // Effects
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isRecording) {
       interval = setInterval(() => {
         setRecordingTime(prev => prev + 1);
@@ -1025,7 +1025,7 @@ export default function Psychology2() {
       'Feeling afraid as if something awful might happen',
     ];
 
-    const calculateSeverity = (score: number, type: 'phq9' | 'gad7') => {
+    const calculateSeverity = (score: number, type: 'phq9' | 'gad7' | 'pss') => {
       if (type === 'phq9') {
         if (score <= 4) return 'minimal';
         if (score <= 9) return 'mild';
@@ -1192,7 +1192,7 @@ export default function Psychology2() {
           </button>
 
           <button
-            onClick={() => toast.info('PSS Assessment coming soon!')}
+            onClick={() => toast('PSS Assessment coming soon!')}
             className="neu-card p-5 text-left hover:shadow-lg transition-all group"
           >
             <div className="flex items-start justify-between mb-3">
@@ -1207,7 +1207,7 @@ export default function Psychology2() {
           </button>
 
           <button
-            onClick={() => toast.info('Quick Self-Check coming soon!')}
+            onClick={() => toast('Quick Self-Check coming soon!')}
             className="neu-card p-5 text-left hover:shadow-lg transition-all group"
           >
             <div className="flex items-start justify-between mb-3">
@@ -1552,7 +1552,7 @@ export default function Psychology2() {
           If you\'re experiencing a mental health crisis, help is available 24/7.
         </p>
         <button
-          onClick={() => toast.info('Connecting to crisis support...')}
+          onClick={() => toast('Connecting to crisis support...')}
           className="w-full py-4 bg-rose-500 text-white rounded-xl font-semibold text-lg hover:bg-rose-600 transition-colors shadow-lg"
         >
           <PhoneIcon className="w-6 h-6 inline mr-2" />
@@ -1590,7 +1590,7 @@ export default function Psychology2() {
             className="neu-input flex-1"
           />
           <button
-            onClick={() => toast.info('Searching for therapists...')}
+            onClick={() => toast('Searching for therapists...')}
             className="px-4 bg-teal-500 text-white rounded-xl hover:bg-teal-600 transition-colors"
           >
             <MagnifyingGlassIcon className="w-5 h-5" />

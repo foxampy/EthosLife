@@ -123,6 +123,16 @@ const LandingV1 = () => {
               <a href="#statistics" className="text-[#2d2418] hover:text-[#5c5243] transition-colors">Статистика</a>
               <a href="#testimonials" className="text-[#2d2418] hover:text-[#5c5243] transition-colors">Отзывы</a>
               <a href="#pricing" className="text-[#2d2418] hover:text-[#5c5243] transition-colors">Тарифы</a>
+              
+              {/* V2 Toggle */}
+              <button
+                onClick={() => navigate('/v2')}
+                className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all flex items-center space-x-1"
+              >
+                <span>✨</span>
+                <span>V2</span>
+              </button>
+              
               <button
                 onClick={() => navigate('/login')}
                 className="neu-button py-2 px-6 text-sm"

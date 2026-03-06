@@ -55,7 +55,7 @@ import {
   MapPinIcon,
   Cog6ToothIcon,
   ChartBarIcon,
-  HeartHandshakeIcon
+  HeartIcon
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid, HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
