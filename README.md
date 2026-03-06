@@ -1,102 +1,172 @@
-# EthosLife SAFT Platform 🌍
+# EthosLife - Human Operating System 🌍
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
 
-**Multi-language investment platform for EthosLife Seed Round**
+**Full-stack health ecosystem platform with AI coaching**
 
-🌐 **Supported Languages:** English, Español, Deutsch, Polski, עברית, العربية, Русский, 한국어, 日本語, 中文
+🌐 **Live Demo**: https://ethoslife-web.onrender.com
 
 ## ✨ Features
 
-- 🚀 **Dynamic Pricing**: Token price increases from $0.01 to $0.05 until March 10, 2025 01:00 UTC
-- ⏱️ **Price Freeze**: 1-hour price lock after SAFT submission
-- 🤖 **Telegram Bot**: Instant notifications with PDF documents
-- 🗄️ **PostgreSQL Database**: Persistent storage for submissions & analytics
-- 📄 **PDF Generation**: Automatic SAFT document creation
-- 🌍 **10 Languages**: Full internationalization support
-- ✅ **Smart Validation**: Client & server-side validation
-- 📊 **Analytics**: Visit tracking & conversion metrics
+### 🔐 Authentication
+- Google OAuth 2.0
+- Telegram Login Widget
+- JWT with refresh tokens
 
-## 🚀 Quick Start
+### 🏥 Health Module (7 Directions)
+- **Nutrition** - Meal tracking, calories
+- **Fitness** - Workout logging, activity
+- **Sleep** - Sleep duration & quality
+- **Mental Health** - Mood tracking
+- **Medical** - Records, medications
+- **Body** - Weight, BMI, measurements
+- **Environment** - Air quality, ergonomics
 
-```bash
-# 1. Clone & setup
-git clone https://github.com/YOUR_USERNAME/ethoslife-saft.git
-cd ethoslife-saft
-./setup.sh  # or setup.bat on Windows
+### 🤖 AI Coach (Qwen API)
+- Personal health assistant
+- Context-aware responses
+- RAG knowledge base
+- Conversation history
 
-# 2. Configure environment
-cp .env.example .env
-# Edit .env with your credentials
-
-# 3. Run
-npm start
-```
-
-Open http://localhost:3000
+### 📊 Dashboard
+- Health Score (0-100)
+- Interactive charts (Recharts)
+- Goals tracking
+- Recent activity
 
 ## 🛠️ Tech Stack
 
-| Component | Technology |
-|-----------|------------|
+| Layer | Technology |
+|-------|------------|
+| Frontend | React 18, Tailwind CSS, Zustand, React Query |
 | Backend | Node.js, Express |
 | Database | PostgreSQL |
-| Bot | node-telegram-bot-api |
-| Frontend | Vanilla JS, CSS3 |
-| I18n | Custom JSON-based |
-| Deploy | Render |
+| AI | Qwen API (Alibaba) |
+| Auth | JWT, Google OAuth, Telegram |
 
 ## 📁 Project Structure
 
 ```
-├── server.js              # Express API + Telegram bot
-├── database.js            # PostgreSQL models
-├── pdf-generator.js       # SAFT document generation
-├── public/
-│   ├── index.html         # Main SAFT form
-│   └── i18n.js            # Translations (10 languages)
-├── render.yaml            # Render deployment config
-└── .env.example           # Environment template
+├── backend/
+│   ├── server.js              # Express API
+│   ├── controllers/           # Route handlers
+│   ├── routes/                # API routes
+│   ├── middleware/            # Auth middleware
+│   ├── database.js            # PostgreSQL client
+│   └── migrations/            # SQL migrations
+├── frontend/
+│   ├── src/
+│   │   ├── pages/             # React pages
+│   │   ├── components/        # Reusable components
+│   │   ├── store/             # Zustand stores
+│   │   └── services/          # API client
+│   └── package.json
+├── render.yaml                # Render deployment config
+└── README.md
+```
+
+## 🚀 Quick Start
+
+### 1. Clone & Setup
+```bash
+git clone https://github.com/foxampy/EthosLife.git
+cd EthosLife
+npm install
+cd frontend && npm install
+cd ..
+```
+
+### 2. Environment Variables
+Create `.env` file:
+```env
+# Database
+DATABASE_URL=postgresql://localhost:5432/ethoslife
+
+# JWT
+JWT_SECRET=your-secret-key
+JWT_REFRESH_SECRET=your-refresh-secret
+
+# Google OAuth
+GOOGLE_CLIENT_ID=your-google-client-id
+
+# Telegram (optional)
+TELEGRAM_BOT_TOKEN=your-bot-token
+FOUNDER_CHAT_ID=your-chat-id
+
+# Qwen AI (optional)
+QWEN_API_KEY=your-qwen-key
+```
+
+### 3. Database Setup
+```bash
+# Run migrations
+psql $DATABASE_URL -f migrations/001_create_users.sql
+psql $DATABASE_URL -f migrations/002_health_tables.sql
+psql $DATABASE_URL -f migrations/003_ai_tables.sql
+```
+
+### 4. Run Development
+```bash
+# Backend
+npm run dev
+
+# Frontend (new terminal)
+cd frontend
+npm start
+```
+
+## 📊 API Endpoints
+
+### Auth
+```
+POST /api/auth/google
+POST /api/auth/telegram
+POST /api/auth/refresh
+GET  /api/auth/me
+```
+
+### Health
+```
+GET  /api/health/dashboard
+GET  /api/health/metrics
+POST /api/health/metrics
+GET  /api/health/goals
+POST /api/health/goals
+```
+
+### AI
+```
+GET  /api/ai/conversations
+POST /api/ai/conversations
+GET  /api/ai/conversations/:id/messages
+POST /api/ai/conversations/:id/messages
 ```
 
 ## 🌍 Languages
 
-| Code | Language | Flag | Direction |
-|------|----------|------|-----------|
-| en | English | 🇺🇸 | LTR |
-| es | Español | 🇪🇸 | LTR |
-| de | Deutsch | 🇩🇪 | LTR |
-| pl | Polski | 🇵🇱 | LTR |
-| he | עברית | 🇮🇱 | RTL |
-| ar | العربية | 🇸🇦 | RTL |
-| ru | Русский | 🇷🇺 | LTR |
-| ko | 한국어 | 🇰🇷 | LTR |
-| ja | 日本語 | 🇯🇵 | LTR |
-| zh | 中文 | 🇨🇳 | LTR |
+| Code | Language | Flag |
+|------|----------|------|
+| en | English | 🇺🇸 |
+| es | Español | 🇪🇸 |
+| de | Deutsch | 🇩🇪 |
+| pl | Polski | 🇵🇱 |
+| he | עברית | 🇮🇱 |
+| ar | العربية | 🇸🇦 |
+| ru | Русский | 🇷🇺 |
+| ko | 한국어 | 🇰🇷 |
+| ja | 日本語 | 🇯🇵 |
+| zh | 中文 | 🇨🇳 |
 
-## 📊 Pricing Algorithm
+## 🚀 Deployment
 
-```
-Start: Now              → $0.01
-End: Mar 10, 01:00 UTC  → $0.05
+1. Push to GitHub
+2. Connect to Render (Blueprint)
+3. Add environment variables in Render Dashboard
+4. Deploy!
 
-Formula:
-price = $0.01 + ($0.05 - $0.01) × (elapsed / total_duration)
+## 📝 License
 
-After submission: Frozen for 1 hour
-```
-
-## 🔐 Security
-
-- ✅ Telegram token in environment variables only
-- ✅ Input validation on client & server
-- ✅ SQL injection protection via parameterized queries
-- ✅ Admin authentication required for sensitive endpoints
-
-## 📞 Support
-
-- **Telegram**: @ethoslife_bot
-- **Email**: hello@ethoslife.com
+Private - EthosLife Inc.
 
 ---
 

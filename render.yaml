@@ -1,10 +1,11 @@
 services:
   - type: web
-    name: ethoslife-saft-platform
+    name: ethoslife-api
     runtime: node
     plan: starter
     buildCommand: npm install
     startCommand: npm start
+    rootDir: .
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
@@ -21,8 +22,30 @@ services:
         sync: false
       - key: ADMIN_KEY
         sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: QWEN_API_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
       - key: PGSSLMODE
         value: no-verify
+    autoDeploy: true
+
+  - type: web
+    name: ethoslife-web
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          name: ethoslife-api
+          type: web
+          property: host
+          template: "https://{{host}}/api"
     autoDeploy: true
 
 databases:
