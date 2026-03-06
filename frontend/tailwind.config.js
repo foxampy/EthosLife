@@ -1,7 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -19,12 +20,23 @@ module.exports = {
         stone: '#5c5243',
       },
       fontFamily: {
-        sans: ['Space Grotesk', 'sans-serif'],
+        display: ['Space Grotesk', 'sans-serif'],
+        mono: ['Courier Prime', 'monospace'],
       },
       boxShadow: {
-        'neu': '8px 8px 16px #b8ae9f, -8px -8px 16px #ffffff',
-        'neu-inset': 'inset 3px 3px 6px #b8ae9f, inset -2px -2px 4px rgba(255,255,255,0.6)',
-        'neu-dark': '6px 6px 12px #a8a093, -6px -6px 12px #ffffff',
+        'neu': '8px 8px 16px #a8a093, -8px -8px 16px #ffffff',
+        'neu-inset': 'inset 4px 4px 8px #a8a093, inset -4px -4px 8px #ffffff',
+        'neu-sm': '4px 4px 8px #a8a093, -4px -4px 8px #ffffff',
+        'deep-bay': 'inset 12px 12px 24px #b8ae9f, inset -12px -12px 24px #e8decf',
+      },
+      borderRadius: {
+        '2xl': '1rem',
+        '3xl': '1.5rem',
+        '4xl': '2rem',
+      },
+      animation: {
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'bounce-slow': 'bounce 2s infinite',
       },
     },
   },

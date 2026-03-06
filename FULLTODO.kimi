@@ -1,0 +1,1591 @@
+# EthoLife — FULL TODO
+## Максимально детализированный план доработки
+
+**Дата создания:** 06.03.2026  
+**Статус проекта:** 40-50% MVP  
+**Цель:** Полнофункциональная экосистема здоровья  
+**ETA к завершению:** 3-4 месяца (при параллельной работе)
+
+---
+
+## 📊 АРХИТЕКТУРНАЯ КАРТА ПРОЕКТА
+
+```
+EthoLife Platform
+├── Frontend (React + Tailwind + Vite)
+│   ├── Public Pages (landing, pricing, about)
+│   ├── Auth Pages (login, register, oauth)
+│   ├── Dashboard (main, v2)
+│   ├── 7 Health Modules (nutrition, movement, sleep, psychology, medicine, relationships, habits)
+│   ├── Social Network (posts, feed, profiles)
+│   ├── AI Chat (Qwen/Groq/Gemini)
+│   ├── Specialists/Centers (catalog, booking, CRM)
+│   └── User Features (wallet, tokenomics, profile)
+├── Backend (Node.js + Express)
+│   ├── Auth API (JWT, Google OAuth, Telegram)
+│   ├── Health API (7 modules CRUD)
+│   ├── AI API (chat, insights, recommendations)
+│   ├── Payments API (NOWPayments, Unity Token)
+│   ├── Social API (posts, follows, feed)
+│   └── Specialists API (booking, CRM)
+├── Database (PostgreSQL)
+│   ├── 47+ tables defined
+│   ├── Health metrics tables
+│   ├── Social tables
+│   └── Payment tables
+└── Integrations
+    ├── Qwen API (AI chat)
+    ├── Telegram Bot (notifications)
+    ├── NOWPayments (crypto)
+    └── External APIs (Phase 2+)
+```
+
+---
+
+## 🔴 КРИТИЧЕСКИЕ БЛОКЕРЫ (Решить в первую очередь)
+
+### ENV Variables (Все платформы)
+```bash
+# Render (Backend)
+DATABASE_URL=postgresql://...
+QWEN_API_KEY=sk-...
+JWT_SECRET=...
+TELEGRAM_BOT_TOKEN=... (optional)
+FOUNDER_CHAT_ID=...
+
+# Vercel (Frontend)
+VITE_GOOGLE_CLIENT_ID=...
+VITE_API_URL=https://api.ethoslife.com
+```
+
+### Current Issues
+| Issue | Impact | Solution |
+|-------|--------|----------|
+| Google OAuth не работает | Нет входа через Google | Добавить VITE_GOOGLE_CLIENT_ID в Vercel |
+| AI Fallback only | Шаблонные ответы | Добавить QWEN_API_KEY в Render |
+| Telegram бот выключен | Нет уведомлений | Добавить TELEGRAM_BOT_TOKEN (опционально) |
+| Модули с заглушками | "Feature under development" | Phase 2 доработка |
+
+---
+
+## 📋 PHASE 0: ФУНДАМЕНТ (1 неделя)
+
+### 0.1 Инфраструктура
+- [ ] **Deploy Database** — PostgreSQL на Render
+  - Apply all migrations from `migrations/`
+  - Create indexes for performance
+  - [ ] Connection pooling config
+  - [ ] Backup strategy (daily automated)
+
+- [ ] **ENV Setup**
+  - [ ] Add `QWEN_API_KEY` to Render
+  - [ ] Add `VITE_GOOGLE_CLIENT_ID` to Vercel
+  - [ ] Verify `JWT_SECRET` is set
+  - [ ] Test all integrations
+
+### 0.2 Базовая стабилизация
+- [ ] **Auth System Finalization**
+  - [ ] Test email/password registration
+  - [ ] Test email/password login
+  - [ ] Test JWT token refresh
+  - [ ] Implement password reset flow
+    - [ ] Backend: generate reset token
+    - [ ] Backend: send email via SendGrid/AWS SES
+    - [ ] Frontend: reset password page
+  - [ ] Implement email verification
+    - [ ] Send verification on register
+    - [ ] Verification link handler
+
+- [ ] **AI Chat Production**
+  - [ ] Connect Qwen API
+  - [ ] Test streaming responses
+  - [ ] Add rate limiting per user tier
+  - [ ] Fallback responses if API fails
+
+---
+
+## 📋 PHASE 1: HEALTH MODULES CORE (4-6 недель)
+
+### PHASE 1.1: NUTRITION DEEP DIVE (Неделя 1-2)
+
+#### Database Schema Extensions
+```sql
+-- Core Tables
+nutrition_foods
+├── id (uuid) PRIMARY KEY
+├── name (varchar 255)
+├── brand (varchar 100, nullable)
+├── barcode (varchar 50, indexed) -- For scanner
+├── category (enum: grains, proteins, dairy, vegetables, fruits, fats, beverages, snacks, supplements, other)
+├── serving_size (decimal 10,2) -- grams
+├── serving_unit (varchar 20)
+├── is_verified (boolean) -- USDA verified
+├── is_user_created (boolean)
+├── created_by_user_id (uuid, nullable)
+├── source (enum: 'usda', 'openfoodfacts', 'custom', 'recipe')
+└── nutrients (JSONB)
+    ├── calories (kcal)
+    ├── protein, carbs, fat (g)
+    ├── fiber, sugar (g)
+    ├── sodium, cholesterol (mg)
+    ├── vitamins (A, C, D, E, K, B-complex)
+    └── minerals (calcium, iron, magnesium, etc.)
+
+nutrition_recipes
+├── id (uuid)
+├── user_id (uuid)
+├── name (varchar 255)
+├── description (text)
+├── instructions (text[])
+├── prep_time_minutes (int)
+├── cook_time_minutes (int)
+├── servings (int)
+├── difficulty (enum: easy, medium, hard)
+├── tags (varchar[])
+├── image_url (varchar)
+├── is_public (boolean)
+├── likes_count (int)
+└── total_nutrients (JSONB)
+
+nutrition_recipe_ingredients
+├── id (uuid)
+├── recipe_id (uuid)
+├── food_id (uuid)
+├── amount (decimal 10,2)
+├── unit (varchar 20)
+└── notes (text)
+
+nutrition_diary_entries
+├── id (uuid)
+├── user_id (uuid)
+├── date (date)
+├── meal_type (enum: breakfast, lunch, dinner, snack, pre_workout, post_workout)
+├── entry_type (enum: food, recipe, quick_add, barcode)
+├── food_id (uuid, nullable)
+├── recipe_id (uuid, nullable)
+├── custom_name (varchar 255, nullable)
+├── amount (decimal 10,2)
+├── unit (varchar 20)
+├── calculated_nutrients (JSONB)
+├── photo_url (varchar, nullable)
+├── logged_at (timestamp)
+├── location (JSONB, nullable) -- GPS
+├── mood (enum: hungry, satisfied, full, stuffed)
+├── hunger_level_before (int 1-10)
+├── hunger_level_after (int 1-10)
+├── ai_analysis (JSONB)
+└── notes (text)
+
+nutrition_goals
+├── id (uuid)
+├── user_id (uuid)
+├── goal_type (enum: lose_weight, maintain, gain_weight, gain_muscle, improve_health)
+├── target_calories (int)
+├── macro_goals (JSONB) -- protein%, carbs%, fat%
+├── macro_grams (JSONB) -- exact grams
+├── target_water_ml (int)
+├── fasting_schedule (JSONB) -- 16:8, 18:6, etc.
+├── dietary_restrictions (varchar[]) -- vegetarian, vegan, keto, etc.
+├── allergies (varchar[])
+├── avoid_foods (varchar[])
+├── prefer_foods (varchar[])
+├── meal_frequency (int) -- 3-6 meals
+└── is_active (boolean)
+
+nutrition_water_log
+├── id (uuid)
+├── user_id (uuid)
+├── date (date)
+├── amount_ml (int)
+├── logged_at (timestamp)
+└── source (enum: manual, reminder)
+
+nutrition_weight_log
+├── id (uuid)
+├── user_id (uuid)
+├── date (date)
+├── weight_kg (decimal 5,2)
+├── body_fat_percent (decimal 4,1, nullable)
+├── muscle_mass_kg (decimal 5,2, nullable)
+├── waist_cm (decimal 5,2, nullable)
+└── photo_url (varchar, nullable)
+
+nutrition_ai_insights
+├── id (uuid)
+├── user_id (uuid)
+├── date (date)
+├── insight_type (enum: pattern, warning, recommendation, achievement)
+├── title (varchar 255)
+├── description (text)
+├── priority (enum: low, medium, high)
+├── is_read (boolean)
+└── actionable_steps (JSONB[])
+```
+
+#### API Endpoints
+```typescript
+// Foods
+GET    /api/nutrition/foods/search?q={query}&limit=20
+GET    /api/nutrition/foods/barcode/{barcode}
+POST   /api/nutrition/foods (create custom food)
+GET    /api/nutrition/foods/:id
+
+// Recipes
+GET    /api/nutrition/recipes?public=true&page=1
+POST   /api/nutrition/recipes (create recipe)
+GET    /api/nutrition/recipes/:id
+PUT    /api/nutrition/recipes/:id
+DELETE /api/nutrition/recipes/:id
+POST   /api/nutrition/recipes/:id/like
+
+// Diary
+GET    /api/nutrition/diary?date=2026-03-06
+POST   /api/nutrition/diary/entries (add entry)
+PUT    /api/nutrition/diary/entries/:id
+DELETE /api/nutrition/diary/entries/:id
+GET    /api/nutrition/diary/summary?startDate=&endDate=
+
+// Goals
+GET    /api/nutrition/goals
+POST   /api/nutrition/goals
+PUT    /api/nutrition/goals/:id
+
+// Water
+GET    /api/nutrition/water?date=2026-03-06
+POST   /api/nutrition/water (log water)
+DELETE /api/nutrition/water/:id
+
+// Weight
+GET    /api/nutrition/weight/history?days=30
+POST   /api/nutrition/weight
+
+// Insights
+GET    /api/nutrition/insights
+POST   /api/nutrition/insights/:id/read
+```
+
+#### Frontend Components
+```typescript
+// Pages
+NutritionDashboard.tsx        // Main dashboard
+├── CircularProgress          // Calories circle
+├── MacroBars                 // Protein/Carbs/Fat progress
+├── MealTimeline              // Today's meals
+├── WaterTracker              // Animated water counter
+├── QuickAddModal             // Fast food entry
+├── AISuggestionCard          // AI recommendations
+
+FoodSearch.tsx                // Search with barcode
+├── BarcodeScanner            // Camera scanner
+├── SearchResults             // List with filters
+├── FoodDetailCard            // Nutrients breakdown
+
+RecipeBuilder.tsx             // Create recipes
+├── IngredientSelector        // Add ingredients
+├── NutritionCalculator       // Auto-calculate macros
+├── InstructionEditor         // Step-by-step
+
+MealPlanner.tsx               // AI meal plans
+├── PlanGenerator             // AI generation
+├── WeeklyView                // 7-day calendar
+├── ShoppingList              // Auto-generated list
+
+// Shared Components
+FoodCard.tsx
+MealTypeIcon.tsx
+NutrientBadge.tsx
+CalorieChart.tsx
+WeightChart.tsx
+```
+
+#### External Integrations
+```typescript
+// Open Food Facts API
+interface OpenFoodFactsService {
+  searchByBarcode(barcode: string): Promise<FoodData>;
+  searchByName(name: string, limit: number): Promise<FoodData[]>;
+}
+
+// USDA FoodData Central
+interface USDAService {
+  searchFoods(query: string): Promise<USDAFood[]>;
+  getFoodDetails(fdcId: string): Promise<USDAFoodDetails>;
+}
+
+// AI Photo Analysis
+interface AIFoodRecognition {
+  analyzePhoto(imageBase64: string): Promise<{
+    foodName: string;
+    confidence: number;
+    estimatedWeight: number;
+    calories: number;
+    macros: Macros;
+  }>;
+}
+```
+
+#### Tasks Checklist
+- [ ] **Week 1.1: Database & API**
+  - [ ] Create migration for nutrition tables
+  - [ ] Seed USDA foods (top 1000 common foods)
+  - [ ] Implement /api/nutrition/foods endpoints
+  - [ ] Implement diary CRUD endpoints
+  - [ ] Implement goals endpoints
+
+- [ ] **Week 1.2: Frontend Core**
+  - [ ] NutritionDashboard with CircularProgress
+  - [ ] FoodSearch with autocomplete
+  - [ ] Diary entry form (quick add)
+  - [ ] Water tracker with animation
+  - [ ] Weight logging chart
+
+- [ ] **Week 2.1: Advanced Features**
+  - [ ] Recipe builder (create, edit, delete)
+  - [ ] Recipe public gallery
+  - [ ] Meal planner generator
+  - [ ] Shopping list export
+
+- [ ] **Week 2.2: Integrations**
+  - [ ] Open Food Facts API integration
+  - [ ] Barcode scanner (camera access)
+  - [ ] AI photo food recognition
+  - [ ] Nutrition AI insights generation
+
+---
+
+### PHASE 1.2: MOVEMENT DEEP DIVE (Неделя 3-4)
+
+#### Database Schema Extensions
+```sql
+movement_daily_activity
+├── id (uuid)
+├── user_id (uuid)
+├── date (date)
+├── steps (int)
+├── distance_meters (int)
+├── calories_burned (int)
+├── active_minutes (int)
+├── floors_climbed (int)
+├── source (enum: manual, phone, wearable)
+└── is_goal_achieved (boolean)
+
+movement_workouts
+├── id (uuid)
+├── user_id (uuid)
+├── workout_type (enum: cardio, strength, hiit, yoga, pilates, running, cycling, swimming, walking, sports)
+├── name (varchar 255)
+├── start_time (timestamp)
+├── end_time (timestamp)
+├── duration_seconds (int)
+├── calories_burned (int)
+├── heart_rate_avg (int)
+├── heart_rate_max (int)
+├── heart_rate_min (int)
+├── feeling_rating (int 1-10)
+├── rpe (int 6-20) -- Rate of Perceived Exertion
+├── location_data (JSONB) -- GPS track
+├── is_planned (boolean)
+└── notes (text)
+
+movement_workout_exercises
+├── id (uuid)
+├── workout_id (uuid)
+├── exercise_id (uuid)
+├── exercise_name (varchar 255) -- denormalized
+├── order_index (int)
+├── rest_seconds (int)
+└── sets (JSONB[]) -- [{reps, weight_kg, duration, distance, rpe, notes}]
+
+movement_exercises (reference table)
+├── id (uuid)
+├── name (varchar 255)
+├── name_ru (varchar 255)
+├── category (enum: cardio, strength, flexibility, balance, plyometrics)
+├── muscle_groups (varchar[]) -- ['chest', 'back', 'legs', 'shoulders', 'arms', 'core']
+├── equipment (varchar[]) -- ['none', 'dumbbells', 'barbell', 'kettlebell', 'machine']
+├── difficulty (enum: beginner, intermediate, advanced)
+├── instructions (text[])
+├── video_url (varchar)
+├── image_url (varchar)
+├── met_value (decimal 4,2) -- Metabolic Equivalent
+└── tags (varchar[])
+
+movement_programs
+├── id (uuid)
+├── name (varchar 255)
+├── goal (enum: lose_weight, build_muscle, improve_endurance, general_fitness)
+├── difficulty (enum: beginner, intermediate, advanced)
+├── duration_weeks (int)
+├── days_per_week (int)
+├── equipment_needed (varchar[])
+├── is_ai_generated (boolean)
+├── weeks (JSONB[]) -- structured program
+└── is_public (boolean)
+
+movement_planned_workouts
+├── id (uuid)
+├── user_id (uuid)
+├── program_id (uuid, nullable)
+├── name (varchar 255)
+├── scheduled_date (date)
+├── scheduled_time (time)
+├── workout_type (enum)
+├── estimated_duration_minutes (int)
+├── exercises (JSONB[])
+├── is_completed (boolean)
+├── reminder_enabled (boolean)
+└── reminder_time (time)
+
+movement_fitness_metrics
+├── id (uuid)
+├── user_id (uuid)
+├── date (date)
+├── vo2_max (decimal 4,1)
+├── resting_heart_rate (int)
+├── hrv (decimal 5,2) -- Heart Rate Variability
+├── body_composition (JSONB)
+└── created_at
+
+movement_personal_records
+├── id (uuid)
+├── user_id (uuid)
+├── exercise_id (uuid)
+├── pr_type (enum: weight, reps, distance, time, speed)
+├── value (decimal 10,2)
+├── unit (varchar 20)
+├── achieved_at (timestamp)
+├── improvement_percent (decimal 5,2)
+└── is_notified (boolean)
+
+movement_recovery_status
+├── id (uuid)
+├── user_id (uuid)
+├── date (date)
+├── recovery_score (int 0-100)
+├── sleep_quality_impact (int -50 to +50)
+├── nutrition_impact (int -50 to +50)
+├── stress_impact (int -50 to +50)
+├── previous_workout_impact (int -50 to +50)
+├── readiness_to_train (enum: low, moderate, high, optimal)
+├── recommended_intensity (enum: rest, light, moderate, hard)
+├── muscle_groups_fatigue (JSONB) -- {chest: 80, legs: 40}
+└── ai_recommendation (text)
+```
+
+#### Frontend Components
+```typescript
+MovementDashboard.tsx
+├── ActivityRings           // Steps/Calories/Time rings
+├── WorkoutCard             // Today's/Last workout
+├── RecoveryStatusWidget    // Recovery score
+└── StreakDisplay           // Activity streak
+
+WorkoutLogger.tsx           // Active workout screen
+├── ExerciseTimer           // Current exercise timer
+├── SetLogger               // Reps/weight input
+├── RestTimer               // Countdown between sets
+├── ExerciseVideo           // Technique video
+└── NextExercisePreview
+
+ExerciseLibrary.tsx         // Browse exercises
+├── ExerciseFilter          // By muscle/equipment
+├── ExerciseCard            // Preview with image
+├── ExerciseDetail          // Full instructions
+└── RelatedExercises
+
+WorkoutPlanner.tsx          // Plan workouts
+├── ProgramSelector         // Choose program
+├── WeekCalendar            // Scheduled workouts
+├── WorkoutBuilder          // Custom workout creator
+└── AIWorkoutGenerator      // AI-generated workout
+
+ProgressDashboard.tsx
+├── VolumeChart             // Total volume over time
+├── ExerciseProgressChart   // Per-exercise progress
+├── PRList                  // Personal records
+└── BodyMetricsChart        // Weight/body fat
+```
+
+#### Tasks Checklist
+- [ ] **Week 3.1: Core Database & API**
+  - [ ] Create movement tables migration
+  - [ ] Seed exercise library (100+ exercises)
+  - [ ] Workout CRUD endpoints
+  - [ ] Exercise library endpoints
+  - [ ] Program templates (Beginner, Intermediate)
+
+- [ ] **Week 3.2: Frontend Core**
+  - [ ] MovementDashboard with activity rings
+  - [ ] Workout logger (active workout screen)
+  - [ ] Exercise library browser
+  - [ ] Workout planner/calendar
+
+- [ ] **Week 4.1: Advanced Features**
+  - [ ] Recovery status calculator
+  - [ ] Personal records tracking
+  - [ ] AI workout generator
+  - [ ] Progress analytics charts
+
+- [ ] **Week 4.2: Integrations**
+  - [ ] GPS tracking for running/cycling
+  - [ ] Wearables integration (Google Fit API prep)
+  - [ ] Video form analysis (AI)
+
+---
+
+### PHASE 1.3: SLEEP DEEP DIVE (Неделя 5-6)
+
+#### Database Schema Extensions
+```sql
+sleep_sessions
+├── id (uuid)
+├── user_id (uuid)
+├── date (date)
+├── bedtime (timestamp)
+├── wake_time (timestamp)
+├── duration_minutes (int)
+├── sleep_latency_minutes (int) -- time to fall asleep
+├── awake_duration_minutes (int)
+├── sleep_efficiency_percent (decimal 5,2)
+├── source (enum: manual, wearable, phone_app)
+├── quality_score (int 0-100)
+└── notes (text)
+
+sleep_phases
+├── id (uuid)
+├── sleep_session_id (uuid)
+├── phase_type (enum: deep, light, rem, awake)
+├── start_time (timestamp)
+├── end_time (timestamp)
+├── duration_minutes (int)
+└── percentage_of_total (decimal 5,2)
+
+sleep_metrics
+├── id (uuid)
+├── sleep_session_id (uuid)
+├── heart_rate_avg (int)
+├── hrv_avg (decimal 5,2)
+├── breathing_rate_avg (decimal 4,1)
+├── spo2_avg (decimal 4,1)
+├── movement_score (int 0-100)
+├── snoring_duration_minutes (int)
+└── environmental_data (JSONB) -- temp, humidity, noise
+
+sleep_goals
+├── id (uuid)
+├── user_id (uuid)
+├── target_bedtime (time)
+├── target_wake_time (time)
+├── target_duration_minutes (int) -- 420-540 (7-9h)
+├── chronotype (enum: lion, bear, wolf, dolphin)
+├── is_smart_alarm_enabled (boolean)
+├── smart_alarm_window_minutes (int) -- usually 30
+└── is_active (boolean)
+
+sleep_smart_alarms
+├── id (uuid)
+├── user_id (uuid)
+├── sleep_session_id (uuid)
+├── scheduled_time (timestamp)
+├── actual_trigger_time (timestamp)
+├── phase_at_trigger (enum: deep, light, rem, awake)
+├── user_response (enum: dismissed, snoozed, missed)
+└── effectiveness_rating (int 1-5)
+
+sleep_routine_checklist
+├── id (uuid)
+├── user_id (uuid)
+├── date (date)
+├── pre_sleep_activities (JSONB)
+│   ├── no_caffeine_after_14h (boolean)
+│   ├── no_heavy_meal_3h_before (boolean)
+│   ├── no_screens_1h_before (boolean)
+│   ├── dimmed_lights (boolean)
+│   ├── meditation_or_relaxation (boolean)
+│   ├── consistent_bedtime (boolean)
+│   └── cool_room (boolean)
+└── environment_score (int 0-100)
+
+sleep_factors
+├── id (uuid)
+├── sleep_session_id (uuid)
+├── factor_type (enum: caffeine, alcohol, exercise, stress, medication, late_meal, nap)
+├── factor_value (varchar 255)
+├── estimated_impact (enum: positive, negative, neutral)
+└── severity (int 1-10)
+
+sleep_naps
+├── id (uuid)
+├── user_id (uuid)
+├── start_time (timestamp)
+├── end_time (timestamp)
+├── duration_minutes (int)
+├── nap_type (enum: power_nap_20min, restorative_90min)
+├── quality_rating (int 1-5)
+└── effect_on_night_sleep (enum: improved, no_effect, worsened)
+
+sleep_weekly_summaries
+├── id (uuid)
+├── user_id (uuid)
+├── week_start_date (date)
+├── avg_duration_minutes (int)
+├── avg_quality_score (int)
+├── deep_sleep_avg_percent (decimal 5,2)
+├── rem_sleep_avg_percent (decimal 5,2)
+├── consistency_score (int 0-100)
+└── sleep_debt_minutes (int)
+```
+
+#### Frontend Components
+```typescript
+SleepDashboard.tsx
+├── SleepArcChart           // Duration arc
+├── PhaseDonutChart         // Deep/Light/REM %
+├── SleepQualityGauge       // 0-100 score
+├── SleepTimeline           // Visual timeline
+└── StreakBadge             // Good sleep streak
+
+SleepDetailView.tsx
+├── PhaseTimeline           // Hourly breakdown
+├── MetricsPanel            // HR, HRV, breathing
+├── FactorsList             // What affected sleep
+└── NotesEditor
+
+SleepHygieneChecklist.tsx
+├── RoutineChecklist        // 7 habits checklist
+├── EnvironmentScore        // Room conditions
+├── WindDownTimer           // Pre-sleep countdown
+└── TipsCarousel            // Personalized tips
+
+SmartAlarm.tsx
+├── AlarmSetter             // Time + window
+├── ChronotypeQuiz          // Lion/Bear/Wolf/Dolphin
+├── SleepCalculator         // Optimal bedtime
+└── WakeHistory             // Past alarms
+
+SleepTrends.tsx
+├── DurationChart           // 7/30/90 day view
+├── QualityTrendChart
+├── ConsistencyChart        // Bedtime variance
+├── SleepDebtTracker
+└── CorrelationInsights     // Sleep vs other modules
+```
+
+#### Tasks Checklist
+- [ ] **Week 5.1: Core Database & API**
+  - [ ] Create sleep tables migration
+  - [ ] Sleep session CRUD endpoints
+  - [ ] Sleep goals endpoints
+  - [ ] Smart alarm endpoints
+
+- [ ] **Week 5.2: Frontend Core**
+  - [ ] SleepDashboard with visualizations
+  - [ ] Manual sleep entry form
+  - [ ] Sleep hygiene checklist
+  - [ ] Smart alarm settings
+
+- [ ] **Week 6.1: Advanced Features**
+  - [ ] Sleep trends analytics
+  - [ ] Sleep debt calculator
+  - [ ] Chronotype quiz
+  - [ ] Correlation analysis (with Nutrition/Movement)
+
+- [ ] **Week 6.2: Wearable Prep**
+  - [ ] Import format for Fitbit/Apple Health/Garmin
+  - [ ] CSV import for sleep data
+  - [ ] Phase visualization (even if manual entry)
+
+---
+
+### PHASE 1.4: PSYCHOLOGY DEEP DIVE (Неделя 7-8)
+
+#### Database Schema Extensions
+```sql
+psychology_mood_entries
+├── id (uuid)
+├── user_id (uuid)
+├── date (date)
+├── time_of_day (enum: morning, afternoon, evening, night)
+├── overall_mood (int 1-10)
+├── energy_level (int 1-10)
+├── stress_level (int 1-10)
+├── anxiety_level (int 1-10)
+├── focus_level (int 1-10)
+├── emotions (varchar[]) -- ['happy', 'grateful', 'anxious', 'tired']
+├── mood_tags (varchar[]) -- work, family, health, finances
+├── journal_entry (text)
+├── voice_note_url (varchar)
+├── trigger_event (text)
+└── created_at
+
+psychology_emotion_checkins
+├── id (uuid)
+├── user_id (uuid)
+├── emotion_name (varchar 50) -- Plutchik wheel
+├── emotion_intensity (int 1-10)
+├── valence (enum: positive, neutral, negative)
+├── arousal (int 1-10)
+├── body_sensation (varchar 255) -- where felt in body
+└── duration_minutes (int)
+
+psychology_assessments
+├── id (uuid)
+├── user_id (uuid)
+├── assessment_type (enum: phq9, gad7, pss, wb5, who5)
+├── total_score (int)
+├── severity_level (enum: minimal, mild, moderate, severe)
+├── answers (JSONB)
+├── interpretation (text)
+└── taken_at (timestamp)
+
+psychology_phq9_scores
+├── id (uuid)
+├── user_id (uuid)
+├── total_score (int 0-27)
+├── severity (varchar 20)
+├── suicidal_ideation_flag (boolean) -- question 9
+└── requires_follow_up (boolean)
+
+psychology_gad7_scores
+├── id (uuid)
+├── user_id (uuid)
+├── total_score (int 0-21)
+└── severity (varchar 20)
+
+psychology_techniques
+├── id (uuid)
+├── name (varchar 255)
+├── name_ru (varchar 255)
+├── category (enum: breathing, meditation, cbt, grounding, mindfulness, gratitude)
+├── difficulty (enum: beginner, intermediate, advanced)
+├── duration_minutes (int)
+├── description (text)
+├── instructions (text[])
+├── audio_url (varchar)
+├── video_url (varchar)
+├── target_symptoms (varchar[]) -- anxiety, depression, stress
+└── is_premium (boolean)
+
+psychology_technique_sessions
+├── id (uuid)
+├── user_id (uuid)
+├── technique_id (uuid)
+├── started_at (timestamp)
+├── completed_at (timestamp)
+├── duration_seconds (int)
+├── effectiveness_rating (int 1-10)
+├── pre_stress_level (int 1-10)
+├── post_stress_level (int 1-10)
+└── notes (text)
+
+psychology_journal_entries
+├── id (uuid)
+├── user_id (uuid)
+├── entry_type (enum: free_form, gratitude, worry_dump, cognitive_restructuring)
+├── title (varchar 255)
+├── content (text)
+├── ai_analysis (JSONB)
+│   ├── sentiment_score (decimal 3,2) -- -1 to 1
+│   ├── key_themes (varchar[])
+│   ├── suggested_techniques (uuid[])
+│   ├── cognitive_distortions_detected (varchar[])
+│   └── ai_summary (text)
+└── word_count (int)
+
+psychology_cbt_worksheets
+├── id (uuid)
+├── user_id (uuid)
+├── worksheet_type (enum: thought_record, behavioral_activation, worry_tree)
+├── situation (text)
+├── automatic_thoughts (text)
+├── emotions (varchar[])
+├── evidence_for (text)
+├── evidence_against (text)
+├── balanced_thought (text)
+├── action_plan (text)
+└── created_at
+```
+
+#### Frontend Components
+```typescript
+PsychologyDashboard.tsx
+├── MoodTracker             // 1-10 slider
+├── EmotionWheel            // Plutchik wheel selector
+├── StressGauge             // Current stress level
+├── StreakCalendar          // Mood tracking streak
+└── AITherapistCard         // Quick chat with AI
+
+MoodJournal.tsx
+├── MoodEntryForm           // Daily check-in
+├── EmotionSelector         // Multi-emotion picker
+├── TriggerInput            // What caused mood
+├── VoiceNoteRecorder       // Audio journal
+└── PhotoMoodUploader       // Visual mood
+
+Assessments.tsx
+├── PHQ9Test               // Depression screening
+├── GAD7Test               // Anxiety screening
+├── PSSScale               // Perceived stress
+├── ResultsView            // Score + interpretation
+└── ProgressTracking       // Historical scores
+
+CBTTools.tsx
+├── ThoughtRecordSheet     // Cognitive restructuring
+├── WorryTree              // Decision tree
+├── BehavioralActivation   // Activity planner
+├── ABCWorksheet           // Antecedent-Behavior-Consequence
+└── SavedWorksheets        // History
+
+MeditationLibrary.tsx
+├── TechniqueBrowser       // Filter by category
+├── AudioPlayer            // Built-in player
+├── ProgressTracker        // Sessions completed
+├── FavoritesList          // Saved techniques
+└── QuickRelief            // 2-5 min techniques
+
+InsightsPanel.tsx
+├── MoodTrendChart         // 30-day mood
+├── PatternRecognition     // "You tend to feel..."
+├── CorrelationAnalysis    // Sleep vs Mood, etc.
+├── WeeklySummary          // AI-generated summary
+└── CrisisResources        // Emergency contacts
+```
+
+#### Tasks Checklist
+- [ ] **Week 7.1: Core Database & API**
+  - [ ] Create psychology tables migration
+  - [ ] Seed techniques library (20+ techniques)
+  - [ ] Mood entry CRUD endpoints
+  - [ ] Assessment endpoints (PHQ-9, GAD-7)
+  - [ ] Journal endpoints with AI analysis
+
+- [ ] **Week 7.2: Frontend Core**
+  - [ ] PsychologyDashboard with mood tracking
+  - [ ] Daily mood check-in form
+  - [ ] Emotion wheel selector
+  - [ ] Journal with AI analysis
+
+- [ ] **Week 8.1: CBT & Assessments**
+  - [ ] PHQ-9 assessment implementation
+  - [ ] GAD-7 assessment implementation
+  - [ ] Thought record worksheet
+  - [ ] Worry tree tool
+
+- [ ] **Week 8.2: Meditation & Insights**
+  - [ ] Meditation audio player
+  - [ ] Technique library
+  - [ ] Mood trends analytics
+  - [ ] AI-generated insights
+
+---
+
+### PHASE 1.5: MEDICINE DEEP DIVE (Неделя 9-10)
+
+#### Database Schema Extensions
+```sql
+medicine_drugs (reference table)
+├── id (uuid)
+├── name (varchar 255)
+├── name_generic (varchar 255)
+├── category (enum: prescription, otc, supplement, herbal)
+├── drug_class (varchar 100)
+├── form (enum: tablet, capsule, liquid, injection, cream)
+├── common_dosages (JSONB[])
+├── side_effects (text[])
+├── contraindications (text[])
+└── is_prescription_required (boolean)
+
+medicine_user_medications
+├── id (uuid)
+├── user_id (uuid)
+├── drug_id (uuid, nullable)
+├── custom_name (varchar 255)
+├── dosage_amount (decimal 10,2)
+├── dosage_unit (varchar 20)
+├── frequency (JSONB) -- complex scheduling
+├── prescribed_by (varchar 255)
+├── start_date (date)
+├── end_date (date, nullable)
+├── with_food (enum: before, with, after, empty_stomach)
+├── reminder_enabled (boolean)
+├── reminder_time (time[])
+├── refill_reminder_days (int)
+├── current_stock (decimal 10,2)
+└── is_active (boolean)
+
+medicine_intake_log
+├── id (uuid)
+├── user_id (uuid)
+├── medication_id (uuid)
+├── scheduled_time (timestamp)
+├── taken_at (timestamp, nullable)
+├── status (enum: taken, skipped, missed, late)
+├── dosage_taken (decimal 10,2)
+├── side_effects_noted (text[])
+└── notes (text)
+
+medicine_symptoms_catalog (reference)
+├── id (uuid)
+├── name (varchar 255)
+├── name_ru (varchar 255)
+├── body_system (enum: general, cardiovascular, respiratory, digestive)
+└── severity_scale (JSONB)
+
+medicine_symptom_entries
+├── id (uuid)
+├── user_id (uuid)
+├── symptom_id (uuid, nullable)
+├── custom_symptom_name (varchar 255)
+├── severity (int 1-10)
+├── body_location (varchar 100)
+├── quality (varchar[]) -- 'sharp', 'dull', 'burning'
+├── triggers (text[])
+├── relievers (text[])
+├── started_at (timestamp)
+├── ended_at (timestamp, nullable)
+└── notes (text)
+
+medicine_lab_test_types (reference)
+├── id (uuid)
+├── name (varchar 255)
+├── category (enum: blood, urine, imaging, genetic)
+├── parameters (JSONB[]) -- what is measured
+└── normal_frequency (varchar)
+
+medicine_lab_results
+├── id (uuid)
+├── user_id (uuid)
+├── test_type_id (uuid)
+├── test_name (varchar 255)
+├── date_taken (date)
+├── laboratory (varchar 255)
+├── results (JSONB[]) -- parameter values
+├── ai_interpretation (text)
+├── doctor_notes (text)
+├── document_url (varchar) -- scanned PDF
+└── is_abnormal (boolean)
+
+medicine_appointments
+├── id (uuid)
+├── user_id (uuid)
+├── doctor_name (varchar 255)
+├── specialty (varchar 100)
+├── appointment_type (enum: in_person, video, phone)
+├── scheduled_date (date)
+├── scheduled_time (time)
+├── location (varchar 255)
+├── reason (text)
+├── notes (text)
+├── follow_up_needed (boolean)
+├── follow_up_date (date)
+└── status (enum: scheduled, completed, cancelled, no_show)
+
+medicine_documents
+├── id (uuid)
+├── user_id (uuid)
+├── document_type (enum: prescription, lab_result, discharge_summary, insurance, other)
+├── title (varchar 255)
+├── file_url (varchar)
+├── ocr_text (text) -- extracted text
+├── ai_summary (text)
+├── tags (varchar[])
+└── uploaded_at (timestamp)
+```
+
+#### Frontend Components
+```typescript
+MedicineDashboard.tsx
+├── TodayMedications       // Today's pills
+├── AdherenceChart         // Compliance %
+├── UpcomingAppointments   // Next 7 days
+├── SymptomQuickLog        // Quick symptom entry
+└── AbnormalResultsAlert   // Flagged lab results
+
+MedicationManager.tsx
+├── MedicationList         // All active meds
+├── MedicationDetail       // Full schedule
+├── AddMedicationForm      // Create new
+├── ScheduleEditor         // Complex timing
+└── RefillTracker          // Stock levels
+
+MedicationTracker.tsx      // Daily tracking
+├── DailySchedule          // Time-based list
+├── TakeButton             // Log intake
+├── SkipReasonModal        // Why skipped
+├── SideEffectsLogger      // Track reactions
+└── HistoryView            // Past intakes
+
+SymptomDiary.tsx
+├── SymptomSelector        // Body map or list
+├── SeveritySlider         // 1-10 scale
+├── SymptomTimeline        // History chart
+├── PatternAnalysis        // Triggers correlation
+└── DoctorReport           // Export for physician
+
+LabResults.tsx
+├── ResultsList            // All tests
+├── ResultDetail           // Parameter breakdown
+├── TrendsChart            // Historical values
+├── AIInterpretation       // Normal vs abnormal
+├── UploadDocument         // OCR integration
+└── ShareWithDoctor        // Export PDF
+
+Appointments.tsx
+├── CalendarView           // Upcoming visits
+├── AppointmentForm        // Schedule new
+├── ReminderSettings       // Notifications
+├── VisitNotes             // Post-visit notes
+└── DoctorDirectory        // Saved contacts
+
+OCRDocumentScanner.tsx
+├── CameraUpload           // Document photo
+├── CropAndEnhance         // Image processing
+├── TextExtraction         // OCR results
+├── DataParsing            // Structured data
+└── SaveToRecords          // Store in DB
+```
+
+#### Tasks Checklist
+- [ ] **Week 9.1: Core Database & API**
+  - [ ] Create medicine tables migration
+  - [ ] Seed common drugs database (top 500)
+  - [ ] Medication CRUD endpoints
+  - [ ] Intake logging endpoints
+  - [ ] Symptom tracking endpoints
+
+- [ ] **Week 9.2: Frontend Core**
+  - [ ] MedicineDashboard overview
+  - [ ] Medication manager
+  - [ ] Daily medication tracker
+  - [ ] Refill reminders
+
+- [ ] **Week 10.1: Labs & Appointments**
+  - [ ] Lab results upload and storage
+  - [ ] OCR for document scanning
+  - [ ] Appointment scheduler
+  - [ ] Doctor directory
+
+- [ ] **Week 10.2: Insights**
+  - [ ] Adherence analytics
+  - [ ] Symptom pattern recognition
+  - [ ] Drug interaction warnings
+  - [ ] AI health summaries
+
+---
+
+### PHASE 1.6: RELATIONSHIPS & HABITS (Неделя 11-12)
+
+#### Database Schema
+```sql
+relationships_connections
+├── id (uuid)
+├── user_id (uuid)
+├── person_name (varchar 255)
+├── relationship_type (enum: family, friend, partner, colleague, other)
+├── closeness_level (int 1-10)
+├── last_contact_date (date)
+├── contact_frequency_goal (varchar) -- weekly, monthly
+└── notes (text)
+
+relationships_activities
+├── id (uuid)
+├── user_id (uuid)
+├── connection_id (uuid)
+├── activity_type (enum: call, meet, message, shared_activity)
+├── date (date)
+├── duration_minutes (int)
+├── quality_rating (int 1-10)
+└── notes (text)
+
+habits
+├── id (uuid)
+├── user_id (uuid)
+├── name (varchar 255)
+├── category (enum: health, productivity, mindfulness, social, other)
+├── frequency (enum: daily, weekly, custom)
+├── target_days (int[]) -- [1,2,3,4,5] for weekdays
+├── reminder_time (time)
+├── color (varchar 7) -- hex color
+├── icon (varchar 50)
+├── start_date (date)
+├── target_end_date (date, nullable)
+└── is_active (boolean)
+
+habit_completions
+├── id (uuid)
+├── habit_id (uuid)
+├── user_id (uuid)
+├── date (date)
+├── completed_at (timestamp)
+├── notes (text)
+└── mood_after (int 1-10)
+```
+
+#### Tasks Checklist
+- [ ] **Week 11: Relationships Module**
+  - [ ] Create relationships tables
+  - [ ] Connections manager
+  - [ ] Activity logging
+  - [ ] Quality time tracker
+  - [ ] Social health score
+
+- [ ] **Week 12: Habits Module Enhancement**
+  - [ ] Enhanced habit creation
+  - [ ] Streak visualization
+  - [ ] Habit stacking
+  - [ ] Group habits
+  - [ ] Habit insights
+
+---
+
+## 📋 PHASE 2: AI ENHANCEMENT (Неделя 13-16)
+
+### 2.1 AI Chat Improvements
+
+#### Features
+```typescript
+// Enhanced AI Context
+interface AIHealthContext {
+  userProfile: {
+    goals: UserGoals;
+    restrictions: string[];
+    preferences: UserPreferences;
+  };
+  recentMetrics: {
+    nutrition: NutritionSummary;
+    movement: ActivitySummary;
+    sleep: SleepSummary;
+    psychology: MoodSummary;
+  };
+  patterns: DiscoveredPattern[];
+  activePlans: {
+    mealPlan?: MealPlan;
+    workoutPlan?: WorkoutPlan;
+    sleepSchedule?: SleepSchedule;
+  };
+}
+
+// AI Capabilities
+- Personalized meal suggestions based on remaining macros
+- Workout recommendations based on recovery status
+- Sleep hygiene tips based on recent sleep quality
+- Mood support based on psychology patterns
+- Medication reminders with context
+```
+
+#### Implementation
+- [ ] **Week 13:**
+  - [ ] RAG implementation with user health data
+  - [ ] Context injection for all 7 modules
+  - [ ] Streaming responses
+  - [ ] Conversation memory (last 10 messages)
+
+- [ ] **Week 14:**
+  - [ ] Proactive AI insights ("You haven't logged lunch yet")
+  - [ ] Weekly AI health reports
+  - [ ] Pattern detection alerts
+  - [ ] Goal adjustment recommendations
+
+### 2.2 AI-Powered Insights Engine
+
+#### Cross-Module Correlations
+```typescript
+// Auto-discovered patterns
+CorrelationExamples = [
+  "Sleep < 6h → Next day calorie intake +15%",
+  "Evening workout → Sleep quality -10%",
+  "High stress → Skipped workouts +40%",
+  "Consistent breakfast → Better mood scores",
+  "Late caffeine → Sleep latency +25min"
+]
+```
+
+- [ ] **Week 15-16:**
+  - [ ] Correlation analysis engine
+  - [ ] Pattern detection algorithms
+  - [ ] Predictive health alerts
+  - [ ] Personalized goal recommendations
+
+---
+
+## 📋 PHASE 3: EXTERNAL INTEGRATIONS (Неделя 17-20)
+
+### 3.1 Nutrition Integrations
+
+| Integration | Type | Complexity | Status |
+|-------------|------|------------|--------|
+| Open Food Facts | Barcode DB | Low | Phase 1.2 |
+| USDA FoodData Central | Food DB | Medium | Phase 1.2 |
+| FatSecret API | Nutrition | Medium | Post-launch |
+| Spoonacular API | Recipes | Medium | Post-launch |
+
+- [ ] **Open Food Facts:**
+  - [ ] API client implementation
+  - [ ] Barcode search endpoint
+  - [ ] Product photo display
+  - [ ] Nutrition fact parsing
+
+- [ ] **USDA FoodData Central:**
+  - [ ] API key setup
+  - [ ] Food search integration
+  - [ ] Detailed nutrients (vitamins/minerals)
+  - [ ] Portion size handling
+
+### 3.2 Movement Integrations
+
+| Integration | Type | Complexity | ETA |
+|-------------|------|------------|-----|
+| Google Fit | Activity | Medium | Week 17 |
+| Apple HealthKit | Activity | High (iOS) | After app store |
+| Fitbit | Wearable | Medium | Week 18 |
+| Strava | GPS Sports | Low | Week 17 |
+| Garmin | Wearable | High | Week 19 |
+
+- [ ] **Google Fit:**
+  - [ ] OAuth setup
+  - [ ] Steps sync
+  - [ ] Workout import
+  - [ ] Heart rate sync
+
+- [ ] **Strava:**
+  - [ ] OAuth connection
+  - [ ] Activity import
+  - [ ] Route visualization
+  - [ ] PR tracking
+
+### 3.3 Sleep Integrations
+
+| Integration | Type | Complexity | ETA |
+|-------------|------|------------|-----|
+| Fitbit Sleep | Wearable | Medium | Week 18 |
+| Oura Ring | Wearable | Medium | Week 19 |
+| Withings | Devices | Medium | Week 20 |
+| CSV Import | Universal | Low | Phase 1.3 |
+
+### 3.4 Health Data Standards
+
+- [ ] **FHIR Integration:**
+  - [ ] FHIR R4 client
+  - [ ] Health records export
+  - [ ] Lab result standardization
+  - [ ] Clinical document exchange
+
+---
+
+## 📋 PHASE 4: MARKETING & DISCOVERY (Параллельно)
+
+### 4.1 AI Chat Optimization (llms.txt)
+
+Based on `AI_CHAT_OPTIMIZATION_PLAN.md`:
+
+```markdown
+# llms.txt (Root file)
+- Project description for AI indexing
+- Key features list
+- Use cases for recommendations
+- Target audience
+```
+
+- [ ] **Week 1 (Parallel):**
+  - [ ] Create `llms.txt` in root
+  - [ ] Create `docs/AI_CONTEXT.md`
+  - [ ] Add Schema.org markup to all pages
+  - [ ] Create `/about` page
+  - [ ] Create `/features` page
+
+- [ ] **Week 2 (Parallel):**
+  - [ ] SEO meta tags for all routes
+  - [ ] Create `FAQ.md`
+  - [ ] Add Open Graph tags
+  - [ ] Create sitemap.xml
+  - [ ] Update robots.txt
+
+### 4.2 Content Marketing
+
+- [ ] **Blog Setup:**
+  - [ ] Create `/blog` route
+  - [ ] First 5 articles:
+    - [ ] "How to track nutrition effectively"
+    - [ ] "Sleep hygiene best practices"
+    - [ ] "Beginner workout guide"
+    - [ ] "Stress management techniques"
+    - [ ] "Understanding your health data"
+
+- [ ] **Use Cases Pages:**
+  - [ ] Weight loss journey
+  - [ ] Marathon training
+  - [ ] Sleep improvement
+  - [ ] Stress reduction
+
+---
+
+## 📋 PHASE 5: MONETIZATION & PAYMENTS (Неделя 21-22)
+
+### 5.1 Payment System Completion
+
+- [ ] **NOWPayments Integration:**
+  - [ ] Test crypto payments
+  - [ ] Webhook handlers
+  - [ ] Payment history
+
+- [ ] **Unity Token System:**
+  - [ ] Token earning (activity rewards)
+  - [ ] Token spending (premium features)
+  - [ ] Token exchange rate
+  - [ ] Wallet integration
+
+- [ ] **Stripe Integration (Optional):**
+  - [ ] Credit card payments
+  - [ ] Subscription management
+  - [ ] Invoice generation
+
+### 5.2 Subscription Tiers
+
+| Tier | Price | Features |
+|------|-------|----------|
+| Free | $0 | 3 modules, 5 AI msgs/day |
+| Basic | $20/mo | All modules, 50 AI msgs |
+| Premium | $50/mo | Unlimited, specialists |
+
+- [ ] **Implementation:**
+  - [ ] Tier feature gating
+  - [ ] Upgrade prompts
+  - [ ] Trial system
+  - [ ] Cancellation flow
+
+---
+
+## 📋 PHASE 6: SPECIALISTS & CENTERS (Неделя 23-24)
+
+### 6.1 Specialist Features
+
+- [ ] **Video Consultations:**
+  - [ ] WebRTC integration
+  - [ ] Appointment scheduling
+  - [ ] Waiting room
+  - [ ] Recording (optional)
+
+- [ ] **Enhanced Profiles:**
+  - [ ] Portfolio/case studies
+  - [ ] Reviews system
+  - [ ] Availability calendar
+  - [ ] Service packages
+
+### 6.2 Center CRM Enhancements
+
+- [ ] **Patient Management:**
+  - [ ] Patient records
+  - [ ] Treatment plans
+  - [ ] Progress notes
+  - [ ] Billing integration
+
+- [ ] **Analytics:**
+  - [ ] Revenue dashboard
+  - [ ] Patient retention
+  - [ ] Popular services
+
+---
+
+## 📋 PHASE 7: POLISH & OPTIMIZATION (Неделя 25-26)
+
+### 7.1 Performance
+
+- [ ] **Frontend:**
+  - [ ] Code splitting
+  - [ ] Image optimization
+  - [ ] Lazy loading
+  - [ ] Service worker for offline
+
+- [ ] **Backend:**
+  - [ ] Query optimization
+  - [ ] Redis caching
+  - [ ] Rate limiting refinement
+  - [ ] API response compression
+
+### 7.2 Mobile Experience
+
+- [ ] **PWA:**
+  - [ ] Install prompt
+  - [ ] Push notifications
+  - [ ] Offline mode
+  - [ ] Mobile-optimized UI
+
+- [ ] **Native App Prep:**
+  - [ ] React Native research
+  - [ ] Feature parity plan
+  - [ ] App store preparation
+
+### 7.3 Security & Compliance
+
+- [ ] **Security:**
+  - [ ] Security audit
+  - [ ] Penetration testing
+  - [ ] GDPR compliance
+  - [ ] HIPAA considerations (for US)
+
+- [ ] **Data:**
+  - [ ] Backup verification
+  - [ ] Data export (user request)
+  - [ ] Data retention policies
+  - [ ] Privacy policy update
+
+---
+
+## 🎯 MINIMAL VIABLE PRODUCT (MVP) CRITERIA
+
+### MVP Launch Ready (End of Phase 1.1 - 2 weeks)
+- ✅ Email/password auth working
+- ✅ AI chat with Qwen API
+- ✅ Nutrition module functional (diary, goals, water)
+- ✅ Basic dashboard
+- ✅ User profile
+
+### Beta Ready (End of Phase 1 - 12 weeks)
+- ✅ All 7 health modules functional
+- ✅ Social features
+- ✅ Payment system
+- ✅ Telegram bot
+- ✅ AI insights
+
+### Full Launch (End of Phase 7 - 26 weeks)
+- ✅ All integrations
+- ✅ Specialists video calls
+- ✅ Native apps
+- ✅ Full AI capabilities
+- ✅ Enterprise features
+
+---
+
+## 👥 TEAM ALLOCATION (Рекомендации)
+
+### Solo Developer (Current)
+**Priority Order:**
+1. Phase 0 (1 week)
+2. Phase 1.1 Nutrition (2 weeks) - CRITICAL
+3. Phase 2 AI Enhancement (parallel)
+4. Phase 1.2-1.6 by priority
+
+### With 2 Developers
+- **Dev 1:** Frontend (React components)
+- **Dev 2:** Backend (API + Database)
+
+### With 3 Developers
+- **Dev 1:** Frontend Core
+- **Dev 2:** Backend + AI
+- **Dev 3:** Mobile/Integrations
+
+---
+
+## 📊 SUCCESS METRICS
+
+### Technical
+- [ ] Page load < 2s
+- [ ] API response < 200ms
+- [ ] 99.9% uptime
+- [ ] Zero critical bugs
+
+### User
+- [ ] 1000+ registered users
+- [ ] 50% DAU/MAU ratio
+- [ ] Avg 3+ modules used
+- [ ] 4.5+ app store rating
+
+### Business
+- [ ] $1000 MRR
+- [ ] 5% conversion free→paid
+- [ ] 50 active specialists
+- [ ] 10 corporate clients
+
+---
+
+## 🔗 EXTERNAL DEPENDENCIES
+
+### APIs Needing Keys
+| Service | Key Name | Where | Cost |
+|---------|----------|-------|------|
+| Qwen AI | QWEN_API_KEY | Render | ~$0.002/1K tokens |
+| Google OAuth | VITE_GOOGLE_CLIENT_ID | Vercel | Free |
+| Open Food Facts | None | - | Free |
+| Google Fit | GOOGLE_FIT_CLIENT_ID | Render | Free (quota) |
+| Strava | STRAVA_CLIENT_ID | Render | Free |
+| SendGrid | SENDGRID_API_KEY | Render | Free tier |
+| NOWPayments | NOWPAYMENTS_API_KEY | Render | Free |
+
+### Services to Set Up
+- [ ] Google Cloud Console project
+- [ ] Render PostgreSQL
+- [ ] Vercel deployment
+- [ ] SendGrid account
+- [ ] NOWPayments account
+
+---
+
+## 📝 DOCUMENTATION REQUIREMENTS
+
+### User Documentation
+- [ ] Getting Started Guide
+- [ ] Module Guides (7)
+- [ ] FAQ
+- [ ] Video Tutorials
+
+### Developer Documentation
+- [ ] API Reference (OpenAPI/Swagger)
+- [ ] Database Schema
+- [ ] Deployment Guide
+- [ ] Contributing Guide
+
+### AI Documentation
+- [ ] llms.txt (AI discovery)
+- [ ] AI_CONTEXT.md
+- [ ] Use case descriptions
+- [ ] Feature comparison
+
+---
+
+## ✅ WEEKLY CHECKLIST TEMPLATE
+
+### Every Week:
+- [ ] Review completed tasks
+- [ ] Update this TODO
+- [ ] Test critical paths
+- [ ] Backup database
+- [ ] Check error logs
+- [ ] Update changelog
+
+### Every Sprint (2 weeks):
+- [ ] Deploy to production
+- [ ] User testing session
+- [ ] Performance check
+- [ ] Security review
+- [ ] Documentation update
+
+---
+
+## 🚀 IMMEDIATE NEXT STEPS
+
+### Today:
+1. [ ] Add QWEN_API_KEY to Render
+2. [ ] Add VITE_GOOGLE_CLIENT_ID to Vercel
+3. [ ] Test AI chat works
+4. [ ] Test Google OAuth works
+
+### This Week:
+1. [ ] Create nutrition tables migration
+2. [ ] Implement food diary API
+3. [ ] Build NutritionDashboard UI
+4. [ ] Connect Open Food Facts API
+
+### Next Week:
+1. [ ] Complete Nutrition module MVP
+2. [ ] Test with real users
+3. [ ] Fix critical bugs
+4. [ ] Deploy to production
+
+---
+
+**END OF FULLTODO.kimi**
+
+This document is a living document. Update it as tasks are completed and new requirements emerge.
+
+**Last Updated:** 06.03.2026  
+**Next Review:** 13.03.2026

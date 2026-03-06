@@ -14,18 +14,58 @@ import Mental from './pages/Health/Mental';
 import Medical from './pages/Health/Medical';
 import Body from './pages/Health/Body';
 import Environment from './pages/Health/Environment';
-import Fitness from './pages/Health/Fitness';
-import Sleep from './pages/Health/Sleep';
-import Mental from './pages/Health/Mental';
-import Medical from './pages/Health/Medical';
+// New v2 Health Modules
+import Nutrition2 from './pages/Health/Nutrition2';
+import Movement2 from './pages/Health/Movement2';
+import Sleep2 from './pages/Health/Sleep2';
+import Psychology2 from './pages/Health/Psychology2';
+import Medicine2 from './pages/Health/Medicine2';
+import Relationships2 from './pages/Health/Relationships2';
+import Habits2 from './pages/Health/Habits2';
 import SocialFeed from './pages/Social/Feed';
 import AIChat from './pages/AI/Chat';
 import Profile from './pages/Profile/Profile';
 import Settings from './pages/Settings/Settings';
+// New v2 Platform Pages
+import InvestorDemo from './pages/InvestorDemo';
+import Dashboard2 from './pages/Dashboard/Dashboard2';
+import AIChat2 from './pages/AI/AIChat2';
+import Profile2 from './pages/Profile/Profile2';
+import SocialFeed2 from './pages/Social/SocialFeed2';
+import Analytics2 from './pages/Analytics/Analytics2';
+import Gamification2 from './pages/Gamification/Gamification2';
+import Specialists2 from './pages/Specialists/Specialists2';
+import Centers2 from './pages/Centers/Centers2';
+import Settings2 from './pages/Settings/Settings2';
+
+// Health V1 Modules - Nutrition
+import NutritionV1 from './pages/Health/V1/NutritionV1';
+import FoodDiaryV1 from './pages/Health/V1/FoodDiaryV1';
+import MealPlannerV1 from './pages/Health/V1/MealPlannerV1';
+import RecipesV1 from './pages/Health/V1/RecipesV1';
+import ProductsDBV1 from './pages/Health/V1/ProductsDBV1';
+
+// Health V1 Modules - Fitness
+import FitnessV1 from './pages/Health/V1/FitnessV1';
+import WorkoutLoggerV1 from './pages/Health/V1/WorkoutLoggerV1';
+import ExerciseLibraryV1 from './pages/Health/V1/ExerciseLibraryV1';
+
+// Health V1 Modules - Sleep
+import SleepV1 from './pages/Health/V1/SleepV1';
+import SleepAnalysisV1 from './pages/Health/V1/SleepAnalysisV1';
+
+// Health V1 Modules - Mental Health
+import MentalHealthV1 from './pages/Health/V1/MentalHealthV1';
+import MoodTrackerV1 from './pages/Health/V1/MoodTrackerV1';
+
+// Health V1 Modules - Medical
+import MedicalV1 from './pages/Health/V1/MedicalV1';
+import MedicationsV1 from './pages/Health/V1/MedicationsV1';
 
 // Components
 import Layout from './components/Layout/Layout';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
+import GuestAccessRoute from './components/Auth/GuestAccessRoute';
 
 function App() {
   const { isAuthenticated, isLoading } = useAuthStore();
@@ -48,11 +88,52 @@ function App() {
         <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} />
         <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} />
         
-        {/* Protected routes */}
+        {/* Guest Access Routes - Open for Investor Demo */}
+        <Route element={<GuestAccessRoute />}>
+          <Route element={<Layout />}>
+            {/* All v2 Modules - OPEN FOR GUESTS */}
+            <Route path="/dashboard2" element={<Dashboard2 />} />
+            <Route path="/health/nutrition2" element={<Nutrition2 />} />
+            <Route path="/health/movement2" element={<Movement2 />} />
+            <Route path="/health/sleep2" element={<Sleep2 />} />
+            <Route path="/health/psychology2" element={<Psychology2 />} />
+            <Route path="/health/medicine2" element={<Medicine2 />} />
+            <Route path="/health/relationships2" element={<Relationships2 />} />
+            <Route path="/health/habits2" element={<Habits2 />} />
+            <Route path="/ai-chat2" element={<AIChat2 />} />
+            <Route path="/profile2" element={<Profile2 />} />
+            <Route path="/social2" element={<SocialFeed2 />} />
+            <Route path="/analytics2" element={<Analytics2 />} />
+            <Route path="/gamification2" element={<Gamification2 />} />
+            <Route path="/specialists2" element={<Specialists2 />} />
+            <Route path="/centers2" element={<Centers2 />} />
+            <Route path="/settings2" element={<Settings2 />} />
+            
+            {/* Health V1 Modules - Full Suite */}
+            <Route path="/health/nutrition-v1" element={<NutritionV1 />} />
+            <Route path="/health/nutrition/diary-v1" element={<FoodDiaryV1 />} />
+            <Route path="/health/nutrition/meal-plan-v1" element={<MealPlannerV1 />} />
+            <Route path="/health/nutrition/recipes-v1" element={<RecipesV1 />} />
+            <Route path="/health/nutrition/products-v1" element={<ProductsDBV1 />} />
+            <Route path="/health/fitness-v1" element={<FitnessV1 />} />
+            <Route path="/health/fitness/workout-v1" element={<WorkoutLoggerV1 />} />
+            <Route path="/health/fitness/exercises-v1" element={<ExerciseLibraryV1 />} />
+            <Route path="/health/sleep-v1" element={<SleepV1 />} />
+            <Route path="/health/sleep/analysis-v1" element={<SleepAnalysisV1 />} />
+            <Route path="/health/mental-v1" element={<MentalHealthV1 />} />
+            <Route path="/health/mental/mood-v1" element={<MoodTrackerV1 />} />
+            <Route path="/health/medical-v1" element={<MedicalV1 />} />
+            <Route path="/health/medical/meds-v1" element={<MedicationsV1 />} />
+            
+            {/* Health Center & Classic Routes */}
+            <Route path="/health" element={<HealthCenter />} />
+          </Route>
+        </Route>
+        
+        {/* Protected routes - Require Login */}
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/health" element={<HealthCenter />} />
             <Route path="/health/nutrition" element={<Nutrition />} />
             <Route path="/health/fitness" element={<Fitness />} />
             <Route path="/health/sleep" element={<Sleep />} />
@@ -60,18 +141,18 @@ function App() {
             <Route path="/health/medical" element={<Medical />} />
             <Route path="/health/body" element={<Body />} />
             <Route path="/health/environment" element={<Environment />} />
-            <Route path="/health/sleep" element={<Sleep />} />
-            <Route path="/health/mental" element={<Mental />} />
-            <Route path="/health/medical" element={<Medical />} />
             <Route path="/social" element={<SocialFeed />} />
             <Route path="/ai-chat" element={<AIChat />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route path="/settings" element={<Settings} />
           </Route>
         </Route>
         
-        {/* Default redirect */}
-        <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />} />
+        {/* Public Demo Route */}
+        <Route path="/demo" element={<InvestorDemo />} />
+        
+        {/* Default redirect - Show Investor Demo for guests */}
+        <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/demo"} />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
