@@ -99,25 +99,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/saft', express.static('public'));
 app.use('/i18n.js', express.static('public/i18n.js'));
 
-// API Routes (должны быть ДО статики фронтенда)
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/health', healthRoutes);
 app.use('/api/ai', aiRoutes);
-
-// Serve React Frontend (Production)
-// На продакшене фронтенд билдится в frontend/dist и раздаётся здесь
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('frontend/dist'));
-  
-  // Все не-API запросы → index.html (React Router)
-  app.get('*', (req, res) => {
-    // Не перенаправляем API запросы
-    if (req.path.startsWith('/api/') || req.path.startsWith('/saft')) {
-      return res.status(404).json({ error: 'API endpoint not found' });
-    }
-    res.sendFile('frontend/dist/index.html', { root: '.' });
-  });
-}
 
 // ==================== DATABASE INIT ====================
 

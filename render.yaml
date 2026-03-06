@@ -1,10 +1,9 @@
 services:
-  # Single service: API + Frontend combined
   - type: web
-    name: ethoslife
+    name: ethoslife-api
     runtime: node
     plan: starter
-    buildCommand: npm install && cd frontend && npm install && npm run build
+    buildCommand: npm install
     startCommand: npm start
     rootDir: .
     healthCheckPath: /api/health
@@ -33,6 +32,20 @@ services:
         sync: false
       - key: PGSSLMODE
         value: no-verify
+    autoDeploy: true
+
+  - type: web
+    name: ethoslife-web
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: ethoslife-api
+          type: web
+          property: host
+          template: "https://{{host}}/api"
     autoDeploy: true
 
 databases:
