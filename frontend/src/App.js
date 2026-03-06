@@ -27,7 +27,6 @@ import AIChat from './pages/AI/Chat';
 import Profile from './pages/Profile/Profile';
 import Settings from './pages/Settings/Settings';
 // New v2 Platform Pages
-import InvestorDemo from './pages/InvestorDemo';
 import Dashboard2 from './pages/Dashboard/Dashboard2';
 import AIChat2 from './pages/AI/AIChat2';
 import Profile2 from './pages/Profile/Profile2';
@@ -62,6 +61,22 @@ import MoodTrackerV1 from './pages/Health/V1/MoodTrackerV1';
 import MedicalV1 from './pages/Health/V1/MedicalV1';
 import MedicationsV1 from './pages/Health/V1/MedicationsV1';
 
+// Landing V1 Pages
+import LandingV1 from './pages/Landing/LandingV1';
+import FeaturesV1 from './pages/Landing/FeaturesV1';
+import PricingV1 from './pages/Landing/PricingV1';
+import TokenomicsV1 from './pages/Landing/TokenomicsV1';
+import RoadmapV1 from './pages/Landing/RoadmapV1';
+
+// Dashboard V1 Pages
+import DashboardV1 from './pages/Dashboard/DashboardV1';
+import OverviewV1 from './pages/Dashboard/OverviewV1';
+import WalletV1 from './pages/Dashboard/WalletV1';
+import NotificationsV1 from './pages/Dashboard/NotificationsV1';
+import ActivityV1 from './pages/Dashboard/ActivityV1';
+import AchievementsV1 from './pages/Dashboard/AchievementsV1';
+import SearchV1 from './pages/Dashboard/SearchV1';
+
 // Components
 import Layout from './components/Layout/Layout';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
@@ -87,10 +102,26 @@ function App() {
         {/* Public routes */}
         <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} />
         <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} />
-        
+
         {/* Guest Access Routes - Open for Investor Demo */}
         <Route element={<GuestAccessRoute />}>
           <Route element={<Layout />}>
+            {/* Landing V1 Pages - OPEN FOR GUESTS */}
+            <Route path="/v1" element={<LandingV1 />} />
+            <Route path="/features-v1" element={<FeaturesV1 />} />
+            <Route path="/pricing-v1" element={<PricingV1 />} />
+            <Route path="/tokenomics-v1" element={<TokenomicsV1 />} />
+            <Route path="/roadmap-v1" element={<RoadmapV1 />} />
+
+            {/* Dashboard V1 Pages - OPEN FOR GUESTS */}
+            <Route path="/dashboard-v1" element={<DashboardV1 />} />
+            <Route path="/overview-v1" element={<OverviewV1 />} />
+            <Route path="/wallet-v1" element={<WalletV1 />} />
+            <Route path="/notifications-v1" element={<NotificationsV1 />} />
+            <Route path="/activity-v1" element={<ActivityV1 />} />
+            <Route path="/achievements-v1" element={<AchievementsV1 />} />
+            <Route path="/search-v1" element={<SearchV1 />} />
+
             {/* All v2 Modules - OPEN FOR GUESTS */}
             <Route path="/dashboard2" element={<Dashboard2 />} />
             <Route path="/health/nutrition2" element={<Nutrition2 />} />
@@ -108,8 +139,8 @@ function App() {
             <Route path="/specialists2" element={<Specialists2 />} />
             <Route path="/centers2" element={<Centers2 />} />
             <Route path="/settings2" element={<Settings2 />} />
-            
-            {/* Health V1 Modules - Full Suite */}
+
+            {/* Health V1 Modules - Full Suite - OPEN FOR GUESTS */}
             <Route path="/health/nutrition-v1" element={<NutritionV1 />} />
             <Route path="/health/nutrition/diary-v1" element={<FoodDiaryV1 />} />
             <Route path="/health/nutrition/meal-plan-v1" element={<MealPlannerV1 />} />
@@ -124,12 +155,12 @@ function App() {
             <Route path="/health/mental/mood-v1" element={<MoodTrackerV1 />} />
             <Route path="/health/medical-v1" element={<MedicalV1 />} />
             <Route path="/health/medical/meds-v1" element={<MedicationsV1 />} />
-            
+
             {/* Health Center & Classic Routes */}
             <Route path="/health" element={<HealthCenter />} />
           </Route>
         </Route>
-        
+
         {/* Protected routes - Require Login */}
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
@@ -144,16 +175,16 @@ function App() {
             <Route path="/social" element={<SocialFeed />} />
             <Route path="/ai-chat" element={<AIChat />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/settings" element={<Settings} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
         </Route>
-        
+
         {/* Public Demo Route */}
         <Route path="/demo" element={<InvestorDemo />} />
-        
+
         {/* Default redirect - Show Investor Demo for guests */}
         <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/demo"} />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/demo" />} />
       </Routes>
     </Router>
   );
