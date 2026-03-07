@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
 
@@ -84,7 +84,11 @@ import ProtectedRoute from './components/Auth/ProtectedRoute';
 import GuestAccessRoute from './components/Auth/GuestAccessRoute';
 
 function App() {
-  const { isAuthenticated, isLoading } = useAuthStore();
+  const { isAuthenticated, isLoading, initialize } = useAuthStore();
+
+  useEffect(() => {
+    initialize();
+  }, []);
 
   if (isLoading) {
     return (

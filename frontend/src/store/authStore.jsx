@@ -11,6 +11,18 @@ export const useAuthStore = create(
       token: null,
       refreshToken: null,
 
+      // Initialize auth state - call this on app start
+      initialize: () => {
+        const state = get();
+        // If we have token, verify it, otherwise just stop loading
+        if (state.token) {
+          // Optional: verify token with backend
+          set({ isLoading: false });
+        } else {
+          set({ isLoading: false });
+        }
+      },
+
       setAuth: (data) => {
         set({
           user: data.user,
@@ -36,6 +48,7 @@ export const useAuthStore = create(
           
           return { success: true };
         } catch (error) {
+          set({ isLoading: false });
           return {
             success: false,
             error: error.response?.data?.message || 'Login failed',
@@ -58,6 +71,7 @@ export const useAuthStore = create(
           
           return { success: true };
         } catch (error) {
+          set({ isLoading: false });
           return {
             success: false,
             error: error.response?.data?.message || 'Registration failed',
@@ -80,6 +94,7 @@ export const useAuthStore = create(
           
           return { success: true };
         } catch (error) {
+          set({ isLoading: false });
           return {
             success: false,
             error: error.response?.data?.message || 'Google login failed',
@@ -115,6 +130,12 @@ export const useAuthStore = create(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
+      // This runs when store is rehydrated from storage
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.isLoading = false;
+        }
+      },
     }
   )
 );
