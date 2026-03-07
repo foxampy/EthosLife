@@ -104,6 +104,19 @@ app.use('/api/auth', authRoutes);
 app.use('/api/health', healthRoutes);
 app.use('/api/ai', aiRoutes);
 
+// Serve React Frontend (Production) - AFTER API routes
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('frontend/dist'));
+  
+  // All non-API routes go to React app
+  app.get('*', (req, res) => {
+    if (req.path.startsWith('/api/') || req.path.startsWith('/saft/')) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+    res.sendFile('frontend/dist/index.html', { root: process.cwd() });
+  });
+}
+
 // ==================== DATABASE INIT ====================
 
 // Initialize database on startup
