@@ -471,6 +471,50 @@ p {
 }
 
 /* ============================================
+   MOBILE RESPONSIVE FIXES
+   ============================================ */
+
+/* Fix header on mobile */
+@media (max-width: 768px) {
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  /* Ensure all content is accessible */
+  .neu-card {
+    margin-bottom: 1rem;
+  }
+  
+  /* Fix button sizes for touch */
+  button, a {
+    min-height: 44px; /* Apple HIG minimum touch target */
+  }
+  
+  /* Fix font sizes */
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+  
+  /* Fix padding */
+  .px-4 { padding-left: 1rem; padding-right: 1rem; }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+  
+  /* Stack grid items */
+  .grid { grid-template-columns: 1fr; }
+  .md\:grid-cols-2, .lg\:grid-cols-3, .md\:grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
    DARK MODE SUPPORT (Optional)
    ============================================ */
 
