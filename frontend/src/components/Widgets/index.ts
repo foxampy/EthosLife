@@ -1,0 +1,14 @@
+export { HealthScoreWidget } from './HealthScoreWidget';
+export { DailyRingsWidget } from './DailyRingsWidget';
+export { HabitHeatmapWidget } from './HabitHeatmapWidget';
+export { WaterTrackerWidget } from './WaterTrackerWidget';
+export { StepsCounterWidget } from './StepsCounterWidget';
+export { SleepPhasesWidget } from './SleepPhasesWidget';
+export { MoodTrackerWidget } from './MoodTrackerWidget';
+export { ActivityWidget } from './ActivityWidget';
+export { NutritionWidget } from './NutritionWidget';
+export { BodyMetricsWidget } from './BodyMetricsWidget';
+export { GamificationWidget } from './GamificationWidget';
+export { SocialWidget } from './SocialWidget';
+export { AIInsightsWidget } from './AIInsightsWidget';
+export { QuickActionsWidget } from './QuickActionsWidget';
