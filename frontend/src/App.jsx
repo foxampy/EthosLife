@@ -50,6 +50,16 @@ import FitnessV1 from './pages/Health/V1/FitnessV1';
 import WorkoutLoggerV1 from './pages/Health/V1/WorkoutLoggerV1';
 import ExerciseLibraryV1 from './pages/Health/V1/ExerciseLibraryV1';
 
+// Social V1 Modules - Retrofuturism Neumorphism
+import SocialFeedV1 from './pages/Social/V1/SocialFeedV1';
+import PostDetailV1 from './pages/Social/V1/PostDetailV1';
+import GroupsV1 from './pages/Social/V1/GroupsV1';
+import GroupDetailV1 from './pages/Social/V1/GroupDetailV1';
+import ChallengesV1 from './pages/Social/V1/ChallengesV1';
+import LeadersV1 from './pages/Social/V1/LeadersV1';
+import MessagesV1 from './pages/Social/V1/MessagesV1';
+import FriendsV1 from './pages/Social/V1/FriendsV1';
+
 // Health V1 Modules - Sleep
 import SleepV1 from './pages/Health/V1/SleepV1';
 import SleepAnalysisV1 from './pages/Health/V1/SleepAnalysisV1';
@@ -165,6 +175,16 @@ function App() {
 
             {/* Health Center & Classic Routes */}
             <Route path="/health" element={<HealthCenter />} />
+
+            {/* Social V1 Modules - Retrofuturism Neumorphism (OPEN FOR GUESTS) */}
+            <Route path="/social-v1" element={<SocialFeedV1 />} />
+            <Route path="/social/post/:id-v1" element={<PostDetailV1 />} />
+            <Route path="/social/groups-v1" element={<GroupsV1 />} />
+            <Route path="/social/group/:id-v1" element={<GroupDetailV1 />} />
+            <Route path="/social/challenges-v1" element={<ChallengesV1 />} />
+            <Route path="/social/leaders-v1" element={<LeadersV1 />} />
+            <Route path="/social/messages-v1" element={<MessagesV1 />} />
+            <Route path="/social/friends-v1" element={<FriendsV1 />} />
           </Route>
         </Route>
 
