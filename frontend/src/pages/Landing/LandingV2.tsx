@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useVersion } from '../../contexts/VersionContext';
+import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { 
-  Heart, 
-  Brain, 
-  Activity, 
-  Users, 
-  Zap, 
-  Shield, 
-  TrendingUp, 
+import {
+  Heart,
+  Brain,
+  Activity,
+  Users,
+  Zap,
+  Shield,
+  TrendingUp,
   Award,
   CheckCircle2,
   ArrowRight,
@@ -23,6 +24,7 @@ import {
 const LandingV2 = () => {
   const navigate = useNavigate();
   const { isV2, toggleVersion } = useVersion();
+  const { t } = useTranslation();
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
@@ -32,22 +34,41 @@ const LandingV2 = () => {
   const features = [
     {
       icon: <Heart className="w-8 h-8" />,
-      title: '7 Модулей Здоровья',
-      description: 'Питание, движение, сон, психология, привычки, медицина, отношения',
+      title: t('landing.modules.nutrition.title'),
+      description: t('landing.modules.nutrition.description'),
       color: 'from-rose-500 to-pink-500'
     },
     {
       icon: <Brain className="w-8 h-8" />,
-      title: 'AI-Коуч',
-      description: 'Персональные рекомендации на основе ваших данных',
+      title: t('landing.modules.mental.title'),
+      description: t('landing.modules.mental.description'),
       color: 'from-violet-500 to-purple-500'
     },
     {
       icon: <Activity className="w-8 h-8" />,
-      title: 'Предиктивная Аналитика',
-      description: 'Прогнозирование и предотвращение срывов',
+      title: t('analytics.title'),
+      description: t('analytics.trends'),
       color: 'from-blue-500 to-cyan-500'
     },
+    {
+      icon: <Users className="w-8 h-8" />,
+      title: t('social.title'),
+      description: t('landing.features.marketplace'),
+      color: 'from-emerald-500 to-green-500'
+    },
+    {
+      icon: <Zap className="w-8 h-8" />,
+      title: t('landing.features.aiCoach'),
+      description: t('landing.features.gamification'),
+      color: 'from-amber-500 to-orange-500'
+    },
+    {
+      icon: <Shield className="w-8 h-8" />,
+      title: t('settings.privacy'),
+      description: t('settings.connectedDevices'),
+      color: 'from-slate-500 to-gray-500'
+    }
+  ];
     {
       icon: <Users className="w-8 h-8" />,
       title: 'Сообщество',
