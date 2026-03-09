@@ -1,167 +1,244 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Award, Star, ChevronRight, Zap, Target } from 'lucide-react';
-import { NeuCard, NeuCardHeader } from '../Neumorphism';
+import { 
+  Trophy, 
+  Flame, 
+  Target, 
+  Medal, 
+  Star, 
+  TrendingUp,
+  Award,
+  Zap,
+  ChevronRight,
+  Users
+} from 'lucide-react';
+import { NeuCard, NeuCardHeader } from '../Neumorphism/NeuCard';
 import { NeuButton } from '../Neumorphism/NeuButton';
-import { NeuOrb } from '../Neumorphism/NeuOrb';
-
-export interface Badge {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  rarity: 'common' | 'rare' | 'epic' | 'legendary';
-  earnedAt?: string;
-}
 
 export interface GamificationWidgetProps {
   level: number;
   xp: number;
-  xpToNext: number;
-  leaderboardPosition: number;
-  recentBadges: Badge[];
-  dailyChallenges: {
+  xpToNextLevel: number;
+  streak: number;
+  badges: Array<{
     id: string;
-    title: string;
-    progress: number;
-    total: number;
-    reward: number;
-  }[];
+    name: string;
+    icon: string;
+    unlocked: boolean;
+    rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  }>;
+  rank: number;
+  totalUsers: number;
   className?: string;
-  onViewAllClick?: () => void;
+  onLeaderboardClick?: () => void;
+  onBadgesClick?: () => void;
 }
 
 const rarityColors = {
-  common: 'bg-gray-100 text-gray-600 border-gray-200',
-  rare: 'bg-blue-100 text-blue-600 border-blue-200',
-  epic: 'bg-purple-100 text-purple-600 border-purple-200',
-  legendary: 'bg-yellow-100 text-yellow-700 border-yellow-300',
+  common: 'from-gray-400 to-gray-600',
+  rare: 'from-blue-400 to-blue-600',
+  epic: 'from-purple-400 to-purple-600',
+  legendary: 'from-amber-400 to-amber-600',
 };
 
 const rarityGlow = {
-  common: '',
-  rare: 'shadow-blue-200',
-  epic: 'shadow-purple-200',
-  legendary: 'shadow-yellow-200',
+  common: 'shadow-gray-400/50',
+  rare: 'shadow-blue-400/50',
+  epic: 'shadow-purple-400/50',
+  legendary: 'shadow-amber-400/50',
 };
 
 export const GamificationWidget: React.FC<GamificationWidgetProps> = ({
   level,
   xp,
-  xpToNext,
-  leaderboardPosition,
-  recentBadges,
-  dailyChallenges,
+  xpToNextLevel,
+  streak,
+  badges,
+  rank,
+  totalUsers,
   className,
-  onViewAllClick,
+  onLeaderboardClick,
+  onBadgesClick,
 }) => {
-  const xpProgress = (xp / xpToNext) * 100;
+  const [isHovered, setIsHovered] = useState(false);
+  const progressPercent = (xp / xpToNextLevel) * 100;
+
+  const unlockedBadges = badges.filter(b => b.unlocked);
+  const lockedBadges = badges.filter(b => !b.unlocked);
 
   return (
-    <NeuCard className={className} hover>
+    <NeuCard 
+      className={className} 
+      hover
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <NeuCardHeader
-        title="Achievements"
-        icon={<Trophy className="w-5 h-5 text-yellow-500" />}
+        title="Игровой Прогресс"
+        icon={<Trophy className="w-5 h-5 text-[#5c5243]" />}
         action={
-          <NeuButton variant="flat" size="sm" onClick={onViewAllClick} rightIcon={<ChevronRight className="w-3 h-3" />}>
-            View All
+          <NeuButton
+            variant="flat"
+            size="sm"
+            onClick={onLeaderboardClick}
+            rightIcon={<ChevronRight className="w-3 h-3" />}
+          >
+            Топ
           </NeuButton>
         }
       />
 
-      {/* Level and XP */}
-      <div className="flex items-center gap-4 mb-5">
-        <NeuOrb size="lg" variant="glow" color="#fef3c7">
-          <span className="text-2xl font-bold text-yellow-700">{level}</span>
-        </NeuOrb>
-
-        <div className="flex-1">
-          <p className="font-bold text-[#2d2418]">Level {level}</p>
-          <div className="mt-1 h-2.5 bg-[#dcd3c6] rounded-full overflow-hidden shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1)]">
-            <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-yellow-400 to-orange-500"
-              initial={{ width: 0 }}
-              animate={{ width: `${xpProgress}%` }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-            />
+      {/* Level & XP */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <motion.div 
+              className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#5c5243] to-[#8c7a6b] flex items-center justify-center text-white shadow-lg"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
+              <span className="text-2xl font-bold">{level}</span>
+            </motion.div>
+            <div>
+              <div className="text-sm text-[#5c5243]">Уровень</div>
+              <div className="text-lg font-bold text-[#2d2418]">
+                {level < 10 ? 'Новичок' : level < 20 ? 'Любитель' : level < 30 ? 'Продвинутый' : level < 50 ? 'Эксперт' : 'Мастер'}
+              </div>
+            </div>
           </div>
-          <p className="text-[10px] text-[#5c5243] mt-1">
-            {xp.toLocaleString()} / {xpToNext.toLocaleString()} XP
-          </p>
+          
+          <motion.div 
+            className="text-right"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
+            <div className="flex items-center gap-1 text-orange-500">
+              <Flame className="w-5 h-5" />
+              <span className="text-xl font-bold">{streak}</span>
+            </div>
+            <div className="text-xs text-[#5c5243]">дней подряд</div>
+          </motion.div>
+        </div>
+
+        {/* XP Progress */}
+        <div className="mb-2">
+          <div className="flex items-center justify-between text-xs mb-2">
+            <span className="text-[#5c5243]">XP: {xp.toLocaleString()} / {xpToNextLevel.toLocaleString()}</span>
+            <span className="text-[#5c5243] font-medium">{progressPercent.toFixed(0)}%</span>
+          </div>
+          <div className="h-3 bg-[#dcd3c6] rounded-full overflow-hidden shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1)]">
+            <motion.div
+              className="h-full bg-gradient-to-r from-[#5c5243] via-[#8c7a6b] to-[#a69b8c] rounded-full relative"
+              initial={{ width: 0 }}
+              animate={{ width: `${progressPercent}%` }}
+              transition={{ duration: 1, ease: 'easeOut' }}
+            >
+              <motion.div 
+                className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-4 bg-white rounded-full shadow-lg"
+                animate={{ x: [0, 5, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              />
+            </motion.div>
+          </div>
         </div>
       </div>
 
-      {/* Leaderboard badge */}
-      <motion.div
-        className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-[#5c5243] to-[#3d3226] text-white mb-4"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <Award className="w-5 h-5" />
-        <div className="flex-1">
-          <p className="text-xs opacity-80">Leaderboard Position</p>
-          <p className="font-bold">#{leaderboardPosition}</p>
+      {/* Rank Badge */}
+      <div className="mb-6 p-4 rounded-2xl bg-[#d4ccb8]/50 shadow-[inset_3px_3px_6px_rgba(44,40,34,0.08),inset_-3px_-3px_6px_rgba(255,255,255,0.5)]">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
+              <Medal className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <div className="text-sm text-[#5c5243]">Ваш ранг</div>
+              <div className="text-lg font-bold text-[#2d2418]">#{rank.toLocaleString()}</div>
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-xs text-[#5c5243]">из {totalUsers.toLocaleString()}</div>
+            <div className="text-xs font-medium text-[#5c5243]">
+              {((rank / totalUsers) * 100).toFixed(1)}% лучших
+            </div>
+          </div>
         </div>
-        <ChevronRight className="w-4 h-4 opacity-60" />
-      </motion.div>
+      </div>
 
-      {/* Recent badges */}
-      <div className="space-y-2 mb-4">
-        <p className="text-xs font-medium text-[#5c5243] uppercase tracking-wider">Recent Badges</p>
-        {recentBadges.slice(0, 2).map((badge, index) => (
-          <motion.div
-            key={badge.id}
-            className="flex items-center gap-3 p-3 rounded-xl bg-[#e4dfd5] shadow-[inset_2px_2px_4px_rgba(44,40,34,0.08),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 + index * 0.1 }}
-          >
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-white shadow-sm ${rarityGlow[badge.rarity]}`}>
-              {badge.icon}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-[#2d2418] truncate">{badge.name}</p>
-              <p className="text-xs text-[#5c5243] truncate">{badge.description}</p>
-            </div>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full border ${rarityColors[badge.rarity]}`}>
-              {badge.rarity}
+      {/* Badges Grid */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Star className="w-4 h-4 text-[#5c5243]" />
+            <span className="text-sm font-medium text-[#5c5243]">
+              Награды: {unlockedBadges.length} / {badges.length}
             </span>
-          </motion.div>
-        ))}
+          </div>
+          <NeuButton
+            variant="flat"
+            size="xs"
+            onClick={onBadgesClick}
+          >
+            Все
+          </NeuButton>
+        </div>
+
+        <div className="grid grid-cols-5 gap-2">
+          {badges.slice(0, 10).map((badge, index) => (
+            <motion.div
+              key={badge.id}
+              className={`relative w-full aspect-square rounded-xl flex items-center justify-center text-2xl cursor-pointer transition-all ${
+                badge.unlocked 
+                  ? `bg-gradient-to-br ${rarityColors[badge.rarity]} shadow-lg ${rarityGlow[badge.rarity]}` 
+                  : 'bg-[#dcd3c6] shadow-[inset_3px_3px_6px_rgba(44,40,34,0.1),inset_-3px_-3px_6px_rgba(255,255,255,0.5)] opacity-50'
+              }`}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.05, type: 'spring' }}
+              whileHover={{ scale: 1.1, rotate: badge.unlocked ? 5 : 0 }}
+              title={badge.name}
+            >
+              {badge.icon}
+              {!badge.unlocked && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-full h-1 bg-[#5c5243]/20 rotate-45" />
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </div>
       </div>
 
-      {/* Daily challenges */}
-      <div className="space-y-2">
-        <p className="text-xs font-medium text-[#5c5243] uppercase tracking-wider">Daily Challenges</p>
-        {dailyChallenges.slice(0, 2).map((challenge, index) => (
-          <motion.div
-            key={challenge.id}
-            className="p-3 rounded-xl bg-[#e4dfd5] shadow-[inset_2px_2px_4px_rgba(44,40,34,0.08),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 + index * 0.1 }}
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm font-medium text-[#2d2418]">{challenge.title}</span>
-              <div className="flex items-center gap-1 text-xs text-yellow-600">
-                <Zap className="w-3 h-3" />
-                <span>+{challenge.reward} XP</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 h-2 bg-[#dcd3c6] rounded-full overflow-hidden shadow-[inset_1px_1px_2px_rgba(44,40,34,0.1)]">
-                <motion.div
-                  className="h-full rounded-full bg-green-500"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${(challenge.progress / challenge.total) * 100}%` }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
-                />
-              </div>
-              <span className="text-xs font-medium text-[#5c5243]">{challenge.progress}/{challenge.total}</span>
-            </div>
-          </motion.div>
-        ))}
+      {/* Quick Stats */}
+      <div className="mt-6 grid grid-cols-3 gap-3">
+        <motion.div 
+          className="text-center p-3 rounded-xl bg-[#d4ccb8]/30"
+          whileHover={{ scale: 1.05 }}
+        >
+          <Zap className="w-5 h-5 text-yellow-500 mx-auto mb-1" />
+          <div className="text-lg font-bold text-[#2d2418]">{xp.toLocaleString()}</div>
+          <div className="text-xs text-[#5c5243]">Всего XP</div>
+        </motion.div>
+        
+        <motion.div 
+          className="text-center p-3 rounded-xl bg-[#d4ccb8]/30"
+          whileHover={{ scale: 1.05 }}
+        >
+          <Award className="w-5 h-5 text-purple-500 mx-auto mb-1" />
+          <div className="text-lg font-bold text-[#2d2418]">{unlockedBadges.length}</div>
+          <div className="text-xs text-[#5c5243]">Наград</div>
+        </motion.div>
+        
+        <motion.div 
+          className="text-center p-3 rounded-xl bg-[#d4ccb8]/30"
+          whileHover={{ scale: 1.05 }}
+        >
+          <Users className="w-5 h-5 text-blue-500 mx-auto mb-1" />
+          <div className="text-lg font-bold text-[#2d2418]">
+            {rank <= 100 ? 'Top' : rank <= 1000 ? 'Pro' : 'New'}
+          </div>
+          <div className="text-xs text-[#5c5243]">Статус</div>
+        </motion.div>
       </div>
     </NeuCard>
   );

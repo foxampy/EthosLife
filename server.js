@@ -23,6 +23,11 @@ const aiRoutes = require('./routes/ai');
 const subscriptionRoutes = require('./routes/subscriptions');
 const referralRoutes = require('./routes/referrals');
 const cashbackRoutes = require('./routes/cashback');
+const productsRoutes = require('./routes/products');
+const cartRoutes = require('./routes/cart');
+const ordersRoutes = require('./routes/orders');
+const specialistsRoutes = require('./routes/specialists');
+const centersRoutes = require('./routes/centers');
 
 require('dotenv').config();
 
@@ -118,6 +123,11 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api', referralRoutes);
 app.use('/api', cashbackRoutes);
+app.use('/api/products', productsRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', ordersRoutes);
+app.use('/api/specialists', specialistsRoutes);
+app.use('/api/centers', centersRoutes);
 
 // Stripe Webhook endpoint (needs raw body)
 app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {

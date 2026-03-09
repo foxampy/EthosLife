@@ -48,6 +48,10 @@ Thumbs.db
 *.swo
 *~
 
+# Build output
+dist/
+build/
+
 # Temporary files
 tmp/
 temp/

@@ -1,138 +1,255 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Moon, Heart, Utensils, Activity, Pill, Droplets, Dumbbell } from 'lucide-react';
-import { NeuCard } from '../Neumorphism';
+import { 
+  Plus,
+  Dumbbell,
+  Utensils,
+  Moon,
+  Brain,
+  Droplets,
+  Heart,
+  Activity,
+  Target,
+  Calendar,
+  Clock,
+  Zap,
+  TrendingUp,
+  Award
+} from 'lucide-react';
+import { NeuCard } from '../Neumorphism/NeuCard';
 import { NeuButton } from '../Neumorphism/NeuButton';
-import { NeuOrb } from '../Neumorphism/NeuOrb';
-
-export interface QuickAction {
-  id: string;
-  label: string;
-  icon: React.ReactNode;
-  color: string;
-  onClick: () => void;
-}
 
 export interface QuickActionsWidgetProps {
-  actions?: QuickAction[];
+  todayProgress?: {
+    steps: number;
+    stepsGoal: number;
+    calories: number;
+    caloriesGoal: number;
+    water: number;
+    waterGoal: number;
+    sleep: number;
+    sleepGoal: number;
+  };
+  quickActions?: Array<{
+    id: string;
+    label: string;
+    icon: React.ReactNode;
+    color: string;
+    onClick: () => void;
+  }>;
   className?: string;
-  onLogMeal?: () => void;
+  onLogFood?: () => void;
   onLogWorkout?: () => void;
-  onLogSleep?: () => void;
-  onLogVitals?: () => void;
-  onLogMedication?: () => void;
   onLogWater?: () => void;
-  onLogWeight?: () => void;
-  onAddEntry?: () => void;
+  onLogSleep?: () => void;
+  onLogMood?: () => void;
+  onViewCalendar?: () => void;
+  onSetGoal?: () => void;
 }
 
-const defaultActions = (props: QuickActionsWidgetProps): QuickAction[] => [
-  {
-    id: 'meal',
-    label: 'Log Meal',
-    icon: <Utensils className="w-5 h-5" />,
-    color: 'bg-orange-100 text-orange-600 hover:bg-orange-200',
-    onClick: props.onLogMeal || (() => {}),
-  },
-  {
-    id: 'workout',
-    label: 'Workout',
-    icon: <Dumbbell className="w-5 h-5" />,
-    color: 'bg-green-100 text-green-600 hover:bg-green-200',
-    onClick: props.onLogWorkout || (() => {}),
-  },
-  {
-    id: 'sleep',
-    label: 'Log Sleep',
-    icon: <Moon className="w-5 h-5" />,
-    color: 'bg-indigo-100 text-indigo-600 hover:bg-indigo-200',
-    onClick: props.onLogSleep || (() => {}),
-  },
-  {
-    id: 'vitals',
-    label: 'Vitals',
-    icon: <Heart className="w-5 h-5" />,
-    color: 'bg-red-100 text-red-600 hover:bg-red-200',
-    onClick: props.onLogVitals || (() => {}),
-  },
-  {
-    id: 'medication',
-    label: 'Medication',
-    icon: <Pill className="w-5 h-5" />,
-    color: 'bg-blue-100 text-blue-600 hover:bg-blue-200',
-    onClick: props.onLogMedication || (() => {}),
-  },
-  {
-    id: 'water',
-    label: 'Water',
-    icon: <Droplets className="w-5 h-5" />,
-    color: 'bg-cyan-100 text-cyan-600 hover:bg-cyan-200',
-    onClick: props.onLogWater || (() => {}),
-  },
+const defaultActions = [
+  { id: 'food', label: 'Еда', icon: <Utensils size={20} />, color: 'text-green-600' },
+  { id: 'workout', label: 'Тренировка', icon: <Dumbbell size={20} />, color: 'text-orange-600' },
+  { id: 'water', label: 'Вода', icon: <Droplets size={20} />, color: 'text-blue-600' },
+  { id: 'sleep', label: 'Сон', icon: <Moon size={20} />, color: 'text-purple-600' },
+  { id: 'mood', label: 'Настроение', icon: <Brain size={20} />, color: 'text-pink-600' },
+  { id: 'calendar', label: 'План', icon: <Calendar size={20} />, color: 'text-indigo-600' },
 ];
 
-export const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = (props) => {
-  const { actions: customActions, className, onAddEntry } = props;
-  const actions = customActions || defaultActions(props);
+export const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({
+  todayProgress,
+  quickActions = defaultActions,
+  className,
+  onLogFood,
+  onLogWorkout,
+  onLogWater,
+  onLogSleep,
+  onLogMood,
+  onViewCalendar,
+  onSetGoal,
+}) => {
+  const actionHandlers: Record<string, () => void> = {
+    food: onLogFood || (() => {}),
+    workout: onLogWorkout || (() => {}),
+    water: onLogWater || (() => {}),
+    sleep: onLogSleep || (() => {}),
+    mood: onLogMood || (() => {}),
+    calendar: onViewCalendar || (() => {}),
+  };
+
+  const getProgressColor = (current: number, goal: number) => {
+    const percent = (current / goal) * 100;
+    if (percent >= 100) return 'text-green-600';
+    if (percent >= 70) return 'text-blue-600';
+    if (percent >= 40) return 'text-amber-600';
+    return 'text-red-500';
+  };
+
+  const getProgressBg = (current: number, goal: number) => {
+    const percent = (current / goal) * 100;
+    if (percent >= 100) return 'from-green-500 to-emerald-500';
+    if (percent >= 70) return 'from-blue-500 to-cyan-500';
+    if (percent >= 40) return 'from-amber-500 to-orange-500';
+    return 'from-red-500 to-pink-500';
+  };
 
   return (
     <NeuCard className={className}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-[#2d2418]">Quick Actions</h3>
-        {onAddEntry && (
-          <NeuButton variant="flat" size="sm" onClick={onAddEntry} leftIcon={<Plus className="w-4 h-4" />}>
-            Add
-          </NeuButton>
-        )}
-      </div>
-
-      <div className="grid grid-cols-3 gap-3">
-        {actions.map((action, index) => (
-          <motion.button
-            key={action.id}
-            onClick={action.onClick}
-            className={`
-              flex flex-col items-center gap-2 p-4 rounded-2xl
-              transition-all duration-200
-              ${action.color}
-              bg-[#e4dfd5]
-              shadow-[4px_4px_8px_rgba(44,40,34,0.1),-4px_-4px_8px_rgba(255,255,255,0.6)]
-              hover:shadow-[6px_6px_12px_rgba(44,40,34,0.15),-6px_-6px_12px_rgba(255,255,255,0.7)]
-              active:shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1),inset_-2px_-2px_4px_rgba(255,255,255,0.5)]
-            `}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label={action.label}
-          >
-            <div className="w-10 h-10 rounded-xl bg-white/50 flex items-center justify-center shadow-sm">
-              {action.icon}
-            </div>
-            <span className="text-[10px] font-semibold text-[#2d2418]">{action.label}</span>
-          </motion.button>
-        ))}
-      </div>
-
-      {/* AI Assistant hint */}
-      <motion.div
-        className="mt-4 p-3 rounded-xl bg-purple-50 border border-purple-100 flex items-center gap-3"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-      >
-        <NeuOrb size="sm" variant="elevated" color="#f3e8ff">
-          <Activity className="w-4 h-4 text-purple-500" />
-        </NeuOrb>
-        <div className="flex-1">
-          <p className="text-xs text-purple-700 font-medium">Need help logging?</p>
-          <p className="text-[10px] text-purple-600">Ask our AI assistant</p>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#5c5243] to-[#8c7a6b] flex items-center justify-center text-white shadow-lg">
+            <Zap size={20} />
+          </div>
+          <div>
+            <h3 className="font-bold text-[#2d2418]">Быстрые действия</h3>
+            <p className="text-xs text-[#5c5243]">Отслеживайте здоровье быстро</p>
+          </div>
         </div>
-        <NeuButton variant="flat" size="sm" className="text-purple-600">
-          Chat
+        <NeuButton variant="flat" size="sm" onClick={onSetGoal}>
+          <Target size={16} className="mr-1" />
+          Цель
         </NeuButton>
-      </motion.div>
+      </div>
+
+      {/* Quick Actions Grid */}
+      <div className="grid grid-cols-3 gap-3 mb-6">
+        {quickActions.map((action, index) => {
+          const Icon = action.icon;
+          return (
+            <motion.button
+              key={action.id}
+              className="p-4 rounded-2xl bg-[#e4dfd5] shadow-[6px_6px_12px_rgba(44,40,34,0.1),-6px_-6px_12px_rgba(255,255,255,0.6)] hover:shadow-[8px_8px_16px_rgba(44,40,34,0.12),-8px_-8px_16px_rgba(255,255,255,0.6)] transition-all flex flex-col items-center gap-2 group"
+              onClick={() => actionHandlers[action.id]?.()}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <div className={`${action.color} group-hover:scale-110 transition-transform`}>
+                {Icon}
+              </div>
+              <span className="text-xs font-medium text-[#5c5243]">{action.label}</span>
+            </motion.button>
+          );
+        })}
+        
+        {/* Add Custom Action */}
+        <motion.button
+          className="p-4 rounded-2xl bg-[#dcd3c6] shadow-[inset_4px_4px_8px_rgba(44,40,34,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.5)] hover:bg-[#d4ccb8] transition-all flex flex-col items-center gap-2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: quickActions.length * 0.05 }}
+        >
+          <Plus size={20} className="text-[#5c5243]" />
+          <span className="text-xs font-medium text-[#5c5243]">Еще</span>
+        </motion.button>
+      </div>
+
+      {/* Today's Progress */}
+      {todayProgress && (
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Activity size={18} className="text-[#5c5243]" />
+              <span className="text-sm font-medium text-[#5c5243]">Прогресс сегодня</span>
+            </div>
+            <span className="text-xs text-[#5c5243]">
+              {Object.values(todayProgress).filter((v, i) => i % 2 === 0 && v >= (todayProgress as any)[Object.keys(todayProgress)[i + 1]]).length} из 4 целей
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            {/* Steps */}
+            <div className="p-4 rounded-2xl bg-[#d4ccb8]/50 shadow-[inset_3px_3px_6px_rgba(44,40,34,0.08),inset_-3px_-3px_6px_rgba(255,255,255,0.5)]">
+              <div className="flex items-center gap-2 mb-2">
+                <Activity size={16} className={getProgressColor(todayProgress.steps, todayProgress.stepsGoal)} />
+                <span className="text-xs text-[#5c5243]">Шаги</span>
+              </div>
+              <div className="text-xl font-bold text-[#2d2418] mb-2">
+                {todayProgress.steps.toLocaleString()} / {todayProgress.stepsGoal.toLocaleString()}
+              </div>
+              <div className="h-2 bg-[#dcd3c6] rounded-full overflow-hidden">
+                <motion.div
+                  className={`h-full rounded-full bg-gradient-to-r ${getProgressBg(todayProgress.steps, todayProgress.stepsGoal)}`}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.min(100, (todayProgress.steps / todayProgress.stepsGoal) * 100)}%` }}
+                  transition={{ duration: 0.5 }}
+                />
+              </div>
+            </div>
+
+            {/* Calories */}
+            <div className="p-4 rounded-2xl bg-[#d4ccb8]/50 shadow-[inset_3px_3px_6px_rgba(44,40,34,0.08),inset_-3px_-3px_6px_rgba(255,255,255,0.5)]">
+              <div className="flex items-center gap-2 mb-2">
+                <FireIcon className={getProgressColor(todayProgress.calories, todayProgress.caloriesGoal)} />
+                <span className="text-xs text-[#5c5243]">Ккал</span>
+              </div>
+              <div className="text-xl font-bold text-[#2d2418] mb-2">
+                {todayProgress.calories} / {todayProgress.caloriesGoal}
+              </div>
+              <div className="h-2 bg-[#dcd3c6] rounded-full overflow-hidden">
+                <motion.div
+                  className={`h-full rounded-full bg-gradient-to-r ${getProgressBg(todayProgress.calories, todayProgress.caloriesGoal)}`}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.min(100, (todayProgress.calories / todayProgress.caloriesGoal) * 100)}%` }}
+                  transition={{ duration: 0.5 }}
+                />
+              </div>
+            </div>
+
+            {/* Water */}
+            <div className="p-4 rounded-2xl bg-[#d4ccb8]/50 shadow-[inset_3px_3px_6px_rgba(44,40,34,0.08),inset_-3px_-3px_6px_rgba(255,255,255,0.5)]">
+              <div className="flex items-center gap-2 mb-2">
+                <Droplets size={16} className={getProgressColor(todayProgress.water, todayProgress.waterGoal)} />
+                <span className="text-xs text-[#5c5243]">Вода (мл)</span>
+              </div>
+              <div className="text-xl font-bold text-[#2d2418] mb-2">
+                {todayProgress.water} / {todayProgress.waterGoal}
+              </div>
+              <div className="h-2 bg-[#dcd3c6] rounded-full overflow-hidden">
+                <motion.div
+                  className={`h-full rounded-full bg-gradient-to-r ${getProgressBg(todayProgress.water, todayProgress.waterGoal)}`}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.min(100, (todayProgress.water / todayProgress.waterGoal) * 100)}%` }}
+                  transition={{ duration: 0.5 }}
+                />
+              </div>
+            </div>
+
+            {/* Sleep */}
+            <div className="p-4 rounded-2xl bg-[#d4ccb8]/50 shadow-[inset_3px_3px_6px_rgba(44,40,34,0.08),inset_-3px_-3px_6px_rgba(255,255,255,0.5)]">
+              <div className="flex items-center gap-2 mb-2">
+                <Moon size={16} className={getProgressColor(todayProgress.sleep, todayProgress.sleepGoal)} />
+                <span className="text-xs text-[#5c5243]">Сон (ч)</span>
+              </div>
+              <div className="text-xl font-bold text-[#2d2418] mb-2">
+                {todayProgress.sleep} / {todayProgress.sleepGoal}
+              </div>
+              <div className="h-2 bg-[#dcd3c6] rounded-full overflow-hidden">
+                <motion.div
+                  className={`h-full rounded-full bg-gradient-to-r ${getProgressBg(todayProgress.sleep, todayProgress.sleepGoal)}`}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.min(100, (todayProgress.sleep / todayProgress.sleepGoal) * 100)}%` }}
+                  transition={{ duration: 0.5 }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </NeuCard>
   );
 };
+
+// Custom Fire Icon component
+const FireIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg 
+    className={`w-4 h-4 ${className}`} 
+    fill="currentColor" 
+    viewBox="0 0 20 20"
+  >
+    <path d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.699-3.181a1 1 0 111.794.952l-1.699 3.182 2.582 2.581a1 1 0 01-.952 1.794l-3.181-1.699L13 13.277V17a1 1 0 01-1 1H8a1 1 0 01-1-1v-3.723L4.746 14.95a1 1 0 01-.952-1.794l2.582-2.581-1.699-3.182a1 1 0 111.794-.952l1.699 3.181L10 4.323V3a1 1 0 011-1z" />
+  </svg>
+);
