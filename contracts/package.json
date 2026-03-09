@@ -1,0 +1,32 @@
+{
+  "name": "ethoslife-contracts",
+  "version": "1.0.0",
+  "description": "Unity Token Smart Contracts for EthosLife",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.ts --network hardhat",
+    "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia",
+    "deploy:mumbai": "hardhat run scripts/deploy.ts --network mumbai",
+    "verify": "hardhat verify",
+    "node": "hardhat node",
+    "coverage": "hardhat coverage"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^16.3.1",
+    "hardhat": "^2.19.0",
+    "typescript": "^5.3.0"
+  },
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "erc20",
+    "staking",
+    "unity",
+    "ethoslife"
+  ],
+  "license": "MIT"
+}

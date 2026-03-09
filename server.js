@@ -20,6 +20,9 @@ const db = require('./database');
 const authRoutes = require('./routes/auth');
 const healthRoutes = require('./routes/health');
 const aiRoutes = require('./routes/ai');
+const subscriptionRoutes = require('./routes/subscriptions');
+const referralRoutes = require('./routes/referrals');
+const cashbackRoutes = require('./routes/cashback');
 
 require('dotenv').config();
 
@@ -112,6 +115,15 @@ app.use('/i18n.js', express.static('public/i18n.js'));
 app.use('/api/auth', authRoutes);
 app.use('/api/health', healthRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api', referralRoutes);
+app.use('/api', cashbackRoutes);
+
+// Stripe Webhook endpoint (needs raw body)
+app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
+  const { handleWebhook } = require('./webhooks/stripe');
+  await handleWebhook(req, res);
+});
 
 // Serve React Frontend (Production) - AFTER API routes
 if (process.env.NODE_ENV === 'production') {
