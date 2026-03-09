@@ -8,10 +8,11 @@ function cn(...inputs: ClassValue[]) {
 }
 
 export interface NeuButtonProps extends Omit<HTMLMotionProps<'button'>, 'variant'> {
-  variant?: 'elevated' | 'inset' | 'flat';
+  variant?: 'elevated' | 'inset' | 'flat' | 'secondary';
   size?: 'sm' | 'md' | 'lg';
   isActive?: boolean;
   isDisabled?: boolean;
+  disabled?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   children: React.ReactNode;
@@ -34,6 +35,13 @@ const variantStyles = {
     hover:shadow-[6px_6px_12px_rgba(44,40,34,0.12),-6px_-6px_12px_rgba(255,255,255,0.55)]
     active:shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1),inset_-2px_-2px_4px_rgba(255,255,255,0.5)]
   `,
+  secondary: `
+    bg-[#d4cfc5] 
+    shadow-[4px_4px_8px_rgba(44,40,34,0.1),-4px_-4px_8px_rgba(255,255,255,0.5)]
+    hover:shadow-[6px_6px_12px_rgba(44,40,34,0.12),-6px_-6px_12px_rgba(255,255,255,0.55)]
+    active:shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1),inset_-2px_-2px_4px_rgba(255,255,255,0.5)]
+    text-[#5c5243]
+  `,
 };
 
 const sizeStyles = {
@@ -49,6 +57,7 @@ export const NeuButton = React.forwardRef<HTMLButtonElement, NeuButtonProps>(
       size = 'md',
       isActive = false,
       isDisabled = false,
+      disabled,
       leftIcon,
       rightIcon,
       children,
@@ -57,6 +66,7 @@ export const NeuButton = React.forwardRef<HTMLButtonElement, NeuButtonProps>(
     },
     ref
   ) => {
+    const isButtonDisabled = isDisabled || disabled;
     const baseStyles = `
       relative inline-flex items-center justify-center gap-2
       font-semibold text-[#2d2418]
@@ -74,10 +84,10 @@ export const NeuButton = React.forwardRef<HTMLButtonElement, NeuButtonProps>(
       <motion.button
         ref={ref}
         className={cn(baseStyles, variantStyles[variant], sizeStyles[size], activeStyles, className)}
-        disabled={isDisabled}
-        whileHover={!isDisabled && !isActive ? { scale: 1.02 } : {}}
-        whileTap={!isDisabled ? { scale: 0.98 } : {}}
-        aria-disabled={isDisabled}
+        disabled={isButtonDisabled}
+        whileHover={!isButtonDisabled && !isActive ? { scale: 1.02 } : {}}
+        whileTap={!isButtonDisabled ? { scale: 0.98 } : {}}
+        aria-disabled={isButtonDisabled}
         {...props}
       >
         {leftIcon && <span className="flex-shrink-0">{leftIcon}</span>}

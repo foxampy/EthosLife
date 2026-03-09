@@ -228,11 +228,11 @@ const LeaderboardRow = ({ user, index, category }) => {
         marginBottom: '8px',
         border: user.rank <= 3 ? `1px solid ${style.color}40` : '1px solid transparent',
         transition: 'all 0.3s',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        transform: isHovered ? 'translateX(5px)' : 'translateX(0)'
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{ transform: isHovered ? 'translateX(5px)' : 'translateX(0)' }}
     >
       {/* Rank */}
       <div style={{ minWidth: '50px' }}>

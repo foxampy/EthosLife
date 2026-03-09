@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
 import BurgerMenu from './BurgerMenu';
 import LanguageSelector from './LanguageSelector';
+import { WalletConnectButton } from '../Web3/WalletConnectButton';
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -140,6 +141,9 @@ const Header = () => {
                 <span className="hidden xl:inline">{t('nav.investorDemo')}</span>
                 <span className="xl:hidden">{t('nav.buyTokens')}</span>
               </Link>
+
+              {/* Wallet Connect */}
+              <WalletConnectButton />
             </div>
 
             {/* Right Section: Language, Search, Notifications, User, Burger */}
