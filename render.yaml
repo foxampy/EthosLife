@@ -15,6 +15,8 @@ services:
         fromDatabase:
           name: ethoslife-db
           property: connectionString
+      - key: PGSSLMODE
+        value: no-verify
       - key: TELEGRAM_BOT_TOKEN
         sync: false
       - key: FOUNDER_CHAT_ID
@@ -22,7 +24,7 @@ services:
       - key: ADMIN_CHAT_IDS
         sync: false
       - key: ADMIN_KEY
-        sync: false
+        generateValue: true
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
@@ -31,8 +33,6 @@ services:
         sync: false
       - key: GOOGLE_CLIENT_ID
         sync: false
-      - key: PGSSLMODE
-        value: no-verify
     autoDeploy: true
 
 databases:
@@ -40,3 +40,4 @@ databases:
     plan: free
     databaseName: ethoslife
     user: ethoslife
+    ipAllowList: []
