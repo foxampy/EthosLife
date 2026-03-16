@@ -77,7 +77,7 @@ const submissions = new Map();  // sessionId -> submission data (cache)
 
 // Initialize Telegram Bot
 let bot = null;
-if (CONFIG.TELEGRAM_BOT_TOKEN && CONFIG.TELEGRAM_BOT_TOKEN !== 'your_bot_token_here') {
+if (CONFIG.TELEGRAM_BOT_TOKEN && CONFIG.TELEGRAM_BOT_TOKEN !== 'your_bot_token_here' && CONFIG.TELEGRAM_BOT_TOKEN.length > 20) {
   try {
     bot = new TelegramBot(CONFIG.TELEGRAM_BOT_TOKEN, { polling: true });
     console.log('🤖 Telegram bot initialized');
