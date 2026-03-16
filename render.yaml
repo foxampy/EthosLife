@@ -6,8 +6,6 @@ services:
     plan: starter
     buildCommand: npm install && cd frontend && npm install && npm run build
     startCommand: npm start
-    rootDir: .
-    healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
@@ -36,7 +34,6 @@ services:
       - key: PGSSLMODE
         value: no-verify
     autoDeploy: true
-    dockerfilePath: Dockerfile.render
 
 databases:
   - name: ethoslife-db
