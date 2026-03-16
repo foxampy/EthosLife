@@ -136,16 +136,35 @@ app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (r
 });
 
 // Serve React Frontend (Production) - AFTER API routes
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('frontend/dist'));
-  
-  // All non-API routes go to React app
+// Also serve in development if dist exists
+const distExists = require('fs').existsSync('./frontend/dist');
+if (process.env.NODE_ENV === 'production' || distExists) {
+  // IMPORTANT: Static files MUST come before wildcard route
+  app.use(express.static('frontend/dist', {
+    setHeaders: (res, path) => {
+      // Set correct MIME types for JS modules
+      if (path.endsWith('.js')) {
+        res.setHeader('Content-Type', 'application/javascript');
+      } else if (path.endsWith('.css')) {
+        res.setHeader('Content-Type', 'text/css');
+      } else if (path.endsWith('.wasm')) {
+        res.setHeader('Content-Type', 'application/wasm');
+      }
+    }
+  }));
+
+  // All non-API routes go to React app (but NOT /assets/*)
   app.get('*', (req, res) => {
-    if (req.path.startsWith('/api/') || req.path.startsWith('/saft/')) {
+    // Skip API routes, static assets, and saft
+    if (req.path.startsWith('/api/') || 
+        req.path.startsWith('/saft/') ||
+        req.path.startsWith('/assets/')) {
       return res.status(404).json({ error: 'Not found' });
     }
     res.sendFile('frontend/dist/index.html', { root: process.cwd() });
   });
+} else {
+  console.log('ℹ️ Frontend not served - build first with: npm run build');
 }
 
 // ==================== DATABASE INIT ====================
