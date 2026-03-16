@@ -311,10 +311,10 @@ const LandingV2 = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="neu-card p-8 hover:shadow-2xl transition-all duration-300 group"
+                className="bg-[#e4dfd5]/80 backdrop-blur-sm p-8 rounded-3xl border border-[#5c5243]/10 hover:shadow-2xl transition-all duration-300 group"
                 whileHover={{ scale: 1.02, y: -5 }}
               >
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform`}>
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
                   {feature.icon}
                 </div>
                 <h3 className="text-2xl font-bold text-[#2d2418] mb-3">{feature.title}</h3>

@@ -329,8 +329,19 @@ const BurgerMenu = ({ isOpen, onClose }) => {
       </div>
 
       {/* Footer */}
-      <div className="px-4 py-6 border-t border-[#5c5243]/10 text-center">
-        <p className="text-xs text-[#5c5243]">© 2026 EthosLife. All rights reserved.</p>
+      <div className="px-4 py-6 border-t border-[#5c5243]/10">
+        {/* Version Switch Button */}
+        <a
+          href="https://ethoslife.onrender.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-medium hover:shadow-lg transition-all mb-4"
+        >
+          <span>🔄</span>
+          <span>Open V1 Version</span>
+        </a>
+        
+        <p className="text-xs text-[#5c5243] text-center">© 2026 EthosLife. All rights reserved.</p>
         <div className="flex items-center justify-center gap-4 mt-2 text-xs text-[#5c5243]">
           <Link to="/privacy" onClick={onClose} className="hover:text-[#2d2418]">Privacy</Link>
           <Link to="/terms" onClick={onClose} className="hover:text-[#2d2418]">Terms</Link>
