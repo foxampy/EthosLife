@@ -60,7 +60,7 @@ const InsightCard: React.FC<{
   index: number;
   onActionClick?: (id: string) => void;
 }> = ({ insight, index, onActionClick }) => {
-  const config = insightConfig[insight.type];
+  const config = insightConfig[insight.type] || insightConfig.tip; // Fallback to tip if type not found
   const Icon = config.icon;
 
   return (

@@ -383,7 +383,7 @@ const LandingV2 = () => {
                   className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 ${
                     plan.popular
                       ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg hover:shadow-xl'
-                      : 'bg-[#5c5243] text-white hover:bg-[#8c7a6b]'
+                      : 'bg-[#5c5243] text-[#e4dfd5] hover:bg-[#8c7a6b]'
                   }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}

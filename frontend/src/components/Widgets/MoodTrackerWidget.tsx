@@ -112,7 +112,7 @@ export const MoodTrackerWidget: React.FC<MoodTrackerWidgetProps> = ({
           <span className="text-xs text-[#5c5243]">This week</span>
           <div className="flex items-center gap-1 text-xs text-[#5c5243]">
             <TrendingUp className="w-3 h-3" />
-            <span>Avg: {averageMood.toFixed(1)}</span>
+            <span>Avg: {(averageMood || 0).toFixed(1)}</span>
           </div>
         </div>
 

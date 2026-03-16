@@ -127,7 +127,7 @@ export const StepsCounterWidget: React.FC<StepsCounterWidgetProps> = ({
             transition={{ delay: 0.4 }}
           >
             <MapPin className="w-4 h-4 text-blue-500 mx-auto mb-1" />
-            <p className="text-lg font-bold text-[#2d2418]">{distance.toFixed(1)}</p>
+            <p className="text-lg font-bold text-[#2d2418]">{(distance || 0).toFixed(1)}</p>
             <p className="text-[10px] text-[#5c5243] uppercase">km</p>
           </motion.div>
 

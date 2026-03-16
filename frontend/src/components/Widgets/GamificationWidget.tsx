@@ -125,7 +125,7 @@ export const GamificationWidget: React.FC<GamificationWidgetProps> = ({
         <div className="mb-2">
           <div className="flex items-center justify-between text-xs mb-2">
             <span className="text-[#5c5243]">XP: {xp.toLocaleString()} / {xpToNextLevel.toLocaleString()}</span>
-            <span className="text-[#5c5243] font-medium">{progressPercent.toFixed(0)}%</span>
+            <span className="text-[#5c5243] font-medium">{(progressPercent || 0).toFixed(0)}%</span>
           </div>
           <div className="h-3 bg-[#dcd3c6] rounded-full overflow-hidden shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1)]">
             <motion.div
