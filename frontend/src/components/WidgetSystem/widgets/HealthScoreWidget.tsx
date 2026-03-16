@@ -98,7 +98,7 @@ export const HealthScoreWidget: React.FC<HealthScoreWidgetProps> = ({
           <span className={
             trend === 'up' ? 'text-emerald-500' : trend === 'down' ? 'text-red-500' : 'text-gray-400'
           }>
-            {trend === 'up' ? '+' : trend === 'down' ? '-'}{trendValue}%
+            {(trend === 'up' ? '+' : trend === 'down' ? '-' : '')}{trendValue}%
           </span>
           <span className="text-[var(--text-tertiary)]">this week</span>
         </div>

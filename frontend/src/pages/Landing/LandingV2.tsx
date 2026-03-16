@@ -67,8 +67,7 @@ const LandingV2 = () => {
       title: t('settings.privacy'),
       description: t('settings.connectedDevices'),
       color: 'from-slate-500 to-gray-500'
-    }
-  ];
+    },
     {
       icon: <Users className="w-8 h-8" />,
       title: 'Сообщество',
@@ -285,7 +284,7 @@ const LandingV2 = () => {
             ))}
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Features Section */}
       <section className="py-24 px-4">
