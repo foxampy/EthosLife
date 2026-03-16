@@ -1,0 +1,38 @@
+# EthosLife Production Docker Image for Render
+FROM node:18-alpine
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy frontend
+COPY frontend/package*.json ./frontend/
+COPY frontend/ ./frontend/
+
+# Install frontend dependencies and build
+WORKDIR /app/frontend
+RUN npm install
+RUN npm run build
+
+# Back to root
+WORKDIR /app
+
+# Copy the rest of the application
+COPY . .
+
+# Expose port
+EXPOSE 10000
+
+# Set environment
+ENV NODE_ENV=production
+
+# Start the application
+CMD ["node", "server.js"]
