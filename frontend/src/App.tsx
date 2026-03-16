@@ -1,5 +1,5 @@
 /**
- * EthosLife - Human Operating System
+ * EthosLife - Human Operating System V2
  * Main Application Component
  *
  * Features:
@@ -8,6 +8,7 @@
  * - Toast notifications
  * - Global error boundary
  * - ALL PAGES AVAILABLE WITHOUT REGISTRATION
+ * - V2 IS MAIN - All V1 features integrated
  */
 
 import React, { Suspense, lazy } from 'react';
@@ -21,36 +22,57 @@ import Layout from './components/Layout/Layout';
 // Import i18n configuration
 import './i18n/config';
 
-// Lazy load pages
+// Auth Pages
 const Login = lazy(() => import('./pages/Auth/Login'));
 const Register = lazy(() => import('./pages/Auth/Register'));
-const LandingV1 = lazy(() => import('./pages/Landing/LandingV1'));
-const DashboardV1 = lazy(() => import('./pages/Dashboard/DashboardV1'));
-const HealthCenter = lazy(() => import('./pages/Health/HealthCenter'));
+
+// V2 Main Pages (Default)
+const LandingV2 = lazy(() => import('./pages/Landing/LandingV2'));
+const DashboardV2 = lazy(() => import('./pages/Unified/DashboardV2'));
 const InvestorDemo = lazy(() => import('./pages/InvestorDemo'));
 
-// V2 Unified Pages
-const UnifiedHomePage = lazy(() => import('./pages/Unified/UnifiedHomePage'));
-const DashboardV2 = lazy(() => import('./pages/Unified/DashboardV2'));
-const NutritionUnified = lazy(() => import('./pages/Unified/Health/NutritionUnified'));
-const MovementUnified = lazy(() => import('./pages/Unified/Health/MovementUnified'));
-const SleepUnified = lazy(() => import('./pages/Unified/Health/SleepUnified'));
-const PsychologyUnified = lazy(() => import('./pages/Unified/Health/PsychologyUnified'));
-const MedicineUnified = lazy(() => import('./pages/Unified/Health/MedicineUnified'));
-const RelationshipsUnified = lazy(() => import('./pages/Unified/Health/RelationshipsUnified'));
-const HabitsUnified = lazy(() => import('./pages/Unified/Health/HabitsUnified'));
-const SocialFeedUnified = lazy(() => import('./pages/Unified/Social/SocialFeedUnified'));
-const MessagesUnified = lazy(() => import('./pages/Unified/Social/MessagesUnified'));
-const GroupsUnified = lazy(() => import('./pages/Unified/Social/GroupsUnified'));
-const ChallengesUnified = lazy(() => import('./pages/Unified/Social/ChallengesUnified'));
-const AIChatUnified = lazy(() => import('./pages/Unified/AIChatUnified'));
-const AnalyticsUnified = lazy(() => import('./pages/Unified/AnalyticsUnified'));
-const GamificationUnified = lazy(() => import('./pages/Unified/GamificationUnified'));
-const SpecialistsUnified = lazy(() => import('./pages/Unified/SpecialistsUnified'));
-const CentersUnified = lazy(() => import('./pages/Unified/CentersUnified'));
-const ProfileUnified = lazy(() => import('./pages/Unified/ProfileUnified'));
-const SettingsUnified = lazy(() => import('./pages/Unified/SettingsUnified'));
-const WalletUnified = lazy(() => import('./pages/Unified/WalletUnified'));
+// V2 Health Modules
+const Nutrition2 = lazy(() => import('./pages/Health/Nutrition2'));
+const Movement2 = lazy(() => import('./pages/Health/Movement2'));
+const Sleep2 = lazy(() => import('./pages/Health/Sleep2'));
+const Psychology2 = lazy(() => import('./pages/Health/Psychology2'));
+const Medicine2 = lazy(() => import('./pages/Health/Medicine2'));
+const Relationships2 = lazy(() => import('./pages/Health/Relationships2'));
+const Habits2 = lazy(() => import('./pages/Health/Habits2'));
+
+// V2 Social Modules
+const SocialFeed2 = lazy(() => import('./pages/Social/SocialFeed2'));
+
+// V2 Other Modules
+const AIChat2 = lazy(() => import('./pages/AI/AIChat2'));
+const Analytics2 = lazy(() => import('./pages/Analytics/Analytics2'));
+const Gamification2 = lazy(() => import('./pages/Gamification/Gamification2'));
+const Specialists2 = lazy(() => import('./pages/Specialists/Specialists2'));
+const Centers2 = lazy(() => import('./pages/Centers/Centers2'));
+const Profile2 = lazy(() => import('./pages/Profile/Profile2'));
+const Settings2 = lazy(() => import('./pages/Settings/Settings2'));
+
+// V1 Pages (for features not yet in V2 - lazy loaded on demand)
+const WalletV1 = lazy(() => import('./pages/Dashboard/WalletV1'));
+const NotificationsV1 = lazy(() => import('./pages/Dashboard/NotificationsV1'));
+const ActivityV1 = lazy(() => import('./pages/Dashboard/ActivityV1'));
+const SearchV1 = lazy(() => import('./pages/Dashboard/SearchV1'));
+const TokenomicsV1 = lazy(() => import('./pages/Landing/TokenomicsV1'));
+const ChallengesV1 = lazy(() => import('./pages/Social/V1/ChallengesV1'));
+const FriendsV1 = lazy(() => import('./pages/Social/V1/FriendsV1'));
+const GroupsV1 = lazy(() => import('./pages/Social/V1/GroupsV1'));
+const MessagesV1 = lazy(() => import('./pages/Social/V1/MessagesV1'));
+const LeadersV1 = lazy(() => import('./pages/Social/V1/LeadersV1'));
+const FoodDiaryV1 = lazy(() => import('./pages/Health/V1/FoodDiaryV1'));
+const MealPlannerV1 = lazy(() => import('./pages/Health/V1/MealPlannerV1'));
+const RecipesV1 = lazy(() => import('./pages/Health/V1/RecipesV1'));
+const ProductsDBV1 = lazy(() => import('./pages/Health/V1/ProductsDBV1'));
+const ExerciseLibraryV1 = lazy(() => import('./pages/Health/V1/ExerciseLibraryV1'));
+const WorkoutLoggerV1 = lazy(() => import('./pages/Health/V1/WorkoutLoggerV1'));
+const SleepAnalysisV1 = lazy(() => import('./pages/Health/V1/SleepAnalysisV1'));
+const MoodTrackerV1 = lazy(() => import('./pages/Health/V1/MoodTrackerV1'));
+const MedicationsV1 = lazy(() => import('./pages/Health/V1/MedicationsV1'));
+const FitnessV1 = lazy(() => import('./pages/Health/V1/FitnessV1'));
 
 // Loading fallback
 const PageLoader: React.FC = () => (
@@ -107,67 +129,73 @@ function App() {
             {/* ALL PAGES AVAILABLE WITHOUT REGISTRATION - Guest Access Routes */}
             <Route element={<GuestAccessRoute />}>
               <Route element={<Layout />}>
-                {/* Root landing page */}
-                <Route path="/" element={<LandingV1 />} />
-
-                {/* V2 Landing/Home */}
+                {/* Root - V2 Landing as Main */}
+                <Route path="/" element={<LandingV2 />} />
+                
+                {/* V2 Main Routes */}
                 <Route path="/v2" element={<InvestorDemo />} />
                 <Route path="/demo" element={<Navigate to="/v2" replace />} />
-                <Route path="/home" element={<UnifiedHomePage />} />
-
-                {/* Dashboard */}
-                <Route path="/dashboard" element={<DashboardV1 />} />
-                <Route path="/dashboard-v2" element={<DashboardV2 />} />
-                <Route path="/dashboard-v1" element={<DashboardV1 />} />
-
-                {/* Health Modules - V1 */}
-                <Route path="/health" element={<HealthCenter />} />
-                <Route path="/health/nutrition-v1" element={lazy(() => import('./pages/Health/V1/NutritionV1'))} />
-                <Route path="/health/fitness-v1" element={lazy(() => import('./pages/Health/V1/FitnessV1'))} />
-                <Route path="/health/sleep-v1" element={lazy(() => import('./pages/Health/V1/SleepV1'))} />
-                <Route path="/health/mental-v1" element={lazy(() => import('./pages/Health/V1/MentalHealthV1'))} />
-                <Route path="/health/medical-v1" element={lazy(() => import('./pages/Health/V1/MedicalV1'))} />
-
-                {/* Health Modules - V2 Unified */}
-                <Route path="/health/nutrition" element={<NutritionUnified />} />
-                <Route path="/health/movement" element={<MovementUnified />} />
-                <Route path="/health/sleep" element={<SleepUnified />} />
-                <Route path="/health/psychology" element={<PsychologyUnified />} />
-                <Route path="/health/medicine" element={<MedicineUnified />} />
-                <Route path="/health/relationships" element={<RelationshipsUnified />} />
-                <Route path="/health/habits" element={<HabitsUnified />} />
-
-                {/* Social Routes */}
-                <Route path="/social" element={lazy(() => import('./pages/Social/Feed'))} />
-                <Route path="/social-v1" element={lazy(() => import('./pages/Social/V1/SocialFeedV1'))} />
-                <Route path="/social/feed" element={<SocialFeedUnified />} />
-                <Route path="/social/messages" element={<MessagesUnified />} />
-                <Route path="/social/groups" element={<GroupsUnified />} />
-                <Route path="/social/challenges" element={<ChallengesUnified />} />
-
-                {/* AI & Features */}
-                <Route path="/ai-chat" element={lazy(() => import('./pages/AI/Chat'))} />
-                <Route path="/ai" element={<AIChatUnified />} />
-                <Route path="/analytics" element={<AnalyticsUnified />} />
-                <Route path="/gamification" element={<GamificationUnified />} />
-                <Route path="/achievements" element={<GamificationUnified />} />
-                <Route path="/specialists" element={<SpecialistsUnified />} />
-                <Route path="/centers" element={<CentersUnified />} />
-
-                {/* User */}
-                <Route path="/profile" element={lazy(() => import('./pages/Profile/Profile'))} />
-                <Route path="/profile-v2" element={<ProfileUnified />} />
-                <Route path="/settings" element={lazy(() => import('./pages/Settings/Settings'))} />
-                <Route path="/settings-v2" element={<SettingsUnified />} />
-                <Route path="/wallet" element={<WalletUnified />} />
-
-                {/* Landing V1 Pages */}
-                <Route path="/v1" element={<LandingV1 />} />
-                <Route path="/features-v1" element={lazy(() => import('./pages/Landing/FeaturesV1'))} />
-                <Route path="/pricing-v1" element={lazy(() => import('./pages/Landing/PricingV1'))} />
-                <Route path="/tokenomics-v1" element={lazy(() => import('./pages/Landing/TokenomicsV1'))} />
-                <Route path="/roadmap-v1" element={lazy(() => import('./pages/Landing/RoadmapV1'))} />
-
+                <Route path="/dashboard" element={<DashboardV2 />} />
+                
+                {/* V2 Health Modules - Main */}
+                <Route path="/health" element={<Navigate to="/health/nutrition" replace />} />
+                <Route path="/health/nutrition" element={<Nutrition2 />} />
+                <Route path="/health/movement" element={<Movement2 />} />
+                <Route path="/health/sleep" element={<Sleep2 />} />
+                <Route path="/health/psychology" element={<Psychology2 />} />
+                <Route path="/health/medicine" element={<Medicine2 />} />
+                <Route path="/health/relationships" element={<Relationships2 />} />
+                <Route path="/health/habits" element={<Habits2 />} />
+                
+                {/* V2 Social */}
+                <Route path="/social" element={<SocialFeed2 />} />
+                
+                {/* V2 Other Modules */}
+                <Route path="/ai-chat" element={<AIChat2 />} />
+                <Route path="/analytics" element={<Analytics2 />} />
+                <Route path="/gamification" element={<Gamification2 />} />
+                <Route path="/specialists" element={<Specialists2 />} />
+                <Route path="/centers" element={<Centers2 />} />
+                <Route path="/profile" element={<Profile2 />} />
+                <Route path="/settings" element={<Settings2 />} />
+                
+                {/* V1 Features NOT YET IN V2 - Integrated from V1 */}
+                {/* Web3 & Crypto */}
+                <Route path="/wallet" element={<WalletV1 />} />
+                <Route path="/tokenomics" element={<TokenomicsV1 />} />
+                
+                {/* Social V1 Features */}
+                <Route path="/challenges" element={<ChallengesV1 />} />
+                <Route path="/friends" element={<FriendsV1 />} />
+                <Route path="/groups" element={<GroupsV1 />} />
+                <Route path="/messages" element={<MessagesV1 />} />
+                <Route path="/leaders" element={<LeadersV1 />} />
+                
+                {/* Health V1 Features - Extended */}
+                <Route path="/health/fitness" element={<FitnessV1 />} />
+                <Route path="/health/nutrition/diary" element={<FoodDiaryV1 />} />
+                <Route path="/health/nutrition/meal-plan" element={<MealPlannerV1 />} />
+                <Route path="/health/nutrition/recipes" element={<RecipesV1 />} />
+                <Route path="/health/nutrition/products" element={<ProductsDBV1 />} />
+                <Route path="/health/fitness/exercises" element={<ExerciseLibraryV1 />} />
+                <Route path="/health/fitness/workout" element={<WorkoutLoggerV1 />} />
+                <Route path="/health/sleep/analysis" element={<SleepAnalysisV1 />} />
+                <Route path="/health/mental/mood" element={<MoodTrackerV1 />} />
+                <Route path="/health/medical/medications" element={<MedicationsV1 />} />
+                
+                {/* Dashboard V1 Features */}
+                <Route path="/notifications" element={<NotificationsV1 />} />
+                <Route path="/activity" element={<ActivityV1 />} />
+                <Route path="/search" element={<SearchV1 />} />
+                
+                {/* Landing V2 Pages */}
+                <Route path="/features" element={lazy(() => import('./pages/Landing/FeaturesV2'))} />
+                <Route path="/pricing" element={lazy(() => import('./pages/Landing/PricingV2'))} />
+                <Route path="/team" element={lazy(() => import('./pages/Landing/TeamV2'))} />
+                <Route path="/roadmap" element={lazy(() => import('./pages/Landing/RoadmapV2'))} />
+                <Route path="/faq" element={lazy(() => import('./pages/Landing/FAQV2'))} />
+                <Route path="/blog" element={lazy(() => import('./pages/Landing/BlogV2'))} />
+                
                 {/* Design System Demo */}
                 <Route path="/design-system" element={lazy(() => import('./pages/Unified/DesignSystemDemo'))} />
                 <Route path="/design" element={lazy(() => import('./pages/Unified/DesignSystemDemo'))} />
