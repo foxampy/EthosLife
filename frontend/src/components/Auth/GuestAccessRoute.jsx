@@ -1,22 +1,11 @@
-import React, { createContext, useContext, useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-
-// Context for guest mode
-export const GuestContext = createContext({
-  isGuest: false,
-  enableGuestMode: () => {},
-  disableGuestMode: () => {},
-});
-
-// Hook to use guest context
-export const useGuest = () => useContext(GuestContext);
 
 // Guest Access Route - ALL PAGES AVAILABLE WITHOUT REGISTRATION
 const GuestAccessRoute = () => {
   const { isAuthenticated, isLoading } = useAuthStore();
   const [isGuestMode, setIsGuestMode] = useState(true);
-  const location = useLocation();
 
   if (isLoading) {
     return (
@@ -31,11 +20,7 @@ const GuestAccessRoute = () => {
 
   // Always allow access - no registration required
   return (
-    <GuestContext.Provider value={{
-      isGuest: !isAuthenticated && isGuestMode,
-      enableGuestMode: () => setIsGuestMode(true),
-      disableGuestMode: () => setIsGuestMode(false),
-    }}>
+    <div className={!isAuthenticated && isGuestMode ? '' : ''}>
       {/* Guest Mode Banner with Sales Pitch */}
       {!isAuthenticated && isGuestMode && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white px-4 py-3 text-center shadow-2xl">
@@ -54,7 +39,7 @@ const GuestAccessRoute = () => {
       <div className={!isAuthenticated && isGuestMode ? 'pt-16' : ''}>
         <Outlet />
       </div>
-    </GuestContext.Provider>
+    </div>
   );
 };
 

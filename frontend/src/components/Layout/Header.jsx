@@ -9,7 +9,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Search, Bell, User, ChevronDown, LogOut, Settings, Home, Heart, MessageCircle, Zap, Wallet, Shield } from 'lucide-react';
+import { Menu, X, Search, Bell, User, ChevronDown, LogOut, Settings, Home, Heart, MessageCircle, Zap, Wallet } from 'lucide-react';
 import BurgerMenu from './BurgerMenu';
 import LanguageSelector from './LanguageSelector';
 
@@ -77,7 +77,7 @@ const Header = () => {
   return (
     <>
       {/* Permanent Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#e4dfd5]/95 backdrop-blur-xl border-b border-[#5c5243]/10 shadow-lg">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#e4dfd5]/95 backdrop-blur-xl border-b border-[#5c5243]/10 shadow-lg" suppressHydrationWarning>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             
