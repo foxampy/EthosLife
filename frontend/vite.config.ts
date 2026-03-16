@@ -22,9 +22,17 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
-    // Continue build despite TypeScript errors
     minify: true,
+    // Ensure correct base path for production
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+      },
+    },
   },
+  base: '/',
   esbuild: {
     // Ignore TypeScript errors during build
     logOverride: { 'this-is-undefined-in-esm': 'silent' },
