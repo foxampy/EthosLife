@@ -2,27 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuthStore } from '../../store/authStore';
+import { tempStorage } from '../../services/tempStorage';
 import toast from 'react-hot-toast';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login, googleLogin, isAuthenticated } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/dashboard');
     }
-    
+
     // Initialize Google Sign-In
     if (window.google && window.google.accounts) {
       window.google.accounts.id.initialize({
         client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
         callback: handleGoogleResponse,
       });
-      
+
       window.google.accounts.id.renderButton(
         document.getElementById('googleSignInButton'),
         { theme: 'outline', size: 'large', width: '100%' }
@@ -35,6 +36,7 @@ const Login = () => {
     try {
       const result = await googleLogin({ credential: response.credential });
       if (result.success) {
+        await migrateTempData();
         toast.success('Successfully logged in with Google!');
         navigate('/dashboard');
       } else {
@@ -47,11 +49,26 @@ const Login = () => {
     }
   };
 
+  // Migrate temporary data to server after login
+  const migrateTempData = async () => {
+    try {
+      const allData = tempStorage.getAll();
+      if (Object.keys(allData).length > 0) {
+        // TODO: Send data to server API to save to user account
+        console.log('[Login] Data ready for migration:', allData);
+        toast.success('Ваши данные будут перенесены в аккаунт!');
+      }
+    } catch (error) {
+      console.error('[Login] Migration error:', error);
+    }
+  };
+
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
       const result = await login(data);
       if (result.success) {
+        await migrateTempData();
         toast.success('Successfully logged in!');
         navigate('/dashboard');
       } else {

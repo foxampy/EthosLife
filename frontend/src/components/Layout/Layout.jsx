@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
+import SubscriptionUpsell from '../Upsell/SubscriptionUpsell';
 
 const Layout = () => {
   return (
@@ -12,6 +13,9 @@ const Layout = () => {
       <main className="pb-8">
         <Outlet />
       </main>
+
+      {/* Subscription Upsell Banner for Guest Users */}
+      <SubscriptionUpsell variant="banner" />
 
       {/* Footer */}
       <footer className="border-t border-stone/20 bg-bone/80 backdrop-blur-md">

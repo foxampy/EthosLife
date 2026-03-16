@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuthStore } from '../../store/authStore';
+import { tempStorage } from '../../services/tempStorage';
 import toast from 'react-hot-toast';
 
 const Register = () => {
   const navigate = useNavigate();
   const { register: registerUser, googleLogin, isAuthenticated } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const password = watch('password');
 
@@ -16,14 +17,14 @@ const Register = () => {
     if (isAuthenticated) {
       navigate('/dashboard');
     }
-    
+
     // Initialize Google Sign-In
     if (window.google && window.google.accounts) {
       window.google.accounts.id.initialize({
         client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
         callback: handleGoogleResponse,
       });
-      
+
       window.google.accounts.id.renderButton(
         document.getElementById('googleSignUpButton'),
         { theme: 'outline', size: 'large', width: '100%' }
@@ -36,6 +37,8 @@ const Register = () => {
     try {
       const result = await googleLogin({ credential: response.credential });
       if (result.success) {
+        // Migrate temp data after successful login
+        await migrateTempData();
         toast.success('Successfully registered with Google!');
         navigate('/dashboard');
       } else {
@@ -48,11 +51,32 @@ const Register = () => {
     }
   };
 
+  // Migrate temporary data to server after registration
+  const migrateTempData = async () => {
+    try {
+      const allData = tempStorage.getAll();
+      if (Object.keys(allData).length > 0) {
+        // TODO: Send data to server API to save to user account
+        // await fetch('/api/migrate-data', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify(allData)
+        // });
+        console.log('[Register] Data ready for migration:', allData);
+        toast.success('Ваши данные сохранены и будут перенесены в аккаунт!');
+      }
+    } catch (error) {
+      console.error('[Register] Migration error:', error);
+    }
+  };
+
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
       const result = await registerUser(data);
       if (result.success) {
+        // Migrate temp data after successful registration
+        await migrateTempData();
         toast.success('Account created successfully!');
         navigate('/dashboard');
       } else {

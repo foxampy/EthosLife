@@ -12,10 +12,10 @@ export const GuestContext = createContext({
 // Hook to use guest context
 export const useGuest = () => useContext(GuestContext);
 
-// Guest Access Route - allows both authenticated and guest users
+// Guest Access Route - ALL PAGES AVAILABLE WITHOUT REGISTRATION
 const GuestAccessRoute = () => {
   const { isAuthenticated, isLoading } = useAuthStore();
-  const [isGuestMode, setIsGuestMode] = useState(true); // Enable guest mode by default for v2 pages
+  const [isGuestMode, setIsGuestMode] = useState(true);
   const location = useLocation();
 
   if (isLoading) {
@@ -23,41 +23,35 @@ const GuestAccessRoute = () => {
       <div className="min-h-screen flex items-center justify-center bg-bone">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-stone mx-auto mb-4"></div>
-          <p className="text-stone">Loading EthoLife...</p>
+          <p className="text-stone">Loading EthosLife...</p>
         </div>
       </div>
     );
   }
 
-  // Allow access to authenticated users or guest mode
-  const hasAccess = isAuthenticated || isGuestMode;
-
-  if (!hasAccess) {
-    return <Navigate to="/login" replace />;
-  }
-
+  // Always allow access - no registration required
   return (
-    <GuestContext.Provider value={{ 
+    <GuestContext.Provider value={{
       isGuest: !isAuthenticated && isGuestMode,
       enableGuestMode: () => setIsGuestMode(true),
       disableGuestMode: () => setIsGuestMode(false),
     }}>
-      {/* Guest Mode Banner */}
+      {/* Guest Mode Banner with Sales Pitch */}
       {!isAuthenticated && isGuestMode && (
-        <div className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-4 py-2 text-center shadow-lg">
-          <div className="flex items-center justify-center space-x-4">
-            <span className="font-medium">🔍 Guest Preview Mode - For Investor Demo</span>
-            <span className="text-sm opacity-90">All features visible, data is simulated</span>
-            <a 
-              href="/login" 
-              className="bg-white text-orange-600 px-3 py-1 rounded-full text-sm font-semibold hover:bg-opacity-90 transition-colors"
+        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white px-4 py-3 text-center shadow-2xl">
+          <div className="flex items-center justify-center space-x-6 flex-wrap">
+            <span className="font-bold text-lg">🎁 ПОПРОБУЙТЕ БЕСПЛАТНО - ВСЕ ФУНКЦИИ ДОСТУПНЫ!</span>
+            <span className="text-sm opacity-95 hidden md:inline">Ваши данные сохраняются временно. Зарегистрируйтесь, чтобы сохранить навсегда.</span>
+            <a
+              href="/register"
+              className="bg-white text-emerald-700 px-5 py-2 rounded-full text-sm font-bold hover:bg-opacity-95 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
             >
-              Sign In →
+              🚀 СОХРАНИТЬ ДАННЫЕ (-50% СКИДКА)
             </a>
           </div>
         </div>
       )}
-      <div className={!isAuthenticated && isGuestMode ? 'pt-12' : ''}>
+      <div className={!isAuthenticated && isGuestMode ? 'pt-16' : ''}>
         <Outlet />
       </div>
     </GuestContext.Provider>
