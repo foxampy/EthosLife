@@ -137,9 +137,8 @@ app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (r
 
 // Serve React Frontend (Production) - AFTER API routes
 // Also serve in development if dist exists
-const path = require('path');
 const distPath = path.join(__dirname, 'frontend', 'dist');
-const distExists = require('fs').existsSync(distPath);
+const distExists = fs.existsSync(distPath);
 
 console.log('📁 Static files path:', distPath);
 console.log('📁 Dist exists:', distExists);
