@@ -84,6 +84,7 @@ const BlogV2 = lazy(() => import('./pages/Landing/BlogV2'));
 
 // Design System
 const DesignSystemDemo = lazy(() => import('./pages/Unified/DesignSystemDemo'));
+const NotFound404 = lazy(() => import('./pages/NotFound404'));
 
 // Loading fallback
 const PageLoader: React.FC = () => (
@@ -211,8 +212,8 @@ function App() {
               </Route>
             </Route>
 
-            {/* 404 */}
-            <Route path="*" element={<Navigate to="/" />} />
+            {/* 404 - Not Found */}
+            <Route path="*" element={<NotFound404 />} />
           </Routes>
         </Router>
       </GuestDataProvider>
