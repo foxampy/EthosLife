@@ -11,11 +11,11 @@
  * - V2 IS MAIN PRODUCTION VERSION
  */
 
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { VersionProvider } from './contexts/VersionContext';
-import { GuestDataProvider } from './contexts/GuestDataContext';
+import { motion } from 'framer-motion';
+import { useAuthStore } from './store/authStore';
 import GuestAccessRoute from './components/Auth/GuestAccessRoute';
 import Layout from './components/Layout/Layout';
 
@@ -44,7 +44,7 @@ const Habits2 = lazy(() => import('./pages/Health/Habits2'));
 const SocialFeed2 = lazy(() => import('./pages/Social/SocialFeed2'));
 
 // V2 Other Modules (Main)
-const AIChat2 = lazy(() => import('./pages/AI/AIChat2'));
+const AIChatUnified = lazy(() => import('./pages/AI/AIChatUnified'));
 const Analytics2 = lazy(() => import('./pages/Analytics/Analytics2'));
 const Gamification2 = lazy(() => import('./pages/Gamification/Gamification2'));
 const Specialists2 = lazy(() => import('./pages/Specialists/Specialists2'));
@@ -86,138 +86,190 @@ const BlogV2 = lazy(() => import('./pages/Landing/BlogV2'));
 const DesignSystemDemo = lazy(() => import('./pages/Unified/DesignSystemDemo'));
 const NotFound404 = lazy(() => import('./pages/NotFound404'));
 
-// Loading fallback
+// Loading fallback with better styling
 const PageLoader: React.FC = () => (
-  <div className="min-h-screen flex items-center justify-center bg-bone">
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#dcd3c6] via-[#e8e0d5] to-[#f5f0eb]">
     <div className="text-center">
-      <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-stone mx-auto mb-4"></div>
-      <p className="text-stone">Loading EthosLife...</p>
+      <motion.div
+        className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-[#5c5243] to-[#8c7a6b] flex items-center justify-center text-white font-bold text-2xl shadow-lg animate-pulse"
+      >
+        E
+      </motion.div>
+      <p className="text-[#5c5243] font-medium">Loading EthosLife...</p>
     </div>
   </div>
 );
 
+// Error Boundary Component
+class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean; error: Error | null }> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#dcd3c6] via-[#e8e0d5] to-[#f5f0eb]">
+          <div className="text-center max-w-md p-8">
+            <h1 className="text-3xl font-bold text-[#2d2418] mb-4">Oops!</h1>
+            <p className="text-[#5c5243] mb-6">Something went wrong. Please try refreshing the page.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-gradient-to-r from-[#5c5243] to-[#8c7a6b] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all"
+            >
+              Refresh Page
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+function AppContent() {
+  // Initialize auth store on app mount
+  const initializeAuth = useAuthStore((state) => state.initialize);
+
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
+
+  return (
+    <>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: 'var(--bone-200)',
+            color: 'var(--text-primary)',
+            borderRadius: '16px',
+            boxShadow: 'var(--shadow-elevated)',
+            fontFamily: 'var(--font-body)',
+          },
+          success: {
+            iconTheme: {
+              primary: 'var(--neon-green)',
+              secondary: 'var(--bone-200)',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: 'var(--error)',
+              secondary: 'var(--bone-200)',
+            },
+          },
+          loading: {
+            iconTheme: {
+              primary: 'var(--neon-cyan)',
+              secondary: 'var(--bone-200)',
+            },
+          },
+        }}
+      />
+
+      <Routes>
+      {/* Public routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      {/* ALL PAGES AVAILABLE WITHOUT REGISTRATION */}
+      <Route element={<GuestAccessRoute />}>
+        <Route element={<Layout />}>
+          {/* MAIN V2 ROUTES */}
+          <Route path="/" element={<LandingV2 />} />
+          <Route path="/v2" element={<InvestorDemo />} />
+          <Route path="/demo" element={<Navigate to="/v2" replace />} />
+          <Route path="/dashboard" element={<DashboardV2 />} />
+
+          {/* Health (V2 Main) */}
+          <Route path="/health" element={<Navigate to="/health/nutrition" replace />} />
+          <Route path="/health/nutrition" element={<Nutrition2 />} />
+          <Route path="/health/movement" element={<Movement2 />} />
+          <Route path="/health/sleep" element={<Sleep2 />} />
+          <Route path="/health/psychology" element={<Psychology2 />} />
+          <Route path="/health/medicine" element={<Medicine2 />} />
+          <Route path="/health/relationships" element={<Relationships2 />} />
+          <Route path="/health/habits" element={<Habits2 />} />
+
+          {/* Social (V2 Main) */}
+          <Route path="/social" element={<SocialFeed2 />} />
+
+          {/* Other V2 Modules */}
+          <Route path="/ai-chat" element={<AIChatUnified />} />
+          <Route path="/analytics" element={<Analytics2 />} />
+          <Route path="/gamification" element={<Gamification2 />} />
+          <Route path="/specialists" element={<Specialists2 />} />
+          <Route path="/centers" element={<Centers2 />} />
+          <Route path="/profile" element={<Profile2 />} />
+          <Route path="/settings" element={<Settings2 />} />
+
+          {/* V1 LEGACY FEATURES (Accessible from menu) */}
+          {/* Web3 */}
+          <Route path="/wallet" element={<WalletV1 />} />
+          <Route path="/tokenomics" element={<TokenomicsV1 />} />
+
+          {/* Social Legacy */}
+          <Route path="/challenges" element={<ChallengesV1 />} />
+          <Route path="/friends" element={<FriendsV1 />} />
+          <Route path="/groups" element={<GroupsV1 />} />
+          <Route path="/messages" element={<MessagesV1 />} />
+          <Route path="/leaders" element={<LeadersV1 />} />
+
+          {/* Health Legacy Extended */}
+          <Route path="/health/fitness" element={<FitnessV1 />} />
+          <Route path="/health/nutrition/diary" element={<FoodDiaryV1 />} />
+          <Route path="/health/nutrition/meal-plan" element={<MealPlannerV1 />} />
+          <Route path="/health/nutrition/recipes" element={<RecipesV1 />} />
+          <Route path="/health/nutrition/products" element={<ProductsDBV1 />} />
+          <Route path="/health/fitness/exercises" element={<ExerciseLibraryV1 />} />
+          <Route path="/health/fitness/workout" element={<WorkoutLoggerV1 />} />
+          <Route path="/health/sleep/analysis" element={<SleepAnalysisV1 />} />
+          <Route path="/health/mental/mood" element={<MoodTrackerV1 />} />
+          <Route path="/health/medical/medications" element={<MedicationsV1 />} />
+
+          {/* Dashboard Legacy */}
+          <Route path="/notifications" element={<NotificationsV1 />} />
+          <Route path="/activity" element={<ActivityV1 />} />
+          <Route path="/search" element={<SearchV1 />} />
+
+          {/* Landing Pages */}
+          <Route path="/features" element={<FeaturesV2 />} />
+          <Route path="/pricing" element={<PricingV2 />} />
+          <Route path="/team" element={<TeamV2 />} />
+          <Route path="/roadmap" element={<RoadmapV2 />} />
+          <Route path="/faq" element={<FAQV2 />} />
+          <Route path="/blog" element={<BlogV2 />} />
+
+          {/* Design System */}
+          <Route path="/design-system" element={<DesignSystemDemo />} />
+          <Route path="/design" element={<DesignSystemDemo />} />
+        </Route>
+      </Route>
+
+      {/* 404 - Not Found */}
+      <Route path="*" element={<NotFound404 />} />
+    </Routes>
+    </>
+  );
+}
+
 function App() {
   return (
-    <VersionProvider defaultVersion="v2">
-      <GuestDataProvider>
-        <Router>
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: 'var(--bone-200)',
-                color: 'var(--text-primary)',
-                borderRadius: '16px',
-                boxShadow: 'var(--shadow-elevated)',
-                fontFamily: 'var(--font-body)',
-              },
-              success: {
-                iconTheme: {
-                  primary: 'var(--neon-green)',
-                  secondary: 'var(--bone-200)',
-                },
-              },
-              error: {
-                iconTheme: {
-                  primary: 'var(--error)',
-                  secondary: 'var(--bone-200)',
-                },
-              },
-              loading: {
-                iconTheme: {
-                  primary: 'var(--neon-cyan)',
-                  secondary: 'var(--bone-200)',
-                },
-              },
-            }}
-          />
-
-          <Routes>
-            {/* Public routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-
-            {/* ALL PAGES AVAILABLE WITHOUT REGISTRATION */}
-            <Route element={<GuestAccessRoute />}>
-              <Route element={<Layout />}>
-                {/* MAIN V2 ROUTES */}
-                <Route path="/" element={<LandingV2 />} />
-                <Route path="/v2" element={<InvestorDemo />} />
-                <Route path="/demo" element={<Navigate to="/v2" replace />} />
-                <Route path="/dashboard" element={<DashboardV2 />} />
-                
-                {/* Health (V2 Main) */}
-                <Route path="/health" element={<Navigate to="/health/nutrition" replace />} />
-                <Route path="/health/nutrition" element={<Nutrition2 />} />
-                <Route path="/health/movement" element={<Movement2 />} />
-                <Route path="/health/sleep" element={<Sleep2 />} />
-                <Route path="/health/psychology" element={<Psychology2 />} />
-                <Route path="/health/medicine" element={<Medicine2 />} />
-                <Route path="/health/relationships" element={<Relationships2 />} />
-                <Route path="/health/habits" element={<Habits2 />} />
-                
-                {/* Social (V2 Main) */}
-                <Route path="/social" element={<SocialFeed2 />} />
-                
-                {/* Other V2 Modules */}
-                <Route path="/ai-chat" element={<AIChat2 />} />
-                <Route path="/analytics" element={<Analytics2 />} />
-                <Route path="/gamification" element={<Gamification2 />} />
-                <Route path="/specialists" element={<Specialists2 />} />
-                <Route path="/centers" element={<Centers2 />} />
-                <Route path="/profile" element={<Profile2 />} />
-                <Route path="/settings" element={<Settings2 />} />
-                
-                {/* V1 LEGACY FEATURES (Accessible from menu) */}
-                {/* Web3 */}
-                <Route path="/wallet" element={<WalletV1 />} />
-                <Route path="/tokenomics" element={<TokenomicsV1 />} />
-                
-                {/* Social Legacy */}
-                <Route path="/challenges" element={<ChallengesV1 />} />
-                <Route path="/friends" element={<FriendsV1 />} />
-                <Route path="/groups" element={<GroupsV1 />} />
-                <Route path="/messages" element={<MessagesV1 />} />
-                <Route path="/leaders" element={<LeadersV1 />} />
-                
-                {/* Health Legacy Extended */}
-                <Route path="/health/fitness" element={<FitnessV1 />} />
-                <Route path="/health/nutrition/diary" element={<FoodDiaryV1 />} />
-                <Route path="/health/nutrition/meal-plan" element={<MealPlannerV1 />} />
-                <Route path="/health/nutrition/recipes" element={<RecipesV1 />} />
-                <Route path="/health/nutrition/products" element={<ProductsDBV1 />} />
-                <Route path="/health/fitness/exercises" element={<ExerciseLibraryV1 />} />
-                <Route path="/health/fitness/workout" element={<WorkoutLoggerV1 />} />
-                <Route path="/health/sleep/analysis" element={<SleepAnalysisV1 />} />
-                <Route path="/health/mental/mood" element={<MoodTrackerV1 />} />
-                <Route path="/health/medical/medications" element={<MedicationsV1 />} />
-                
-                {/* Dashboard Legacy */}
-                <Route path="/notifications" element={<NotificationsV1 />} />
-                <Route path="/activity" element={<ActivityV1 />} />
-                <Route path="/search" element={<SearchV1 />} />
-                
-                {/* Landing Pages */}
-                <Route path="/features" element={<FeaturesV2 />} />
-                <Route path="/pricing" element={<PricingV2 />} />
-                <Route path="/team" element={<TeamV2 />} />
-                <Route path="/roadmap" element={<RoadmapV2 />} />
-                <Route path="/faq" element={<FAQV2 />} />
-                <Route path="/blog" element={<BlogV2 />} />
-                
-                {/* Design System */}
-                <Route path="/design-system" element={<DesignSystemDemo />} />
-                <Route path="/design" element={<DesignSystemDemo />} />
-              </Route>
-            </Route>
-
-            {/* 404 - Not Found */}
-            <Route path="*" element={<NotFound404 />} />
-          </Routes>
-        </Router>
-      </GuestDataProvider>
-    </VersionProvider>
+    <ErrorBoundary>
+      <Router>
+        <Suspense fallback={<PageLoader />}>
+          <AppContent />
+        </Suspense>
+      </Router>
+    </ErrorBoundary>
   );
 }
 
