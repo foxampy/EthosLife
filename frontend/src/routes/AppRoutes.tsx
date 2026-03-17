@@ -12,8 +12,6 @@
 import React, { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-
-// Layout
 import ElLayout from '../components/ElLayout/ElLayout';
 
 // Loading Component
@@ -34,45 +32,45 @@ const PageLoader: React.FC = () => (
 
 // ==================== PAGES (Lazy Loaded) ====================
 
-// Landing Pages
-const LandingV2 = React.lazy(() => import('../pages/Landing/LandingV2'));
-const FeaturesV2 = React.lazy(() => import('../pages/Landing/FeaturesV2'));
-const PricingV2 = React.lazy(() => import('../pages/Landing/PricingV2'));
-const TeamV2 = React.lazy(() => import('../pages/Landing/TeamV2'));
-const RoadmapV2 = React.lazy(() => import('../pages/Landing/RoadmapV2'));
-const FAQV2 = React.lazy(() => import('../pages/Landing/FAQV2'));
-const BlogV2 = React.lazy(() => import('../pages/Landing/BlogV2'));
+// Landing Pages (V2 is now main - renamed without V2 suffix)
+const Landing = React.lazy(() => import('../pages/Landing/Landing'));
+const Features = React.lazy(() => import('../pages/Landing/Features'));
+const Pricing = React.lazy(() => import('../pages/Landing/Pricing'));
+const Team = React.lazy(() => import('../pages/Landing/Team'));
+const Roadmap = React.lazy(() => import('../pages/Landing/Roadmap'));
+const FAQ = React.lazy(() => import('../pages/Landing/FAQ'));
+const Blog = React.lazy(() => import('../pages/Landing/Blog'));
 
 // Auth
 const Login = React.lazy(() => import('../pages/Auth/Login'));
 const Register = React.lazy(() => import('../pages/Auth/Register'));
 
-// Dashboard
-const DashboardV2 = React.lazy(() => import('../pages/Unified/DashboardV2'));
+// Dashboard (V2 is main)
+const Dashboard = React.lazy(() => import('../pages/Dashboard/Dashboard'));
 const InvestorDemo = React.lazy(() => import('../pages/InvestorDemo'));
 
 // Health Modules (V2 - Primary)
-const Nutrition2 = React.lazy(() => import('../pages/Health/Nutrition2'));
-const Movement2 = React.lazy(() => import('../pages/Health/Movement2'));
-const Sleep2 = React.lazy(() => import('../pages/Health/Sleep2'));
-const Psychology2 = React.lazy(() => import('../pages/Health/Psychology2'));
-const Medicine2 = React.lazy(() => import('../pages/Health/Medicine2'));
-const Relationships2 = React.lazy(() => import('../pages/Health/Relationships2'));
-const Habits2 = React.lazy(() => import('../pages/Health/Habits2'));
+const Nutrition = React.lazy(() => import('../pages/Health/Nutrition2'));
+const Movement = React.lazy(() => import('../pages/Health/Movement2'));
+const Sleep = React.lazy(() => import('../pages/Health/Sleep2'));
+const Psychology = React.lazy(() => import('../pages/Health/Psychology2'));
+const Medicine = React.lazy(() => import('../pages/Health/Medicine2'));
+const Relationships = React.lazy(() => import('../pages/Health/Relationships2'));
+const Habits = React.lazy(() => import('../pages/Health/Habits2'));
 
 // Social
-const SocialFeed2 = React.lazy(() => import('../pages/Social/SocialFeed2'));
+const SocialFeed = React.lazy(() => import('../pages/Social/SocialFeed2'));
 
 // AI & Features
 const AIChatUnified = React.lazy(() => import('../pages/AI/AIChatUnified'));
-const Analytics2 = React.lazy(() => import('../pages/Analytics/Analytics2'));
-const Gamification2 = React.lazy(() => import('../pages/Gamification/Gamification2'));
-const Specialists2 = React.lazy(() => import('../pages/Specialists/Specialists2'));
-const Centers2 = React.lazy(() => import('../pages/Centers/Centers2'));
+const Analytics = React.lazy(() => import('../pages/Analytics/Analytics2'));
+const Gamification = React.lazy(() => import('../pages/Gamification/Gamification2'));
+const Specialists = React.lazy(() => import('../pages/Specialists/Specialists2'));
+const Centers = React.lazy(() => import('../pages/Centers/Centers2'));
 
 // User
-const Profile2 = React.lazy(() => import('../pages/Profile/Profile2'));
-const Settings2 = React.lazy(() => import('../pages/Settings/Settings2'));
+const Profile = React.lazy(() => import('../pages/Profile/Profile2'));
+const Settings = React.lazy(() => import('../pages/Settings/Settings2'));
 
 // V1 Legacy (Keep for compatibility)
 const WalletV1 = React.lazy(() => import('../pages/Dashboard/WalletV1'));
@@ -107,36 +105,36 @@ export const AppRoutes: React.FC = () => {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* =============== LANDING PAGES =============== */}
-        <Route path="/" element={<LandingV2 />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/v2" element={<InvestorDemo />} />
         <Route path="/demo" element={<Navigate to="/v2" replace />} />
         
         {/* Landing Sub-pages */}
-        <Route path="/features" element={<ElLayout><FeaturesV2 /></ElLayout>} />
-        <Route path="/pricing" element={<ElLayout><PricingV2 /></ElLayout>} />
-        <Route path="/team" element={<ElLayout><TeamV2 /></ElLayout>} />
-        <Route path="/roadmap" element={<ElLayout><RoadmapV2 /></ElLayout>} />
-        <Route path="/faq" element={<ElLayout><FAQV2 /></ElLayout>} />
-        <Route path="/blog" element={<ElLayout><BlogV2 /></ElLayout>} />
+        <Route path="/features" element={<ElLayout><Features /></ElLayout>} />
+        <Route path="/pricing" element={<ElLayout><Pricing /></ElLayout>} />
+        <Route path="/team" element={<ElLayout><Team /></ElLayout>} />
+        <Route path="/roadmap" element={<ElLayout><Roadmap /></ElLayout>} />
+        <Route path="/faq" element={<ElLayout><FAQ /></ElLayout>} />
+        <Route path="/blog" element={<ElLayout><Blog /></ElLayout>} />
 
         {/* =============== AUTH =============== */}
         <Route path="/login" element={<ElLayout showFooter={false}><Login /></ElLayout>} />
         <Route path="/register" element={<ElLayout showFooter={false}><Register /></ElLayout>} />
 
         {/* =============== DASHBOARD =============== */}
-        <Route path="/dashboard" element={<DashboardV2 />} />
+        <Route path="/dashboard" element={<Dashboard />} />
 
         {/* =============== HEALTH MODULES =============== */}
         <Route path="/health" element={<Navigate to="/health/nutrition" replace />} />
         
         {/* Primary Health Routes */}
-        <Route path="/health/nutrition" element={<Nutrition2 />} />
-        <Route path="/health/movement" element={<Movement2 />} />
-        <Route path="/health/sleep" element={<Sleep2 />} />
-        <Route path="/health/psychology" element={<Psychology2 />} />
-        <Route path="/health/medicine" element={<Medicine2 />} />
-        <Route path="/health/relationships" element={<Relationships2 />} />
-        <Route path="/health/habits" element={<Habits2 />} />
+        <Route path="/health/nutrition" element={<Nutrition />} />
+        <Route path="/health/movement" element={<Movement />} />
+        <Route path="/health/sleep" element={<Sleep />} />
+        <Route path="/health/psychology" element={<Psychology />} />
+        <Route path="/health/medicine" element={<Medicine />} />
+        <Route path="/health/relationships" element={<Relationships />} />
+        <Route path="/health/habits" element={<Habits />} />
 
         {/* Legacy Health Routes (V1) */}
         <Route path="/health/fitness" element={<FitnessV1 />} />
@@ -151,7 +149,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/health/medical/medications" element={<MedicationsV1 />} />
 
         {/* =============== SOCIAL =============== */}
-        <Route path="/social" element={<SocialFeed2 />} />
+        <Route path="/social" element={<SocialFeed />} />
         
         {/* Legacy Social Routes */}
         <Route path="/challenges" element={<ChallengesV1 />} />
@@ -163,15 +161,15 @@ export const AppRoutes: React.FC = () => {
         {/* =============== AI & FEATURES =============== */}
         <Route path="/ai-chat" element={<AIChatUnified />} />
         <Route path="/ai" element={<AIChatUnified />} />
-        <Route path="/analytics" element={<Analytics2 />} />
-        <Route path="/gamification" element={<Gamification2 />} />
-        <Route path="/achievements" element={<Gamification2 />} />
-        <Route path="/specialists" element={<Specialists2 />} />
-        <Route path="/centers" element={<Centers2 />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/gamification" element={<Gamification />} />
+        <Route path="/achievements" element={<Gamification />} />
+        <Route path="/specialists" element={<Specialists />} />
+        <Route path="/centers" element={<Centers />} />
 
         {/* =============== USER =============== */}
-        <Route path="/profile" element={<Profile2 />} />
-        <Route path="/settings" element={<Settings2 />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
         <Route path="/wallet" element={<WalletV1 />} />
         <Route path="/tokenomics" element={<TokenomicsV1 />} />
 
