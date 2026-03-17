@@ -1,607 +1,226 @@
 /**
- * ElHeader - Unified Header Component
- * EthosLife Design System
- * 
- * Features:
- * - Responsive design with mobile menu
- * - Version toggle (V1/V2)
- * - Language selector
- * - Wallet connection
- * - Notifications
- * - User menu
- * - Neumorphic styling
+ * ElHeader - Unified Header with Burger Menu
+ * All pages navigation through burger menu
  */
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
 import {
   Menu,
   X,
-  Bell,
-  Search,
+  Home,
+  Heart,
+  Brain,
+  Activity,
+  Users,
+  Stethoscope,
+  Moon,
+  Utensils,
+  Dumbbell,
+  Target,
+  MessageCircle,
+  Zap,
+  TrendingUp,
+  Award,
   User,
   Settings,
-  LogOut,
-  ChevronDown,
-  Zap,
-  Smartphone,
-  Diamond,
+  ChevronRight,
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { useVersion } from '../../contexts/VersionContext';
-import { ElLanguageSelector } from './ElLanguageSelector';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// ============================================
-// NAVIGATION ITEMS
-// ============================================
-const navItems = [
-  { path: '/dashboard', label: 'nav.dashboard', icon: '⌘', requiresAuth: true },
-  { path: '/health', label: 'nav.health', icon: '⚕', requiresAuth: true },
-  { path: '/social', label: 'nav.social', icon: '👥', requiresAuth: true },
-  { path: '/ai-chat', label: 'nav.aiCoach', icon: '🤖', requiresAuth: true },
-  { path: '/wallet', label: 'nav.wallet', icon: '💎', requiresAuth: true, v2Only: true },
-  { path: '/specialists', label: 'nav.specialists', icon: '👨‍⚕️', requiresAuth: true, v2Only: true },
+const healthModules = [
+  { name: 'Питание', href: '/health/nutrition', icon: Utensils },
+  { name: 'Движение', href: '/health/movement', icon: Dumbbell },
+  { name: 'Сон', href: '/health/sleep', icon: Moon },
+  { name: 'Психология', href: '/health/psychology', icon: Brain },
+  { name: 'Медицина', href: '/health/medicine', icon: Stethoscope },
+  { name: 'Отношения', href: '/health/relationships', icon: Users },
+  { name: 'Привычки', href: '/health/habits', icon: Target },
 ];
 
-const landingNavItems = [
-  { path: '/features', label: 'nav.features' },
-  { path: '/pricing', label: 'nav.pricing' },
-  { path: '/roadmap', label: 'nav.roadmap' },
-  { path: '/team', label: 'nav.team' },
-  { path: '/faq', label: 'nav.faq' },
+const allPages = [
+  { name: 'Главная', href: '/', icon: Home },
+  { name: 'Dashboard', href: '/dashboard', icon: Activity },
+  { name: 'AI Чат', href: '/ai-chat', icon: Zap },
+  { name: 'Аналитика', href: '/analytics', icon: TrendingUp },
+  { name: 'Геймификация', href: '/gamification', icon: Award },
+  { name: 'Специалисты', href: '/specialists', icon: User },
+  { name: 'Центры', href: '/centers', icon: Users },
+  { name: 'Сообщество', href: '/social', icon: MessageCircle },
+  { name: 'Профиль', href: '/profile', icon: User },
+  { name: 'Настройки', href: '/settings', icon: Settings },
 ];
-
-// ============================================
-// COMPONENT
-// ============================================
 
 export const ElHeader: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [healthMenuOpen, setHealthMenuOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
-  const { version, toggleVersion, isV2 } = useVersion();
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isVersionMenuOpen, setIsVersionMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [notificationCount] = useState(3);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  const userMenuRef = useRef<HTMLDivElement>(null);
-  const versionMenuRef = useRef<HTMLDivElement>(null);
-  const searchRef = useRef<HTMLDivElement>(null);
-
-  // Handle scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Close menus on outside click
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
-        setIsUserMenuOpen(false);
-      }
-      if (versionMenuRef.current && !versionMenuRef.current.contains(event.target as Node)) {
-        setIsVersionMenuOpen(false);
-      }
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setIsSearchOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Close menus on route change
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-    setIsUserMenuOpen(false);
-    setIsVersionMenuOpen(false);
-  }, [location.pathname]);
-
-  const isActive = (path: string) => {
-    return location.pathname === path || location.pathname.startsWith(`${path}/`);
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
-      setIsSearchOpen(false);
-      setSearchQuery('');
-    }
-  };
-
-  // Mock user - replace with actual auth
-  const user = {
-    name: 'Alex Johnson',
-    email: 'alex@example.com',
-    avatar: 'AJ',
-    level: 12,
-    xp: 3450,
-  };
-
-  const isAuthenticated = true; // Replace with actual auth check
-  const isLandingPage = location.pathname === '/' || 
-    landingNavItems.some(item => location.pathname === item.path);
+  const isActive = (href: string) => location.pathname === href;
 
   return (
     <>
-      <motion.header
-        className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          isScrolled || !isLandingPage
-            ? 'bg-[var(--bone-200)]/90 backdrop-blur-lg shadow-lg'
-            : 'bg-transparent'
-        )}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ type: 'spring', stiffness: 100 }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-18">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-[#dcd3c6]/90 backdrop-blur-md border-b border-[#c9b8a6]/30 shadow-lg">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4">
+          <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 group">
+            <Link to="/" className="flex items-center gap-2">
               <motion.div
-                className={cn(
-                  'w-10 h-10 lg:w-11 lg:h-11 rounded-xl flex items-center justify-center text-white font-bold text-xl',
-                  'bg-gradient-to-br from-[var(--stone-600)] via-[var(--stone-500)] to-[var(--stone-400)]',
-                  'shadow-[4px_4px_8px_rgba(44,40,34,0.2),-4px_-4px_8px_rgba(255,255,255,0.5)]'
-                )}
-                whileHover={{ scale: 1.05, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#5c5243] to-[#8c7a6b] flex items-center justify-center text-white font-bold text-lg shadow-lg"
+                whileHover={{ scale: 1.05 }}
               >
-                🌱
+                E
               </motion.div>
-              <div className="hidden sm:block">
-                <span className="text-lg lg:text-xl font-bold text-[var(--text-primary)] tracking-tight">
-                  EthosLife
-                </span>
-                <span className="block text-[10px] text-[var(--text-tertiary)] -mt-1">
-                  {t('app.tagline')}
-                </span>
-              </div>
+              <span className="font-bold text-lg sm:text-xl text-[#2d2418] hidden xs:block">EthosLife</span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {isAuthenticated ? (
-                // Authenticated nav
-                navItems
-                  .filter(item => !item.v2Only || isV2)
-                  .map((item) => (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className={cn(
-                        'px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200',
-                        'flex items-center gap-2',
-                        isActive(item.path)
-                          ? 'bg-gradient-to-r from-[var(--stone-600)] to-[var(--stone-500)] text-white shadow-md'
-                          : 'text-[var(--text-secondary)] hover:bg-[var(--bone-300)] hover:text-[var(--text-primary)]'
-                      )}
-                    >
-                      <span>{item.icon}</span>
-                      <span>{t(item.label)}</span>
-                    </Link>
-                  ))
-              ) : (
-                // Landing page nav
-                landingNavItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={cn(
-                      'px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200',
-                      isActive(item.path)
-                        ? 'text-[var(--neon-cyan)]'
-                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    )}
-                  >
-                    {t(item.label)}
-                  </Link>
-                ))
-              )}
-            </nav>
-
-            {/* Right Section */}
+            {/* Right Side */}
             <div className="flex items-center gap-2">
-              {/* Version Toggle */}
-              {isAuthenticated && (
-                <div ref={versionMenuRef} className="relative hidden md:block">
-                  <motion.button
-                    onClick={() => setIsVersionMenuOpen(!isVersionMenuOpen)}
-                    className={cn(
-                      'flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all',
-                      isV2
-                        ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg'
-                        : 'bg-[var(--bone-300)] text-[var(--text-secondary)] shadow-[2px_2px_4px_rgba(44,40,34,0.08),-2px_-2px_4px_rgba(255,255,255,0.6)]'
-                    )}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {isV2 ? <Zap className="w-4 h-4" /> : <Smartphone className="w-4 h-4" />}
-                    <span className="hidden xl:inline">{isV2 ? 'V2 Premium' : 'V1 Classic'}</span>
-                    <ChevronDown className={cn('w-4 h-4 transition-transform', isVersionMenuOpen && 'rotate-180')} />
-                  </motion.button>
-
-                  {/* Version Dropdown */}
-                  <AnimatePresence>
-                    {isVersionMenuOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className={cn(
-                          'absolute right-0 mt-2 w-64 rounded-2xl z-50',
-                          'bg-[var(--bone-200)]',
-                          'shadow-[8px_8px_16px_rgba(44,40,34,0.15),-8px_-8px_16px_rgba(255,255,255,0.7)]',
-                          'overflow-hidden'
-                        )}
-                      >
-                        <div className="p-2 space-y-1">
-                          <button
-                            onClick={() => {
-                              if (!isV2) toggleVersion();
-                              setIsVersionMenuOpen(false);
-                            }}
-                            className={cn(
-                              'w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors',
-                              isV2 ? 'bg-emerald-500/10' : 'hover:bg-[var(--bone-300)]'
-                            )}
-                          >
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 flex items-center justify-center text-white">
-                              <Zap className="w-5 h-5" />
-                            </div>
-                            <div className="text-left">
-                              <div className={cn('font-semibold', isV2 ? 'text-emerald-600' : 'text-[var(--text-primary)]')}>
-                                V2 Premium
-                              </div>
-                              <div className="text-xs text-[var(--text-tertiary)]">Advanced features, modern UI</div>
-                            </div>
-                            {isV2 && <Check className="w-5 h-5 text-emerald-500 ml-auto" />}
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              if (isV2) toggleVersion();
-                              setIsVersionMenuOpen(false);
-                            }}
-                            className={cn(
-                              'w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors',
-                              !isV2 ? 'bg-[var(--stone-600)]/10' : 'hover:bg-[var(--bone-300)]'
-                            )}
-                          >
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-[var(--stone-600)] to-[var(--stone-500)] flex items-center justify-center text-white">
-                              <Smartphone className="w-5 h-5" />
-                            </div>
-                            <div className="text-left">
-                              <div className={cn('font-semibold', !isV2 ? 'text-[var(--stone-600)]' : 'text-[var(--text-primary)]')}>
-                                V1 Classic
-                              </div>
-                              <div className="text-xs text-[var(--text-tertiary)]">Simple, familiar interface</div>
-                            </div>
-                            {!isV2 && <Check className="w-5 h-5 text-[var(--stone-600)] ml-auto" />}
-                          </button>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              )}
-
-              {/* SAFT Button */}
-              <Link
-                to="/saft"
-                className={cn(
-                  'hidden lg:flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold',
-                  'bg-gradient-to-r from-amber-500 to-orange-500 text-white',
-                  'shadow-lg hover:shadow-xl transition-all'
-                )}
+              {/* Burger Menu Button */}
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsMenuOpen(true)}
+                className="p-2.5 rounded-xl bg-[#e4dfd5] text-[#5c5243] shadow-[4px_4px_8px_rgba(44,40,34,0.1),-4px_-4px_8px_rgba(255,255,255,0.6)] min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label="Open menu"
               >
-                <Diamond className="w-4 h-4" />
-                <span>Invest</span>
-              </Link>
-
-              {/* Language Selector */}
-              <div className="hidden md:block">
-                <ElLanguageSelector variant="minimal" />
-              </div>
-
-              {/* Search */}
-              {isAuthenticated && (
-                <div ref={searchRef} className="relative hidden sm:block">
-                  {isSearchOpen ? (
-                    <form onSubmit={handleSearch} className="flex items-center">
-                      <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder={t('common.search')}
-                        className={cn(
-                          'w-48 lg:w-64 px-4 py-2 rounded-xl text-sm',
-                          'bg-[var(--bone-300)]',
-                          'shadow-[inset_3px_3px_6px_rgba(44,40,34,0.1),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]',
-                          'focus:outline-none focus:ring-2 focus:ring-[var(--neon-cyan)]/30'
-                        )}
-                        autoFocus
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setIsSearchOpen(false)}
-                        className="ml-2 p-2 rounded-xl hover:bg-[var(--bone-300)] text-[var(--text-secondary)]"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </form>
-                  ) : (
-                    <button
-                      onClick={() => setIsSearchOpen(true)}
-                      className={cn(
-                        'p-2.5 rounded-xl transition-all',
-                        'text-[var(--text-secondary)]',
-                        'hover:bg-[var(--bone-300)]'
-                      )}
-                    >
-                      <Search className="w-5 h-5" />
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {/* Notifications */}
-              {isAuthenticated && (
-                <button className={cn(
-                  'relative p-2.5 rounded-xl transition-all',
-                  'text-[var(--text-secondary)]',
-                  'hover:bg-[var(--bone-300)]'
-                )}>
-                  <Bell className="w-5 h-5" />
-                  {notificationCount > 0 && (
-                    <motion.span
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full flex items-center justify-center"
-                    >
-                      {notificationCount}
-                    </motion.span>
-                  )}
-                </button>
-              )}
-
-              {/* User Menu */}
-              {isAuthenticated ? (
-                <div ref={userMenuRef} className="relative">
-                  <button
-                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className={cn(
-                      'flex items-center gap-2 p-1.5 pr-3 rounded-xl transition-all',
-                      'hover:bg-[var(--bone-300)]',
-                      isUserMenuOpen && 'bg-[var(--bone-300)]'
-                    )}
-                  >
-                    <div className={cn(
-                      'w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold text-sm',
-                      'bg-gradient-to-br from-[var(--stone-600)] to-[var(--stone-500)]',
-                      'shadow-md'
-                    )}>
-                      {user.avatar}
-                    </div>
-                    <ChevronDown className={cn(
-                      'w-4 h-4 text-[var(--text-tertiary)] transition-transform hidden sm:block',
-                      isUserMenuOpen && 'rotate-180'
-                    )} />
-                  </button>
-
-                  {/* User Dropdown */}
-                  <AnimatePresence>
-                    {isUserMenuOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className={cn(
-                          'absolute right-0 mt-2 w-64 rounded-2xl z-50',
-                          'bg-[var(--bone-200)]',
-                          'shadow-[8px_8px_16px_rgba(44,40,34,0.15),-8px_-8px_16px_rgba(255,255,255,0.7)]',
-                          'overflow-hidden'
-                        )}
-                      >
-                        {/* User Info */}
-                        <div className="p-4 border-b border-[var(--bone-400)]/30">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--stone-600)] to-[var(--stone-500)] flex items-center justify-center text-white font-bold">
-                              {user.avatar}
-                            </div>
-                            <div>
-                              <div className="font-semibold text-[var(--text-primary)]">{user.name}</div>
-                              <div className="text-xs text-[var(--text-tertiary)]">{user.email}</div>
-                              <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--neon-cyan)]/20 text-[var(--neon-cyan)]">
-                                  Lvl {user.level}
-                                </span>
-                                <span className="text-xs text-[var(--text-tertiary)]">{user.xp} XP</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Menu Items */}
-                        <div className="p-2">
-                          <Link
-                            to="/profile"
-                            className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-[var(--bone-300)] transition-colors text-[var(--text-primary)]"
-                          >
-                            <User className="w-4 h-4 text-[var(--text-secondary)]" />
-                            <span>{t('nav.profile')}</span>
-                          </Link>
-                          <Link
-                            to="/settings"
-                            className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-[var(--bone-300)] transition-colors text-[var(--text-primary)]"
-                          >
-                            <Settings className="w-4 h-4 text-[var(--text-secondary)]" />
-                            <span>{t('nav.settings')}</span>
-                          </Link>
-                          <button
-                            onClick={() => navigate('/login')}
-                            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-red-50 transition-colors text-red-500"
-                          >
-                            <LogOut className="w-4 h-4" />
-                            <span>{t('nav.logout')}</span>
-                          </button>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                <div className="hidden md:flex items-center gap-2">
-                  <Link
-                    to="/login"
-                    className="px-4 py-2 rounded-xl text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                  >
-                    {t('nav.login')}
-                  </Link>
-                  <Link
-                    to="/register"
-                    className={cn(
-                      'px-4 py-2 rounded-xl text-sm font-bold',
-                      'bg-gradient-to-r from-[var(--stone-600)] to-[var(--stone-500)] text-white',
-                      'shadow-lg hover:shadow-xl transition-all'
-                    )}
-                  >
-                    {t('nav.register')}
-                  </Link>
-                </div>
-              )}
-
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={cn(
-                  'lg:hidden p-2.5 rounded-xl transition-all',
-                  'text-[var(--text-secondary)]',
-                  'hover:bg-[var(--bone-300)]'
-                )}
-              >
-                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
+                <Menu className="w-5 h-5" />
+              </motion.button>
             </div>
           </div>
         </div>
-      </motion.header>
+      </header>
 
-      {/* Mobile Menu */}
+      {/* Full Screen Menu */}
       <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ type: 'spring', damping: 25 }}
-            className={cn(
-              'fixed inset-0 z-40 lg:hidden',
-              'bg-[var(--bone-200)]',
-              'pt-20 px-4 pb-4'
-            )}
-          >
-            {/* Mobile Language Selector */}
-            <div className="mb-4">
-              <ElLanguageSelector variant="flags" />
-            </div>
+        {isMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-50"
+              onClick={() => setIsMenuOpen(false)}
+            />
 
-            {/* Mobile Navigation */}
-            <nav className="space-y-2">
-              {isAuthenticated ? (
-                navItems
-                  .filter(item => !item.v2Only || isV2)
-                  .map((item) => (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className={cn(
-                        'flex items-center gap-3 px-4 py-3 rounded-xl text-lg font-medium transition-all',
-                        isActive(item.path)
-                          ? 'bg-gradient-to-r from-[var(--stone-600)] to-[var(--stone-500)] text-white shadow-md'
-                          : 'text-[var(--text-primary)] hover:bg-[var(--bone-300)]'
-                      )}
-                    >
-                      <span className="text-2xl">{item.icon}</span>
-                      <span>{t(item.label)}</span>
-                    </Link>
-                  ))
-              ) : (
-                landingNavItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={cn(
-                      'block px-4 py-3 rounded-xl text-lg font-medium transition-all',
-                      isActive(item.path)
-                        ? 'text-[var(--neon-cyan)]'
-                        : 'text-[var(--text-primary)] hover:bg-[var(--bone-300)]'
-                    )}
-                  >
-                    {t(item.label)}
-                  </Link>
-                ))
-              )}
-            </nav>
-
-            {/* Mobile Auth Buttons */}
-            {!isAuthenticated && (
-              <div className="mt-6 space-y-3">
-                <Link
-                  to="/login"
-                  className={cn(
-                    'block w-full text-center px-4 py-3 rounded-xl',
-                    'border-2 border-[var(--stone-600)] text-[var(--stone-600)]',
-                    'font-semibold'
-                  )}
+            {/* Menu Panel */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 h-full w-full max-w-sm bg-[#e4dfd5] z-[51] shadow-2xl overflow-y-auto"
+            >
+              {/* Menu Header */}
+              <div className="sticky top-0 bg-[#e4dfd5] border-b border-[#c9b8a6]/30 p-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#5c5243] to-[#8c7a6b] flex items-center justify-center text-white font-bold">
+                    E
+                  </div>
+                  <span className="font-bold text-lg text-[#2d2418]">Меню</span>
+                </div>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="p-2.5 rounded-xl bg-[#dcd3c6] text-[#5c5243] min-h-[44px] min-w-[44px]"
                 >
-                  {t('nav.login')}
-                </Link>
-                <Link
-                  to="/register"
-                  className={cn(
-                    'block w-full text-center px-4 py-3 rounded-xl',
-                    'bg-gradient-to-r from-[var(--stone-600)] to-[var(--stone-500)] text-white',
-                    'font-bold shadow-lg'
-                  )}
-                >
-                  {t('nav.register')}
-                </Link>
+                  <X className="w-5 h-5" />
+                </motion.button>
               </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
 
-      {/* Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
+              {/* Menu Content */}
+              <div className="p-4 space-y-6">
+                {/* Main Pages */}
+                <div>
+                  <h3 className="text-xs font-bold text-[#5c5243] uppercase tracking-wider mb-3 px-2">Главное</h3>
+                  <div className="space-y-1">
+                    {allPages.map((page) => (
+                      <Link
+                        key={page.href}
+                        to={page.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={cn(
+                          'flex items-center gap-3 px-3 py-3 rounded-xl transition-all min-h-[48px]',
+                          isActive(page.href)
+                            ? 'bg-gradient-to-r from-[#5c5243] to-[#8c7a6b] text-white shadow-lg'
+                            : 'text-[#5c5243] hover:bg-[#dcd3c6]'
+                        )}
+                      >
+                        <page.icon className="w-5 h-5" />
+                        <span className="font-medium text-sm flex-1">{page.name}</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Health Modules */}
+                <div>
+                  <button
+                    onClick={() => setHealthMenuOpen(!healthMenuOpen)}
+                    className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[#5c5243] hover:bg-[#dcd3c6] transition-all min-h-[48px]"
+                  >
+                    <Heart className="w-5 h-5" />
+                    <span className="font-medium text-sm flex-1 text-left">Здоровье</span>
+                    <motion.div
+                      animate={{ rotate: healthMenuOpen ? 90 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </motion.div>
+                  </button>
+
+                  <AnimatePresence>
+                    {healthMenuOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="ml-8 mt-2 space-y-1">
+                          {healthModules.map((module) => (
+                            <Link
+                              key={module.href}
+                              to={module.href}
+                              onClick={() => setIsMenuOpen(false)}
+                              className={cn(
+                                'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm min-h-[44px]',
+                                isActive(module.href)
+                                  ? 'bg-[#5c5243] text-white'
+                                  : 'text-[#5c5243] hover:bg-[#dcd3c6]'
+                              )}
+                            >
+                              <module.icon className="w-4 h-4" />
+                              <span className="flex-1">{module.name}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Guest Mode Info */}
+                <div className="p-4 rounded-xl bg-[#dcd3c6] shadow-[inset_3px_3px_6px_rgba(44,40,34,0.1),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <User className="w-4 h-4 text-[#5c5243]" />
+                    <span className="text-xs font-bold text-[#2d2418]">Гостевой режим</span>
+                  </div>
+                  <p className="text-xs text-[#5c5243]">
+                    Все страницы доступны без регистрации. Данные сохраняются временно в браузере.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
