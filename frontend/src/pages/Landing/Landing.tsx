@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useVersion } from '../../contexts/VersionContext';
 import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { ElHeader } from '../../components/ElLayout';
 import {
   Heart,
   Brain,
@@ -186,7 +187,9 @@ const LandingV2 = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#dcd3c6] via-[#e8e0d5] to-[#f5f0eb]">
+    <>
+      <ElHeader />
+      <div className="min-h-screen bg-gradient-to-br from-[#dcd3c6] via-[#e8e0d5] to-[#f5f0eb]">
       {/* Hero Section */}
       <motion.section 
         style={{ opacity, scale }}
@@ -516,6 +519,7 @@ const LandingV2 = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 
