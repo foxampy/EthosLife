@@ -1,172 +1,181 @@
 # EthosLife - Human Operating System 🌍
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/foxampy/EthosLife)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/foxampy/EthosLife&project-name=ethoslife-frontend&repository-name=ethoslife-frontend&root-directory=frontend)
 
-**Full-stack health ecosystem platform with AI coaching**
+**AI-Powered Health Ecosystem Platform**
 
-🌐 **Live Demo**: https://ethoslife-web.onrender.com
+🌐 **Live Demo**: [Coming Soon](#)  
+📚 **Full Documentation**: See [DEPLOY_SCRIPT.md](./DEPLOY_SCRIPT.md)
 
-## ✨ Features
+---
 
-### 🔐 Authentication
-- Google OAuth 2.0
-- Telegram Login Widget
-- JWT with refresh tokens
+## ✨ Quick Overview
 
-### 🏥 Health Module (7 Directions)
-- **Nutrition** - Meal tracking, calories
-- **Fitness** - Workout logging, activity
-- **Sleep** - Sleep duration & quality
-- **Mental Health** - Mood tracking
-- **Medical** - Records, medications
-- **Body** - Weight, BMI, measurements
-- **Environment** - Air quality, ergonomics
+EthosLife is a comprehensive health platform that combines:
+- 🤖 AI Health Coach (Qwen API)
+- 📊 Health Tracking (7 modules)
+- 💬 Unified Chat (AI + General)
+- 🌐 25 Languages Support
+- 🔐 Google & Telegram Auth
 
-### 🤖 AI Coach (Qwen API)
-- Personal health assistant
-- Context-aware responses
-- RAG knowledge base
-- Conversation history
+---
 
-### 📊 Dashboard
-- Health Score (0-100)
-- Interactive charts (Recharts)
-- Goals tracking
-- Recent activity
+## 🚀 Quick Deploy
+
+### Option 1: One-Click Deploy
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/foxampy/EthosLife)
+
+### Option 2: Manual Setup
+
+```bash
+# Clone
+git clone https://github.com/foxampy/EthosLife.git
+cd EthosLife
+
+# Install backend
+npm install
+
+# Install frontend
+cd frontend && npm install && cd ..
+
+# Create .env (see .env.example)
+cp .env.example .env
+
+# Run
+npm run dev
+```
+
+---
 
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | React 18, Tailwind CSS, Zustand, React Query |
-| Backend | Node.js, Express |
-| Database | PostgreSQL |
-| AI | Qwen API (Alibaba) |
-| Auth | JWT, Google OAuth, Telegram |
+| **Frontend** | React 18, Vite, Tailwind CSS, Zustand |
+| **Backend** | Node.js, Express |
+| **Database** | PostgreSQL |
+| **AI** | Qwen API (Alibaba) |
+| **Auth** | JWT, Google OAuth, Telegram |
+| **Deploy** | Render, Vercel |
+
+---
 
 ## 📁 Project Structure
 
 ```
-├── backend/
-│   ├── server.js              # Express API
-│   ├── controllers/           # Route handlers
-│   ├── routes/                # API routes
-│   ├── middleware/            # Auth middleware
-│   ├── database.js            # PostgreSQL client
-│   └── migrations/            # SQL migrations
-├── frontend/
+EthosLife/
+├── server.js              # Backend API
+├── database.js            # PostgreSQL connection
+├── routes/                # API routes
+├── controllers/           # Business logic
+├── frontend/              # React application
 │   ├── src/
-│   │   ├── pages/             # React pages
-│   │   ├── components/        # Reusable components
-│   │   ├── store/             # Zustand stores
-│   │   └── services/          # API client
+│   │   ├── pages/         # Pages (V2 main)
+│   │   ├── components/    # UI components
+│   │   ├── App.tsx        # Main component
+│   │   └── main.tsx       # Entry point
 │   └── package.json
-├── render.yaml                # Render deployment config
-└── README.md
+├── render.yaml            # Render config
+└── .env.example           # Environment template
 ```
 
-## 🚀 Quick Start
+---
 
-### 1. Clone & Setup
-```bash
-git clone https://github.com/foxampy/EthosLife.git
-cd EthosLife
-npm install
-cd frontend && npm install
-cd ..
-```
+## 🔐 Environment Variables
 
-### 2. Environment Variables
-Create `.env` file:
+**Required (Backend):**
 ```env
-# Database
-DATABASE_URL=postgresql://localhost:5432/ethoslife
-
-# JWT
+NODE_ENV=production
+DATABASE_URL=postgresql://...
 JWT_SECRET=your-secret-key
-JWT_REFRESH_SECRET=your-refresh-secret
-
-# Google OAuth
-GOOGLE_CLIENT_ID=your-google-client-id
-
-# Telegram (optional)
-TELEGRAM_BOT_TOKEN=your-bot-token
-FOUNDER_CHAT_ID=your-chat-id
-
-# Qwen AI (optional)
-QWEN_API_KEY=your-qwen-key
+CORS_ORIGIN=https://your-app.vercel.app
 ```
 
-### 3. Database Setup
-```bash
-# Run migrations
-psql $DATABASE_URL -f migrations/001_create_users.sql
-psql $DATABASE_URL -f migrations/002_health_tables.sql
-psql $DATABASE_URL -f migrations/003_ai_tables.sql
+**Optional:**
+```env
+TELEGRAM_BOT_TOKEN=...
+QWEN_API_KEY=...
+GOOGLE_CLIENT_ID=...
+STRIPE_SECRET_KEY=...
 ```
 
-### 4. Run Development
-```bash
-# Backend
-npm run dev
+See [DEPLOY_SCRIPT.md](./DEPLOY_SCRIPT.md) for complete list.
 
-# Frontend (new terminal)
-cd frontend
-npm start
-```
+---
 
-## 📊 API Endpoints
+## 📊 Features
 
-### Auth
-```
-POST /api/auth/google
-POST /api/auth/telegram
-POST /api/auth/refresh
-GET  /api/auth/me
-```
+### Health Modules
+- 🥗 **Nutrition** - Meal tracking, calories
+- 💪 **Movement** - Workouts, activity
+- 😴 **Sleep** - Sleep quality & duration
+- 🧠 **Psychology** - Mental health, mood
+- 🏥 **Medicine** - Medical records
+- 🤝 **Relationships** - Social health
+- 🎯 **Habits** - Habit tracking
 
-### Health
-```
-GET  /api/health/dashboard
-GET  /api/health/metrics
-POST /api/health/metrics
-GET  /api/health/goals
-POST /api/health/goals
-```
+### AI Chat
+- 🤖 6 AI Personas (Dr. Wellness, FitCoach, NutriBot, etc.)
+- 💬 General Chat mode
+- ⚙️ Configurable settings
+- 📊 Health context integration
 
-### AI
-```
-GET  /api/ai/conversations
-POST /api/ai/conversations
-GET  /api/ai/conversations/:id/messages
-POST /api/ai/conversations/:id/messages
-```
+### Auth & Security
+- 🔐 JWT with refresh tokens
+- 🌐 Google OAuth 2.0
+- 📱 Telegram Login
+- ✅ Role-based access
+
+---
 
 ## 🌍 Languages
 
-| Code | Language | Flag |
-|------|----------|------|
-| en | English | 🇺🇸 |
-| es | Español | 🇪🇸 |
-| de | Deutsch | 🇩🇪 |
-| pl | Polski | 🇵🇱 |
-| he | עברית | 🇮🇱 |
-| ar | العربية | 🇸🇦 |
-| ru | Русский | 🇷🇺 |
-| ko | 한국어 | 🇰🇷 |
-| ja | 日本語 | 🇯🇵 |
-| zh | 中文 | 🇨🇳 |
+Supports 25 languages: English, Spanish, German, Polish, Hebrew, Arabic, Russian, Korean, Japanese, Chinese, and more.
 
-## 🚀 Deployment
+---
 
-1. Push to GitHub
-2. Connect to Render (Blueprint)
-3. Add environment variables in Render Dashboard
-4. Deploy!
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [README.md](./README.md) | This file - Quick start |
+| [DEPLOY_SCRIPT.md](./DEPLOY_SCRIPT.md) | **Complete deployment guide** |
+| [.env.example](./.env.example) | Environment variables template |
+
+---
+
+## 🐛 Troubleshooting
+
+**Build fails?**
+```bash
+node --version  # Must be >= 18.0.0
+npm run build   # Test locally
+```
+
+**CORS errors?**
+- Add your frontend URL to `CORS_ORIGIN` in backend
+
+**Database connection failed?**
+- Check `DATABASE_URL` is correct
+- Add `PGSSLMODE=no-verify` for Render
+
+See [DEPLOY_SCRIPT.md](./DEPLOY_SCRIPT.md) for more solutions.
+
+---
 
 ## 📝 License
 
 Private - EthosLife Inc.
+
+---
+
+## 🔗 Links
+
+- **GitHub**: https://github.com/foxampy/EthosLife
+- **Render**: https://render.com
+- **Vercel**: https://vercel.com
 
 ---
 

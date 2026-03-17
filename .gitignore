@@ -63,3 +63,32 @@ saft-generated/
 
 # Local data storage
 data/
+
+# Documentation (keep README, exclude detailed guides)
+CHANGELOG*.md
+DEPLOY_SCRIPT.md
+PROJECT_STRUCTURE.md
+READY_TO_DEPLOY.md
+DEPLOY*.md
+DEVELOPMENT*.md
+IMPLEMENTATION*.md
+TODO*.md
+FULLTODO*
+MISSING*.md
+NEXT*.md
+QWEN*.md
+RESTORATION*.md
+RETROFUTURISM*.md
+ROADMAP*.md
+ROUTES*.md
+UNIFIED*.md
+UX_UI*.md
+V2_*.md
+VERCEL*.md
+WHITEPAPER*.md
+LITEPAPER*.md
+KNOWLEDGE*.md
+SETUP*.md
+TELEGRAM*.md
+RENDER*.md
+*.kimi
