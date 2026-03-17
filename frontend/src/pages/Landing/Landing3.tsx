@@ -7,7 +7,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ElHeader } from '../../components/ElLayout';
 import {
   Heart, Brain, Activity, Users, Zap, Shield, TrendingUp, Award,
   ArrowRight, Star, Sparkles, Target, Coins, ShoppingBag,
@@ -110,9 +109,7 @@ const Landing3 = () => {
   ];
 
   return (
-    <>
-      <ElHeader />
-      <div className="min-h-screen bg-gradient-to-br from-[#dcd3c6] via-[#e8e0d5] to-[#f5f0eb]">
+    <div className="min-h-screen bg-gradient-to-br from-[#dcd3c6] via-[#e8e0d5] to-[#f5f0eb]">
       
       {/* Hero - Complete Vision */}
       <section className="relative overflow-hidden py-24 px-4">
@@ -512,7 +509,6 @@ const Landing3 = () => {
         </div>
       </footer>
     </div>
-    </>
   );
 };
 

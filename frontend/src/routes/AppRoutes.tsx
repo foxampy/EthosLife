@@ -12,7 +12,7 @@
 import React, { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import ElLayout from '../components/ElLayout/ElLayout';
+import PageLayout from '../components/Layout/PageLayout';
 
 // Loading Component
 const PageLoader: React.FC = () => (
@@ -105,82 +105,82 @@ export const AppRoutes: React.FC = () => {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* =============== LANDING PAGES =============== */}
-        <Route path="/" element={<Landing />} />
-        <Route path="/landing" element={<Landing />} />
-        <Route path="/landing2" element={<Landing2 />} />
-        <Route path="/landing3" element={<Landing3 />} />
-        <Route path="/v2" element={<InvestorDemo />} />
+        <Route path="/" element={<PageLayout><Landing /></PageLayout>} />
+        <Route path="/landing" element={<PageLayout><Landing /></PageLayout>} />
+        <Route path="/landing2" element={<PageLayout><Landing2 /></PageLayout>} />
+        <Route path="/landing3" element={<PageLayout><Landing3 /></PageLayout>} />
+        <Route path="/v2" element={<PageLayout><InvestorDemo /></PageLayout>} />
         <Route path="/demo" element={<Navigate to="/v2" replace />} />
         
         {/* Landing Sub-pages */}
-        <Route path="/features" element={<ElLayout><Features /></ElLayout>} />
-        <Route path="/pricing" element={<ElLayout><Pricing /></ElLayout>} />
-        <Route path="/team" element={<ElLayout><Team /></ElLayout>} />
-        <Route path="/roadmap" element={<ElLayout><Roadmap /></ElLayout>} />
-        <Route path="/faq" element={<ElLayout><FAQ /></ElLayout>} />
-        <Route path="/blog" element={<ElLayout><Blog /></ElLayout>} />
+        <Route path="/features" element={<PageLayout><Features /></PageLayout>} />
+        <Route path="/pricing" element={<PageLayout><Pricing /></PageLayout>} />
+        <Route path="/team" element={<PageLayout><Team /></PageLayout>} />
+        <Route path="/roadmap" element={<PageLayout><Roadmap /></PageLayout>} />
+        <Route path="/faq" element={<PageLayout><FAQ /></PageLayout>} />
+        <Route path="/blog" element={<PageLayout><Blog /></PageLayout>} />
 
         {/* =============== AUTH =============== */}
-        <Route path="/login" element={<ElLayout showFooter={false}><Login /></ElLayout>} />
-        <Route path="/register" element={<ElLayout showFooter={false}><Register /></ElLayout>} />
+        <Route path="/login" element={<PageLayout showFooter={false}><Login /></PageLayout>} />
+        <Route path="/register" element={<PageLayout showFooter={false}><Register /></PageLayout>} />
 
         {/* =============== DASHBOARD =============== */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard-v2" element={<Dashboard2 />} />
-        <Route path="/dashboard-preview" element={<Dashboard2Preview />} />
+        <Route path="/dashboard" element={<PageLayout><Dashboard /></PageLayout>} />
+        <Route path="/dashboard-v2" element={<PageLayout><Dashboard2 /></PageLayout>} />
+        <Route path="/dashboard-preview" element={<PageLayout><Dashboard2Preview /></PageLayout>} />
 
         {/* =============== HEALTH MODULES =============== */}
         <Route path="/health" element={<Navigate to="/health/nutrition" replace />} />
-        
+
         {/* Primary Health Routes */}
-        <Route path="/health/nutrition" element={<Nutrition />} />
-        <Route path="/health/movement" element={<Movement />} />
-        <Route path="/health/sleep" element={<Sleep />} />
-        <Route path="/health/psychology" element={<Psychology />} />
-        <Route path="/health/medicine" element={<Medicine />} />
-        <Route path="/health/relationships" element={<Relationships />} />
-        <Route path="/health/habits" element={<Habits />} />
+        <Route path="/health/nutrition" element={<PageLayout><Nutrition /></PageLayout>} />
+        <Route path="/health/movement" element={<PageLayout><Movement /></PageLayout>} />
+        <Route path="/health/sleep" element={<PageLayout><Sleep /></PageLayout>} />
+        <Route path="/health/psychology" element={<PageLayout><Psychology /></PageLayout>} />
+        <Route path="/health/medicine" element={<PageLayout><Medicine /></PageLayout>} />
+        <Route path="/health/relationships" element={<PageLayout><Relationships /></PageLayout>} />
+        <Route path="/health/habits" element={<PageLayout><Habits /></PageLayout>} />
 
         {/* =============== LEGACY HEALTH ROUTES (V1) =============== */}
-        <Route path="/health/fitness" element={<FitnessV1 />} />
-        <Route path="/health/nutrition/diary" element={<FoodDiaryV1 />} />
-        <Route path="/health/nutrition/meal-plan" element={<MealPlannerV1 />} />
-        <Route path="/health/nutrition/recipes" element={<RecipesV1 />} />
-        <Route path="/health/nutrition/products" element={<ProductsDBV1 />} />
-        <Route path="/health/fitness/exercises" element={<ExerciseLibraryV1 />} />
-        <Route path="/health/fitness/workout" element={<WorkoutLoggerV1 />} />
-        <Route path="/health/sleep/analysis" element={<SleepAnalysisV1 />} />
-        <Route path="/health/mental/mood" element={<MoodTrackerV1 />} />
-        <Route path="/health/medical/medications" element={<MedicationsV1 />} />
+        <Route path="/health/fitness" element={<PageLayout><FitnessV1 /></PageLayout>} />
+        <Route path="/health/nutrition/diary" element={<PageLayout><FoodDiaryV1 /></PageLayout>} />
+        <Route path="/health/nutrition/meal-plan" element={<PageLayout><MealPlannerV1 /></PageLayout>} />
+        <Route path="/health/nutrition/recipes" element={<PageLayout><RecipesV1 /></PageLayout>} />
+        <Route path="/health/nutrition/products" element={<PageLayout><ProductsDBV1 /></PageLayout>} />
+        <Route path="/health/fitness/exercises" element={<PageLayout><ExerciseLibraryV1 /></PageLayout>} />
+        <Route path="/health/fitness/workout" element={<PageLayout><WorkoutLoggerV1 /></PageLayout>} />
+        <Route path="/health/sleep/analysis" element={<PageLayout><SleepAnalysisV1 /></PageLayout>} />
+        <Route path="/health/mental/mood" element={<PageLayout><MoodTrackerV1 /></PageLayout>} />
+        <Route path="/health/medical/medications" element={<PageLayout><MedicationsV1 /></PageLayout>} />
 
         {/* =============== LEGACY SOCIAL ROUTES =============== */}
-        <Route path="/challenges" element={<ChallengesV1 />} />
-        <Route path="/friends" element={<FriendsV1 />} />
-        <Route path="/groups" element={<GroupsV1 />} />
-        <Route path="/messages" element={<MessagesV1 />} />
-        <Route path="/leaders" element={<LeadersV1 />} />
+        <Route path="/challenges" element={<PageLayout><ChallengesV1 /></PageLayout>} />
+        <Route path="/friends" element={<PageLayout><FriendsV1 /></PageLayout>} />
+        <Route path="/groups" element={<PageLayout><GroupsV1 /></PageLayout>} />
+        <Route path="/messages" element={<PageLayout><MessagesV1 /></PageLayout>} />
+        <Route path="/leaders" element={<PageLayout><LeadersV1 /></PageLayout>} />
 
         {/* =============== AI & FEATURES =============== */}
-        <Route path="/social" element={<SocialFeed />} />
-        <Route path="/ai-chat" element={<AIChatUnified />} />
-        <Route path="/ai" element={<AIChatUnified />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/gamification" element={<Gamification />} />
-        <Route path="/achievements" element={<Gamification />} />
-        <Route path="/specialists" element={<Specialists />} />
-        <Route path="/centers" element={<Centers />} />
+        <Route path="/social" element={<PageLayout><SocialFeed /></PageLayout>} />
+        <Route path="/ai-chat" element={<PageLayout><AIChatUnified /></PageLayout>} />
+        <Route path="/ai" element={<PageLayout><AIChatUnified /></PageLayout>} />
+        <Route path="/analytics" element={<PageLayout><Analytics /></PageLayout>} />
+        <Route path="/gamification" element={<PageLayout><Gamification /></PageLayout>} />
+        <Route path="/achievements" element={<PageLayout><Gamification /></PageLayout>} />
+        <Route path="/specialists" element={<PageLayout><Specialists /></PageLayout>} />
+        <Route path="/centers" element={<PageLayout><Centers /></PageLayout>} />
 
         {/* =============== USER =============== */}
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/tokenomics" element={<TokenomicsV1 />} />
+        <Route path="/profile" element={<PageLayout><Profile /></PageLayout>} />
+        <Route path="/settings" element={<PageLayout><Settings /></PageLayout>} />
+        <Route path="/tokenomics" element={<PageLayout><TokenomicsV1 /></PageLayout>} />
 
         {/* =============== DESIGN SYSTEM =============== */}
-        <Route path="/design-system" element={<DesignSystemDemo />} />
-        <Route path="/design" element={<DesignSystemDemo />} />
+        <Route path="/design-system" element={<PageLayout><DesignSystemDemo /></PageLayout>} />
+        <Route path="/design" element={<PageLayout><DesignSystemDemo /></PageLayout>} />
 
         {/* =============== 404 =============== */}
-        <Route path="*" element={<NotFound404 />} />
+        <Route path="*" element={<PageLayout><NotFound404 /></PageLayout>} />
       </Routes>
     </Suspense>
   );

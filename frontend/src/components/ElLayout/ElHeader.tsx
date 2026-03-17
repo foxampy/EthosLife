@@ -46,6 +46,8 @@ const healthModules = [
 
 const allPages = [
   { name: 'Главная', href: '/', icon: Home },
+  { name: 'Landing 2', href: '/landing2', icon: Home },
+  { name: 'Landing 3', href: '/landing3', icon: Home },
   { name: 'Dashboard', href: '/dashboard', icon: Activity },
   { name: 'AI Чат', href: '/ai-chat', icon: Zap },
   { name: 'Аналитика', href: '/analytics', icon: TrendingUp },
@@ -55,6 +57,16 @@ const allPages = [
   { name: 'Сообщество', href: '/social', icon: MessageCircle },
   { name: 'Профиль', href: '/profile', icon: User },
   { name: 'Настройки', href: '/settings', icon: Settings },
+];
+
+const featuresPages = [
+  { name: 'Возможности', href: '/features', icon: Zap },
+  { name: 'Тарифы', href: '/pricing', icon: Award },
+  { name: 'Команда', href: '/team', icon: Users },
+  { name: 'Roadmap', href: '/roadmap', icon: TrendingUp },
+  { name: 'FAQ', href: '/faq', icon: MessageCircle },
+  { name: 'Блог', href: '/blog', icon: MessageCircle },
+  { name: 'Токеномика', href: '/tokenomics', icon: Award },
 ];
 
 export const ElHeader: React.FC = () => {
@@ -206,6 +218,30 @@ export const ElHeader: React.FC = () => {
                       </motion.div>
                     )}
                   </AnimatePresence>
+                </div>
+
+                {/* Features Pages */}
+                <div>
+                  <h3 className="text-xs font-bold text-[#5c5243] uppercase tracking-wider mb-3 px-2">Информация</h3>
+                  <div className="space-y-1">
+                    {featuresPages.map((page) => (
+                      <Link
+                        key={page.href}
+                        to={page.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={cn(
+                          'flex items-center gap-3 px-3 py-3 rounded-xl transition-all min-h-[48px] text-sm',
+                          isActive(page.href)
+                            ? 'bg-gradient-to-r from-[#5c5243] to-[#8c7a6b] text-white shadow-lg'
+                            : 'text-[#5c5243] hover:bg-[#dcd3c6]'
+                        )}
+                      >
+                        <page.icon className="w-5 h-5" />
+                        <span className="font-medium flex-1">{page.name}</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </Link>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Guest Mode Info */}
