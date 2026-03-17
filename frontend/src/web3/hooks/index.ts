@@ -1,4 +1,15 @@
-export { useWeb3, shortenAddress, formatEther, parseEther, formatTokenAmount, parseTokenAmount } from './useWeb3';
+/**
+ * Web3 Hooks
+ * Complete set of hooks for Web3 functionality
+ */
+
+export { useWeb3 } from './useWeb3';
 export { useUnityToken } from './useUnityToken';
-export { useStaking, type StakeDuration, type StakeInfo } from './useStaking';
-export { useTokenSale, type SaleRound } from './useTokenSale';
+export { useStaking } from './useStaking';
+export { useTokenSale } from './useTokenSale';
+
+// Re-export types
+export type { Web3State } from './useWeb3';
+export type { UnityTokenState } from './useUnityToken';
+export type { StakingState } from './useStaking';
+export type { TokenSaleState } from './useTokenSale';

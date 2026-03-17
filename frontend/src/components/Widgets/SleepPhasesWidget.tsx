@@ -98,7 +98,7 @@ export const SleepPhasesWidget: React.FC<SleepPhasesWidgetProps> = ({
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              {(duration || 0).toFixed(1)}
+              {typeof duration === 'number' ? duration.toFixed(1) : '0.0'}
             </motion.span>
             <span className="text-sm text-[#5c5243]">hours</span>
           </div>

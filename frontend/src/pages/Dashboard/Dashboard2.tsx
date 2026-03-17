@@ -49,6 +49,11 @@ import {
   calculateRingProgress,
 } from '../../utils/dashboard';
 
+// Safe navigation helper
+const safeGet = <T,>(obj: any, path: string, defaultValue: T): T => {
+  return path.split('.').reduce((acc, part) => acc?.[part], obj) ?? defaultValue;
+};
+
 // ============================================================================
 // DASHBOARD 2.0 - Health Operating System
 // Style: Retrofuturism + Neumorphism (Soft UI)
@@ -83,8 +88,10 @@ const itemVariants = {
 const DailyChecklist: React.FC<{
   items: ChecklistItem[];
   onToggle: (id: string) => void;
-}> = ({ items, onToggle }) => {
-  const completionRate = Math.round((items.filter(i => i.completed).length / items.length) * 100);
+}> = ({ items = [], onToggle }) => {
+  const completionRate = items && items.length > 0 
+    ? Math.round((items.filter(i => i.completed).length / items.length) * 100)
+    : 0;
 
   return (
     <NeuCard hover>
@@ -222,9 +229,9 @@ const UpcomingEvents: React.FC<{
 export default function Dashboard2() {
   const [data, setData] = useState<DashboardState>(getMockDashboardState());
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [checklist, setChecklist] = useState(data.todayProgress.checklist);
-  const [selectedMood, setSelectedMood] = useState(data.widgets.mood.todayMood);
-  const [waterAmount, setWaterAmount] = useState(data.widgets.nutrition.waterIntake);
+  const [checklist, setChecklist] = useState(() => safeGet(data, 'todayProgress.checklist', []));
+  const [selectedMood, setSelectedMood] = useState(() => safeGet(data, 'widgets.mood.todayMood', 0));
+  const [waterAmount, setWaterAmount] = useState(() => safeGet(data, 'widgets.nutrition.waterIntake', 0));
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Update time every minute
@@ -332,14 +339,14 @@ export default function Dashboard2() {
                 <NeuButton variant="elevated" size="sm" className="!p-2.5">
                   <Bell className="w-5 h-5" />
                 </NeuButton>
-                {data.social.unreadMessages > 0 && (
+                {(data.social?.unreadMessages || 0) > 0 && (
                   <motion.span
                     className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold shadow-lg"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring' }}
                   >
-                    {data.social.unreadMessages}
+                    {data.social?.unreadMessages}
                   </motion.span>
                 )}
               </div>
@@ -515,10 +522,10 @@ export default function Dashboard2() {
 
             {/* Social */}
             <SocialWidget
-              activities={data.social.activities}
-              challenges={data.social.challenges}
+              activities={data.social?.activities || []}
+              challenges={data.social?.challenges || []}
               onlineFriends={12}
-              unreadMessages={data.social.unreadMessages}
+              unreadMessages={data.social?.unreadMessages || 0}
             />
 
             {/* AI Insights */}

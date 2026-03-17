@@ -34,6 +34,8 @@ const PageLoader: React.FC = () => (
 
 // Landing Pages (V2 is now main - renamed without V2 suffix)
 const Landing = React.lazy(() => import('../pages/Landing/Landing'));
+const Landing2 = React.lazy(() => import('../pages/Landing/Landing2'));
+const Landing3 = React.lazy(() => import('../pages/Landing/Landing3'));
 const Features = React.lazy(() => import('../pages/Landing/Features'));
 const Pricing = React.lazy(() => import('../pages/Landing/Pricing'));
 const Team = React.lazy(() => import('../pages/Landing/Team'));
@@ -47,6 +49,8 @@ const Register = React.lazy(() => import('../pages/Auth/Register'));
 
 // Dashboard (V2 is main)
 const Dashboard = React.lazy(() => import('../pages/Dashboard/Dashboard'));
+const Dashboard2 = React.lazy(() => import('../pages/Dashboard/Dashboard2'));
+const Dashboard2Preview = React.lazy(() => import('../pages/Dashboard/Dashboard2Preview'));
 const InvestorDemo = React.lazy(() => import('../pages/InvestorDemo'));
 
 // Health Modules (V2 - Primary)
@@ -72,8 +76,7 @@ const Centers = React.lazy(() => import('../pages/Centers/Centers2'));
 const Profile = React.lazy(() => import('../pages/Profile/Profile2'));
 const Settings = React.lazy(() => import('../pages/Settings/Settings2'));
 
-// V1 Legacy (Keep for compatibility)
-const WalletV1 = React.lazy(() => import('../pages/Dashboard/WalletV1'));
+// V1 Legacy (Keep for compatibility - only existing files)
 const TokenomicsV1 = React.lazy(() => import('../pages/Landing/TokenomicsV1'));
 const FitnessV1 = React.lazy(() => import('../pages/Health/V1/FitnessV1'));
 const FoodDiaryV1 = React.lazy(() => import('../pages/Health/V1/FoodDiaryV1'));
@@ -90,9 +93,6 @@ const FriendsV1 = React.lazy(() => import('../pages/Social/V1/FriendsV1'));
 const GroupsV1 = React.lazy(() => import('../pages/Social/V1/GroupsV1'));
 const MessagesV1 = React.lazy(() => import('../pages/Social/V1/MessagesV1'));
 const LeadersV1 = React.lazy(() => import('../pages/Social/V1/LeadersV1'));
-const NotificationsV1 = React.lazy(() => import('../pages/Dashboard/NotificationsV1'));
-const ActivityV1 = React.lazy(() => import('../pages/Dashboard/ActivityV1'));
-const SearchV1 = React.lazy(() => import('../pages/Dashboard/SearchV1'));
 
 // Design & Utilities
 const DesignSystemDemo = React.lazy(() => import('../pages/Unified/DesignSystemDemo'));
@@ -106,6 +106,9 @@ export const AppRoutes: React.FC = () => {
       <Routes>
         {/* =============== LANDING PAGES =============== */}
         <Route path="/" element={<Landing />} />
+        <Route path="/landing" element={<Landing />} />
+        <Route path="/landing2" element={<Landing2 />} />
+        <Route path="/landing3" element={<Landing3 />} />
         <Route path="/v2" element={<InvestorDemo />} />
         <Route path="/demo" element={<Navigate to="/v2" replace />} />
         
@@ -123,6 +126,8 @@ export const AppRoutes: React.FC = () => {
 
         {/* =============== DASHBOARD =============== */}
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard-v2" element={<Dashboard2 />} />
+        <Route path="/dashboard-preview" element={<Dashboard2Preview />} />
 
         {/* =============== HEALTH MODULES =============== */}
         <Route path="/health" element={<Navigate to="/health/nutrition" replace />} />
@@ -136,7 +141,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/health/relationships" element={<Relationships />} />
         <Route path="/health/habits" element={<Habits />} />
 
-        {/* Legacy Health Routes (V1) */}
+        {/* =============== LEGACY HEALTH ROUTES (V1) =============== */}
         <Route path="/health/fitness" element={<FitnessV1 />} />
         <Route path="/health/nutrition/diary" element={<FoodDiaryV1 />} />
         <Route path="/health/nutrition/meal-plan" element={<MealPlannerV1 />} />
@@ -148,10 +153,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/health/mental/mood" element={<MoodTrackerV1 />} />
         <Route path="/health/medical/medications" element={<MedicationsV1 />} />
 
-        {/* =============== SOCIAL =============== */}
-        <Route path="/social" element={<SocialFeed />} />
-        
-        {/* Legacy Social Routes */}
+        {/* =============== LEGACY SOCIAL ROUTES =============== */}
         <Route path="/challenges" element={<ChallengesV1 />} />
         <Route path="/friends" element={<FriendsV1 />} />
         <Route path="/groups" element={<GroupsV1 />} />
@@ -159,6 +161,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/leaders" element={<LeadersV1 />} />
 
         {/* =============== AI & FEATURES =============== */}
+        <Route path="/social" element={<SocialFeed />} />
         <Route path="/ai-chat" element={<AIChatUnified />} />
         <Route path="/ai" element={<AIChatUnified />} />
         <Route path="/analytics" element={<Analytics />} />
@@ -170,13 +173,7 @@ export const AppRoutes: React.FC = () => {
         {/* =============== USER =============== */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="/wallet" element={<WalletV1 />} />
         <Route path="/tokenomics" element={<TokenomicsV1 />} />
-
-        {/* =============== LEGACY DASHBOARD =============== */}
-        <Route path="/notifications" element={<NotificationsV1 />} />
-        <Route path="/activity" element={<ActivityV1 />} />
-        <Route path="/search" element={<SearchV1 />} />
 
         {/* =============== DESIGN SYSTEM =============== */}
         <Route path="/design-system" element={<DesignSystemDemo />} />

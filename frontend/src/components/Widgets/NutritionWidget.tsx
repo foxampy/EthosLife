@@ -140,7 +140,6 @@ export const NutritionWidget: React.FC<NutritionWidgetProps> = ({
       <NeuButton
         variant="elevated"
         size="md"
-        fullWidth
         onClick={onLogMealClick}
         leftIcon={<Plus className="w-4 h-4" />}
         className="w-full"

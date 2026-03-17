@@ -63,8 +63,8 @@ export const GamificationWidget: React.FC<GamificationWidgetProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const progressPercent = (xp / xpToNextLevel) * 100;
 
-  const unlockedBadges = badges.filter(b => b.unlocked);
-  const lockedBadges = badges.filter(b => !b.unlocked);
+  const unlockedBadges = (badges || []).filter(b => b.unlocked);
+  const lockedBadges = (badges || []).filter(b => !b.unlocked);
 
   return (
     <NeuCard 
@@ -124,7 +124,7 @@ export const GamificationWidget: React.FC<GamificationWidgetProps> = ({
         {/* XP Progress */}
         <div className="mb-2">
           <div className="flex items-center justify-between text-xs mb-2">
-            <span className="text-[#5c5243]">XP: {xp.toLocaleString()} / {xpToNextLevel.toLocaleString()}</span>
+            <span className="text-[#5c5243]">XP: {(xp || 0).toLocaleString()} / {(xpToNextLevel || 0).toLocaleString()}</span>
             <span className="text-[#5c5243] font-medium">{(progressPercent || 0).toFixed(0)}%</span>
           </div>
           <div className="h-3 bg-[#dcd3c6] rounded-full overflow-hidden shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1)]">
@@ -153,13 +153,13 @@ export const GamificationWidget: React.FC<GamificationWidgetProps> = ({
             </div>
             <div>
               <div className="text-sm text-[#5c5243]">Ваш ранг</div>
-              <div className="text-lg font-bold text-[#2d2418]">#{rank.toLocaleString()}</div>
+              <div className="text-lg font-bold text-[#2d2418]">#{(rank || 0).toLocaleString()}</div>
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-[#5c5243]">из {totalUsers.toLocaleString()}</div>
+            <div className="text-xs text-[#5c5243]">из {(totalUsers || 0).toLocaleString()}</div>
             <div className="text-xs font-medium text-[#5c5243]">
-              {((rank / totalUsers) * 100).toFixed(1)}% лучших
+              {(((rank || 0) / (totalUsers || 1)) * 100).toFixed(1)}% лучших
             </div>
           </div>
         </div>
@@ -171,7 +171,7 @@ export const GamificationWidget: React.FC<GamificationWidgetProps> = ({
           <div className="flex items-center gap-2">
             <Star className="w-4 h-4 text-[#5c5243]" />
             <span className="text-sm font-medium text-[#5c5243]">
-              Награды: {unlockedBadges.length} / {badges.length}
+              Награды: {(unlockedBadges || []).length} / {(badges || []).length}
             </span>
           </div>
           <NeuButton
@@ -216,16 +216,16 @@ export const GamificationWidget: React.FC<GamificationWidgetProps> = ({
           whileHover={{ scale: 1.05 }}
         >
           <Zap className="w-5 h-5 text-yellow-500 mx-auto mb-1" />
-          <div className="text-lg font-bold text-[#2d2418]">{xp.toLocaleString()}</div>
+          <div className="text-lg font-bold text-[#2d2418]">{(xp || 0).toLocaleString()}</div>
           <div className="text-xs text-[#5c5243]">Всего XP</div>
         </motion.div>
         
-        <motion.div 
+        <motion.div
           className="text-center p-3 rounded-xl bg-[#d4ccb8]/30"
           whileHover={{ scale: 1.05 }}
         >
           <Award className="w-5 h-5 text-purple-500 mx-auto mb-1" />
-          <div className="text-lg font-bold text-[#2d2418]">{unlockedBadges.length}</div>
+          <div className="text-lg font-bold text-[#2d2418]">{(unlockedBadges || []).length}</div>
           <div className="text-xs text-[#5c5243]">Наград</div>
         </motion.div>
         

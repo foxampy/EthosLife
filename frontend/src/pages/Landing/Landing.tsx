@@ -33,58 +33,67 @@ const LandingV2 = () => {
 
   const features = [
     {
-      icon: <Heart className="w-8 h-8" />,
+      icon: <Heart className="w-8 h-8 text-white" />,
       title: t('landing.modules.nutrition.title'),
       description: t('landing.modules.nutrition.description'),
-      color: 'from-rose-500 to-pink-500'
+      gradient: 'from-rose-400 to-pink-500',
+      neumorph: true
     },
     {
-      icon: <Brain className="w-8 h-8" />,
+      icon: <Brain className="w-8 h-8 text-white" />,
       title: t('landing.modules.mental.title'),
       description: t('landing.modules.mental.description'),
-      color: 'from-violet-500 to-purple-500'
+      gradient: 'from-violet-400 to-purple-500',
+      neumorph: true
     },
     {
-      icon: <Activity className="w-8 h-8" />,
+      icon: <Activity className="w-8 h-8 text-white" />,
       title: t('analytics.title'),
       description: t('analytics.trends'),
-      color: 'from-blue-500 to-cyan-500'
+      gradient: 'from-blue-400 to-cyan-500',
+      neumorph: true
     },
     {
-      icon: <Users className="w-8 h-8" />,
+      icon: <Users className="w-8 h-8 text-white" />,
       title: t('social.title'),
       description: t('landing.features.marketplace'),
-      color: 'from-emerald-500 to-green-500'
+      gradient: 'from-emerald-400 to-green-500',
+      neumorph: true
     },
     {
-      icon: <Zap className="w-8 h-8" />,
+      icon: <Zap className="w-8 h-8 text-white" />,
       title: t('landing.features.aiCoach'),
       description: t('landing.features.gamification'),
-      color: 'from-amber-500 to-orange-500'
+      gradient: 'from-amber-400 to-orange-500',
+      neumorph: true
     },
     {
-      icon: <Shield className="w-8 h-8" />,
+      icon: <Shield className="w-8 h-8 text-white" />,
       title: t('settings.privacy'),
       description: t('settings.connectedDevices'),
-      color: 'from-slate-500 to-gray-500'
+      gradient: 'from-slate-400 to-gray-500',
+      neumorph: true
     },
     {
-      icon: <Users className="w-8 h-8" />,
+      icon: <Users className="w-8 h-8 text-white" />,
       title: 'Сообщество',
       description: 'Поддержка единомышленников и специалистов',
-      color: 'from-emerald-500 to-green-500'
+      gradient: 'from-emerald-400 to-green-500',
+      neumorph: true
     },
     {
-      icon: <Zap className="w-8 h-8" />,
+      icon: <Zap className="w-8 h-8 text-white" />,
       title: 'Геймификация',
       description: 'Достижения, челленджи, таблица лидеров',
-      color: 'from-amber-500 to-orange-500'
+      gradient: 'from-amber-400 to-orange-500',
+      neumorph: true
     },
     {
-      icon: <Shield className="w-8 h-8" />,
+      icon: <Shield className="w-8 h-8 text-white" />,
       title: 'Приватность',
       description: 'Ваши данные под надёжной защитой',
-      color: 'from-slate-500 to-gray-500'
+      gradient: 'from-slate-400 to-gray-500',
+      neumorph: true
     }
   ];
 
@@ -303,7 +312,7 @@ const LandingV2 = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
@@ -311,14 +320,14 @@ const LandingV2 = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-[#e4dfd5]/80 backdrop-blur-sm p-8 rounded-3xl border border-[#5c5243]/10 hover:shadow-2xl transition-all duration-300 group"
-                whileHover={{ scale: 1.02, y: -5 }}
+                className="bg-[#e4dfd5] rounded-3xl p-6 shadow-[8px_8px_16px_rgba(44,40,34,0.12),-8px_-8px_16px_rgba(255,255,255,0.6)] hover:shadow-[12px_12px_24px_rgba(44,40,34,0.15),-12px_-12px_24px_rgba(255,255,255,0.7)] transition-all duration-300 group"
+                whileHover={{ scale: 1.02, y: -3 }}
               >
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-white mb-5 group-hover:scale-110 transition-transform shadow-[4px_4px_8px_rgba(0,0,0,0.2)]`}>
                   {feature.icon}
                 </div>
-                <h3 className="text-2xl font-bold text-[#2d2418] mb-3">{feature.title}</h3>
-                <p className="text-[#5c5243] leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-bold text-[#2d2418] mb-3">{feature.title}</h3>
+                <p className="text-[#5c5243] leading-relaxed text-sm">{feature.description}</p>
               </motion.div>
             ))}
           </div>
