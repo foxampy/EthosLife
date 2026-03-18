@@ -133,7 +133,7 @@ export const ElHeader: React.FC = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 h-full w-full max-w-sm bg-[#e4dfd5] z-50 shadow-2xl overflow-y-auto"
+              className="fixed top-0 right-0 h-full w-[85vw] sm:w-full sm:max-w-sm bg-[#e4dfd5] z-50 shadow-2xl overflow-y-auto"
             >
               {/* Menu Header */}
               <div className="sticky top-0 bg-[#e4dfd5] border-b border-[#c9b8a6]/30 p-4 flex items-center justify-between">
