@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 // ============================================
 // TYPE DEFINITIONS
@@ -129,6 +130,7 @@ const getScoreGradient = (score: number): string => {
 
 // Sleep Clock - Circular Phase Chart
 const SleepClock: React.FC<{ phases: SleepPhase[]; score: number }> = ({ phases, score }) => {
+  const { t } = useTranslation();
   const radius = 100;
   const strokeWidth = 24;
   const circumference = 2 * Math.PI * radius;
@@ -156,7 +158,7 @@ const SleepClock: React.FC<{ phases: SleepPhase[]; score: number }> = ({ phases,
             >
               {score}
             </motion.span>
-            <p className="text-sm text-[#5c5243] mt-1 font-medium">Sleep Score</p>
+            <p className="text-sm text-[#5c5243] mt-1 font-medium">{t('sleep.sleepScore')}</p>
           </div>
         </div>
       </div>
@@ -213,9 +215,10 @@ const SleepClock: React.FC<{ phases: SleepPhase[]; score: number }> = ({ phases,
 
 // Sleep Score Big Display
 const SleepScoreBig: React.FC<{ score: number; quality: string }> = ({ score, quality }) => {
+  const { t } = useTranslation();
   return (
     <div className={`${neuStyles.card} text-center`}>
-      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">Sleep Quality</h3>
+      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">{t('sleep.quality')}</h3>
       <div className="relative w-40 h-40 mx-auto mb-4">
         <motion.div
           className={`absolute inset-0 rounded-full bg-gradient-to-br ${getScoreGradient(score)}`}
@@ -237,15 +240,15 @@ const SleepScoreBig: React.FC<{ score: number; quality: string }> = ({ score, qu
       </div>
       <div className="flex justify-center gap-4 text-sm">
         <div className="text-center">
-          <p className="text-[#5c5243]">Target</p>
+          <p className="text-[#5c5243]">{t('sleep.target')}</p>
           <p className="font-semibold text-[#2d2418]">85+</p>
         </div>
         <div className="text-center">
-          <p className="text-[#5c5243]">Average</p>
+          <p className="text-[#5c5243]">{t('sleep.average')}</p>
           <p className="font-semibold text-[#2d2418]">78</p>
         </div>
         <div className="text-center">
-          <p className="text-[#5c5243]">Best</p>
+          <p className="text-[#5c5243]">{t('sleep.best')}</p>
           <p className="font-semibold text-[#2d2418]">94</p>
         </div>
       </div>
@@ -255,12 +258,13 @@ const SleepScoreBig: React.FC<{ score: number; quality: string }> = ({ score, qu
 
 // Sleep Debt Visualizer
 const SleepDebt: React.FC<{ debt: number }> = ({ debt }) => {
+  const { t } = useTranslation();
   const isDebt = debt > 0;
   const percentage = Math.min(Math.abs(debt) / 3 * 100, 100);
 
   return (
     <div className={`${neuStyles.card}`}>
-      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">Sleep Debt</h3>
+      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">{t('sleep.sleepDebt')}</h3>
       <div className="relative h-8 rounded-full bg-[#dcd3c6] shadow-[inset_3px_3px_6px_rgba(44,40,34,0.1),inset_-3px_-3px_6px_rgba(255,255,255,0.5)] overflow-hidden mb-3">
         <motion.div
           className={`absolute left-0 top-0 h-full rounded-full ${isDebt ? 'bg-gradient-to-r from-rose-400 to-rose-600' : 'bg-gradient-to-r from-emerald-400 to-emerald-600'}`}
@@ -276,8 +280,8 @@ const SleepDebt: React.FC<{ debt: number }> = ({ debt }) => {
       </div>
       <p className="text-sm text-[#5c5243]">
         {isDebt 
-          ? 'You need more sleep to recover. Try going to bed 30 minutes earlier tonight.'
-          : 'Great! You have a sleep surplus. Maintain this healthy pattern.'}
+          ? t('sleep.debtMessage')
+          : t('sleep.surplusMessage')}
       </p>
     </div>
   );
@@ -285,6 +289,7 @@ const SleepDebt: React.FC<{ debt: number }> = ({ debt }) => {
 
 // Smart Alarm
 const SmartAlarm: React.FC = () => {
+  const { t } = useTranslation();
   const [alarmTime, setAlarmTime] = useState('07:00');
   const [smartWindow, setSmartWindow] = useState(30);
   const [isEnabled, setIsEnabled] = useState(true);
@@ -292,7 +297,7 @@ const SmartAlarm: React.FC = () => {
   return (
     <div className={`${neuStyles.card}`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-[#2d2418]">Smart Alarm</h3>
+        <h3 className="text-lg font-semibold text-[#2d2418]">{t('sleep.smartAlarm')}</h3>
         <button
           onClick={() => setIsEnabled(!isEnabled)}
           className={`w-14 h-8 rounded-full transition-all duration-300 ${isEnabled ? 'bg-indigo-500' : 'bg-[#dcd3c6]'} shadow-[inset_2px_2px_4px_rgba(0,0,0,0.2),inset_-2px_-2px_4px_rgba(255,255,255,0.3)]`}
@@ -318,8 +323,8 @@ const SmartAlarm: React.FC = () => {
 
       <div className="mb-4">
         <div className="flex justify-between text-sm text-[#5c5243] mb-2">
-          <span>Smart Window</span>
-          <span>{smartWindow} min</span>
+          <span>{t('sleep.smartWindow')}</span>
+          <span>{smartWindow} {t('common.min') || 'min'}</span>
         </div>
         <input
           type="range"
@@ -334,15 +339,15 @@ const SmartAlarm: React.FC = () => {
             boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.1)'
           }}
         />
-        <p className="text-xs text-[#5c5243] mt-2">Wakes you during light sleep phase</p>
+        <p className="text-xs text-[#5c5243] mt-2">{t('sleep.wakeDuringLight')}</p>
       </div>
 
       <div className={`${neuStyles.cardInset} p-4`}>
         <div className="flex items-center gap-3">
           <span className="text-2xl">🌅</span>
           <div>
-            <p className="text-sm font-medium text-[#2d2418]">Optimal Wake Time</p>
-            <p className="text-xs text-[#5c5243]">Between {formatTime('06:30')} - {formatTime('07:00')}</p>
+            <p className="text-sm font-medium text-[#2d2418]">{t('sleep.optimalWakeTime')}</p>
+            <p className="text-xs text-[#5c5243]">{t('common.between') || 'Between'} {formatTime('06:30')} - {formatTime('07:00')}</p>
           </div>
         </div>
       </div>
@@ -352,11 +357,12 @@ const SmartAlarm: React.FC = () => {
 
 // Sleep Timeline
 const SleepTimeline: React.FC<{ data: SleepData }> = ({ data }) => {
+  const { t } = useTranslation();
   const hours = ['23:00', '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00'];
 
   return (
     <div className={`${neuStyles.card}`}>
-      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">Sleep Timeline</h3>
+      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">{t('sleep.timeline')}</h3>
       
       {/* Time markers */}
       <div className="flex justify-between text-xs text-[#5c5243] mb-2 px-2">
@@ -429,25 +435,26 @@ const SleepTimeline: React.FC<{ data: SleepData }> = ({ data }) => {
 
 // Sleep Trends
 const SleepTrends: React.FC = () => {
+  const { t } = useTranslation();
   const maxDuration = Math.max(...WEEKLY_DATA.map(d => d.duration));
   const avgScore = Math.round(WEEKLY_DATA.reduce((acc, d) => acc + d.score, 0) / WEEKLY_DATA.length);
 
   return (
     <div className={`${neuStyles.card}`}>
-      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">Weekly Trends</h3>
+      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">{t('sleep.weeklyTrends')}</h3>
       
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-6">
         <div className={`${neuStyles.cardInset} p-3 text-center`}>
-          <p className="text-xs text-[#5c5243]">Avg Score</p>
+          <p className="text-xs text-[#5c5243]">{t('sleep.average')} {t('gamification.score').toLowerCase()}</p>
           <p className={`text-2xl font-bold ${getScoreColor(avgScore)}`}>{avgScore}</p>
         </div>
         <div className={`${neuStyles.cardInset} p-3 text-center`}>
-          <p className="text-xs text-[#5c5243]">Avg Duration</p>
+          <p className="text-xs text-[#5c5243]">{t('sleep.average')} {t('sleep.duration').toLowerCase()}</p>
           <p className="text-2xl font-bold text-[#2d2418]">7.6h</p>
         </div>
         <div className={`${neuStyles.cardInset} p-3 text-center`}>
-          <p className="text-xs text-[#5c5243]">Consistency</p>
+          <p className="text-xs text-[#5c5243]">{t('sleep.consistency')}</p>
           <p className="text-2xl font-bold text-emerald-600">82%</p>
         </div>
       </div>
@@ -484,6 +491,7 @@ const SleepTrends: React.FC = () => {
 
 // Environment Monitor
 const EnvironmentMonitor: React.FC = () => {
+  const { t } = useTranslation();
   const [envData] = useState<EnvironmentData>({
     temperature: 19,
     humidity: 45,
@@ -492,15 +500,15 @@ const EnvironmentMonitor: React.FC = () => {
   });
 
   const factors = [
-    { icon: '🌡️', label: 'Temperature', value: `${envData.temperature}°C`, optimal: '18-20°C', color: 'from-orange-400 to-red-500', percentage: (envData.temperature / 30) * 100 },
-    { icon: '💧', label: 'Humidity', value: `${envData.humidity}%`, optimal: '40-60%', color: 'from-blue-400 to-cyan-500', percentage: envData.humidity },
-    { icon: '🔊', label: 'Noise', value: `${envData.noise} dB`, optimal: '<30 dB', color: 'from-purple-400 to-violet-500', percentage: (envData.noise / 60) * 100 },
-    { icon: '💡', label: 'Light', value: `${envData.light} lux`, optimal: '<5 lux', color: 'from-yellow-400 to-amber-500', percentage: Math.min((envData.light / 10) * 100, 100) },
+    { icon: '🌡️', label: t('sleep.temperature'), value: `${envData.temperature}°C`, optimal: '18-20°C', color: 'from-orange-400 to-red-500', percentage: (envData.temperature / 30) * 100 },
+    { icon: '💧', label: t('sleep.humidity'), value: `${envData.humidity}%`, optimal: '40-60%', color: 'from-blue-400 to-cyan-500', percentage: envData.humidity },
+    { icon: '🔊', label: t('sleep.noise'), value: `${envData.noise} dB`, optimal: '<30 dB', color: 'from-purple-400 to-violet-500', percentage: (envData.noise / 60) * 100 },
+    { icon: '💡', label: t('sleep.lightLevel'), value: `${envData.light} lux`, optimal: '<5 lux', color: 'from-yellow-400 to-amber-500', percentage: Math.min((envData.light / 10) * 100, 100) },
   ];
 
   return (
     <div className={`${neuStyles.card}`}>
-      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">Sleep Environment</h3>
+      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">{t('sleep.environment')}</h3>
       
       <div className="space-y-4">
         {factors.map((factor) => (
@@ -534,6 +542,7 @@ const EnvironmentMonitor: React.FC = () => {
 
 // Chronotype Test
 const ChronotypeTest: React.FC = () => {
+  const { t } = useTranslation();
   const [selectedType, setSelectedType] = useState<Chronotype>(CHRONOTYPES[1]);
   const [showTest, setShowTest] = useState(false);
 
@@ -541,12 +550,12 @@ const ChronotypeTest: React.FC = () => {
     return (
       <div className={`${neuStyles.card}`}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-[#2d2418]">Chronotype Test</h3>
+          <h3 className="text-lg font-semibold text-[#2d2418]">{t('sleep.chronotype')} {t('gamification.test') || 'Test'}</h3>
           <button onClick={() => setShowTest(false)} className="text-[#5c5243] hover:text-[#2d2418]">✕</button>
         </div>
         
         <div className="space-y-3 mb-4">
-          <p className="text-sm text-[#5c5243]">Select your natural sleep pattern:</p>
+          <p className="text-sm text-[#5c5243]">{t('sleep.takeTest')}:</p>
           {CHRONOTYPES.map((type) => (
             <button
               key={type.id}
@@ -560,8 +569,8 @@ const ChronotypeTest: React.FC = () => {
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{type.icon}</span>
                 <div>
-                  <p className="font-medium text-[#2d2418]">{type.name}</p>
-                  <p className="text-xs text-[#5c5243]">{type.description}</p>
+                  <p className="font-medium text-[#2d2418]">{t(`sleep.chronotypes.${type.id}`)}</p>
+                  <p className="text-xs text-[#5c5243]">{t(`sleep.chronotypes.${type.id}Desc`)}</p>
                 </div>
               </div>
             </button>
@@ -575,7 +584,7 @@ const ChronotypeTest: React.FC = () => {
           }}
           className={`${neuStyles.button} w-full text-center font-medium text-[#2d2418]`}
         >
-          Confirm Selection
+          {t('common.confirm') || 'Confirm Selection'}
         </button>
       </div>
     );
@@ -583,7 +592,7 @@ const ChronotypeTest: React.FC = () => {
 
   return (
     <div className={`${neuStyles.card}`}>
-      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">Chronotype</h3>
+      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">{t('sleep.chronotype')}</h3>
       
       <div className={`${neuStyles.cardInset} p-4 mb-4`}>
         <div className="flex items-center gap-4">
@@ -591,19 +600,19 @@ const ChronotypeTest: React.FC = () => {
             {selectedType.icon}
           </div>
           <div>
-            <p className="text-xl font-bold text-[#2d2418]">{selectedType.name}</p>
-            <p className="text-sm text-[#5c5243]">{selectedType.description}</p>
+            <p className="text-xl font-bold text-[#2d2418]">{t(`sleep.chronotypes.${selectedType.id}`)}</p>
+            <p className="text-sm text-[#5c5243]">{t(`sleep.chronotypes.${selectedType.id}Desc`)}</p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
         <div className={`${neuStyles.cardInset} p-3 text-center`}>
-          <p className="text-xs text-[#5c5243]">Optimal Bedtime</p>
+          <p className="text-xs text-[#5c5243]">{t('sleep.optimal')} {t('sleep.bedtime')}</p>
           <p className="text-lg font-semibold text-[#2d2418]">{formatTime(selectedType.optimalBedtime)}</p>
         </div>
         <div className={`${neuStyles.cardInset} p-3 text-center`}>
-          <p className="text-xs text-[#5c5243]">Optimal Wake</p>
+          <p className="text-xs text-[#5c5243]">{t('sleep.optimal')} {t('sleep.waketime')}</p>
           <p className="text-lg font-semibold text-[#2d2418]">{formatTime(selectedType.optimalWakeTime)}</p>
         </div>
       </div>
@@ -612,7 +621,7 @@ const ChronotypeTest: React.FC = () => {
         onClick={() => setShowTest(true)}
         className={`${neuStyles.button} w-full text-center font-medium text-[#2d2418]`}
       >
-        Take Test Again
+        {t('sleep.takeTestAgain')}
       </button>
     </div>
   );
@@ -620,9 +629,10 @@ const ChronotypeTest: React.FC = () => {
 
 // Phase Breakdown
 const PhaseBreakdown: React.FC<{ phases: SleepPhase[] }> = ({ phases }) => {
+  const { t } = useTranslation();
   return (
     <div className={`${neuStyles.card}`}>
-      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">Sleep Phases</h3>
+      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">{t('sleep.deepSleep')} & {t('sleep.lightSleep')}</h3>
       <div className="space-y-3">
         {phases.map((phase, idx) => (
           <motion.div
@@ -637,7 +647,12 @@ const PhaseBreakdown: React.FC<{ phases: SleepPhase[] }> = ({ phases }) => {
             </div>
             <div className="flex-1">
               <div className="flex justify-between items-center mb-1">
-                <span className="font-medium text-[#2d2418]">{phase.name}</span>
+                <span className="font-medium text-[#2d2418]">
+                  {phase.name === 'Deep' ? t('sleep.deepSleep') : 
+                   phase.name === 'Light' ? t('sleep.lightSleep') : 
+                   phase.name === 'REM' ? t('sleep.rem') : 
+                   phase.name === 'Awake' ? t('sleep.awake') : phase.name}
+                </span>
                 <span className="text-sm text-[#5c5243]">{formatDuration(phase.duration / 60)}</span>
               </div>
               <div className="h-2 rounded-full bg-[#dcd3c6] shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1),inset_-2px_-2px_4px_rgba(255,255,255,0.5)] overflow-hidden">
@@ -660,16 +675,17 @@ const PhaseBreakdown: React.FC<{ phases: SleepPhase[] }> = ({ phases }) => {
 
 // Recommendations
 const SleepRecommendations: React.FC<{ score: number }> = ({ score }) => {
+  const { t } = useTranslation();
   const recommendations = [
-    { icon: '🌙', title: 'Consistent Schedule', desc: 'Go to bed at the same time every night' },
-    { icon: '📱', title: 'Screen Break', desc: 'No screens 1 hour before bedtime' },
-    { icon: '🌡️', title: 'Cool Room', desc: 'Keep bedroom at 18-20°C' },
-    { icon: '☕', title: 'Limit Caffeine', desc: 'No caffeine after 2 PM' },
+    { icon: '🌙', title: t('sleep.consistentSchedule') || 'Consistent Schedule', desc: t('sleep.consistentScheduleDesc') || 'Go to bed at the same time every night' },
+    { icon: '📱', title: t('sleep.screenBreak') || 'Screen Break', desc: t('sleep.screenBreakDesc') || 'No screens 1 hour before bedtime' },
+    { icon: '🌡️', title: t('sleep.coolRoom') || 'Cool Room', desc: t('sleep.coolRoomDesc') || 'Keep bedroom at 18-20°C' },
+    { icon: '☕', title: t('sleep.limitCaffeine') || 'Limit Caffeine', desc: t('sleep.limitCaffeineDesc') || 'No caffeine after 2 PM' },
   ];
 
   return (
     <div className={`${neuStyles.card}`}>
-      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">Recommendations</h3>
+      <h3 className="text-lg font-semibold text-[#2d2418] mb-4">{t('sleep.recommendations')}</h3>
       <div className="space-y-3">
         {recommendations.map((rec, idx) => (
           <motion.div
@@ -697,6 +713,7 @@ const SleepRecommendations: React.FC<{ score: number }> = ({ score }) => {
 // ============================================
 
 const Sleep2: React.FC = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'trends'>('overview');
 
   return (
@@ -716,9 +733,9 @@ const Sleep2: React.FC = () => {
               >
                 🌙
               </motion.span>
-              Sleep
+              {t('sleep.title')}
             </h1>
-            <p className="text-[#5c5243] mt-1">Track, analyze, and improve your sleep quality</p>
+            <p className="text-[#5c5243] mt-1">{t('sleep.subtitle')}</p>
           </div>
           
           {/* Tab Navigation */}
@@ -733,7 +750,7 @@ const Sleep2: React.FC = () => {
                     : 'text-[#5c5243] hover:text-[#2d2418]'
                 }`}
               >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                {t(`sleep.${tab}`)}
               </button>
             ))}
           </div>
@@ -760,7 +777,7 @@ const Sleep2: React.FC = () => {
 
               {/* Center Column */}
               <div className="lg:col-span-4 space-y-6">
-                <SleepScoreBig score={LAST_NIGHT.score} quality="Good" />
+                <SleepScoreBig score={LAST_NIGHT.score} quality={t('sleep.optimal')} />
                 <SleepDebt debt={LAST_NIGHT.sleepDebt} />
                 <EnvironmentMonitor />
               </div>

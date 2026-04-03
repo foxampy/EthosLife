@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Activity,
@@ -252,6 +253,7 @@ const WorkoutPlayer: React.FC<{
   onPause: () => void;
   onStop: () => void;
 }> = ({ isActive, workoutTimer, currentPhase, phaseTimeRemaining, onStart, onPause, onStop }) => {
+  const { t } = useTranslation();
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -269,12 +271,12 @@ const WorkoutPlayer: React.FC<{
       <div className="flex items-center justify-between mb-6">
         <h3 className="font-semibold text-[#2d2418] flex items-center gap-2">
           <Timer className="w-5 h-5 text-[#5c5243]" />
-          Workout Player
+          {t('health.movement.workoutPlayer')}
         </h3>
         <div className={`px-3 py-1 rounded-full text-xs font-medium ${
           isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-600'
         }`}>
-          {isActive ? 'Active' : 'Ready'}
+          {isActive ? t('health.movement.active') : t('health.movement.ready')}
         </div>
       </div>
 
@@ -289,7 +291,7 @@ const WorkoutPlayer: React.FC<{
           >
             {formatTime(workoutTimer)}
           </motion.span>
-          <p className="text-sm text-[#5c5243] mt-2 capitalize">{currentPhase} Phase</p>
+          <p className="text-sm text-[#5c5243] mt-2 capitalize">{t(`health.movement.${currentPhase}` as any)} {t('health.movement.active')}</p>
         </div>
       </div>
 
@@ -307,7 +309,7 @@ const WorkoutPlayer: React.FC<{
               </div>
               <div className="flex-1">
                 <div className="flex justify-between text-sm mb-1">
-                  <span className={isActive ? 'font-medium text-[#2d2418]' : 'text-[#5c5243]'}>{phase.name}</span>
+                  <span className={isActive ? 'font-medium text-[#2d2418]' : 'text-[#5c5243]'}>{t(`health.movement.${phase.name.toLowerCase().replace(' ', '')}` as any)}</span>
                   <span className="text-xs text-[#5c5243]">{formatTime(phase.duration)}</span>
                 </div>
                 <div className="h-2 bg-[#dcd3c6] rounded-full overflow-hidden">
@@ -334,7 +336,7 @@ const WorkoutPlayer: React.FC<{
             className={`flex-1 ${neuStyles.buttonPrimary} flex items-center justify-center gap-2`}
           >
             <Play className="w-5 h-5" />
-            Start Workout
+            {t('health.movement.startWorkout')}
           </motion.button>
         ) : (
           <>
@@ -345,7 +347,7 @@ const WorkoutPlayer: React.FC<{
               className={`flex-1 ${neuStyles.button} flex items-center justify-center gap-2`}
             >
               <Pause className="w-5 h-5" />
-              Pause
+              {t('health.movement.pause')}
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.02 }}
@@ -368,6 +370,7 @@ const RestTimer: React.FC<{
   defaultTime?: number;
   onComplete: () => void;
 }> = ({ isActive, defaultTime = 90, onComplete }) => {
+  const { t } = useTranslation();
   const [timeLeft, setTimeLeft] = useState(defaultTime);
   const [initialTime, setInitialTime] = useState(defaultTime);
 
@@ -398,7 +401,7 @@ const RestTimer: React.FC<{
   return (
     <div className={neuStyles.card}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-[#2d2418]">Rest Timer</h3>
+        <h3 className="font-semibold text-[#2d2418]">{t('health.movement.restTimer')}</h3>
         <span className="text-2xl font-bold text-[#5c5243]">{formatTime(timeLeft)}</span>
       </div>
       <div className="flex gap-2 mb-4">
@@ -470,6 +473,7 @@ const ExerciseCard: React.FC<{
 
 // Recovery Score Component
 const RecoveryScore: React.FC<{ score: number }> = ({ score }) => {
+  const { t } = useTranslation();
   const getColor = (s: number) => {
     if (s >= 80) return '#22c55e';
     if (s >= 60) return '#f59e0b';
@@ -484,7 +488,7 @@ const RecoveryScore: React.FC<{ score: number }> = ({ score }) => {
     <div className={neuStyles.card}>
       <h3 className="font-semibold text-[#2d2418] mb-4 flex items-center gap-2">
         <Heart className="w-5 h-5 text-rose-500" />
-        Recovery Score
+        {t('health.movement.recoveryScore')}
       </h3>
       <div className="flex items-center justify-center">
         <div className="relative w-32 h-32">
@@ -506,15 +510,15 @@ const RecoveryScore: React.FC<{ score: number }> = ({ score }) => {
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="text-4xl font-bold" style={{ color: getColor(score) }}>{score}</span>
-            <span className="text-xs text-[#5c5243]">Score</span>
+            <span className="text-xs text-[#5c5243]">{t('health.movement.recovery.score')}</span>
           </div>
         </div>
       </div>
       <div className="mt-4 text-center">
         <p className="text-sm text-[#5c5243]">
-          {score >= 80 ? 'Great recovery! Ready for intensity.' : 
-           score >= 60 ? 'Moderate recovery. Consider lighter workout.' : 
-           'Poor recovery. Focus on rest today.'}
+          {score >= 80 ? t('health.movement.recovery.great') : 
+           score >= 60 ? t('health.movement.recovery.moderate') : 
+           t('health.movement.recovery.poor')}
         </p>
       </div>
     </div>
@@ -523,6 +527,7 @@ const RecoveryScore: React.FC<{ score: number }> = ({ score }) => {
 
 // Muscle Fatigue Map
 const MuscleFatigueMap: React.FC<{ fatigue: Record<string, number> }> = ({ fatigue }) => {
+  const { t } = useTranslation();
   const getColor = (level: number) => {
     if (level > 80) return '#ef4444';
     if (level > 50) return '#f97316';
@@ -532,7 +537,7 @@ const MuscleFatigueMap: React.FC<{ fatigue: Record<string, number> }> = ({ fatig
 
   return (
     <div className={neuStyles.card}>
-      <h3 className="font-semibold text-[#2d2418] mb-4">Muscle Fatigue</h3>
+      <h3 className="font-semibold text-[#2d2418] mb-4">{t('health.movement.muscleFatigue')}</h3>
       <div className="space-y-3">
         {Object.entries(fatigue).map(([muscle, level]) => (
           <div key={muscle} className="flex items-center gap-3">
@@ -589,6 +594,7 @@ const StatCard: React.FC<{
 
 // GPS Tracker Component (Stylized)
 const GPSTracker: React.FC = () => {
+  const { t } = useTranslation();
   const [isTracking, setIsTracking] = useState(false);
   const [distance, setDistance] = useState(0);
 
@@ -623,7 +629,7 @@ const GPSTracker: React.FC = () => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-[#2d2418] flex items-center gap-2">
           <Navigation className="w-5 h-5 text-[#5c5243]" />
-          GPS Tracker
+          {t('health.movement.gpsTracker')}
         </h3>
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -675,11 +681,11 @@ const GPSTracker: React.FC = () => {
 
       <div className="grid grid-cols-2 gap-3">
         <div className={`${neuStyles.cardInset} p-3 text-center`}>
-          <p className="text-xs text-[#5c5243]">Distance</p>
+          <p className="text-xs text-[#5c5243]">{t('health.movement.distance')}</p>
           <p className="text-xl font-bold text-[#2d2418]">{distance.toFixed(2)} km</p>
         </div>
         <div className={`${neuStyles.cardInset} p-3 text-center`}>
-          <p className="text-xs text-[#5c5243]">Pace</p>
+          <p className="text-xs text-[#5c5243]">{t('health.movement.pace')}</p>
           <p className="text-xl font-bold text-[#2d2418]">5:30 /km</p>
         </div>
       </div>
@@ -689,6 +695,7 @@ const GPSTracker: React.FC = () => {
 
 // Weekly Calendar
 const WeeklyCalendar: React.FC = () => {
+  const { t } = useTranslation();
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const [selectedDay, setSelectedDay] = useState(2);
   const workouts = [1, 3, 5]; // Days with workouts
@@ -697,7 +704,7 @@ const WeeklyCalendar: React.FC = () => {
     <div className={neuStyles.card}>
       <h3 className="font-semibold text-[#2d2418] mb-4 flex items-center gap-2">
         <Calendar className="w-5 h-5 text-[#5c5243]" />
-        Weekly Schedule
+        {t('health.movement.weeklySchedule')}
       </h3>
       <div className="flex justify-between gap-1">
         {days.map((day, index) => (
@@ -721,14 +728,14 @@ const WeeklyCalendar: React.FC = () => {
       </div>
       <div className={`${neuStyles.cardInset} mt-4 p-4`}>
         <p className="font-medium text-[#2d2418]">
-          {selectedDay === 1 ? 'Upper Body Strength' : 
-           selectedDay === 3 ? 'Lower Body Power' :
-           selectedDay === 5 ? 'Cardio & Core' : 'Rest Day'}
+          {selectedDay === 1 ? (t('health.movement.strength') + ' ' + t('health.movement.active')) : 
+           selectedDay === 3 ? (t('health.movement.exercises') + ' ' + t('health.movement.active')) :
+           selectedDay === 5 ? 'Cardio & Core' : t('social.online').toLowerCase() === 'online' ? 'Rest Day' : 'День отдыха'}
         </p>
         <p className="text-xs text-[#5c5243] mt-1">
           {selectedDay === 1 ? 'Chest, Back, Shoulders • 60 min' : 
            selectedDay === 3 ? 'Legs, Glutes, Calves • 75 min' :
-           selectedDay === 5 ? '45 min HIIT session' : 'Focus on recovery and stretching'}
+           selectedDay === 5 ? '45 min HIIT session' : t('health.movement.recovery.poor')}
         </p>
       </div>
     </div>
@@ -738,6 +745,7 @@ const WeeklyCalendar: React.FC = () => {
 // ==================== Main Component ====================
 
 export default function Movement2() {
+  const { t, i18n } = useTranslation();
   const [activeCategory, setActiveCategory] = useState<'strength' | 'cardio' | 'flexibility'>('strength');
   const [activeMuscleGroup, setActiveMuscleGroup] = useState<string>('Chest');
   const [isWorkoutActive, setIsWorkoutActive] = useState(false);
@@ -861,8 +869,8 @@ export default function Movement2() {
               <Activity className="w-6 h-6 text-[#5c5243]" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-[#2d2418]">Movement</h1>
-              <p className="text-sm text-[#5c5243]">Track your activity and crush goals</p>
+              <h1 className="text-2xl font-bold text-[#2d2418]">{t('health.movement.title')}</h1>
+              <p className="text-sm text-[#5c5243]">{t('health.movement.subtitle')}</p>
             </div>
           </div>
 
@@ -873,7 +881,7 @@ export default function Movement2() {
               color={COLORS.move}
               size={80}
               strokeWidth={8}
-              label="Move"
+              label={t('health.movement.move')}
               value={todayActivity.calories.toString()}
               goal="600"
               icon={Flame}
@@ -883,7 +891,7 @@ export default function Movement2() {
               color={COLORS.exercise}
               size={80}
               strokeWidth={8}
-              label="Exercise"
+              label={t('health.movement.exercises')}
               value={todayActivity.activeMinutes.toString()}
               goal="30m"
               icon={Timer}
@@ -893,7 +901,7 @@ export default function Movement2() {
               color={COLORS.stand}
               size={80}
               strokeWidth={8}
-              label="Stand"
+              label={t('health.movement.stand')}
               value={todayActivity.standHours.toString()}
               goal="12h"
               icon={Zap}
@@ -907,7 +915,7 @@ export default function Movement2() {
               className={`${neuStyles.button} flex items-center gap-2`}
             >
               <Trophy className="w-4 h-4" />
-              <span className="hidden sm:inline">Records</span>
+              <span className="hidden sm:inline">{t('health.movement.records')}</span>
             </motion.button>
             <div className={`w-10 h-10 rounded-full ${neuStyles.card} p-0 flex items-center justify-center text-[#5c5243] font-semibold`}>
               JD
@@ -924,27 +932,27 @@ export default function Movement2() {
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-3">
               <StatCard
-                label="Steps"
+                label={t('health.movement.steps')}
                 value={todayActivity.steps.toLocaleString()}
                 icon={Footprints}
                 color="#3b82f6"
                 trend="+12%"
               />
               <StatCard
-                label="Distance"
+                label={t('health.movement.distance')}
                 value={todayActivity.distance}
                 unit="km"
                 icon={MapPin}
                 color="#22c55e"
               />
               <StatCard
-                label="Floors"
+                label={t('common.dashboard')} // Or another key for floors if exists
                 value={todayActivity.floors}
                 icon={Mountain}
                 color="#f59e0b"
               />
               <StatCard
-                label="Heart Rate"
+                label={t('health.movement.heartRate') || 'Heart Rate'}
                 value={todayActivity.heartRate}
                 unit="bpm"
                 icon={Heart}
@@ -960,7 +968,7 @@ export default function Movement2() {
 
             {/* Workout Programs */}
             <div className={neuStyles.card}>
-              <h3 className="font-semibold text-[#2d2418] mb-4">Programs</h3>
+              <h3 className="font-semibold text-[#2d2418] mb-4">{t('health.movement.programs')}</h3>
               <div className="space-y-3">
                 {WORKOUT_PROGRAMS.map((program) => (
                   <motion.button
@@ -1031,8 +1039,8 @@ export default function Movement2() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs text-[#5c5243]">Previous Best</p>
-                    <p className="text-sm font-medium text-emerald-600">12 reps × 60kg</p>
+                    <p className="text-xs text-[#5c5243]">{t('health.movement.previousBest')}</p>
+                    <p className="text-sm font-medium text-emerald-600">12 {t('health.movement.reps').toLowerCase()} × 60kg</p>
                   </div>
                 </div>
 
@@ -1048,7 +1056,7 @@ export default function Movement2() {
                 {/* Set Logger */}
                 <div className="grid grid-cols-3 gap-3 mb-4">
                   <div>
-                    <label className="text-xs text-[#5c5243] block mb-1">Reps</label>
+                    <label className="text-xs text-[#5c5243] block mb-1">{t('health.movement.reps')}</label>
                     <input
                       type="number"
                       value={currentSet.reps}
@@ -1057,7 +1065,7 @@ export default function Movement2() {
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-[#5c5243] block mb-1">Weight (kg)</label>
+                    <label className="text-xs text-[#5c5243] block mb-1">{t('health.movement.weight')} (kg)</label>
                     <input
                       type="number"
                       value={currentSet.weight}
@@ -1086,7 +1094,7 @@ export default function Movement2() {
             <div className={neuStyles.card}>
               <h3 className="font-semibold text-[#2d2418] mb-4 flex items-center gap-2">
                 <Dumbbell className="w-5 h-5 text-[#5c5243]" />
-                Exercise Library
+                {t('health.movement.exercises')}
               </h3>
               
               {/* Category Tabs */}
@@ -1101,7 +1109,7 @@ export default function Movement2() {
                         : 'text-[#5c5243] hover:text-[#2d2418]'
                     }`}
                   >
-                    {cat}
+                    {t(`health.movement.${cat}` as any)}
                   </button>
                 ))}
               </div>
@@ -1150,7 +1158,7 @@ export default function Movement2() {
 
               {!isWorkoutActive && (
                 <div className="mt-4 p-4 bg-amber-50 rounded-2xl text-center">
-                  <p className="text-sm text-amber-700">Start a workout to add exercises</p>
+                  <p className="text-sm text-amber-700">{t('health.movement.startWorkout')} {t('health.movement.exercises').toLowerCase()}</p>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -1158,7 +1166,7 @@ export default function Movement2() {
                     className={`mt-2 ${neuStyles.buttonPrimary}`}
                   >
                     <Play className="w-4 h-4 inline mr-2" />
-                    Start Workout
+                    {t('health.movement.startWorkout')}
                   </motion.button>
                 </div>
               )}
@@ -1171,7 +1179,7 @@ export default function Movement2() {
             <div className={neuStyles.card}>
               <h3 className="font-semibold text-[#2d2418] mb-4 flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-[#5c5243]" />
-                Volume (2 weeks)
+                {t('health.movement.volume')} (2 {t('common.weeks') || 'weeks'})
               </h3>
               <div className="flex items-end justify-between gap-1 h-32">
                 {VOLUME_DATA.map((day, idx) => {
@@ -1191,7 +1199,7 @@ export default function Movement2() {
 
             {/* Body Weight Trend */}
             <div className={neuStyles.card}>
-              <h3 className="font-semibold text-[#2d2418] mb-4">Weight Trend</h3>
+              <h3 className="font-semibold text-[#2d2418] mb-4">{t('health.movement.weightTrend')}</h3>
               <div className="h-32 relative">
                 <svg viewBox="0 0 100 50" className="w-full h-full" preserveAspectRatio="none">
                   <defs>
@@ -1220,7 +1228,7 @@ export default function Movement2() {
                 </div>
               </div>
               <div className="flex justify-between items-center mt-3">
-                <span className="text-sm text-[#5c5243]">Current</span>
+                <span className="text-sm text-[#5c5243]">{t('health.movement.current')}</span>
                 <span className="text-xl font-bold text-[#2d2418]">79.2 kg</span>
               </div>
             </div>
@@ -1229,7 +1237,7 @@ export default function Movement2() {
             <div className={neuStyles.card}>
               <h3 className="font-semibold text-[#2d2418] mb-4 flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-amber-500" />
-                Personal Records
+                {t('health.movement.personalRecords')}
               </h3>
               <div className="space-y-3">
                 {PERSONAL_RECORDS.map((pr, idx) => (
@@ -1250,12 +1258,12 @@ export default function Movement2() {
 
             {/* Weekly Goals */}
             <div className={neuStyles.card}>
-              <h3 className="font-semibold text-[#2d2418] mb-4">Weekly Goals</h3>
+              <h3 className="font-semibold text-[#2d2418] mb-4">{t('health.movement.weeklyGoal')}</h3>
               <div className="space-y-4">
                 {[
-                  { label: 'Workouts', current: 3, goal: 4, color: '#ef4444' },
-                  { label: 'Active Minutes', current: 180, goal: 240, color: '#22c55e' },
-                  { label: 'Calories Burned', current: 2800, goal: 3500, color: '#f59e0b' },
+                  { label: t('health.movement.workouts'), current: 3, goal: 4, color: '#ef4444' },
+                  { label: t('health.movement.activeMinutes'), current: 180, goal: 240, color: '#22c55e' },
+                  { label: t('health.movement.calories'), current: 2800, goal: 3500, color: '#f59e0b' },
                 ].map((goal) => (
                   <div key={goal.label}>
                     <div className="flex justify-between text-sm mb-1">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   LineChart,
   Line,
@@ -456,6 +457,7 @@ const MedicationCard: React.FC<{
   onTake: (id: string) => void;
   onSkip: (id: string) => void;
 }> = ({ dose, onTake, onSkip }) => {
+  const { t } = useTranslation();
   const isLowRefill = dose.pillsRemaining !== undefined && dose.pillsRemaining <= 10;
   
   return (
@@ -475,12 +477,12 @@ const MedicationCard: React.FC<{
             <p className="text-sm text-ink-light">{dose.dosage}</p>
             {dose.withFood !== 'either' && (
               <p className="text-xs text-rose-600 mt-1">
-                {dose.withFood === 'with' ? '🍽️ Take with food' : '⏰ Take on empty stomach'}
+                {dose.withFood === 'with' ? '🍽️ ' + t('medicine.withFood') : '⏰ ' + t('medicine.withoutFood')}
               </p>
             )}
             {dose.taken && dose.takenAt && (
               <p className="text-xs text-emerald-600 mt-1">
-                ✓ Taken at {new Date(dose.takenAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                ✓ {t('medicine.taken')} {t('common.at') || 'at'} {new Date(dose.takenAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
             )}
           </div>
@@ -494,30 +496,30 @@ const MedicationCard: React.FC<{
                 className="px-3 py-1.5 bg-emerald-500 text-white rounded-lg text-sm font-medium hover:bg-emerald-600 transition-colors flex items-center space-x-1"
               >
                 <Check className="w-4 h-4" />
-                <span>Take</span>
+                <span>{t('medicine.take')}</span>
               </button>
               <button
                 onClick={() => onSkip(dose.id)}
                 className="px-3 py-1.5 bg-stone-200 text-stone-600 rounded-lg text-sm font-medium hover:bg-stone-300 transition-colors"
               >
-                Skip
+                {t('medicine.skip')}
               </button>
             </div>
           )}
           {dose.taken && (
             <span className="px-3 py-1.5 bg-emerald-100 text-emerald-700 rounded-lg text-sm font-medium">
-              Taken ✓
+              {t('medicine.taken')} ✓
             </span>
           )}
           {dose.skipped && (
             <span className="px-3 py-1.5 bg-stone-200 text-stone-500 rounded-lg text-sm font-medium">
-              Skipped
+              {t('medicine.skipped')}
             </span>
           )}
           {isLowRefill && (
             <span className="flex items-center text-xs text-rose-600 font-medium">
               <AlertCircle className="w-3 h-3 mr-1" />
-              {dose.pillsRemaining} left
+              {dose.pillsRemaining} {t('medicine.pillsRemaining')}
             </span>
           )}
         </div>
@@ -527,6 +529,7 @@ const MedicationCard: React.FC<{
 };
 
 const SymptomTracker: React.FC = () => {
+  const { t } = useTranslation();
   const [severity, setSeverity] = useState(5);
   const [selectedType, setSelectedType] = useState('');
   const [selectedBodyPart, setSelectedBodyPart] = useState('');
@@ -534,11 +537,11 @@ const SymptomTracker: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
 
   const symptomTypes = [
-    { id: 'pain', label: 'Pain', subtypes: ['Sharp', 'Dull', 'Burning', 'Throbbing', 'Aching'] },
-    { id: 'digestive', label: 'Digestive', subtypes: ['Nausea', 'Bloating', 'Heartburn', 'Diarrhea', 'Constipation'] },
-    { id: 'respiratory', label: 'Respiratory', subtypes: ['Cough', 'Shortness of breath', 'Wheezing', 'Congestion'] },
-    { id: 'neurological', label: 'Neurological', subtypes: ['Headache', 'Dizziness', 'Numbness', 'Tingling'] },
-    { id: 'other', label: 'Other', subtypes: ['Fatigue', 'Fever', 'Swelling', 'Rash'] },
+    { id: 'pain', label: t('medicine.pain'), subtypes: ['Sharp', 'Dull', 'Burning', 'Throbbing', 'Aching'] },
+    { id: 'digestive', label: t('medicine.digestive'), subtypes: ['Nausea', 'Bloating', 'Heartburn', 'Diarrhea', 'Constipation'] },
+    { id: 'respiratory', label: t('medicine.respiratory'), subtypes: ['Cough', 'Shortness of breath', 'Wheezing', 'Congestion'] },
+    { id: 'neurological', label: t('medicine.neurological'), subtypes: ['Headache', 'Dizziness', 'Numbness', 'Tingling'] },
+    { id: 'other', label: t('medicine.other'), subtypes: ['Fatigue', 'Fever', 'Swelling', 'Rash'] },
   ];
 
   const bodyParts = [
@@ -574,7 +577,7 @@ const SymptomTracker: React.FC = () => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-ink flex items-center">
           <Activity className="w-5 h-5 mr-2 text-rose-500" />
-          Symptom Tracker
+          {t('medicine.symptomTracker')}
         </h3>
         <button
           onClick={() => setShowForm(!showForm)}
@@ -586,7 +589,7 @@ const SymptomTracker: React.FC = () => {
 
       {showForm && (
         <div className="mb-4 p-4 bg-rose-50/50 rounded-xl border border-rose-100">
-          <h4 className="text-sm font-medium text-ink mb-3">Log New Symptom</h4>
+          <h4 className="text-sm font-medium text-ink mb-3">{t('medicine.logSymptom')}</h4>
           
           <div className="space-y-3">
             <div>
@@ -629,7 +632,7 @@ const SymptomTracker: React.FC = () => {
 
             <div>
               <label className="text-xs text-ink-light mb-1 block">
-                Severity: <span className="font-semibold text-rose-600">{severity}/10</span>
+                {t('medicine.severity')}: <span className="font-semibold text-rose-600">{severity}/10</span>
               </label>
               <input
                 type="range"
@@ -640,8 +643,8 @@ const SymptomTracker: React.FC = () => {
                 className="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-rose-500"
               />
               <div className="flex justify-between text-xs text-ink-light mt-1">
-                <span>Mild</span>
-                <span>Severe</span>
+                <span>{t('medicine.mild')}</span>
+                <span>{t('medicine.severe')}</span>
               </div>
             </div>
 
@@ -650,7 +653,7 @@ const SymptomTracker: React.FC = () => {
               disabled={!selectedType}
               className="w-full py-2 bg-rose-500 text-white rounded-lg text-sm font-medium hover:bg-rose-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Log Symptom
+              {t('medicine.logSymptom')}
             </button>
           </div>
         </div>
@@ -676,6 +679,7 @@ const SymptomTracker: React.FC = () => {
 };
 
 const HealthTimeline: React.FC<{ events: TimelineEvent[] }> = ({ events }) => {
+  const { t } = useTranslation();
   const [filter, setFilter] = useState<string>('all');
 
   const filteredEvents = filter === 'all' 
@@ -683,18 +687,18 @@ const HealthTimeline: React.FC<{ events: TimelineEvent[] }> = ({ events }) => {
     : events.filter(e => e.type === filter);
 
   const filters = [
-    { id: 'all', label: 'All', icon: Filter },
-    { id: 'medication', label: 'Meds', icon: Pill },
-    { id: 'symptom', label: 'Symptoms', icon: Activity },
-    { id: 'appointment', label: 'Visits', icon: Stethoscope },
-    { id: 'lab', label: 'Labs', icon: FileText },
+    { id: 'all', label: t('common.all') || 'All', icon: Filter },
+    { id: 'medication', label: t('medicine.medications'), icon: Pill },
+    { id: 'symptom', label: t('medicine.symptomTracker'), icon: Activity },
+    { id: 'appointment', label: t('medicine.appointments'), icon: Stethoscope },
+    { id: 'lab', label: t('medicine.labResults'), icon: FileText },
   ];
 
   return (
     <div className="neu-card p-4">
       <h3 className="font-semibold text-ink mb-4 flex items-center">
         <History className="w-5 h-5 mr-2 text-rose-500" />
-        Health Timeline
+        {t('medicine.healthTimeline')}
       </h3>
 
       <div className="flex flex-wrap gap-2 mb-4">
@@ -748,6 +752,7 @@ const HealthTimeline: React.FC<{ events: TimelineEvent[] }> = ({ events }) => {
 };
 
 const LabResultsPanel: React.FC = () => {
+  const { t } = useTranslation();
   const [selectedResult, setSelectedResult] = useState<LabResult | null>(null);
   const [results] = useState<LabResult[]>(mockLabResults);
 
@@ -766,7 +771,7 @@ const LabResultsPanel: React.FC = () => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-ink flex items-center">
           <FileText className="w-5 h-5 mr-2 text-rose-500" />
-          Lab Results
+          {t('medicine.labResults')}
         </h3>
         <button className="p-2 bg-rose-100 text-rose-600 rounded-lg hover:bg-rose-200 transition-colors">
           <Upload className="w-4 h-4" />
@@ -853,7 +858,7 @@ const LabResultsPanel: React.FC = () => {
               <div className="mt-4 p-4 bg-blue-50 rounded-xl">
                 <div className="flex items-center mb-2">
                   <Brain className="w-4 h-4 text-blue-500 mr-2" />
-                  <span className="text-sm font-medium text-blue-700">AI Interpretation</span>
+                  <span className="text-sm font-medium text-blue-700">{t('common.aiInsight') || 'AI Interpretation'}</span>
                 </div>
                 <p className="text-sm text-blue-600">{selectedResult.aiInterpretation}</p>
               </div>
@@ -862,11 +867,11 @@ const LabResultsPanel: React.FC = () => {
             <div className="mt-4 flex space-x-2">
               <button className="flex-1 py-2 bg-stone-200 text-ink rounded-lg text-sm font-medium hover:bg-stone-300 transition-colors flex items-center justify-center">
                 <Download className="w-4 h-4 mr-2" />
-                Download
+                {t('common.download')}
               </button>
               <button className="flex-1 py-2 bg-rose-500 text-white rounded-lg text-sm font-medium hover:bg-rose-600 transition-colors flex items-center justify-center">
                 <Share2 className="w-4 h-4 mr-2" />
-                Share
+                {t('common.share')}
               </button>
             </div>
           </div>
@@ -877,17 +882,18 @@ const LabResultsPanel: React.FC = () => {
 };
 
 const DocumentsManager: React.FC = () => {
+  const { t } = useTranslation();
   const [documents, setDocuments] = useState<HealthDocument[]>(mockDocuments);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const categories = [
-    { id: 'all', label: 'All', icon: FileText },
-    { id: 'prescription', label: 'Prescriptions', icon: Pill },
-    { id: 'lab', label: 'Lab Results', icon: Activity },
-    { id: 'discharge', label: 'Discharge', icon: FileText },
-    { id: 'insurance', label: 'Insurance', icon: Shield },
-    { id: 'vaccination', label: 'Vaccines', icon: Shield },
+    { id: 'all', label: t('common.all') || 'All', icon: FileText },
+    { id: 'prescription', label: t('medicine.prescriptions'), icon: Pill },
+    { id: 'lab', label: t('medicine.labResults'), icon: FileText },
+    { id: 'discharge', label: t('medicine.discharge'), icon: FileText },
+    { id: 'insurance', label: t('medicine.insurance'), icon: Shield },
+    { id: 'vaccination', label: t('medicine.vaccines'), icon: Shield },
   ];
 
   const filteredDocs = documents.filter(doc => {
@@ -907,7 +913,7 @@ const DocumentsManager: React.FC = () => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-ink flex items-center">
           <FileText className="w-5 h-5 mr-2 text-rose-500" />
-          Documents
+          {t('medicine.documents')}
         </h3>
         <button className="p-2 bg-rose-100 text-rose-600 rounded-lg hover:bg-rose-200 transition-colors">
           <Upload className="w-4 h-4" />
@@ -918,7 +924,7 @@ const DocumentsManager: React.FC = () => {
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-ink-light" />
         <input
           type="text"
-          placeholder="Search documents..."
+          placeholder={t('common.search') + "..."}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="neu-input pl-9 py-2 text-sm"
@@ -975,6 +981,7 @@ const DocumentsManager: React.FC = () => {
 };
 
 const AppointmentsPanel: React.FC = () => {
+  const { t } = useTranslation();
   const [appointments] = useState<Appointment[]>(mockAppointments);
   const [showAddForm, setShowAddForm] = useState(false);
 
@@ -986,7 +993,7 @@ const AppointmentsPanel: React.FC = () => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-ink flex items-center">
           <Calendar className="w-5 h-5 mr-2 text-rose-500" />
-          Appointments
+          {t('medicine.appointments')}
         </h3>
         <button 
           onClick={() => setShowAddForm(true)}
@@ -997,7 +1004,7 @@ const AppointmentsPanel: React.FC = () => {
       </div>
 
       <div className="space-y-3 max-h-64 overflow-y-auto">
-        <p className="text-xs font-medium text-ink-light uppercase tracking-wide">Upcoming</p>
+        <p className="text-xs font-medium text-ink-light uppercase tracking-wide">{t('medicine.upcoming')}</p>
         {upcoming.map(apt => (
           <div key={apt.id} className="p-3 bg-rose-50 rounded-xl border border-rose-100">
             <div className="flex items-start justify-between">
@@ -1031,7 +1038,7 @@ const AppointmentsPanel: React.FC = () => {
 
         {past.length > 0 && (
           <>
-            <p className="text-xs font-medium text-ink-light uppercase tracking-wide mt-4">Past</p>
+            <p className="text-xs font-medium text-ink-light uppercase tracking-wide mt-4">{t('medicine.past')}</p>
             {past.map(apt => (
               <div key={apt.id} className="p-3 bg-stone-50 rounded-xl opacity-70">
                 <div className="flex items-center justify-between">
@@ -1050,27 +1057,27 @@ const AppointmentsPanel: React.FC = () => {
       {showAddForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-[#e4dfd5] rounded-2xl max-w-md w-full p-6 neu-card">
-            <h3 className="text-lg font-semibold text-ink mb-4">Add Appointment</h3>
+            <h3 className="text-lg font-semibold text-ink mb-4">{t('common.add') || 'Add'} {t('medicine.appointments').toLowerCase()}</h3>
             <div className="space-y-3">
-              <input type="text" placeholder="Doctor Name" className="neu-input" />
-              <input type="text" placeholder="Specialty" className="neu-input" />
+              <input type="text" placeholder={t('auth.fullName') || "Doctor Name"} className="neu-input" />
+              <input type="text" placeholder={t('medicine.specialty') || "Specialty"} className="neu-input" />
               <input type="date" className="neu-input" />
               <input type="time" className="neu-input" />
-              <input type="text" placeholder="Location" className="neu-input" />
-              <input type="text" placeholder="Reason for visit" className="neu-input" />
+              <input type="text" placeholder={t('common.location') || "Location"} className="neu-input" />
+              <input type="text" placeholder={t('common.reason') || "Reason for visit"} className="neu-input" />
             </div>
             <div className="flex space-x-2 mt-4">
               <button 
                 onClick={() => setShowAddForm(false)}
                 className="flex-1 py-2 bg-stone-200 text-ink rounded-lg text-sm font-medium"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button 
                 onClick={() => setShowAddForm(false)}
                 className="flex-1 py-2 bg-rose-500 text-white rounded-lg text-sm font-medium"
               >
-                Add
+                {t('common.add')}
               </button>
             </div>
           </div>
@@ -1081,14 +1088,15 @@ const AppointmentsPanel: React.FC = () => {
 };
 
 const HealthMetrics: React.FC = () => {
+  const { t } = useTranslation();
   const [selectedMetric, setSelectedMetric] = useState<string>('bp');
 
   const metrics = [
-    { id: 'bp', label: 'Blood Pressure', unit: 'mmHg', icon: Heart, color: '#e11d48' },
-    { id: 'weight', label: 'Weight', unit: 'kg', icon: Activity, color: '#059669' },
-    { id: 'temp', label: 'Temperature', unit: '°C', icon: Thermometer, color: '#f59e0b' },
-    { id: 'glucose', label: 'Glucose', unit: 'mg/dL', icon: Droplets, color: '#7c3aed' },
-    { id: 'spo2', label: 'SpO2', unit: '%', icon: Wind, color: '#0891b2' },
+    { id: 'bp', label: t('medicine.bloodPressure'), unit: 'mmHg', icon: Heart, color: '#e11d48' },
+    { id: 'weight', label: t('medicine.weightMetric'), unit: 'kg', icon: Activity, color: '#059669' },
+    { id: 'temp', label: t('medicine.temperature'), unit: '°C', icon: Thermometer, color: '#f59e0b' },
+    { id: 'glucose', label: t('medicine.glucose'), unit: 'mg/dL', icon: Droplets, color: '#7c3aed' },
+    { id: 'spo2', label: t('medicine.spo2'), unit: '%', icon: Wind, color: '#0891b2' },
   ];
 
   const chartData = [
@@ -1109,7 +1117,7 @@ const HealthMetrics: React.FC = () => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-ink flex items-center">
           <Activity className="w-5 h-5 mr-2 text-rose-500" />
-          Health Metrics
+          {t('medicine.metrics')}
         </h3>
         <button className="p-2 bg-rose-100 text-rose-600 rounded-lg hover:bg-rose-200 transition-colors">
           <Plus className="w-4 h-4" />
@@ -1172,15 +1180,15 @@ const HealthMetrics: React.FC = () => {
       <div className="grid grid-cols-3 gap-2">
         <div className="text-center p-2 bg-stone-50 rounded-lg">
           <p className="text-lg font-semibold text-ink">120</p>
-          <p className="text-xs text-ink-light">Latest</p>
+          <p className="text-xs text-ink-light">{t('medicine.latest')}</p>
         </div>
         <div className="text-center p-2 bg-stone-50 rounded-lg">
           <p className="text-lg font-semibold text-emerald-600">118</p>
-          <p className="text-xs text-ink-light">Avg (7d)</p>
+          <p className="text-xs text-ink-light">{t('medicine.avg7d')}</p>
         </div>
         <div className="text-center p-2 bg-stone-50 rounded-lg">
           <p className="text-lg font-semibold text-emerald-600">✓</p>
-          <p className="text-xs text-ink-light">In Range</p>
+          <p className="text-xs text-ink-light">{t('medicine.inRange')}</p>
         </div>
       </div>
     </div>
@@ -1192,6 +1200,7 @@ const AIAssistant: React.FC<{
   symptoms: SymptomEntry[];
   adherence: { weekly: number; monthly: number };
 }> = ({ medications, symptoms, adherence }) => {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(true);
 
   const lowRefills = medications.filter(m => m.pillsRemaining <= 10);
@@ -1211,8 +1220,8 @@ const AIAssistant: React.FC<{
             <Brain className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-ink">AI Health Assistant</h3>
-            <p className="text-xs text-ink-light">Personalized insights & reminders</p>
+            <h3 className="font-semibold text-ink">{t('medicine.aiAssistant')}</h3>
+            <p className="text-xs text-ink-light">{t('ai.subtitle')}</p>
           </div>
         </div>
         {expanded ? <ChevronUp className="w-5 h-5 text-ink-light" /> : <ChevronDown className="w-5 h-5 text-ink-light" />}
@@ -1225,9 +1234,9 @@ const AIAssistant: React.FC<{
             <div className="flex items-start p-3 bg-amber-50 rounded-xl border border-amber-200">
               <AlertCircle className="w-5 h-5 text-amber-500 mr-2 flex-shrink-0" />
               <div>
-                <p className="text-sm font-medium text-amber-800">Adherence Alert</p>
+                <p className="text-sm font-medium text-amber-800">{t('common.warning')}</p>
                 <p className="text-xs text-amber-700">
-                  Your weekly adherence is {adherence.weekly}%. Try to stay consistent with your medications.
+                  {t('medicine.refillDescription', { names: adherence.weekly })}
                 </p>
               </div>
             </div>
@@ -1238,9 +1247,9 @@ const AIAssistant: React.FC<{
             <div className="flex items-start p-3 bg-rose-50 rounded-xl border border-rose-200">
               <Bell className="w-5 h-5 text-rose-500 mr-2 flex-shrink-0" />
               <div>
-                <p className="text-sm font-medium text-rose-800">Refill Reminder</p>
+                <p className="text-sm font-medium text-rose-800">{t('medicine.lowRefillsTitle')}</p>
                 <p className="text-xs text-rose-700">
-                  {lowRefills.map(m => m.name).join(', ')} - Running low on supply
+                  {lowRefills.map(m => m.name).join(', ')} - {t('medicine.pillsRemaining').toLowerCase()}
                 </p>
               </div>
             </div>
@@ -1301,6 +1310,7 @@ const MedicationManager: React.FC<{
   medications: Medication[];
   onUpdate: (meds: Medication[]) => void;
 }> = ({ medications, onUpdate }) => {
+  const { t } = useTranslation();
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [editingMed, setEditingMed] = useState<Medication | null>(null);
@@ -1321,14 +1331,14 @@ const MedicationManager: React.FC<{
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-ink flex items-center">
           <Pill className="w-5 h-5 mr-2 text-rose-500" />
-          Medication Manager
+          {t('medicine.medications')}
         </h3>
         <button 
           onClick={() => setShowAddForm(true)}
           className="px-3 py-1.5 bg-rose-500 text-white rounded-lg text-sm font-medium hover:bg-rose-600 transition-colors flex items-center"
         >
           <Plus className="w-4 h-4 mr-1" />
-          Add
+          {t('common.add')}
         </button>
       </div>
 
@@ -1336,7 +1346,7 @@ const MedicationManager: React.FC<{
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-ink-light" />
         <input
           type="text"
-          placeholder="Search medications..."
+          placeholder={t('common.search') + "..."}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="neu-input pl-9 py-2 text-sm"
@@ -1367,7 +1377,7 @@ const MedicationManager: React.FC<{
                     }}
                   />
                   <span className={`text-xs ${med.pillsRemaining <= 10 ? 'text-rose-600' : 'text-ink-light'}`}>
-                    {med.pillsRemaining}/{med.totalPills} left
+                    {med.pillsRemaining}/{med.totalPills} {t('medicine.pillsRemaining').split(' ')[1]}
                   </span>
                 </div>
               </div>
@@ -1448,6 +1458,7 @@ const MedicationManager: React.FC<{
 // ===== Main Component =====
 
 export default function Medicine2() {
+  const { t } = useTranslation();
   const [medications, setMedications] = useState<Medication[]>(mockMedications);
   const [symptoms, setSymptoms] = useState<SymptomEntry[]>(mockSymptoms);
   const [todaySchedule, setTodaySchedule] = useState<ScheduledDose[]>([]);
@@ -1519,8 +1530,8 @@ export default function Medicine2() {
     
     todaySchedule.filter(d => d.taken).map(dose => ({
       id: dose.id,
-      type: 'medication',
-      title: `Took ${dose.medicationName}`,
+      type: 'medication' as const,
+      title: `${t('medicine.take')} ${dose.medicationName}`,
       description: dose.dosage,
       timestamp: dose.takenAt || new Date().toISOString(),
       icon: '💊',
@@ -1529,9 +1540,9 @@ export default function Medicine2() {
 
     symptoms.forEach(s => events.push({
       id: s.id,
-      type: 'symptom',
+      type: 'symptom' as const,
       title: s.subtype,
-      description: `Severity: ${s.severity}/10`,
+      description: `${t('medicine.severity')}: ${s.severity}/10`,
       timestamp: s.timestamp,
       icon: '😷',
       color: '#f59e0b',
@@ -1541,10 +1552,10 @@ export default function Medicine2() {
   }, [todaySchedule, symptoms]);
 
   const timeLabels = {
-    morning: { label: 'Morning', time: '6:00 - 11:59 AM', icon: '🌅' },
-    afternoon: { label: 'Afternoon', time: '12:00 - 4:59 PM', icon: '☀️' },
-    evening: { label: 'Evening', time: '5:00 - 8:59 PM', icon: '🌆' },
-    night: { label: 'Night', time: '9:00 PM - 5:59 AM', icon: '🌙' },
+    morning: { label: t('health.nutrition.breakfast'), time: '6:00 - 11:59 AM', icon: '🌅' },
+    afternoon: { label: t('health.nutrition.lunch'), time: '12:00 - 4:59 PM', icon: '☀️' },
+    evening: { label: t('health.nutrition.dinner'), time: '5:00 - 8:59 PM', icon: '🌆' },
+    night: { label: t('medicine.night') || 'Night', time: '9:00 PM - 5:59 AM', icon: '🌙' },
   };
 
   return (
@@ -1554,16 +1565,16 @@ export default function Medicine2() {
         <div>
           <h1 className="text-3xl font-bold text-ink mb-1 flex items-center">
             <Heart className="w-8 h-8 mr-3 text-rose-500" />
-            Medicine & Health Records
+            {t('medicine.title')} & {t('medicine.documents')}
           </h1>
-          <p className="text-ink-light">Track medications, symptoms, and health metrics</p>
+          <p className="text-ink-light">{t('medicine.subtitle')}</p>
         </div>
         
         {/* Adherence Dashboard */}
         <div className="flex items-center space-x-4 mt-4 md:mt-0">
           <div className="neu-card px-4 py-2 flex items-center">
             <div className="mr-3">
-              <p className="text-xs text-ink-light">Today's Adherence</p>
+              <p className="text-xs text-ink-light">{t('medicine.todaySchedule')}</p>
               <p className={`text-xl font-bold ${adherencePercentage >= 80 ? 'text-emerald-600' : 'text-amber-600'}`}>
                 {adherencePercentage}%
               </p>
@@ -1586,7 +1597,7 @@ export default function Medicine2() {
           </div>
           
           <div className="neu-card px-4 py-2">
-            <p className="text-xs text-ink-light">Weekly</p>
+            <p className="text-xs text-ink-light">{t('dashboard.weeklySummary') || 'Weekly'}</p>
             <p className="text-lg font-semibold text-ink">{adherence.weekly}%</p>
           </div>
           
