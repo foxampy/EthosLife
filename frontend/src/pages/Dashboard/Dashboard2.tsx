@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import {
   Bell,
@@ -89,6 +90,7 @@ const DailyChecklist: React.FC<{
   items: ChecklistItem[];
   onToggle: (id: string) => void;
 }> = ({ items = [], onToggle }) => {
+  const { t } = useTranslation();
   const completionRate = items && items.length > 0 
     ? Math.round((items.filter(i => i.completed).length / items.length) * 100)
     : 0;
@@ -101,17 +103,17 @@ const DailyChecklist: React.FC<{
             <Check className="w-5 h-5 text-[#5c5243]" />
           </div>
           <div>
-            <h3 className="font-bold text-[#2d2418] text-sm">Daily Checklist</h3>
-            <p className="text-xs text-[#5c5243]">{completionRate}% complete</p>
+            <h3 className="font-bold text-[#2d2418] text-sm">{t('dashboard.dailyProgress')}</h3>
+            <p className="text-xs text-[#5c5243]">{completionRate}% {t('gamification.earned')}</p>
           </div>
         </div>
-        <NeuButton variant="flat" size="sm">Edit</NeuButton>
+        <NeuButton variant="flat" size="sm">{t('settings.profile')}</NeuButton>
       </div>
 
       {/* Progress bar */}
       <div className="h-3 bg-[#dcd3c6] rounded-full overflow-hidden shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1)] mb-4">
         <motion.div
-          className="h-full rounded-full bg-gradient-to-r from-[#5c5243] to-green-500"
+              className="h-full rounded-full bg-gradient-to-r from-[#5c5243] to-green-500"
           initial={{ width: 0 }}
           animate={{ width: `${completionRate}%` }}
           transition={{ duration: 0.5 }}
@@ -168,6 +170,7 @@ const DailyChecklist: React.FC<{
 const UpcomingEvents: React.FC<{
   events: DashboardState['widgets']['events'];
 }> = ({ events }) => {
+  const { t } = useTranslation();
   return (
     <NeuCard hover>
       <div className="flex items-center justify-between mb-4">
@@ -175,10 +178,10 @@ const UpcomingEvents: React.FC<{
           <div className="w-10 h-10 rounded-xl bg-[#dcd3c6] shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1)] flex items-center justify-center">
             <Calendar className="w-5 h-5 text-[#5c5243]" />
           </div>
-          <h3 className="font-bold text-[#2d2418] text-sm">Upcoming</h3>
+          <h3 className="font-bold text-[#2d2418] text-sm">{t('dashboard.quickActions')}</h3>
         </div>
         <NeuButton variant="flat" size="sm" rightIcon={<ChevronRight className="w-3 h-3" />}>
-          Full Schedule
+          {t('dashboard.overview')}
         </NeuButton>
       </div>
 
@@ -227,6 +230,7 @@ const UpcomingEvents: React.FC<{
 // ============================================================================
 
 export default function Dashboard2() {
+  const { t, i18n } = useTranslation();
   const [data, setData] = useState<DashboardState>(getMockDashboardState());
   const [currentTime, setCurrentTime] = useState(new Date());
   const [checklist, setChecklist] = useState(() => safeGet(data, 'todayProgress.checklist', []));
@@ -320,7 +324,7 @@ export default function Dashboard2() {
                 <Menu className="w-5 h-5" />
               </NeuButton>
               <div>
-                <h1 className="text-lg font-bold text-[#2d2418] uppercase tracking-wider">Dashboard</h1>
+                <h1 className="text-lg font-bold text-[#2d2418] uppercase tracking-wider">{t('dashboard.title')}</h1>
                 <p className="text-xs text-[#5c5243]">{getTodayFormatted()}</p>
               </div>
             </div>
@@ -330,9 +334,11 @@ export default function Dashboard2() {
               <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-[#e4dfd5] shadow-[inset_3px_3px_6px_rgba(44,40,34,0.1),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]">
                 <Clock className="w-4 h-4 text-[#5c5243]" />
                 <span className="text-sm font-semibold">
-                  {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                  {currentTime.toLocaleTimeString(i18n.language === 'ru' ? 'ru-RU' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
+
+              {/* Notifications */}
 
               {/* Notifications */}
               <div className="relative">
@@ -514,9 +520,9 @@ export default function Dashboard2() {
               leaderboardPosition={data.gamification.leaderboardPosition}
               recentBadges={data.gamification.recentBadges}
               dailyChallenges={[
-                { id: '1', title: 'Walk 10k steps', progress: 7500, total: 10000, reward: 100 },
-                { id: '2', title: 'Drink 8 glasses', progress: 6, total: 8, reward: 50 },
-                { id: '3', title: 'Sleep 8 hours', progress: 1, total: 1, reward: 75 },
+                { id: '1', title: t('health.movement.steps'), progress: 7500, total: 10000, reward: 100 },
+                { id: '2', title: t('health.nutrition.water'), progress: 6, total: 8, reward: 50 },
+                { id: '3', title: t('health.sleep.duration'), progress: 1, total: 1, reward: 75 },
               ]}
             />
 

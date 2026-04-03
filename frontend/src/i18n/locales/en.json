@@ -165,7 +165,18 @@
       "macroGoals": "Macro Goals",
       "dailyTarget": "Daily Target",
       "consumed": "Consumed",
-      "remaining": "Remaining"
+      "remaining": "Remaining",
+      "hydration": "Hydration",
+      "glasses": "glasses",
+      "noItems": "No items yet",
+      "addFood": "Add Food",
+      "searchFoods": "Search foods...",
+      "quickAdd": "Quick Add",
+      "aiScan": "AI Scan",
+      "foodName": "Food name",
+      "proteinShort": "P",
+      "carbsShort": "C",
+      "fatsShort": "F"
     },
     "movement": {
       "title": "Movement",

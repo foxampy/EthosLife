@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Utensils,
@@ -256,6 +257,7 @@ const CalorieRing: React.FC<{
   max: number;
   size?: number;
 }> = ({ value, max, size = 220 }) => {
+  const { t } = useTranslation();
   const radius = (size - 20) / 2;
   const circumference = radius * 2 * Math.PI;
   const percentage = Math.min(value / max, 1);
@@ -305,7 +307,7 @@ const CalorieRing: React.FC<{
           {value}
         </motion.span>
         <span className="text-sm text-[#5c5243] mt-1">/ {max} kcal</span>
-        <span className="text-xs text-[#5c5243]/70 mt-2">{remaining} remaining</span>
+        <span className="text-xs text-[#5c5243]/70 mt-2">{remaining} {t('health.nutrition.remaining')}</span>
       </div>
     </div>
   );
@@ -369,6 +371,7 @@ const WaterGlass3D: React.FC<{
   goal: number;
   onAdd: (amount: number) => void;
 }> = ({ current, goal, onAdd }) => {
+  const { t } = useTranslation();
   const percentage = Math.min((current / goal) * 100, 100);
   const glasses = Math.floor(current / 250);
   const goalGlasses = Math.floor(goal / 250);
@@ -377,7 +380,7 @@ const WaterGlass3D: React.FC<{
     <div className={`${neuStyles.card} flex flex-col items-center`}>
       <div className="flex items-center gap-2 mb-4">
         <GlassWater className="w-5 h-5 text-cyan-600" />
-        <span className="font-semibold text-[#2d2418]">Hydration</span>
+        <span className="font-semibold text-[#2d2418]">{t('health.nutrition.hydration')}</span>
       </div>
       
       {/* 3D Glass */}
@@ -427,7 +430,7 @@ const WaterGlass3D: React.FC<{
 
       <div className="text-center mb-4">
         <span className="text-2xl font-bold text-[#2d2418]">{glasses}</span>
-        <span className="text-[#5c5243]"> / {goalGlasses} glasses</span>
+        <span className="text-[#5c5243]"> / {goalGlasses} {t('health.nutrition.glasses')}</span>
         <p className="text-xs text-[#5c5243]/70 mt-1">{current}ml / {goal}ml</p>
       </div>
 
@@ -460,11 +463,12 @@ const MealTimeline: React.FC<{
   onAddFood: (type: string) => void;
   onRemoveItem: (mealType: string, itemId: string) => void;
 }> = ({ meals, onAddFood, onRemoveItem }) => {
+  const { t } = useTranslation();
   const mealConfig = {
-    breakfast: { icon: Coffee, color: '#f59e0b', label: 'Breakfast', time: '7:00 - 9:00' },
-    lunch: { icon: Sun, color: '#f97316', label: 'Lunch', time: '12:00 - 14:00' },
-    dinner: { icon: Moon, color: '#6366f1', label: 'Dinner', time: '18:00 - 20:00' },
-    snack: { icon: Cookie, color: '#ec4899', label: 'Snacks', time: 'All day' },
+    breakfast: { icon: Coffee, color: '#f59e0b', label: t('health.nutrition.breakfast'), time: '7:00 - 9:00' },
+    lunch: { icon: Sun, color: '#f97316', label: t('health.nutrition.lunch'), time: '12:00 - 14:00' },
+    dinner: { icon: Moon, color: '#6366f1', label: t('health.nutrition.dinner'), time: '18:00 - 20:00' },
+    snack: { icon: Cookie, color: '#ec4899', label: t('health.nutrition.snacks'), time: t('social.online') },
   };
 
   return (
@@ -501,7 +505,7 @@ const MealTimeline: React.FC<{
               </div>
               <div className="text-right">
                 <span className="text-lg font-bold text-[#2d2418]">{totalCalories}</span>
-                <span className="text-xs text-[#5c5243] block">{totalProtein}g protein</span>
+                <span className="text-xs text-[#5c5243] block">{totalProtein}g {t('health.nutrition.protein')}</span>
               </div>
             </div>
 
@@ -513,7 +517,7 @@ const MealTimeline: React.FC<{
                   animate={{ opacity: 1 }}
                   className="text-center py-6 text-[#5c5243]/60"
                 >
-                  <p className="text-sm">No items yet</p>
+                  <p className="text-sm">{t('health.nutrition.noItems')}</p>
                 </motion.div>
               ) : (
                 <div className="space-y-2 mb-4">
@@ -559,7 +563,7 @@ const MealTimeline: React.FC<{
               className={`w-full ${neuStyles.button} flex items-center justify-center gap-2 text-sm`}
             >
               <Plus className="w-4 h-4" />
-              Add Food
+              {t('health.nutrition.addFood')}
             </motion.button>
           </motion.div>
         );
@@ -583,6 +587,7 @@ const FoodEntryModal: React.FC<{
   mealType: string;
   onAdd: (food: FoodItem) => void;
 }> = ({ isOpen, onClose, mealType, onAdd }) => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFood, setSelectedFood] = useState<FoodItem | null>(null);
   const [quickAdd, setQuickAdd] = useState({ name: '', calories: '', protein: '', carbs: '', fat: '' });
@@ -638,7 +643,7 @@ const FoodEntryModal: React.FC<{
         >
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-bold text-[#2d2418]">
-              Add to {mealType.charAt(0).toUpperCase() + mealType.slice(1)}
+              {t('health.nutrition.addMeal')} {t(`health.nutrition.${mealType}` as any)}
             </h3>
             <button onClick={onClose} className={neuStyles.iconButton}>
               <X className="w-5 h-5" />
@@ -648,9 +653,9 @@ const FoodEntryModal: React.FC<{
           {/* Tabs */}
           <div className="flex gap-2 mb-6 p-1 rounded-2xl bg-[#e4dfd5] shadow-[inset_4px_4px_8px_rgba(44,40,34,0.1),inset_-4px_-4px_8px_rgba(255,255,255,0.5)]">
             {[
-              { id: 'search', icon: Search, label: 'Search' },
-              { id: 'quick', icon: Zap, label: 'Quick' },
-              { id: 'scan', icon: Scan, label: 'AI Scan' },
+              { id: 'search', icon: Search, label: t('common.search') },
+              { id: 'quick', icon: Zap, label: t('health.nutrition.quickAdd') },
+              { id: 'scan', icon: Scan, label: t('health.nutrition.aiScan') },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -674,7 +679,7 @@ const FoodEntryModal: React.FC<{
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5c5243]" />
                   <input
                     type="text"
-                    placeholder="Search foods..."
+                    placeholder={t('health.nutrition.searchFoods')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className={`${neuStyles.input} pl-12`}
@@ -713,7 +718,7 @@ const FoodEntryModal: React.FC<{
               <div className="space-y-4">
                 <input
                   type="text"
-                  placeholder="Food name"
+                  placeholder={t('health.nutrition.foodName')}
                   value={quickAdd.name}
                   onChange={(e) => setQuickAdd({ ...quickAdd, name: e.target.value })}
                   className={neuStyles.input}
@@ -721,28 +726,28 @@ const FoodEntryModal: React.FC<{
                 <div className="grid grid-cols-2 gap-3">
                   <input
                     type="number"
-                    placeholder="Calories"
+                    placeholder={t('health.nutrition.calories')}
                     value={quickAdd.calories}
                     onChange={(e) => setQuickAdd({ ...quickAdd, calories: e.target.value })}
                     className={neuStyles.input}
                   />
                   <input
                     type="number"
-                    placeholder="Protein (g)"
+                    placeholder={t('health.nutrition.protein')}
                     value={quickAdd.protein}
                     onChange={(e) => setQuickAdd({ ...quickAdd, protein: e.target.value })}
                     className={neuStyles.input}
                   />
                   <input
                     type="number"
-                    placeholder="Carbs (g)"
+                    placeholder={t('health.nutrition.carbs')}
                     value={quickAdd.carbs}
                     onChange={(e) => setQuickAdd({ ...quickAdd, carbs: e.target.value })}
                     className={neuStyles.input}
                   />
                   <input
                     type="number"
-                    placeholder="Fat (g)"
+                    placeholder={t('health.nutrition.fats')}
                     value={quickAdd.fat}
                     onChange={(e) => setQuickAdd({ ...quickAdd, fat: e.target.value })}
                     className={neuStyles.input}
@@ -780,7 +785,7 @@ const FoodEntryModal: React.FC<{
                 onClick={onClose}
                 className={`flex-1 ${neuStyles.button}`}
               >
-                Cancel
+                {t('common.cancel')}
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.02 }}
@@ -789,7 +794,7 @@ const FoodEntryModal: React.FC<{
                 disabled={!selectedFood && !quickAdd.name}
                 className={`flex-1 ${neuStyles.buttonPrimary} disabled:opacity-50 disabled:cursor-not-allowed`}
               >
-                Add Food
+                {t('health.nutrition.addFood')}
               </motion.button>
             </div>
           )}
@@ -801,6 +806,7 @@ const FoodEntryModal: React.FC<{
 
 // Recipe Card with Flip Animation
 const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
+  const { t } = useTranslation();
   const [isFlipped, setIsFlipped] = useState(false);
 
   return (
@@ -862,7 +868,7 @@ const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
               onClick={() => setIsFlipped(true)}
               className={`w-full mt-4 ${neuStyles.button} text-sm`}
             >
-              View Recipe
+              {t('common.seeDetails')}
             </motion.button>
           </div>
         </div>
@@ -875,7 +881,7 @@ const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
           <div className="p-4 h-full flex flex-col">
             <h4 className="font-semibold text-[#2d2418] mb-3">{recipe.name}</h4>
             <div className="flex-1 overflow-y-auto">
-              <p className="text-xs text-[#5c5243] font-medium mb-2">Ingredients:</p>
+              <p className="text-xs text-[#5c5243] font-medium mb-2">{t('health.medicine.prescriptions')}:</p>
               <ul className="space-y-1 mb-4">
                 {recipe.ingredients.map((ing, idx) => (
                   <li key={idx} className="text-xs text-[#5c5243]/80 flex items-center gap-2">
@@ -909,8 +915,9 @@ const RecipeCard: React.FC<{ recipe: Recipe }> = ({ recipe }) => {
   );
 };
 
-// Weekly Chart Component
+// Weekly Progress
 const WeeklyChart: React.FC = () => {
+  const { t } = useTranslation();
   const maxCalories = Math.max(...WEEKLY_DATA.map(d => d.calories));
   
   return (
@@ -918,7 +925,7 @@ const WeeklyChart: React.FC = () => {
       <div className="flex items-center justify-between mb-6">
         <h3 className="font-semibold text-[#2d2418] flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-[#5c5243]" />
-          Weekly Progress
+          {t('dashboard.weeklySummary')}
         </h3>
       </div>
       <div className="flex items-end justify-between gap-2 h-40">
@@ -952,6 +959,7 @@ const WeeklyChart: React.FC = () => {
 
 // Quick Add Buttons Component
 const QuickAdd: React.FC<{ onAdd: (food: FoodItem) => void }> = ({ onAdd }) => {
+  const { t } = useTranslation();
   const quickFoods = RECENT_FOODS.slice(0, 4);
 
   return (
@@ -982,6 +990,7 @@ const QuickAdd: React.FC<{ onAdd: (food: FoodItem) => void }> = ({ onAdd }) => {
 // ==================== Main Component ====================
 
 export default function Nutrition2() {
+  const { t, i18n } = useTranslation();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeMealType, setActiveMealType] = useState<string>('');
@@ -1124,10 +1133,10 @@ export default function Nutrition2() {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    if (date.toDateString() === today.toDateString()) return 'Today';
-    if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
-    if (date.toDateString() === tomorrow.toDateString()) return 'Tomorrow';
-    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    if (date.toDateString() === today.toDateString()) return t('social.online').toLowerCase() === 'online' ? 'Today' : 'Сегодня';
+    if (date.toDateString() === yesterday.toDateString()) return t('social.online').toLowerCase() === 'online' ? 'Yesterday' : 'Вчера';
+    if (date.toDateString() === tomorrow.toDateString()) return t('social.online').toLowerCase() === 'online' ? 'Tomorrow' : 'Завтра';
+    return date.toLocaleDateString(i18n.language === 'ru' ? 'ru-RU' : 'en-US', { weekday: 'short', month: 'short', day: 'numeric' });
   };
 
   return (
@@ -1140,8 +1149,8 @@ export default function Nutrition2() {
               <Utensils className="w-6 h-6 text-[#5c5243]" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-[#2d2418]">Nutrition</h1>
-              <p className="text-sm text-[#5c5243]">Fuel your body right</p>
+              <h1 className="text-2xl font-bold text-[#2d2418]">{t('health.nutrition.title')}</h1>
+              <p className="text-sm text-[#5c5243]">{t('health.nutrition.subtitle')}</p>
             </div>
           </div>
 
@@ -1193,13 +1202,13 @@ export default function Nutrition2() {
           <div className="lg:col-span-3 space-y-6">
             {/* Calorie Ring Card */}
             <div className={neuStyles.card}>
-              <h3 className="font-semibold text-[#2d2418] mb-4 text-center">Daily Calories</h3>
+              <h3 className="font-semibold text-[#2d2418] mb-4 text-center">{t('health.nutrition.calories')}</h3>
               <div className="flex justify-center">
                 <CalorieRing value={consumed.calories} max={goals.calories} />
               </div>
               <div className="grid grid-cols-2 gap-3 mt-6">
                 <div className={`${neuStyles.cardInset} text-center py-3`}>
-                  <p className="text-xs text-[#5c5243]">Burned</p>
+                  <p className="text-xs text-[#5c5243]">{t('health.movement.calories')}</p>
                   <p className="text-lg font-bold text-[#2d2418]">420</p>
                 </div>
                 <div className={`${neuStyles.cardInset} text-center py-3`}>
@@ -1211,24 +1220,24 @@ export default function Nutrition2() {
 
             {/* Macro Rings */}
             <div className={neuStyles.card}>
-              <h3 className="font-semibold text-[#2d2418] mb-4">Macros</h3>
+              <h3 className="font-semibold text-[#2d2418] mb-4">{t('health.nutrition.macroGoals')}</h3>
               <div className="flex justify-around">
                 <MacroRing
-                  label="Protein"
+                  label={t('health.nutrition.protein')}
                   value={consumed.protein}
                   max={goals.protein}
                   color={COLORS.protein}
                   icon={Zap}
                 />
                 <MacroRing
-                  label="Carbs"
+                  label={t('health.nutrition.carbs')}
                   value={consumed.carbs}
                   max={goals.carbs}
                   color={COLORS.carbs}
                   icon={Apple}
                 />
                 <MacroRing
-                  label="Fat"
+                  label={t('health.nutrition.fats')}
                   value={consumed.fat}
                   max={goals.fat}
                   color={COLORS.fat}
@@ -1250,14 +1259,14 @@ export default function Nutrition2() {
           {/* Center Column - Meal Timeline */}
           <div className="lg:col-span-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-[#2d2418]">Today's Meals</h2>
+              <h2 className="text-xl font-bold text-[#2d2418]">{t('health.nutrition.meals')}</h2>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={`${neuStyles.button} flex items-center gap-2`}
               >
                 <Barcode className="w-4 h-4" />
-                Scan Barcode
+                {t('health.nutrition.scanFood')}
               </motion.button>
             </div>
             <MealTimeline meals={meals} onAddFood={handleAddFood} onRemoveItem={handleRemoveFood} />
@@ -1311,7 +1320,7 @@ export default function Nutrition2() {
                         : 'bg-[#e4dfd5] text-[#5c5243] shadow-[2px_2px_4px_rgba(44,40,34,0.1),-2px_-2px_4px_rgba(255,255,255,0.5)]'
                     }`}
                   >
-                    {filter.charAt(0).toUpperCase() + filter.slice(1)}
+                    {t(`health.nutrition.${filter}` as any)}
                   </button>
                 ))}
               </div>

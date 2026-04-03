@@ -165,7 +165,18 @@
       "macroGoals": "Цели по макро",
       "dailyTarget": "Дневная цель",
       "consumed": "Потреблено",
-      "remaining": "Осталось"
+      "remaining": "Осталось",
+      "hydration": "Гидратация",
+      "glasses": "стаканов",
+      "noItems": "Нет добавленных продуктов",
+      "addFood": "Добавить еду",
+      "searchFoods": "Поиск продуктов...",
+      "quickAdd": "Быстрое добавление",
+      "aiScan": "ИИ-сканирование",
+      "foodName": "Название продукта",
+      "proteinShort": "Б",
+      "carbsShort": "У",
+      "fatsShort": "Ж"
     },
     "movement": {
       "title": "Активность",
