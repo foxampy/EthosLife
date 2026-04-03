@@ -76,32 +76,32 @@ const LandingV2 = () => {
     },
     {
       icon: <Users className="w-8 h-8 text-white" />,
-      title: 'Сообщество',
-      description: 'Поддержка единомышленников и специалистов',
+      title: t('landing.features.community.title'),
+      description: t('landing.features.community.description'),
       gradient: 'from-emerald-400 to-green-500',
       neumorph: true
     },
     {
       icon: <Zap className="w-8 h-8 text-white" />,
-      title: 'Геймификация',
-      description: 'Достижения, челленджи, таблица лидеров',
+      title: t('landing.features.gamification.title'),
+      description: t('landing.features.gamification.description'),
       gradient: 'from-amber-400 to-orange-500',
       neumorph: true
     },
     {
       icon: <Shield className="w-8 h-8 text-white" />,
-      title: 'Приватность',
-      description: 'Ваши данные под надёжной защитой',
+      title: t('landing.features.privacy.title'),
+      description: t('landing.features.privacy.description'),
       gradient: 'from-slate-400 to-gray-500',
       neumorph: true
     }
   ];
 
   const stats = [
-    { value: '100K+', label: 'Пользователей', icon: <Users className="w-6 h-6" /> },
-    { value: '4.9★', label: 'Рейтинг', icon: <Star className="w-6 h-6" /> },
-    { value: '67%', label: 'Улучшение здоровья', icon: <TrendingUp className="w-6 h-6" /> },
-    { value: '24/7', label: 'AI поддержка', icon: <Zap className="w-6 h-6" /> }
+    { value: '100K+', label: t('landing.stats.users'), icon: <Users className="w-6 h-6" /> },
+    { value: '4.9★', label: t('landing.stats.rating'), icon: <Star className="w-6 h-6" /> },
+    { value: '67%', label: t('landing.stats.improvement'), icon: <TrendingUp className="w-6 h-6" /> },
+    { value: '24/7', label: t('landing.stats.support'), icon: <Zap className="w-6 h-6" /> }
   ];
 
   const testimonials = [
@@ -132,48 +132,28 @@ const LandingV2 = () => {
     {
       name: 'Free',
       price: '0',
-      period: 'навсегда',
-      description: 'Для начала пути',
-      features: [
-        'Базовый трекинг здоровья',
-        '3 модуля на выбор',
-        '5 AI-запросов в день',
-        'Доступ к сообществу',
-        'Базовая аналитика'
-      ],
-      cta: 'Начать бесплатно',
+      period: t('landing.pricing.free.period'),
+      description: t('landing.pricing.free.name'),
+      features: t('landing.pricing.free.features', { returnObjects: true }) as string[],
+      cta: t('landing.pricing.startFree'),
       popular: false
     },
     {
       name: 'Premium',
       price: '9.99',
-      period: 'в месяц',
-      description: 'Для максимальных результатов',
-      features: [
-        'Все 7 модулей здоровья',
-        'Безлимитный AI-коуч',
-        'Расширенная аналитика',
-        'Все интеграции',
-        'Приоритетная поддержка',
-        'Персональные планы'
-      ],
-      cta: 'Попробовать 14 дней',
+      period: t('landing.pricing.premium.period'),
+      description: t('landing.pricing.premium.name'),
+      features: t('landing.pricing.premium.features', { returnObjects: true }) as string[],
+      cta: t('landing.pricing.try14Days'),
       popular: true
     },
     {
       name: 'Pro',
       price: '19.99',
-      period: 'в месяц',
-      description: 'Для профессионалов',
-      features: [
-        'Всё из Premium',
-        'Персональный AI-коуч',
-        '1-on-1 сессии со специалистами',
-        'Семейный план (5 человек)',
-        'B2B доступ',
-        'API доступ'
-      ],
-      cta: 'Начать Pro',
+      period: t('landing.pricing.pro.period'),
+      description: t('landing.pricing.pro.name'),
+      features: t('landing.pricing.pro.features', { returnObjects: true }) as string[],
+      cta: t('landing.pricing.startPro'),
       popular: false
     }
   ];
@@ -218,17 +198,15 @@ const LandingV2 = () => {
             </div>
 
             <h2 className="text-2xl md:text-4xl font-bold text-[#2d2418] mb-6 max-w-4xl mx-auto">
-              Здоровье — это ежедневная привычка.
+              {t('landing.hero.title')}
               <br />
               <span className="text-gradient-emerald">
-                Мы делаем эту привычку лёгкой, выгодной и эффективной.
+                {t('landing.hero.subtitle')}
               </span>
             </h2>
 
             <p className="text-lg md:text-xl text-[#5c5243] mb-10 max-w-2xl mx-auto">
-              7 модулей здоровья. 1 платформа. 0 переключений.
-              <br />
-              Всё ваше здоровье — от генетики до социальных связей — в одном интерфейсе.
+              {t('landing.hero.description')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -238,7 +216,7 @@ const LandingV2 = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Начать бесплатно
+                {t('landing.hero.ctaPrimary')}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </motion.button>
 
@@ -249,7 +227,7 @@ const LandingV2 = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Play className="w-5 h-5" />
-                Демо видео
+                {t('landing.hero.ctaSecondary')}
               </motion.button>
             </div>
 
@@ -305,10 +283,10 @@ const LandingV2 = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-[#2d2418] mb-4">
-              Всё для вашего здоровья
+              {t('landing.features.title')}
             </h2>
             <p className="text-xl text-[#5c5243] max-w-2xl mx-auto">
-              7 интегрированных модулей работают вместе для достижения ваших целей
+              {t('landing.features.subtitle')}
             </p>
           </motion.div>
 
@@ -344,10 +322,10 @@ const LandingV2 = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-[#2d2418] mb-4">
-              Простые тарифы
+              {t('landing.pricing.title')}
             </h2>
             <p className="text-xl text-[#5c5243] max-w-2xl mx-auto">
-              Начните бесплатно. Обновите когда будете готовы.
+              {t('landing.pricing.subtitle')}
             </p>
           </motion.div>
 
@@ -364,7 +342,7 @@ const LandingV2 = () => {
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-sm font-bold rounded-full">
-                    Популярный выбор
+                    {t('landing.pricing.popularChoice')}
                   </div>
                 )}
 
@@ -472,10 +450,10 @@ const LandingV2 = () => {
             className="neu-card p-12 md:p-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-[#2d2418] mb-6">
-              Начните свой путь к здоровью сегодня
+              {t('landing.hero.title')}
             </h2>
             <p className="text-xl text-[#5c5243] mb-8 max-w-2xl mx-auto">
-              Присоединяйтесь к 100,000+ пользователей, которые уже изменили свою жизнь с EthosLife
+              {t('landing.testimonials.subtitle')}
             </p>
             <motion.button
               onClick={() => navigate('/register')}
@@ -483,10 +461,10 @@ const LandingV2 = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Начать бесплатно сейчас
+              {t('landing.hero.ctaPrimary')}
             </motion.button>
             <p className="mt-6 text-sm text-[#5c5243]">
-              Бесплатно • Без кредитной карты • 2 минуты
+              {t('common.free')} • {t('landing.pricing.free.period')} • 2 min
             </p>
           </motion.div>
         </div>
@@ -503,11 +481,11 @@ const LandingV2 = () => {
               <span className="text-lg font-bold text-[#2d2418]">EthosLife</span>
             </div>
             <div className="flex flex-wrap justify-center gap-6 text-sm text-[#5c5243]">
-              <a href="/features" className="hover:text-[#2d2418] transition-colors">Возможности</a>
-              <a href="/pricing" className="hover:text-[#2d2418] transition-colors">Цены</a>
-              <a href="/team" className="hover:text-[#2d2418] transition-colors">Команда</a>
-              <a href="/faq" className="hover:text-[#2d2418] transition-colors">FAQ</a>
-              <a href="/blog" className="hover:text-[#2d2418] transition-colors">Блог</a>
+              <a href="/features" className="hover:text-[#2d2418] transition-colors">{t('nav.features')}</a>
+              <a href="/pricing" className="hover:text-[#2d2418] transition-colors">{t('nav.pricing')}</a>
+              <a href="/team" className="hover:text-[#2d2418] transition-colors">{t('nav.team')}</a>
+              <a href="/faq" className="hover:text-[#2d2418] transition-colors">{t('nav.faq')}</a>
+              <a href="/blog" className="hover:text-[#2d2418] transition-colors">{t('nav.blog')}</a>
             </div>
             <div className="text-sm text-[#5c5243]">
               © 2026 EthosLife. Все права защищены.

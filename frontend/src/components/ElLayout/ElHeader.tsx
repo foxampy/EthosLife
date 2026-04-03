@@ -3,8 +3,9 @@
  * All pages navigation through burger menu
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Menu,
@@ -29,52 +30,59 @@ import {
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { ElLanguageSelector } from './ElLanguageSelector';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const healthModules = [
-  { name: 'Питание', href: '/health/nutrition', icon: Utensils },
-  { name: 'Движение', href: '/health/movement', icon: Dumbbell },
-  { name: 'Сон', href: '/health/sleep', icon: Moon },
-  { name: 'Психология', href: '/health/psychology', icon: Brain },
-  { name: 'Медицина', href: '/health/medicine', icon: Stethoscope },
-  { name: 'Отношения', href: '/health/relationships', icon: Users },
-  { name: 'Привычки', href: '/health/habits', icon: Target },
-];
-
-const allPages = [
-  { name: 'Главная', href: '/', icon: Home },
-  { name: 'Landing 2', href: '/landing2', icon: Home },
-  { name: 'Landing 3', href: '/landing3', icon: Home },
-  { name: 'Dashboard', href: '/dashboard', icon: Activity },
-  { name: 'AI Чат', href: '/ai-chat', icon: Zap },
-  { name: 'Аналитика', href: '/analytics', icon: TrendingUp },
-  { name: 'Геймификация', href: '/gamification', icon: Award },
-  { name: 'Специалисты', href: '/specialists', icon: User },
-  { name: 'Центры', href: '/centers', icon: Users },
-  { name: 'Сообщество', href: '/social', icon: MessageCircle },
-  { name: 'Профиль', href: '/profile', icon: User },
-  { name: 'Настройки', href: '/settings', icon: Settings },
-];
-
-const featuresPages = [
-  { name: 'Возможности', href: '/features', icon: Zap },
-  { name: 'Тарифы', href: '/pricing', icon: Award },
-  { name: 'Команда', href: '/team', icon: Users },
-  { name: 'Roadmap', href: '/roadmap', icon: TrendingUp },
-  { name: 'FAQ', href: '/faq', icon: MessageCircle },
-  { name: 'Блог', href: '/blog', icon: MessageCircle },
-  { name: 'Токеномика', href: '/tokenomics', icon: Award },
-];
-
 export const ElHeader: React.FC = () => {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [healthMenuOpen, setHealthMenuOpen] = useState(false);
   const location = useLocation();
 
+  // Auto-close menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
   const isActive = (href: string) => location.pathname === href;
+
+  const healthModules = [
+    { name: t('nav.nutrition'), href: '/health/nutrition', icon: Utensils },
+    { name: t('nav.movement'), href: '/health/movement', icon: Dumbbell },
+    { name: t('nav.sleep'), href: '/health/sleep', icon: Moon },
+    { name: t('nav.psychology'), href: '/health/psychology', icon: Brain },
+    { name: t('nav.medicine'), href: '/health/medicine', icon: Stethoscope },
+    { name: t('nav.relationships'), href: '/health/relationships', icon: Users },
+    { name: t('nav.habits'), href: '/health/habits', icon: Target },
+  ];
+
+  const allPages = [
+    { name: t('nav.home'), href: '/', icon: Home },
+    { name: 'Landing 2', href: '/landing2', icon: Home },
+    { name: 'Landing 3', href: '/landing3', icon: Home },
+    { name: t('nav.dashboard'), href: '/dashboard', icon: Activity },
+    { name: t('nav.aiCoach'), href: '/ai-chat', icon: Zap },
+    { name: t('nav.analytics'), href: '/analytics', icon: TrendingUp },
+    { name: t('nav.gamification'), href: '/gamification', icon: Award },
+    { name: t('nav.specialists'), href: '/specialists', icon: User },
+    { name: t('nav.centers'), href: '/centers', icon: Users },
+    { name: t('nav.community'), href: '/social', icon: MessageCircle },
+    { name: t('nav.profile'), href: '/profile', icon: User },
+    { name: t('nav.settings'), href: '/settings', icon: Settings },
+  ];
+
+  const featuresPages = [
+    { name: t('nav.features'), href: '/features', icon: Zap },
+    { name: t('nav.pricing'), href: '/pricing', icon: Award },
+    { name: t('nav.team'), href: '/team', icon: Users },
+    { name: t('nav.roadmap'), href: '/roadmap', icon: TrendingUp },
+    { name: t('nav.faq'), href: '/faq', icon: MessageCircle },
+    { name: t('nav.blog'), href: '/blog', icon: MessageCircle },
+    { name: t('nav.tokenomics'), href: '/tokenomics', icon: Award },
+  ];
 
   return (
     <>
@@ -94,7 +102,10 @@ export const ElHeader: React.FC = () => {
             </Link>
 
             {/* Right Side */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 sm:gap-4">
+              {/* Language Selector */}
+              <ElLanguageSelector variant="minimal" className="hidden sm:flex" />
+
               {/* Burger Menu Button */}
               <motion.button
                 whileTap={{ scale: 0.95 }}
@@ -141,28 +152,30 @@ export const ElHeader: React.FC = () => {
                   <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#5c5243] to-[#8c7a6b] flex items-center justify-center text-white font-bold">
                     E
                   </div>
-                  <span className="font-bold text-lg text-[#2d2418]">Меню</span>
+                  <span className="font-bold text-lg text-[#2d2418]">{t('common.info')}</span>
                 </div>
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="p-2.5 rounded-xl bg-[#dcd3c6] text-[#5c5243] min-h-[44px] min-w-[44px]"
-                >
-                  <X className="w-5 h-5" />
-                </motion.button>
+                <div className="flex items-center gap-2">
+                  <ElLanguageSelector variant="minimal" className="sm:hidden" />
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="p-2.5 rounded-xl bg-[#dcd3c6] text-[#5c5243] min-h-[44px] min-w-[44px]"
+                  >
+                    <X className="w-5 h-5" />
+                  </motion.button>
+                </div>
               </div>
 
               {/* Menu Content */}
               <div className="p-4 space-y-6">
                 {/* Main Pages */}
                 <div>
-                  <h3 className="text-xs font-bold text-[#5c5243] uppercase tracking-wider mb-3 px-2">Главное</h3>
+                  <h3 className="text-xs font-bold text-[#5c5243] uppercase tracking-wider mb-3 px-2">{t('dashboard.overview')}</h3>
                   <div className="space-y-1">
                     {allPages.map((page) => (
                       <Link
                         key={page.href}
                         to={page.href}
-                        onClick={() => setIsMenuOpen(false)}
                         className={cn(
                           'flex items-center gap-3 px-3 py-3 rounded-xl transition-all min-h-[48px]',
                           isActive(page.href)
@@ -185,7 +198,7 @@ export const ElHeader: React.FC = () => {
                     className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[#5c5243] hover:bg-[#dcd3c6] transition-all min-h-[48px]"
                   >
                     <Heart className="w-5 h-5" />
-                    <span className="font-medium text-sm flex-1 text-left">Здоровье</span>
+                    <span className="font-medium text-sm flex-1 text-left">{t('nav.health')}</span>
                     <motion.div
                       animate={{ rotate: healthMenuOpen ? 90 : 0 }}
                       transition={{ duration: 0.2 }}
@@ -207,7 +220,6 @@ export const ElHeader: React.FC = () => {
                             <Link
                               key={module.href}
                               to={module.href}
-                              onClick={() => setIsMenuOpen(false)}
                               className={cn(
                                 'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm min-h-[44px]',
                                 isActive(module.href)
@@ -227,13 +239,12 @@ export const ElHeader: React.FC = () => {
 
                 {/* Features Pages */}
                 <div>
-                  <h3 className="text-xs font-bold text-[#5c5243] uppercase tracking-wider mb-3 px-2">Информация</h3>
+                  <h3 className="text-xs font-bold text-[#5c5243] uppercase tracking-wider mb-3 px-2">{t('common.info')}</h3>
                   <div className="space-y-1">
                     {featuresPages.map((page) => (
                       <Link
                         key={page.href}
                         to={page.href}
-                        onClick={() => setIsMenuOpen(false)}
                         className={cn(
                           'flex items-center gap-3 px-3 py-3 rounded-xl transition-all min-h-[48px] text-sm',
                           isActive(page.href)
@@ -253,10 +264,10 @@ export const ElHeader: React.FC = () => {
                 <div className="p-4 rounded-xl bg-[#dcd3c6] shadow-[inset_3px_3px_6px_rgba(44,40,34,0.1),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]">
                   <div className="flex items-center gap-2 mb-2">
                     <User className="w-4 h-4 text-[#5c5243]" />
-                    <span className="text-xs font-bold text-[#2d2418]">Гостевой режим</span>
+                    <span className="text-xs font-bold text-[#2d2418]">{t('nav.v1')}</span>
                   </div>
                   <p className="text-xs text-[#5c5243]">
-                    Все страницы доступны без регистрации. Данные сохраняются временно в браузере.
+                    {t('app.description')}
                   </p>
                 </div>
               </div>
@@ -264,6 +275,11 @@ export const ElHeader: React.FC = () => {
           </>
         )}
       </AnimatePresence>
+    </>
+  );
+};
+
+export default ElHeader;
     </>
   );
 };

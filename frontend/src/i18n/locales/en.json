@@ -417,6 +417,18 @@
       "habits": {
         "title": "Habits",
         "description": "Build lasting healthy habits with gamification"
+      },
+      "community": {
+        "title": "Community",
+        "description": "Support from like-minded people and specialists"
+      },
+      "gamification": {
+        "title": "Gamification",
+        "description": "Achievements, challenges, leaderboards"
+      },
+      "privacy": {
+        "title": "Privacy",
+        "description": "Your data is under reliable protection"
       }
     },
     "pricing": {
@@ -448,6 +460,10 @@
         ],
         "popular": "Most Popular"
       },
+      "popularChoice": "Popular Choice",
+      "startFree": "Start Free",
+      "try14Days": "Try 14 Days",
+      "startPro": "Start Pro",
       "pro": {
         "name": "Pro",
         "price": "19.99",
