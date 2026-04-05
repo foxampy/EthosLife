@@ -13,8 +13,7 @@ import {
   Flame,
   MapPin,
   TrendingUp,
-  Walking,
-  Running,
+  PersonStanding,
   Bike,
   Dumbbell,
   Waves,
@@ -44,8 +43,8 @@ const WEEKLY_STEPS = [
 ];
 
 const ACTIVITY_TYPES = [
-  { id: 'walk', name: 'Walk', icon: Walking, color: 'from-emerald-500 to-teal-500', calories: '200-300', duration: '30 min' },
-  { id: 'run', name: 'Run', icon: Running, color: 'from-orange-500 to-red-500', calories: '400-600', duration: '30 min' },
+  { id: 'walk', name: 'Walk', icon: PersonStanding, color: 'from-emerald-500 to-teal-500', calories: '200-300', duration: '30 min' },
+  { id: 'run', name: 'Run', icon: Bike, color: 'from-orange-500 to-red-500', calories: '400-600', duration: '30 min' },
   { id: 'gym', name: 'Gym', icon: Dumbbell, color: 'from-blue-500 to-indigo-500', calories: '300-500', duration: '45 min' },
   { id: 'cycle', name: 'Cycle', icon: Bike, color: 'from-cyan-500 to-blue-500', calories: '350-550', duration: '45 min' },
   { id: 'swim', name: 'Swim', icon: Waves, color: 'from-violet-500 to-purple-500', calories: '400-700', duration: '30 min' },
@@ -53,8 +52,8 @@ const ACTIVITY_TYPES = [
 ];
 
 const RECENT_WORKOUTS = [
-  { id: 1, type: 'Running', duration: '32 min', calories: 420, date: 'Today, 7:00 AM', icon: Running },
-  { id: 2, type: 'Morning Walk', duration: '45 min', calories: 180, date: 'Yesterday', icon: Walking },
+  { id: 1, type: 'Running', duration: '32 min', calories: 420, date: 'Today, 7:00 AM', icon: Bike },
+  { id: 2, type: 'Morning Walk', duration: '45 min', calories: 180, date: 'Yesterday', icon: PersonStanding },
 ];
 
 // Circular Progress for Steps

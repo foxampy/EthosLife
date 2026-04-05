@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Coins, DollarSign, Clock, CheckCircle2, AlertCircle, ArrowRight, Gift } from 'lucide-react';
+import { Coins, DollarSign, Clock, CheckCircle2, AlertCircle, ArrowRight, Gift, TrendingUp } from 'lucide-react';
 import { NeuCard } from '../../components/Neumorphism/NeuCard';
 import { NeuButton } from '../../components/Neumorphism/NeuButton';
 import { NeuInput } from '../../components/Neumorphism/NeuInput';
@@ -153,7 +153,7 @@ export const TokenSalePage: React.FC = () => {
             <p className="text-[#8c7a6b] mb-8 max-w-md mx-auto">
               Connect your wallet to participate in the UNITY token sale
             </p>
-            <WalletConnectButton size="lg" />
+            <WalletConnectButton />
           </div>
         </div>
       </div>

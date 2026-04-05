@@ -27,7 +27,7 @@ export const WalletDashboard: React.FC = () => {
             <p className="text-[#8c7a6b] mb-8 max-w-md mx-auto">
               Connect your wallet to view your UNITY balance, staking positions, and token vesting schedule
             </p>
-            <WalletConnectButton size="lg" />
+            <WalletConnectButton />
           </div>
         </div>
       </div>

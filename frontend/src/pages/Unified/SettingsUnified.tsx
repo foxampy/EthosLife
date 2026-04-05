@@ -40,7 +40,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import { ElCard, ElButton, ElInput } from '../../components/ElCore';
+import { ElCard, ElCardHeader, ElButton, ElInput } from '../../components/ElCore';
 
 // ============================================
 // TYPES
@@ -135,7 +135,7 @@ const AccountSettings: React.FC = () => {
   return (
     <div className="space-y-6">
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Email Address"
           subtitle="Manage your email preferences"
           icon={<Mail className="w-5 h-5" />}
@@ -154,7 +154,7 @@ const AccountSettings: React.FC = () => {
       </ElCard>
 
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Password"
           subtitle="Update your password regularly"
           icon={<Lock className="w-5 h-5" />}
@@ -209,7 +209,7 @@ const AccountSettings: React.FC = () => {
       </ElCard>
 
       <ElCard variant="elevated" className="border-red-200">
-        <ElCard.Header
+        <ElCardHeader
           title="Danger Zone"
           subtitle="Irreversible actions for your account"
           icon={<AlertTriangle className="w-5 h-5 text-red-500" />}
@@ -295,7 +295,7 @@ const NotificationSettings: React.FC = () => {
   return (
     <div className="space-y-6">
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Push Notifications"
           subtitle="Receive notifications on your device"
           icon={<Bell className="w-5 h-5" />}
@@ -330,7 +330,7 @@ const NotificationSettings: React.FC = () => {
       </ElCard>
 
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Email Notifications"
           subtitle="Manage your email preferences"
           icon={<Mail className="w-5 h-5" />}
@@ -383,7 +383,7 @@ const PrivacySettings: React.FC = () => {
   return (
     <div className="space-y-6">
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Profile Visibility"
           subtitle="Control who can see your profile"
           icon={<Eye className="w-5 h-5" />}
@@ -402,7 +402,7 @@ const PrivacySettings: React.FC = () => {
       </ElCard>
 
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Activity Sharing"
           subtitle="Choose what to share with others"
           icon={<Shield className="w-5 h-5" />}
@@ -424,7 +424,7 @@ const PrivacySettings: React.FC = () => {
       </ElCard>
 
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Data & Privacy"
           subtitle="Manage your personal data"
           icon={<Download className="w-5 h-5" />}
@@ -464,7 +464,7 @@ const AppearanceSettings: React.FC = () => {
   return (
     <div className="space-y-6">
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Theme"
           subtitle="Choose your preferred appearance"
           icon={<Palette className="w-5 h-5" />}
@@ -494,7 +494,7 @@ const AppearanceSettings: React.FC = () => {
       </ElCard>
 
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Language"
           subtitle="Select your preferred language"
           icon={<Globe className="w-5 h-5" />}
@@ -545,7 +545,7 @@ const DevicesSettings: React.FC = () => {
   return (
     <div className="space-y-6">
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Connected Devices"
           subtitle="Manage devices with access to your account"
           icon={<DeviceIcon className="w-5 h-5" />}
@@ -651,7 +651,7 @@ const BillingSettings: React.FC = () => {
       </ElCard>
 
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Payment Method"
           subtitle="Manage your payment options"
           icon={<CreditCard className="w-5 h-5" />}
@@ -673,7 +673,7 @@ const BillingSettings: React.FC = () => {
       </ElCard>
 
       <ElCard variant="elevated">
-        <ElCard.Header
+        <ElCardHeader
           title="Billing History"
           subtitle="View past invoices and receipts"
           icon={<Download className="w-5 h-5" />}

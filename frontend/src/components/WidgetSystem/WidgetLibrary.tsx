@@ -7,12 +7,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Search, X, Plus, Heart, Activity, Zap, Sparkles, Grid3X3 } from 'lucide-react';
-import { useWidgetStore, widgetDefinitions, WidgetCategory } from '../../store/widgetStore';
+import { useWidgetStore, widgetDefinitions } from '../../store/widgetStore';
 import { ElCard, ElButton, ElInput } from '../ElCore';
 
 interface WidgetLibraryProps {
   onClose: () => void;
 }
+
+type WidgetCategory = 'health' | 'social' | 'gamification' | 'utility' | 'gadgets';
 
 const categoryIcons: Record<WidgetCategory, React.ElementType> = {
   health: Heart,
@@ -90,7 +92,7 @@ export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({ onClose }) => {
         <div className="p-6 border-b border-[var(--bone-400)]/30 space-y-4">
           <ElInput
             value={searchQuery}
-            onChange={setSearchQuery}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
             placeholder="Search widgets..."
             leftIcon={<Search className="w-5 h-5" />}
             className="max-w-md"

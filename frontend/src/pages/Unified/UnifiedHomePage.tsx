@@ -14,6 +14,7 @@ import {
   Globe,
   Zap,
   Shield,
+  Plus,
 } from 'lucide-react';
 import { ElCard, ElButton } from '../../components/ElCore';
 import { useNavigate } from 'react-router-dom';

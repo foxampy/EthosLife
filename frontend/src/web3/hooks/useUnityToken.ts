@@ -5,6 +5,24 @@
 
 import { useState, useEffect } from 'react';
 
+export interface TokenInfo {
+  balance: string;
+  stakedBalance: string;
+  totalSupply: string;
+  price: number;
+  isApproved: boolean;
+}
+
+export interface VestingInfo {
+  totalAmount: string;
+  releasedAmount: string;
+  vestedAmount: string;
+  releasableAmount: string;
+  startTime: Date;
+  cliffEnd: Date;
+  vestingEnd: Date;
+}
+
 export interface UnityTokenState {
   balance: string;
   stakedBalance: string;
@@ -13,7 +31,7 @@ export interface UnityTokenState {
   isApproved: boolean;
 }
 
-export function useUnityToken(walletAddress: string | null) {
+export function useUnityToken(walletAddress: string | null = null) {
   const [state, setState] = useState<UnityTokenState>({
     balance: '0',
     stakedBalance: '0',
@@ -21,6 +39,24 @@ export function useUnityToken(walletAddress: string | null) {
     price: 0.05, // $0.05 per token
     isApproved: false,
   });
+
+  const tokenInfo: TokenInfo = {
+    balance: state.balance,
+    stakedBalance: state.stakedBalance,
+    totalSupply: state.totalSupply,
+    price: state.price,
+    isApproved: state.isApproved,
+  };
+
+  const vestingInfo: VestingInfo = {
+    totalAmount: '150000000',
+    releasedAmount: '25000000',
+    vestedAmount: '37500000',
+    releasableAmount: '12500000',
+    startTime: new Date('2025-01-01T00:00:00Z'),
+    cliffEnd: new Date('2025-07-01T00:00:00Z'),
+    vestingEnd: new Date('2026-01-01T00:00:00Z'),
+  };
 
   useEffect(() => {
     if (!walletAddress) {
@@ -78,10 +114,22 @@ export function useUnityToken(walletAddress: string | null) {
     }
   };
 
+  const releaseVestedTokens = async () => {
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: 'Release failed' };
+    }
+  };
+
   return {
     ...state,
+    tokenInfo,
+    vestingInfo,
     approve,
     transfer,
+    releaseVestedTokens,
   };
 }
 

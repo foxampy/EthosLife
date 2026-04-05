@@ -35,9 +35,6 @@ export const mockHealthScore: HealthScore = {
     fitness: 92,
     sleep: 78,
     mental: 88,
-    medical: 95,
-    body: 82,
-    environment: 90,
   },
   trend: 'up',
   lastWeekScore: 82,
@@ -62,6 +59,7 @@ export const mockActivity: ActivityData = {
   steps: { current: 8432, goal: 10000 },
   calories: 420,
   activeMinutes: 25,
+  distance: 6.2,
 };
 
 // Mock Nutrition Data
@@ -79,7 +77,7 @@ export const mockNutrition: NutritionSummary = {
 // Mock Sleep Data
 export const mockSleep: SleepSummary = {
   score: 76,
-  duration: '7h 12m',
+  duration: 7.2,
   durationMinutes: 432,
   bedTime: '11:15 PM',
   wakeTime: '6:27 AM',
@@ -176,8 +174,9 @@ export const mockBodyMetrics: BodyMetrics = {
     current: 78.5,
     trend: [79.2, 79.0, 78.8, 78.7, 78.6, 78.5, 78.5],
     unit: 'kg',
+    change: -0.7,
   },
-  bmi: { value: 23.4, category: 'Normal' },
+  bmi: { value: 23.4, category: 'Normal', idealRange: '18.5-24.9' },
   measurements: { chest: 98, waist: 82, hips: 96 },
   goalProgress: 65,
 };

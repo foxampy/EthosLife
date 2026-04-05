@@ -125,7 +125,7 @@ export const SocialWidget: React.FC<SocialWidgetProps> = ({
             >
               Что нового?
             </button>
-            <NeuButton onClick={onCreatePost} size="icon">
+            <NeuButton onClick={onCreatePost} size="sm">
               <Send size={20} />
             </NeuButton>
           </div>
@@ -257,7 +257,7 @@ export const SocialWidget: React.FC<SocialWidgetProps> = ({
                 {/* Action Buttons */}
                 <div className="flex items-center justify-between">
                   <NeuButton
-                    variant={likedPosts.has(post.id) ? 'primary' : 'flat'}
+                    variant={likedPosts.has(post.id) ? 'elevated' : 'flat'}
                     size="sm"
                     onClick={(e) => toggleLike(post.id, e)}
                     leftIcon={<Heart size={16} className={likedPosts.has(post.id) ? 'text-red-500 fill-red-500' : ''} />}
@@ -288,7 +288,7 @@ export const SocialWidget: React.FC<SocialWidgetProps> = ({
                   
                   <NeuButton
                     variant="flat"
-                    size="icon"
+                    size="sm"
                     onClick={(e) => toggleSave(post.id, e)}
                   >
                     <Bookmark 

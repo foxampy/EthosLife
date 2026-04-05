@@ -17,7 +17,7 @@ import {
 const FAQV2 = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<string | null>(null);
 
   const faqCategories = [
     {
@@ -152,7 +152,7 @@ const FAQV2 = () => {
     }
   ];
 
-  const toggleFaq = (index: number) => {
+  const toggleFaq = (index: string) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
@@ -221,7 +221,7 @@ const FAQV2 = () => {
                       initial={false}
                     >
                       <button
-                        onClick={() => toggleFaq(Number(index))}
+                        onClick={() => toggleFaq(index)}
                         className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-[#d4ccb8]/50 transition-colors"
                       >
                         <div className="flex items-center gap-4 flex-1">

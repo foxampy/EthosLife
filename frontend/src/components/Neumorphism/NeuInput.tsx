@@ -184,7 +184,7 @@ export const NeuTextArea = React.forwardRef<HTMLTextAreaElement, NeuTextAreaProp
           aria-describedby={error ? `${props.id}-error` : helperText ? `${props.id}-helper` : undefined}
           animate={isFocused ? { scale: 1.005 } : { scale: 1 }}
           transition={{ duration: 0.2 }}
-          {...props}
+          {...(props as any)}
         />
         {error && (
           <div id={`${props.id}-error`} className="flex items-center gap-1 mt-1.5 text-xs text-red-500" role="alert">

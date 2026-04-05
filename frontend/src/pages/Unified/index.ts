@@ -1,15 +1,13 @@
 // Health Modules
 export * from './Health';
 
-// Social Features  
+// Social Features
 export * from './Social';
 
 // Main Pages
 export { UnifiedHomePage } from './UnifiedHomePage';
-export { DashboardV2 } from './DashboardV2';
-export { AIChatUnified } from './AIChatUnified';
+export { default as ProfileUnified } from './ProfileUnified';
+export { default as SettingsUnified } from './SettingsUnified';
+export { default as WalletUnified } from './WalletUnified';
 export { SpecialistsUnified } from './SpecialistsUnified';
 export { CentersUnified } from './CentersUnified';
-export { ProfileUnified } from './ProfileUnified';
-export { SettingsUnified } from './SettingsUnified';
-export { WalletUnified } from './WalletUnified';

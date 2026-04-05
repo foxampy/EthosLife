@@ -207,7 +207,7 @@ export const CryptoWidget: React.FC<CryptoWidgetProps> = ({
         <div>
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-[#5c5243]">Последние транзакции</span>
-            <NeuButton variant="flat" size="xs">Все</NeuButton>
+            <NeuButton variant="flat" size="sm">Все</NeuButton>
           </div>
           
           <div className="space-y-2">

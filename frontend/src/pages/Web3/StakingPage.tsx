@@ -31,7 +31,7 @@ export const StakingPage: React.FC = () => {
             <p className="text-[#8c7a6b] mb-8 max-w-md mx-auto">
               Connect your wallet to stake UNITY tokens and start earning rewards
             </p>
-            <WalletConnectButton size="lg" />
+            <WalletConnectButton />
           </div>
         ) : (
           <>

@@ -5,6 +5,42 @@
 
 import { useState, useEffect } from 'react';
 
+export type SaleRound = 'seed' | 'private' | 'public';
+
+export interface RoundInfo {
+  price: number;
+  allocation: string;
+  sold: string;
+  minPurchase: string;
+  maxPurchase: string;
+  active: boolean;
+  remaining: string;
+}
+
+export interface Rounds {
+  seed: RoundInfo;
+  private: RoundInfo;
+  public: RoundInfo;
+}
+
+export interface Purchase {
+  round: SaleRound;
+  amount: string;
+  price: number;
+  purchaseTime: Date;
+  claimed: boolean;
+}
+
+export interface VestingProgress {
+  totalPurchased: string;
+  claimable: string;
+  claimed: string;
+  progressPercent: number;
+  vestingStart: Date;
+  cliffEnd: Date;
+  vestingEnd: Date;
+}
+
 export interface TokenSaleState {
   isActive: boolean;
   currentPrice: number;
@@ -18,7 +54,7 @@ export interface TokenSaleState {
   userPurchased: string;
 }
 
-export function useTokenSale(walletAddress: string | null) {
+export function useTokenSale(walletAddress: string | null = null) {
   const [state, setState] = useState<TokenSaleState>({
     isActive: true,
     currentPrice: 0.05, // $0.05 per token
@@ -31,6 +67,58 @@ export function useTokenSale(walletAddress: string | null) {
     userAllocation: '0',
     userPurchased: '0',
   });
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const rounds: Rounds = {
+    seed: {
+      price: 0.03,
+      allocation: '100000000',
+      sold: '45000000',
+      minPurchase: '5000',
+      maxPurchase: '500000',
+      active: true,
+      remaining: '55000000',
+    },
+    private: {
+      price: 0.04,
+      allocation: '150000000',
+      sold: '75000000',
+      minPurchase: '10000',
+      maxPurchase: '250000',
+      active: true,
+      remaining: '75000000',
+    },
+    public: {
+      price: 0.05,
+      allocation: '50000000',
+      sold: '20000000',
+      minPurchase: '1000',
+      maxPurchase: '50000',
+      active: false,
+      remaining: '30000000',
+    },
+  };
+
+  const purchases: Purchase[] = [
+    {
+      round: 'seed',
+      amount: '10000',
+      price: 0.03,
+      purchaseTime: new Date('2026-03-07T10:00:00Z'),
+      claimed: false,
+    },
+  ];
+
+  const vestingProgress: VestingProgress = {
+    totalPurchased: '10000',
+    claimable: '0',
+    claimed: '0',
+    progressPercent: 25,
+    vestingStart: new Date('2026-03-07T10:00:00Z'),
+    cliffEnd: new Date('2026-09-07T10:00:00Z'),
+    vestingEnd: new Date('2027-03-07T10:00:00Z'),
+  };
 
   useEffect(() => {
     // Check if sale is active
@@ -59,6 +147,13 @@ export function useTokenSale(walletAddress: string | null) {
 
   const calculateTokens = (amount: number): number => {
     return Math.floor(amount / state.currentPrice);
+  };
+
+  const calculateCost = async (_round: SaleRound, amount: string): Promise<string> => {
+    const amt = parseFloat(amount);
+    if (isNaN(amt) || amt <= 0) return '0';
+    const price = rounds[_round]?.price || state.currentPrice;
+    return (amt * price).toString();
   };
 
   const purchase = async (amount: number) => {
@@ -101,6 +196,18 @@ export function useTokenSale(walletAddress: string | null) {
     }
   };
 
+  const buyTokens = async (_round: SaleRound, amount: string, _paymentToken: 'usdc' | 'usdt') => {
+    try {
+      setIsLoading(true);
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: 'Buy failed' };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const claimTokens = async () => {
     // TODO: Implement actual token claiming
     try {
@@ -114,9 +221,15 @@ export function useTokenSale(walletAddress: string | null) {
 
   return {
     ...state,
+    rounds,
+    purchases,
+    vestingProgress,
     calculateTokens,
+    calculateCost,
     purchase,
+    buyTokens,
     claimTokens,
+    isLoading,
   };
 }
 

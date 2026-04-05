@@ -17,7 +17,7 @@ export interface NutritionWidgetProps {
     name: string;
     time: string;
     calories: number;
-  };
+  } | null;
   nextMeal?: string;
   waterIntake: number;
   waterGoal: number;
@@ -112,15 +112,24 @@ export const NutritionWidget: React.FC<NutritionWidgetProps> = ({
         <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center shadow-[inset_1px_1px_2px_rgba(0,0,0,0.1)]">
           <Utensils className="w-5 h-5 text-orange-600" />
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-[#2d2418] truncate">{lastMeal.name}</p>
-          <div className="flex items-center gap-2 text-xs text-[#5c5243]">
-            <Clock className="w-3 h-3" />
-            <span>{lastMeal.time}</span>
-            <span>•</span>
-            <span>{lastMeal.calories} kcal</span>
+        {lastMeal ? (
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-[#2d2418] truncate">{lastMeal.name}</p>
+            <div className="flex items-center gap-2 text-xs text-[#5c5243]">
+              <Clock className="w-3 h-3" />
+              <span>{lastMeal.time}</span>
+              <span>•</span>
+              <span>{lastMeal.calories} kcal</span>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-[#2d2418]">No meals logged yet</p>
+            <div className="flex items-center gap-2 text-xs text-[#5c5243]">
+              <span>Start tracking your meals to see progress</span>
+            </div>
+          </div>
+        )}
       </motion.div>
 
       {/* Next meal reminder */}

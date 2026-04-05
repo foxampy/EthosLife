@@ -2,7 +2,12 @@
 
 export interface HealthScore {
   overall: number;
-  breakdown: Record<string, number>;
+  breakdown: {
+    fitness: number;
+    nutrition: number;
+    sleep: number;
+    mental: number;
+  };
   trend: 'up' | 'down' | 'stable';
   lastWeekScore: number;
 }
@@ -22,6 +27,7 @@ export interface ActivityData {
   steps: { current: number; goal: number };
   calories: number;
   activeMinutes: number;
+  distance: number;
 }
 
 export interface NutritionSummary {
@@ -30,14 +36,14 @@ export interface NutritionSummary {
   protein: { current: number; goal: number };
   carbs: { current: number; goal: number };
   fats: { current: number; goal: number };
-  lastMeal: { name: string; time: string; calories: number };
+  lastMeal: { name: string; time: string; calories: number } | null;
   waterIntake: number;
   waterGoal: number;
 }
 
 export interface SleepSummary {
   score: number;
-  duration: string;
+  duration: number;
   durationMinutes: number;
   bedTime: string;
   wakeTime: string;
@@ -103,8 +109,8 @@ export interface Challenge {
 }
 
 export interface BodyMetrics {
-  weight: { current: number; trend: number[]; unit: string };
-  bmi: { value: number; category: string };
+  weight: { current: number; trend: number[]; unit: string; change: number };
+  bmi: { value: number; category: string; idealRange: string };
   measurements: Record<string, number>;
   goalProgress: number;
 }

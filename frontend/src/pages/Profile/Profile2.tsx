@@ -1437,13 +1437,16 @@ export default function Profile2() {
     const [activeSettingsTab, setActiveSettingsTab] = useState<'account' | 'notifications' | 'privacy' | 'preferences'>('account');
 
     const toggleSetting = (category: keyof UserSettings, key: string) => {
-      setSettings(prev => ({
-        ...prev,
-        [category]: {
-          ...prev[category],
-          [key]: !prev[category][key],
-        },
-      }));
+      setSettings(prev => {
+        const categorySettings = prev[category] as Record<string, any>;
+        return {
+          ...prev,
+          [category]: {
+            ...categorySettings,
+            [key]: !categorySettings[key],
+          },
+        };
+      });
     };
 
     const ToggleSwitch: React.FC<{ checked: boolean; onChange: () => void }> = ({ checked, onChange }) => (
@@ -1912,10 +1915,10 @@ export default function Profile2() {
                   <>
                     <button
                       onClick={() => handleSync(integration.id)}
-                      disabled={integration.status === 'syncing'}
+                      disabled={(integration.status as IntegrationStatus) === 'syncing'}
                       className="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-stone text-bone text-sm hover:bg-stone/90 disabled:opacity-50"
                     >
-                      <RefreshCw size={14} className={integration.status === 'syncing' ? 'animate-spin' : ''} />
+                      <RefreshCw size={14} className={(integration.status as IntegrationStatus) === 'syncing' ? 'animate-spin' : ''} />
                       <span>Sync Now</span>
                     </button>
                     <button

@@ -14,6 +14,11 @@ export interface Web3State {
   error: string | null;
 }
 
+export function shortenAddress(address: string, chars = 4): string {
+  if (!address) return '';
+  return `${address.slice(0, chars + 2)}...${address.slice(-chars)}`;
+}
+
 export function useWeb3() {
   const [state, setState] = useState<Web3State>({
     isConnected: false,

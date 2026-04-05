@@ -176,7 +176,7 @@ export const GamificationWidget: React.FC<GamificationWidgetProps> = ({
           </div>
           <NeuButton
             variant="flat"
-            size="xs"
+            size="sm"
             onClick={onBadgesClick}
           >
             Все

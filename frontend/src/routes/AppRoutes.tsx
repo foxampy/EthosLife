@@ -121,8 +121,8 @@ export const AppRoutes: React.FC = () => {
         <Route path="/blog" element={<PageLayout><Blog /></PageLayout>} />
 
         {/* =============== AUTH =============== */}
-        <Route path="/login" element={<PageLayout showFooter={false}><Login /></PageLayout>} />
-        <Route path="/register" element={<PageLayout showFooter={false}><Register /></PageLayout>} />
+        <Route path="/login" element={<PageLayout><Login /></PageLayout>} />
+        <Route path="/register" element={<PageLayout><Register /></PageLayout>} />
 
         {/* =============== DASHBOARD =============== */}
         <Route path="/dashboard" element={<PageLayout><Dashboard /></PageLayout>} />

@@ -33,7 +33,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import { ElCard, ElButton, ElInput, ElTextArea } from '../../components/ElCore';
+import { ElCard, ElCardHeader, ElButton, ElInput, ElTextArea } from '../../components/ElCore';
 
 // ============================================
 // TYPES
@@ -279,7 +279,7 @@ const BadgeCard: React.FC<{ badge: Badge }> = ({ badge }) => (
 const HealthSummary: React.FC = () => (
   <div className="space-y-4">
     <ElCard variant="elevated">
-      <ElCard.Header
+      <ElCardHeader
         title="Health Overview"
         subtitle="Your wellness metrics this week"
         icon={<Activity className="w-5 h-5" />}
@@ -305,7 +305,7 @@ const HealthSummary: React.FC = () => (
     </ElCard>
 
     <ElCard variant="elevated">
-      <ElCard.Header
+      <ElCardHeader
         title="Current Streaks"
         subtitle="Keep the momentum going!"
         icon={<Flame className="w-5 h-5 text-orange-500" />}

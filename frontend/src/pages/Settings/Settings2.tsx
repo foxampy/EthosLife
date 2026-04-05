@@ -926,7 +926,7 @@ const Card: React.FC<{
 };
 
 const Button: React.FC<{
-  children: React.ReactNode;
+  children?: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   onClick?: () => void;

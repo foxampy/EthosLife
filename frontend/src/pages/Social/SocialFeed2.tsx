@@ -263,7 +263,7 @@ const CreatePostCard: React.FC = () => {
   const [content, setContent] = useState('');
 
   return (
-    <ElCard variant="convex" className="p-4 mb-6">
+    <ElCard variant="elevated" className="p-4 mb-6">
       <div className="flex gap-3">
         <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
           U
@@ -424,7 +424,7 @@ export const SocialFeed2: React.FC = () => {
         {/* Load More */}
         {filteredPosts.length > 0 && (
           <div className="text-center mt-6">
-            <ElButton variant="button" className="px-6 py-3">
+            <ElButton variant="elevated" className="px-6 py-3">
               Load More Posts
             </ElButton>
           </div>
