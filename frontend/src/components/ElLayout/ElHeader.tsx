@@ -27,6 +27,8 @@ import {
   User,
   Settings,
   ChevronRight,
+  FileText,
+  Presentation,
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -101,6 +103,8 @@ export const ElHeader: React.FC = () => {
     { name: t('nav.faq'), href: '/faq', icon: MessageCircle },
     { name: t('nav.blog'), href: '/blog', icon: MessageCircle },
     { name: t('nav.tokenomics'), href: '/tokenomics', icon: Award },
+    { name: t('nav.whitepaper'), href: '/whitepaper', icon: FileText },
+    { name: t('nav.investorPitch'), href: '/investor-pitch', icon: Presentation },
   ];
 
   const socialV1Pages = [

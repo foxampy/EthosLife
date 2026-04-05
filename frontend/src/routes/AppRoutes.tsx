@@ -42,6 +42,8 @@ const Team = React.lazy(() => import('../pages/Landing/Team'));
 const Roadmap = React.lazy(() => import('../pages/Landing/Roadmap'));
 const FAQ = React.lazy(() => import('../pages/Landing/FAQ'));
 const Blog = React.lazy(() => import('../pages/Landing/Blog'));
+const WhitePaper = React.lazy(() => import('../pages/Landing/WhitePaper'));
+const InvestorPitch = React.lazy(() => import('../pages/Landing/InvestorPitch'));
 
 // Auth
 const Login = React.lazy(() => import('../pages/Auth/Login'));
@@ -119,6 +121,8 @@ export const AppRoutes: React.FC = () => {
         <Route path="/roadmap" element={<PageLayout><Roadmap /></PageLayout>} />
         <Route path="/faq" element={<PageLayout><FAQ /></PageLayout>} />
         <Route path="/blog" element={<PageLayout><Blog /></PageLayout>} />
+        <Route path="/whitepaper" element={<PageLayout><WhitePaper /></PageLayout>} />
+        <Route path="/investor-pitch" element={<PageLayout><InvestorPitch /></PageLayout>} />
 
         {/* =============== AUTH =============== */}
         <Route path="/login" element={<PageLayout><Login /></PageLayout>} />

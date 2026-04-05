@@ -502,5 +502,179 @@
     "serverError": "Errore del server. Riprova più tardi",
     "validation": "Controlla i dati inseriti e riprova",
     "rateLimit": "Troppe richieste. Attendi un momento"
+  },
+  "whitepaper": {
+    "title": "WhitePaper EthosLife",
+    "subtitle": "Un documento completo che delinea la nostra visione, tecnologia, tokenomics e roadmap per costruire il Sistema Operativo Umano -- un ecosistema sanitario unificato alimentato da IA e governance comunitaria.",
+    "backToHome": "Torna alla Home",
+    "downloadPdf": "Scarica PDF",
+    "tableOfContents": "Indice dei contenuti",
+    "lastUpdated": "5 aprile 2026",
+    "confidential": "Confidenziale",
+    "keyPoints": "Punti chiave",
+    "keyPointsList": {
+      "item1": "7 moduli sanitari integrati in un'unica piattaforma",
+      "item2": "Coach sanitario IA personale per ogni utente",
+      "item3": "Ecosistema di token UNITY con governance DAO",
+      "item4": "Mercato indirizzabile di +$1,5B bilioni in health-tech e benessere",
+      "item5": "Modello di business multi-entrata sostenibile con chiaro percorso verso la redditivita"
+    },
+    "executiveSummary": "Sintesi esecutiva",
+    "problem": "Il problema",
+    "solution": "La nostra soluzione",
+    "modules": "Moduli sanitari",
+    "technology": "Stack tecnologico",
+    "tokenomics": "Tokenomics",
+    "market": "Analisi del mercato",
+    "businessModel": "Modello di business",
+    "roadmap": "Roadmap",
+    "team": "Team e consulenti",
+    "financials": "Proiezioni finanziarie",
+    "risks": "Fattori di rischio",
+    "contact": "Contatto e legale",
+    "executiveSummary.heading": "Rimmaginare la salute umana",
+    "executiveSummary.p1": "EthosLife e un Sistema Operativo Umano (HOS) -- una piattaforma sanitaria completa alimentata da IA che unifica 7 moduli critici: Nutrizione, Movimento, Sonno, Psicologia, Medicina, Relazioni e Abitudini. La nostra missione e rendere la salute ottimale accessibile, misurabile e sostenibile per ogni persona sul pianeta.",
+    "executiveSummary.p2": "Si prevede che il mercato globale della salute digitale raggiungera $2,4 bilioni entro il 2030, ma il panorama attuale e frammentato. Gli utenti gestiscono 5-7 app diverse, con conseguenti silos di dati, informazioni incoerenti e scarso engagement. EthosLife risolve questa frammentazione con un'unica piattaforma integrata.",
+    "executiveSummary.p3": "Con il nostro token nativo UNITY, motore di coaching IA, modello di governance DAO e marketplace multi-lato che connette utenti con specialisti della salute, EthosLife crea un ecosistema sostenibile che premia i comportamenti sani.",
+    "problem.heading": "Panorama frammentato della Health-Tech",
+    "problem.p1": "L'ecosistema digitale della salute attuale e profondamente frammentato. Un individuo medio attento alla salute usa applicazioni separate per: tracciamento nutrizionale, registrazione allenamenti, monitoraggio del sonno, meditazione, gestione farmaci e salute sociale. Questa frammentazione crea diversi problemi critici.",
+    "problem.p2": "Innanzitutto, i silos di dati impediscono informazioni olistiche sulla salute. Quando la tua app nutrizionale non conosce la qualita del sonno e il tuo tracker del sonno non conosce i livelli di stress, nessuno puo offrire raccomandazioni veramente personalizzate.",
+    "problem.p3": "In secondo luogo, l'engagement crolla drasticamente. Le ricerche mostrano che il 78% degli utenti di app sanitarie abbandona entro 30 giorni. La causa principale: senza dati interconnessi e guida intelligente, gli utenti non vedono risultati significativi.",
+    "problem.p4": "In terzo luogo, il costo e proibitivo. Sottoscrivere 5-7 servizi sanitari premium costa $50-100+ al mese. Nel frattempo, gli specialisti della salute faticano a trovare e trattenere clienti attraverso i canali tradizionali.",
+    "solution.heading": "Una piattaforma. Sette moduli. Zero cambiamenti.",
+    "solution.p1": "EthosLife consolida tutto il tracciamento e coaching sanitario in un'unica piattaforma magnificamente progettata. Il nostro motore IA incrocia-analizza dati da tutti i 7 moduli per offrire informazioni che nessuna app mono-scopo puo eguagliare.",
+    "solution.p2": "Il Coach IA funge da assistente sanitario personale, comprendendo i modelli in tutto il profilo sanitario e fornendo raccomandazioni azionabili e contestuali. Impara dal tuo comportamento e si evolve con le tue esigenze.",
+    "solution.p3": "Il nostro sistema di gamification con ricompense in token UNITY trasforma le abitudini sane in un viaggio gratificante. Gli utenti guadagnano token completando sfide, mantenendo serie e aiutando gli altri.",
+    "solution.p4": "Il marketplace di specialisti connette professionisti sanitari certificati direttamente con gli utenti che cercano orientamento. Nutrizionisti, coach fitness, psicologi e altri specialisti possono offrire consulenze all'interno dell'ecosistema EthosLife.",
+    "solution.p5": "La governance DAO garantisce che la comunita abbia voce nelle decisioni della piattaforma. I detentori di token UNITY possono proporre e votare su priorita di funzionalita, linee guida comunitarie e evoluzione della piattaforma.",
+    "modules.heading": "Sette moduli sanitari integrati",
+    "modules.p1": "Nutrizione: Pianificazione pasti IA, tracciamento macro, scansione codici a barre, raccomandazioni ricette e monitoraggio idratazione. Il modulo apprende preferenze, restrizioni dietetiche e obiettivi.",
+    "modules.p2": "Movimento: Programmi di allenamento personalizzati, libreria esercizi con demo video, GPS per attivita all'aperto, punteggio recupero, analisi fatica muscolare e programmazione settimanale.",
+    "modules.p3": "Sonno: Analisi fasi del sonno, sveglia intelligente, valutazione cronotipo, punteggio igiene del sonno e monitoraggio ambientale. Fornisce raccomandazioni per migliorare la qualita del sonno.",
+    "modules.p4": "Psicologia: Tracciamento quotidiano dell'umore, monitoraggio energia e stress, strumenti TCC, esercizi di respirazione, diario della gratitudine, meditazioni guidate e valutazioni della salute mentale.",
+    "modules.p5": "Medicina: Tracciamento farmaci con promemoria intelligenti, registro sintomi, monitoraggio segni vitali, archiviazione risultati di laboratorio, cronologia sanitaria e gestione appuntamenti.",
+    "modules.p6": "Relazioni: Tracciamento connessioni sociali, metriche tempo di qualita, analisi comunicazione, strumenti di risoluzione conflitti e monitoraggio della batteria sociale.",
+    "modules.p7": "Abitudini: Costruttore di abitudini con tracciamento serie, habit stacking, metodo catena, promemoria personalizzabili e analitica dei progressi. Utilizza tecniche comprovute di scienza comportamentale.",
+    "technology.heading": "Architettura AI-First",
+    "technology.p1": "EthosLife e costruito su uno stack tecnologico moderno e scalabile. Il frontend usa React con TypeScript. Il nostro sistema di design implementa pattern UI neumorfi con animazioni fluide framer-motion.",
+    "technology.p2": "Il backend funziona su Node.js con Express, connesso a PostgreSQL per dati relazionali e Redis per caching e gestione sessioni. Il nostro motore IA sfrutta molteplici fornitori LLM con modelli personalizzati.",
+    "technology.p3": "La privacy dei dati e fondamentale. Implementiamo crittografia end-to-end per dati sanitari sensibili, siamo conformi a GDPR e HIPAA e non vendiamo mai i dati degli utenti a terze parti.",
+    "technology.p4": "Integrazione blockchain tramite lo smart contract UNITY consente transazioni di token, ricompense di staking e governance DAO. Il contratto e auditato e distribuito su una chain compatibile EVM.",
+    "tokenomics.heading": "Ecosistema di token UNITY",
+    "tokenomics.p1": "UNITY e il token nativo utilitaristico e di governance dell'ecosistema EthosLife con un'offerta totale fissa di 1.000.000.000 di token. Serve molteplici funzioni: premiare comportamenti sani, abilitare governance, facilitare transazioni marketplace e fornire rendimenti di staking.",
+    "tokenomics.p2": "Distribuzione Token: 35% Ricompense comunitarie ed ecosistema, 20% Vendita pubblica, 15% Team e consulenti (vesting 3 anni con cliff 1 anno), 15% Fondo sviluppo, 10% Pool di liquidita, 5% Fondo di riserva.",
+    "tokenomics.p3": "Gli utenti guadagnano token UNITY tramite: check-in sanitari quotidiani, serie di allenamento, traguardi sanitari, sfide comunitarie, invito di amici e contributo di contenuti utili alla comunita.",
+    "tokenomics.p4": "Utilita del token: Riscatto per abbonamenti Premium, prenotazione consulenze, acquisto prodotti sanitari, staking per ricompense aggiuntive (8-15% APY), voto proposte DAO e accesso a funzionalita esclusive.",
+    "tokenomics.p5": "Il meccanismo di staking permette di bloccare i token UNITY per periodi di 30/90/180/365 giorni per guadagnare token aggiuntivi e potere di governance. Periodi piu lunghi rendono APY piu elevato.",
+    "market.heading": "Mercato totale indirizzabile",
+    "market.p1": "Il mercato globale della salute digitale e stato valutato a $350 miliardi nel 2025 e si prevede raggiungera $2,4 bilioni entro il 2030, con una crescita CAGR del 27%. Questa crescita massiccia e guidata dalla crescente consapevolezza sanitaria e adozione diffusa degli smartphone.",
+    "market.p2": "Segmenti chiave: App salute & Fitness ($14B entro il 2028), Telemedicina ($455B entro il 2030), Benessere & Salute mentale ($275B entro il 2030), Dispositivi wearable sanitari ($185B entro il 2030), Analitica dati sanitari ($95B entro il 2030).",
+    "market.p3": "L'analisi competitiva mostra che sebbene giocatori individuali dominino categorie singole, nessuna piattaforma offre una soluzione integrata. Questo crea un'opportunita significativa di spazio bianco.",
+    "market.p4": "Il nostro utente target: individui attenti alla salute di 25-45 anni, tecnologici, disposti a investire nel benessere, frustrati dalla frammentazione delle app. Mercati secondari: programmi B2B benessere e specialisti della salute.",
+    "businessModel.heading": "Motore di entrate multi-lato",
+    "businessModel.p1": "EthosLife impiega un modello di entrate diversificato con 5 flussi principali, assicurando resilienza e crescita sostenibile. Il nostro approccio freemium massimizza l'acquisizione utenti mentre i livelli premium guidano la monetizzazione.",
+    "businessModel.p2": "Abbonamenti (45% delle entrate): Premium ($9.99/mese) include 7 moduli, coaching IA illimitato, analitica avanzata. Pro ($19.99/mese) aggiunge coach IA personale, sessioni 1:1 con specialisti e piano familiare per 5 membri.",
+    "businessModel.p3": "Commissione Marketplace (25% delle entrate): EthosLife prende una commissione del 15-20% su consulenze specialisti, vendite programmi e transazioni marketplace. Guadagniamo solo quando guadagnano loro.",
+    "businessModel.p4": "Economia dei Token (15% delle entrate): Ricavi vendita token, fee di staking e fee di transazione nell'ecosistema UNITY. Il meccanismo deflazionistico del token (2% burn) crea apprezzamento di valore a lungo termine.",
+    "businessModel.p5": "Informazioni dati & Partnership (10% delle entrate): Informazioni sanitarie anonimizzate e aggregate vendute a istituti di ricerca (con consenso esplicito dell'utente). Partnership strategiche con assicurazioni e produttori di wearable.",
+    "roadmap.heading": "Roadmap strategica",
+    "roadmap.p1": "Q1-Q2 2026 (Fondazione): Lancio piattaforma web con moduli sanitari core, coaching IA v1, autenticazione utente e funzionalita base comunita. Evento di generazione token.",
+    "roadmap.p2": "Q3-Q4 2026 (Crescita): Lancio beta app mobili (iOS & Android), marketplace specialisti, gamification con ricompense UNITY, coaching IA avanzato v2 e framework iniziale governance DAO.",
+    "roadmap.p3": "Q1-Q2 2027 (Espansione): Integrazioni wearable, lancio programmi B2B benessere, livello Pro con coach IA personale, piano familiare e prototipi hardware per wearable postura.",
+    "roadmap.p4": "Q3-Q4 2027 (Scala): Implementazione completa governance DAO, espansione internazionale (10+ lingue), partnership ricerca dati sanitari e modelli avanzati di predizione sanitaria IA.",
+    "roadmap.p5": "2028 e oltre (Visione): Smart Camera per monitoraggio automatico della salute, integrazione dati genetici, programmi fitness VR e EthosLife come sistema operativo sanitario predefinito per 100M+ utenti.",
+    "team.heading": "Team di classe mondiale e consulenti",
+    "team.p1": "EthosLife e costruito da un team multidisciplinare di esperti in scienze della salute, ingegneria del software, IA/ML, design di prodotti e strategia di business. La nostra esperienza combinata copre 50+ anni in health-tech.",
+    "team.p2": "Il team centrale include: ingegneri full-stack esperti in React, Node.js e infrastruttura cloud; scienziati della salute con PhD in nutrizione, fisiologia dell'esercizio e psicologia; ricercatori IA/ML che sviluppano modelli personalizzati.",
+    "team.p3": "Il consiglio consultivo comprende medici praticanti, dietisti registrati, professionisti fitness certificati, psicologi autorizzati ed esperti blockchain che guidano la nostra validita scientifica e conformita normativa.",
+    "financials.heading": "Proiezioni finanziarie e traguardi",
+    "financials.p1": "Anno 1 (2026): Obiettivo 100.000 utenti registrati, 10.000 abbonati Premium, $1.2M ARR. Focus su product-market fit, acquisizione utenti e costruzione comunita. Spese operative: $2.5M.",
+    "financials.p2": "Anno 2 (2027): Obiettivo 500.000 utenti, 50.000 abbonati Premium, lancio marketplace con 500+ specialisti. Proiettato $8M ARR. Break-even previsto per Q4 2027.",
+    "financials.p3": "Anno 3 (2028): Obiettivo 2M utenti, 200.000 abbonati Premium, programmi B2B con 50+ clienti corporate. Proiettato $35M ARR. Operazioni redditizie con flusso di cassa positivo.",
+    "financials.p4": "Anno 5 (2030): Obiettivo 10M+ utenti, 1M abbonati Premium, marketplace consolidato con 10.000+ specialisti. Proiettato $150M+ ARR. Posizionamento per IPO o acquisizione strategica.",
+    "risks.heading": "Fattori di rischio e mitigazione",
+    "risks.p1": "Rischio normativo: I dati sanitari sono soggetti a normative rigorose (GDPR, HIPAA). Mitigazione: Team conformita dedicato, audit regolari, architettura privacy-by-design e consulenza legale specializzata.",
+    "risks.p2": "Rischio di mercato: Concorrenza da attori ben finanziati (Apple Health, Google Fit) e nuovi concorrenti. Mitigazione: Focus sulla nostra proposta di valore unica -- 7 moduli integrati con analisi incrociata IA.",
+    "risks.p3": "Rischio tecnologico: Precisione dei modelli IA, scalabilita della piattaforma e sicurezza dei dati. Mitigazione: Miglioramento continuo dei modelli, architettura cloud-native scalabile, test di penetrazione regolari e programma bug bounty.",
+    "risks.p4": "Rischio Token/Mercato: Volatilita criptovalute e incertezza normativa. Mitigazione: Design token focalizzato sull'utilita, distribuzione conforme, pareri legali in giurisdizioni chiave e modello di entrate diversificato.",
+    "contact.heading": "Contattaci",
+    "contact.p1": "Accogliamo domande, richieste di partnership e discussioni di investimento. Contattateci attraverso uno dei canali qui sotto e il nostro team rispondera entro 48 ore.",
+    "contact.p2": "Richieste generali: info@ethoslife.com | Investimenti & Partnership: partnerships@ethoslife.com | Stampa: press@ethoslife.com | Supporto: support@ethoslife.com | Telegram: t.me/ethoslife | Twitter: @EthosLife",
+    "cta.title": "Unisciti alla rivoluzione della salute",
+    "cta.description": "EthosLife non e solo un'app -- e un movimento per rendere la salute ottimale accessibile a tutti. Unisciti a 100.000+ utenti che stanno gia costruendo vite piu sane e felici.",
+    "cta.startFree": "Inizia gratis oggi",
+    "cta.contactUs": "Contatta il nostro team",
+    "footer": {
+      "rights": "Tutti i diritti riservati."
+    }
+  },
+  "investorPitch": {
+    "title": "EthosLife -- Pitch per Investitori",
+    "preseed": "Presentazione Pre-Seed -- EthosLife: Il Sistema Operativo Umano. Una piattaforma sanitaria unificata alimentata da IA che integra nutrizione, movimento, sonno, psicologia, medicina, relazioni e abitudini. Cerchiamo $2M per raggiungere il product-market fit e lanciare le nostre app mobili.",
+    "slides": {
+      "problem": {
+        "title": "Il problema",
+        "content": "L'ecosistema sanitario digitale e profondamente frammentato. Gli utenti medi gestiscono 5-7 app separate per nutrizione, esercizio, sonno e meditazione. Questo crea silos di dati dove nessuna app puo dare informazioni olistiche. Il 78% degli utenti abbandona le app in 30 giorni. Il costo combinato di 5-7 servizi premium e $50-100+/mese."
+      },
+      "solution": {
+        "title": "La nostra soluzione",
+        "content": "EthosLife: Una piattaforma. Sette moduli. Zero cambiamenti. Il nostro motore IA incrocia-analizza dati di tutti i moduli per offrire informazioni che nessuna app individuale puo eguagliare. Il Coach IA funge da assistente personale, imparando dal tuo comportamento. Il sistema di gamification con token UNITY trasforma le abitudini sane in un viaggio gratificante."
+      },
+      "market": {
+        "title": "Analisi del mercato",
+        "content": "Mercato globale della salute digitale: $350B nel 2025, proiettato a $2.4T entro il 2030 (CAGR 27%). Segmenti chiave: App Fitness ($14B), Telemedicina ($455B), Benessere & Salute mentale ($275B), Wearable ($185B). EthosLife opera all'intersezione di tutti questi segmenti. Utente target: individui 25-45 anni, attenti alla salute."
+      },
+      "competitive": {
+        "title": "Vantaggio competitivo",
+        "content": "Giocatori individuali dominano categorie separate: MyFitnessPal (nutrizione), Strava (fitness), Calm (meditazione). Ma NESSUNO offre una soluzione integrata. Il nostro vantaggio competitivo: 7 moduli integrati con analisi incrociata IA che i concorrenti mono-scopo non possono replicare. Creiamo un effetto rete dove ogni modulo aggiuntivo aumenta il valore di tutti gli altri."
+      },
+      "businessModel": {
+        "title": "Modello di business",
+        "content": "5 flussi di entrate diversificati:\n1. Abbonamenti (45%): Premium $9.99/mese, Pro $19.99/mese, B2B Enterprise\n2. Commissione Marketplace (25%): 15-20% su consulenze specialisti\n3. Economia dei Token (15%): Vendite, staking e fee di transazione\n4. Informazioni dati (10%): Dati anonimizzati per ricerca\n5. Partnership strategiche (5%): Assicurazioni, wearable, sanita"
+      },
+      "token": {
+        "title": "Ecosistema di token UNITY",
+        "content": "UNITY: Token nativo utilitaristico e di governance. Offerta totale: 1.000.000.000. Distribuzione: 35% Ricompense comunitarie, 20% Vendita pubblica, 15% Team (vesting 3 anni), 15% Sviluppo, 10% Liquidita, 5% Riserva. Gli utenti guadagnano tramite check-in, serie, traguardi e referral. Utilita: Premium, consulenze, marketplace, staking (8-15% APY), governance DAO."
+      },
+      "traction": {
+        "title": "Trazione e metriche",
+        "content": "Metriche di crescita attuali:\n- Piattaforma web lanciata con moduli sanitari core\n- Coach IA v1 operativo e in continuo miglioramento\n- Comunita precoce di early adopters attivi\n- Tasso di engagement superiore alla media del settore\n- Retention utenti in crescita settimana dopo settimana\n- Pipeline di specialisti in costruzione"
+      },
+      "roadmap": {
+        "title": "Roadmap",
+        "content": "Q1-Q2 2026: Lancio web, moduli core, IA v1, TGE\nQ3-Q4 2026: App mobili beta, marketplace, gamification, IA v2, framework DAO\nQ1-Q2 2027: Integrazioni wearable, B2B benessere, Pro, piano familiare\nQ3-Q4 2027: DAO completo, 10+ lingue, ricerca dati, predizione IA\n2028+: Smart Camera, dati genetici, fitness VR, 100M+ utenti"
+      },
+      "useOfFunds": {
+        "title": "Utilizzo dei fondi",
+        "content": "Cerchiamo $2M in round Pre-Seed:\n- 40% Sviluppo prodotto: Ingegneria, design, infrastruttura cloud, sviluppo mobile\n- 25% Marketing & Acquisizione: Growth marketing, partnership, programmi referral\n- 20% Team: Assunzioni chiave in ingegneria, data science, scienze della salute\n- 10% Legale & Conformita: Struttura token, normative, brevetti\n- 5% Riserva operativa: Runway di 18 mesi per raggiungere traguardi chiave"
+      },
+      "projections": {
+        "title": "Proiezioni finanziarie",
+        "content": "Anno 1 (2026): 100K utenti, 10K Premium, $1.2M ARR\nAnno 2 (2027): 500K utenti, 50K Premium, $8M ARR, break-even Q4\nAnno 3 (2028): 2M utenti, 200K Premium, $35M ARR, flusso di cassa positivo\nAnno 5 (2030): 10M+ utenti, 1M Premium, $150M+ ARR\nMultipli di uscita: Le IPO health-tech medie 8-12x revenue"
+      },
+      "tokenSale": {
+        "title": "Dettagli vendita token",
+        "content": "Vendita pubblica di token -- Accesso precoce per investitori\nPrezzo di lancio: Determinato da meccanismo di scoperta dei prezzi\nVesting per investitori precoci: 6 mesi cliff, 12 mesi lineare\nUtilita immediata: Riscattabile per abbonamenti e servizi marketplace\nMeccanismo deflazionistico: 2% burn su transazioni selezionate\nConformita: Pareri legali in giurisdizioni chiave"
+      },
+      "team": {
+        "title": "Team fondatore",
+        "content": "Team multidisciplinare con 50+ anni di esperienza combinata in health-tech. Include: Ingegneri full-stack esperti in React, Node.js, cloud; Scienziati della salute con PhD in nutrizione, fisiologia e psicologia; Ricercatori IA/ML con modelli personalizzati sanitari; Designer di prodotti premiati; Leader commerciali con track record in health-tech."
+      },
+      "highlights": {
+        "title": "Punti salienti dell'investimento",
+        "content": "1. Mercato da $2.4T bilioni con 27% CAGR -- una delle piu grandi opportunita in tech\n2. Proposta di valore unica -- 7 moduli integrati vs. soluzioni frammentate\n3. Modello di business diversificato -- 5 flussi di entrate, non dipendente da uno solo\n4. Token con utilita reale -- Non speculativo, legato a servizi reali\n5. Team esperto -- 50+ anni combinati in health-tech\n6. Trazione precoce -- Piattaforma funzionante con utenti attivi\n7. Vantaggio dati -- Informazioni cross-modulo impossibili da replicare"
+      },
+      "theAsk": {
+        "title": "L'investimento",
+        "content": "Cerchiamo $2M in round Pre-Seed per:\n- Lanciare app mobili iOS e Android\n- Espandere il team di ingegneria e scienze della salute\n- Eseguire strategia di growth marketing\n- Stabilire partnership strategiche\n- Raggiungere 100K utenti e $1.2M ARR in 18 mesi\n\nOffriamo equity + allocazione di token UNITY per investitori precoci. Contatto: partnerships@ethoslife.com"
+      },
+      "contact": {
+        "title": "Contatto",
+        "content": "Siamo aperti a domande, richieste di partnership e discussioni di investimento. Il nostro team rispondera entro 48 ore.\n\nEmail: info@ethoslife.com\nPartnership: partnerships@ethoslife.com\nTelegram: t.me/ethoslife\nTwitter: @EthosLife"
+      }
+    },
+    "downloadPdf": "Scarica PDF",
+    "prev": "Precedente",
+    "next": "Successivo"
   }
 }
