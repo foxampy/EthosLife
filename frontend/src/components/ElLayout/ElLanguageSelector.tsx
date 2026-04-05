@@ -111,15 +111,19 @@ export const ElLanguageSelector: React.FC<ElLanguageSelectorProps> = ({
   }, []);
 
   const handleLanguageChange = (language: Language) => {
-    i18n.changeLanguage(language.code);
+    // Save to localStorage FIRST (before i18n changes)
+    localStorage.setItem('ethoslife-language', language.code);
     document.documentElement.dir = language.rtl ? 'rtl' : 'ltr';
     document.documentElement.lang = language.code;
-    
+
+    // Then change language
+    i18n.changeLanguage(language.code);
+
     // Update recent languages
     const newRecent = [language.code, ...recentLanguages.filter(l => l !== language.code)].slice(0, 3);
     setRecentLanguages(newRecent);
     localStorage.setItem('recentLanguages', JSON.stringify(newRecent));
-    
+
     setIsOpen(false);
     setSearchQuery('');
   };

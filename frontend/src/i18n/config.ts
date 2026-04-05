@@ -99,22 +99,23 @@ i18n
   .init({
     resources,
     fallbackLng: 'en',
+    lng: localStorage.getItem('ethoslife-language') || 'en',
     supportedLngs: Object.keys(languageConfig),
-    
+
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
       lookupLocalStorage: 'ethoslife-language',
     },
-    
+
     interpolation: {
       escapeValue: false,
     },
-    
+
     react: {
       useSuspense: false,
     },
-    
+
     // RTL support
     initImmediate: false,
   });
