@@ -7,8 +7,12 @@
   },
   "nav": {
     "home": "Home",
+    "landing2": "Landing V2",
+    "landing3": "Landing V3",
     "dashboard": "Dashboard",
+    "dashboardV2": "Dashboard V2",
     "health": "Health",
+    "healthV1": "Health (Classic)",
     "nutrition": "Nutrition",
     "movement": "Movement",
     "sleep": "Sleep",
@@ -18,6 +22,7 @@
     "relationships": "Relationships",
     "habits": "Habits",
     "social": "Social",
+    "socialV1": "Social (Classic)",
     "community": "Community",
     "specialists": "Specialists",
     "centers": "Centers",
@@ -41,7 +46,22 @@
     "blog": "Blog",
     "buyTokens": "Buy Tokens",
     "v1": "Classic",
-    "v2": "Premium"
+    "v2": "Premium",
+    "fitnessV1": "Fitness (Classic)",
+    "foodDiaryV1": "Food Diary (Classic)",
+    "mealPlanV1": "Meal Planner (Classic)",
+    "recipesV1": "Recipes (Classic)",
+    "productsDBV1": "Products DB (Classic)",
+    "exerciseLibraryV1": "Exercise Library (Classic)",
+    "workoutLoggerV1": "Workout Logger (Classic)",
+    "sleepAnalysisV1": "Sleep Analysis (Classic)",
+    "moodTrackerV1": "Mood Tracker (Classic)",
+    "medicationsV1": "Medications (Classic)",
+    "challengesV1": "Challenges (Classic)",
+    "friendsV1": "Friends (Classic)",
+    "groupsV1": "Groups (Classic)",
+    "messagesV1": "Messages (Classic)",
+    "leadersV1": "Leaders (Classic)"
   },
   "common": {
     "search": "Search",
@@ -337,6 +357,16 @@
         "wolfDesc": "Night owl, most creative at night",
         "dolphin": "Dolphin",
         "dolphinDesc": "Light sleeper, anxious but intelligent"
+      },
+      "assessmentsList": {
+        "phq9": "Depression screening",
+        "gad7": "Anxiety screening",
+        "pss": "Stress scale"
+      },
+      "crisis": {
+        "USA": "Crisis Lifeline (USA)",
+        "UK": "Samaritans (UK)",
+        "Global": "Worldwide Support"
       }
     },
     "psychology": {
@@ -373,6 +403,21 @@
       "gratitude": "Gratitude Journal",
       "gratitudePrompt": "What are you grateful for?",
       "gratitudeAdded": "Gratitude entry added!",
+      "gratitudeSample1": "Sunny weather today",
+      "gratitudeSample2": "Great conversation with a friend",
+      "gratitudeSample3": "Delicious home-cooked meal",
+      "highStressAlert": "High stress detected. Try a breathing exercise or take a short walk.",
+      "assessments": "Assessments",
+      "assessmentInstruction": "Over the last 2 weeks, how often have you been bothered by:",
+      "crisisSupport": "Crisis Support",
+      "needHelp": "Need Help Now?",
+      "crisisSupportDesc": "Tap for crisis support resources",
+      "assessmentScale": {
+        "0": "Not at all",
+        "1": "Several days",
+        "2": "More than half",
+        "3": "Nearly every day"
+      },
       "moodLevels": {
         "veryLow": "Very Low",
         "low": "Low",

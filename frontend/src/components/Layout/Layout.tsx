@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useVersion } from '../../contexts/VersionContext';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Menu,
@@ -54,6 +55,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [healthMenuOpen, setHealthMenuOpen] = useState(false);
   const { version, isV2 } = useVersion();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const isActive = (href: string) => {
     return location.pathname.startsWith(href);
@@ -239,10 +241,14 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span className="text-xs sm:text-sm">© 2026 EthosLife. All rights reserved.</span>
             </div>
             <div className="flex items-center gap-4 text-xs sm:text-sm flex-wrap justify-center">
-              <Link to="/features" className="hover:text-[#2d2418] transition-colors">Features</Link>
-              <Link to="/pricing" className="hover:text-[#2d2418] transition-colors">Pricing</Link>
-              <Link to="/team" className="hover:text-[#2d2418] transition-colors">Team</Link>
-              <Link to="/faq" className="hover:text-[#2d2418] transition-colors">FAQ</Link>
+              <Link to="/dashboard" className="hover:text-[#2d2418] transition-colors">{t('nav.dashboard')}</Link>
+              <Link to="/health/nutrition" className="hover:text-[#2d2418] transition-colors">{t('nav.health')}</Link>
+              <Link to="/social" className="hover:text-[#2d2418] transition-colors">{t('nav.community')}</Link>
+              <Link to="/ai-chat" className="hover:text-[#2d2418] transition-colors">{t('nav.aiCoach')}</Link>
+              <Link to="/features" className="hover:text-[#2d2418] transition-colors">{t('nav.features')}</Link>
+              <Link to="/pricing" className="hover:text-[#2d2418] transition-colors">{t('nav.pricing')}</Link>
+              <Link to="/team" className="hover:text-[#2d2418] transition-colors">{t('nav.team')}</Link>
+              <Link to="/faq" className="hover:text-[#2d2418] transition-colors">{t('nav.faq')}</Link>
             </div>
           </div>
         </div>

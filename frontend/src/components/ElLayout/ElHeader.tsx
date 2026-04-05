@@ -40,6 +40,8 @@ export const ElHeader: React.FC = () => {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [healthMenuOpen, setHealthMenuOpen] = useState(false);
+  const [healthLegacyMenuOpen, setHealthLegacyMenuOpen] = useState(false);
+  const [socialV1MenuOpen, setSocialV1MenuOpen] = useState(false);
   const location = useLocation();
 
   // Auto-close menu on route change
@@ -59,11 +61,28 @@ export const ElHeader: React.FC = () => {
     { name: t('nav.habits'), href: '/health/habits', icon: Target },
   ];
 
+  const healthLegacyModules = [
+    { name: t('nav.fitnessV1'), href: '/health/fitness', icon: Dumbbell },
+    { name: t('nav.foodDiaryV1'), href: '/health/nutrition/diary', icon: Utensils },
+    { name: t('nav.mealPlanV1'), href: '/health/nutrition/meal-plan', icon: Utensils },
+    { name: t('nav.recipesV1'), href: '/health/nutrition/recipes', icon: Utensils },
+    { name: t('nav.productsDBV1'), href: '/health/nutrition/products', icon: Utensils },
+    { name: t('nav.exerciseLibraryV1'), href: '/health/fitness/exercises', icon: Dumbbell },
+    { name: t('nav.workoutLoggerV1'), href: '/health/fitness/workout', icon: Dumbbell },
+    { name: t('nav.sleepAnalysisV1'), href: '/health/sleep/analysis', icon: Moon },
+    { name: t('nav.moodTrackerV1'), href: '/health/mental/mood', icon: Brain },
+    { name: t('nav.medicationsV1'), href: '/health/medical/medications', icon: Stethoscope },
+  ];
+
   const allPages = [
+    // Landing versions side by side
     { name: t('nav.home'), href: '/', icon: Home },
-    { name: 'Landing 2', href: '/landing2', icon: Home },
-    { name: 'Landing 3', href: '/landing3', icon: Home },
+    { name: t('nav.landing2'), href: '/landing2', icon: Home },
+    { name: t('nav.landing3'), href: '/landing3', icon: Home },
+    // Dashboard versions side by side
     { name: t('nav.dashboard'), href: '/dashboard', icon: Activity },
+    { name: t('nav.dashboardV2'), href: '/dashboard-v2', icon: Activity },
+    // Core features
     { name: t('nav.aiCoach'), href: '/ai-chat', icon: Zap },
     { name: t('nav.analytics'), href: '/analytics', icon: TrendingUp },
     { name: t('nav.gamification'), href: '/gamification', icon: Award },
@@ -82,6 +101,14 @@ export const ElHeader: React.FC = () => {
     { name: t('nav.faq'), href: '/faq', icon: MessageCircle },
     { name: t('nav.blog'), href: '/blog', icon: MessageCircle },
     { name: t('nav.tokenomics'), href: '/tokenomics', icon: Award },
+  ];
+
+  const socialV1Pages = [
+    { name: t('nav.challengesV1'), href: '/challenges', icon: Award },
+    { name: t('nav.friendsV1'), href: '/friends', icon: Users },
+    { name: t('nav.groupsV1'), href: '/groups', icon: Users },
+    { name: t('nav.messagesV1'), href: '/messages', icon: MessageCircle },
+    { name: t('nav.leadersV1'), href: '/leaders', icon: TrendingUp },
   ];
 
   return (
@@ -232,6 +259,50 @@ export const ElHeader: React.FC = () => {
                             </Link>
                           ))}
                         </div>
+
+                        {/* Health V1 Legacy Toggle */}
+                        <button
+                          onClick={() => setHealthLegacyMenuOpen(!healthLegacyMenuOpen)}
+                          className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[#5c5243] hover:bg-[#dcd3c6] transition-all min-h-[48px] mt-2"
+                        >
+                          <Heart className="w-5 h-5" />
+                          <span className="font-medium text-sm flex-1 text-left">{t('nav.healthV1')}</span>
+                          <motion.div
+                            animate={{ rotate: healthLegacyMenuOpen ? 90 : 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <ChevronRight className="w-4 h-4" />
+                          </motion.div>
+                        </button>
+
+                        <AnimatePresence>
+                          {healthLegacyMenuOpen && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="ml-8 mt-2 space-y-1">
+                                {healthLegacyModules.map((module) => (
+                                  <Link
+                                    key={module.href}
+                                    to={module.href}
+                                    className={cn(
+                                      'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm min-h-[44px]',
+                                      isActive(module.href)
+                                        ? 'bg-[#5c5243] text-white'
+                                        : 'text-[#5c5243] hover:bg-[#dcd3c6]'
+                                    )}
+                                  >
+                                    <module.icon className="w-4 h-4" />
+                                    <span className="flex-1">{module.name}</span>
+                                  </Link>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -260,6 +331,52 @@ export const ElHeader: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Social V1 Legacy */}
+                <div>
+                  <button
+                    onClick={() => setSocialV1MenuOpen(!socialV1MenuOpen)}
+                    className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[#5c5243] hover:bg-[#dcd3c6] transition-all min-h-[48px]"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    <span className="font-medium text-sm flex-1 text-left">{t('nav.socialV1')}</span>
+                    <motion.div
+                      animate={{ rotate: socialV1MenuOpen ? 90 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </motion.div>
+                  </button>
+
+                  <AnimatePresence>
+                    {socialV1MenuOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="ml-8 mt-2 space-y-1">
+                          {socialV1Pages.map((page) => (
+                            <Link
+                              key={page.href}
+                              to={page.href}
+                              className={cn(
+                                'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm min-h-[44px]',
+                                isActive(page.href)
+                                  ? 'bg-[#5c5243] text-white'
+                                  : 'text-[#5c5243] hover:bg-[#dcd3c6]'
+                              )}
+                            >
+                              <page.icon className="w-4 h-4" />
+                              <span className="flex-1">{page.name}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
                 {/* Guest Mode Info */}
                 <div className="p-4 rounded-xl bg-[#dcd3c6] shadow-[inset_3px_3px_6px_rgba(44,40,34,0.1),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]">
                   <div className="flex items-center gap-2 mb-2">
@@ -275,11 +392,6 @@ export const ElHeader: React.FC = () => {
           </>
         )}
       </AnimatePresence>
-    </>
-  );
-};
-
-export default ElHeader;
     </>
   );
 };
