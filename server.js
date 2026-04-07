@@ -118,7 +118,7 @@ app.use('/i18n.js', express.static('public/i18n.js'));
 
 // API Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/health', healthRoutes);
+app.use('/api/user/health', healthRoutes);  // Protected health dashboard routes
 app.use('/api/ai', aiRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api', referralRoutes);

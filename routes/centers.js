@@ -564,7 +564,7 @@ router.post('/:id/reviews', authenticateToken, async (req, res) => {
  * POST /api/centers
  * Create center (admin)
  */
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const {
       name,

@@ -160,11 +160,9 @@
         /* Language switcher */
         .lang-btn { transition: all 0.3s; }
         .lang-btn.active { background: #5c5243; color: #e4dfd5; }
-        
-        /* Hide non-active language content */
+
+        /* All language-specific content hidden by default */
         [data-lang] { display: none; }
-        [data-lang].active { display: block; }
-        [data-lang="en"] { display: block; }
         
         /* Icon sizes */
         .icon-lg { font-size: 2rem; }
@@ -221,8 +219,25 @@
                     <span class="material-symbols-outlined text-ink text-xl">account_balance_wallet</span>
                 </a>
             </div>
+
+            <!-- Language Switcher (All devices) -->
+            <div class="deep-bay rounded-full p-1">
+                <button onclick="toggleLangDropdown()" class="flex items-center justify-center size-11 nav-btn" id="desktopLangBtn">
+                    <span class="material-symbols-outlined text-ink text-xl">translate</span>
+                </button>
+            </div>
         </div>
     </nav>
+
+    <!-- Language Dropdown -->
+    <div id="langDropdown" class="fixed z-50 hidden">
+        <div class="module-ivory p-3 relative">
+            <div class="flex gap-2">
+                <button onclick="setLanguage('en')" id="lang-en-desktop" class="lang-btn px-4 py-2 rounded-lg font-semibold bg-[#d0c6b8] text-ink">EN</button>
+                <button onclick="setLanguage('ru')" id="lang-ru-desktop" class="lang-btn px-4 py-2 rounded-lg font-semibold bg-[#d0c6b8] text-ink">RU</button>
+            </div>
+        </div>
+    </div>
     
     <!-- Mobile Menu Overlay -->
     <div id="mobileOverlay" class="mobile-menu-overlay fixed inset-0 z-40 hidden" onclick="toggleMobileMenu()"></div>
@@ -231,7 +246,8 @@
     <div id="mobileMenu" class="fixed top-0 left-0 bottom-0 w-80 z-50 bg-[#e4dfd5] shadow-2xl transform -translate-x-full transition-transform duration-300">
         <div class="p-8 h-full flex flex-col">
             <div class="flex justify-between items-center mb-10">
-                <span class="text-xl font-bold text-ink">Menu</span>
+                <span class="text-xl font-bold text-ink" data-lang="en">Menu</span>
+                <span class="text-xl font-bold text-ink" data-lang="ru">Меню</span>
                 <button onclick="toggleMobileMenu()" class="text-ink p-2">
                     <span class="material-symbols-outlined text-2xl">close</span>
                 </button>
@@ -278,16 +294,6 @@
                     <span data-lang="en">Invest</span>
                     <span data-lang="ru">Инвестировать</span>
                 </a>
-            </div>
-            
-            <!-- Language Switcher at bottom -->
-            <div class="mt-6 pt-6 border-t border-[#c2b8a9]">
-                <p class="text-xs text-ink-light font-semibold mb-3 uppercase tracking-wider" data-lang="en">Language</p>
-                <p class="text-xs text-ink-light font-semibold mb-3 uppercase tracking-wider" data-lang="ru">Язык</p>
-                <div class="flex gap-2">
-                    <button onclick="setLanguage('en')" id="lang-en" class="lang-btn active flex-1 py-2 rounded-lg font-semibold text-sm">EN</button>
-                    <button onclick="setLanguage('ru')" id="lang-ru" class="lang-btn flex-1 py-2 rounded-lg font-semibold text-sm bg-[#d0c6b8] text-ink">RU</button>
-                </div>
             </div>
         </div>
     </div>
@@ -365,7 +371,10 @@
                             <p class="text-sm font-medium mb-3" data-lang="ru"><strong>Seed Round начинается 10 марта.</strong> Уникальная возможность выкупить по цене PreSeed <strong>$0.01</strong> (вместо $0.05) — доступно всего <strong>$50,000</strong>!</p>
                             <div class="flex items-center gap-2 text-xs">
                                 <span class="material-symbols-outlined text-sm">timer</span>
-                                <span id="seed-countdown" class="font-mono font-bold">Until March 10</span>
+                                <span id="seed-countdown" class="font-mono font-bold">
+                                    <span data-lang="en">Until March 10</span>
+                                    <span data-lang="ru">До 10 марта</span>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -677,8 +686,8 @@
                         <div class="screw-matte screw-tr"></div>
                         <div class="text-center mb-4 pt-2">
                             <span class="material-symbols-outlined text-4xl text-[#5c5243] mb-2">stars</span>
-                            <h3 class="text-xl font-bold text-engraved">Pro</h3>
-                            <div class="text-3xl font-bold text-[#5c5243] mt-2">$29<span class="text-sm font-normal text-ink-light">/mo</span></div>
+                            <h3 class="text-xl font-bold text-engraved"><span data-lang="en">Pro</span><span data-lang="ru">Pro</span></h3>
+                            <div class="text-3xl font-bold text-[#5c5243] mt-2">$29<span class="text-sm font-normal text-ink-light"><span data-lang="en">/mo</span><span data-lang="ru">/мес</span></span></div>
                             <p class="text-xs text-ink-light mt-1" data-lang="en">Yearly subscription discount + token bonuses</p>
                             <p class="text-xs text-ink-light mt-1" data-lang="ru">Скидка за год + бонусы за токены</p>
                         </div>
@@ -716,8 +725,8 @@
                         <div class="screw-matte screw-tr"></div>
                         <div class="text-center mb-4">
                             <span class="material-symbols-outlined text-4xl text-[#5c5243] mb-2">diamond</span>
-                            <h3 class="text-xl font-bold text-engraved">Premium</h3>
-                            <div class="text-3xl font-bold text-[#5c5243] mt-2">$59<span class="text-sm font-normal text-ink-light">/mo</span></div>
+                            <h3 class="text-xl font-bold text-engraved"><span data-lang="en">Premium</span><span data-lang="ru">Premium</span></h3>
+                            <div class="text-3xl font-bold text-[#5c5243] mt-2">$59<span class="text-sm font-normal text-ink-light"><span data-lang="en">/mo</span><span data-lang="ru">/мес</span></span></div>
                             <p class="text-xs text-ink-light mt-1" data-lang="en">Yearly discount + token payment bonuses</p>
                             <p class="text-xs text-ink-light mt-1" data-lang="ru">Скидка за год + бонусы за токены</p>
                         </div>
@@ -844,14 +853,15 @@
                             <span class="material-symbols-outlined text-4xl text-[#5c5243] mb-2">business</span>
                             <h3 class="text-xl font-bold text-engraved" data-lang="en">Centers</h3>
                             <h3 class="text-xl font-bold text-engraved" data-lang="ru">Центры</h3>
-                            <div class="text-3xl font-bold text-[#5c5243] mt-2">$790<span class="text-sm font-normal text-ink-light">/mo</span></div>
+                            <div class="text-3xl font-bold text-[#5c5243] mt-2">$790<span class="text-sm font-normal text-ink-light"><span data-lang="en">/mo</span><span data-lang="ru">/мес</span></span></div>
                             <p class="text-xs text-ink-light mt-1" data-lang="en">Yearly subscription discount</p>
                             <p class="text-xs text-ink-light mt-1" data-lang="ru">Скидка за подписку на год</p>
                         </div>
                         <ul class="space-y-3 mb-6 flex-1">
                             <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
                                 <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
-                                <span>CRM system included</span>
+                                <span data-lang="en">CRM system included</span>
+                                <span data-lang="ru">CRM система включена</span>
                             </li>
                             <li class="flex items-start gap-2 text-sm text-ink-light font-medium">
                                 <span class="material-symbols-outlined text-[#5c5243] text-base mt-0.5">check</span>
@@ -882,7 +892,8 @@
     <section class="section-matte" id="projecthub">
         <div class="container-matte">
             <div class="text-center mb-10">
-                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped">ProjectHub</span>
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="en">ProjectHub</span>
+                <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="ru">ProjectHub</span>
                 <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="en">Projects & Products</h2>
                 <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="ru">Проекты и Продукты</h2>
                 <p class="text-base text-ink-light mt-4 max-w-xl mx-auto font-medium" data-lang="en">Each project has an open staking pool. Invest in specific development directions.</p>
@@ -898,7 +909,8 @@
                         <div class="mb-4"><span class="material-symbols-outlined icon-xl text-[#5c5243]">accessibility</span></div>
                         <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="en">Research Stage</span>
                         <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="ru">Стадия исследования</span>
-                        <h3 class="text-lg font-bold text-engraved mb-3">PostureAI Pro</h3>
+                        <h3 class="text-lg font-bold text-engraved mb-3" data-lang="en">PostureAI Pro</h3>
+                        <h3 class="text-lg font-bold text-engraved mb-3" data-lang="ru">PostureAI Pro</h3>
                         <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="en">Device and software for tracking back position. Real-time posture correction via AI.</p>
                         <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="ru">Устройство и программа отслеживания положения спины. Коррекция осанки в реальном времени через ИИ.</p>
                         <div class="grid grid-cols-2 gap-3 mb-5">
@@ -909,7 +921,8 @@
                             </div>
                             <div class="bg-[#d0c6b8]/60 rounded-xl p-3 text-center">
                                 <div class="text-lg font-bold text-[#5c5243]">15%</div>
-                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold">APY</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="en">APY</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="ru">APY</div>
                             </div>
                         </div>
                         <a href="#investment" class="btn-primary-matte py-3 text-center text-sm font-bold" data-lang="en">Invest</a>
@@ -925,7 +938,8 @@
                         <div class="mb-4"><span class="material-symbols-outlined icon-xl text-[#5c5243]">bedtime</span></div>
                         <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="en">Research Stage</span>
                         <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="ru">Стадия исследования</span>
-                        <h3 class="text-lg font-bold text-engraved mb-3">SleepSync</h3>
+                        <h3 class="text-lg font-bold text-engraved mb-3" data-lang="en">SleepSync</h3>
+                        <h3 class="text-lg font-bold text-engraved mb-3" data-lang="ru">SleepSync</h3>
                         <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="en">Sleep tracking device and app. Smart alarm with sleep phases and biological cycles.</p>
                         <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="ru">Устройство и приложение для отслеживания сна. Умный будильник с фазами сна и биологическими циклами.</p>
                         <div class="grid grid-cols-2 gap-3 mb-5">
@@ -936,7 +950,8 @@
                             </div>
                             <div class="bg-[#d0c6b8]/60 rounded-xl p-3 text-center">
                                 <div class="text-lg font-bold text-[#5c5243]">15%</div>
-                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold">APY</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="en">APY</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="ru">APY</div>
                             </div>
                         </div>
                         <a href="#investment" class="btn-primary-matte py-3 text-center text-sm font-bold" data-lang="en">Invest</a>
@@ -952,7 +967,8 @@
                         <div class="mb-4"><span class="material-symbols-outlined icon-xl text-[#5c5243]">neurology</span></div>
                         <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="en">Research Stage</span>
                         <span class="inline-block status-badge text-[10px] uppercase px-3 py-1.5 rounded-full mb-3 w-fit font-bold" data-lang="ru">Стадия исследования</span>
-                        <h3 class="text-lg font-bold text-engraved mb-3">LLM HealthCore</h3>
+                        <h3 class="text-lg font-bold text-engraved mb-3" data-lang="en">LLM HealthCore</h3>
+                        <h3 class="text-lg font-bold text-engraved mb-3" data-lang="ru">LLM HealthCore</h3>
                         <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="en">Programs and methodologies for LLM training. Proprietary datasets from health experts.</p>
                         <p class="text-sm text-ink-light mb-6 flex-1 leading-relaxed font-medium" data-lang="ru">Программы и методологии для обучения LLM. Проприетарные датасеты от экспертов в области здоровья.</p>
                         <div class="grid grid-cols-2 gap-3 mb-5">
@@ -963,7 +979,8 @@
                             </div>
                             <div class="bg-[#d0c6b8]/60 rounded-xl p-3 text-center">
                                 <div class="text-lg font-bold text-[#5c5243]">15%</div>
-                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold">APY</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="en">APY</div>
+                                <div class="text-[10px] text-ink-light uppercase tracking-wider font-semibold" data-lang="ru">APY</div>
                             </div>
                         </div>
                         <a href="#investment" class="btn-primary-matte py-3 text-center text-sm font-bold" data-lang="en">Invest</a>
@@ -980,7 +997,8 @@
             <div class="text-center mb-10">
                 <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="en">Development Path</span>
                 <span class="text-xs font-bold uppercase tracking-[0.3em] text-stamped" data-lang="ru">Путь развития</span>
-                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3">4 Stages</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="en">4 Stages</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-engraved mt-3" data-lang="ru">4 Этапа</h2>
                 <p class="text-base text-ink-light mt-4" data-lang="en">From concept to global health ecosystem</p>
                 <p class="text-base text-ink-light mt-4" data-lang="ru">От концепции к глобальной экосистеме здоровья</p>
             </div>
@@ -1003,22 +1021,23 @@
                         </div>
                         <div class="flex-1">
                             <div class="flex items-center gap-3 mb-1 flex-wrap">
-                                <h3 class="text-lg font-bold text-engraved">Pre-Seed</h3>
+                                <h3 class="text-lg font-bold text-engraved" data-lang="en">Pre-Seed</h3>
+                                <h3 class="text-lg font-bold text-engraved" data-lang="ru">Pre-Seed</h3>
                                 <span class="bg-[#8c7a6b] text-[#e4dfd5] text-xs px-3 py-1 rounded-full font-bold" data-lang="en">$50K Available</span>
                                 <span class="bg-[#8c7a6b] text-[#e4dfd5] text-xs px-3 py-1 rounded-full font-bold" data-lang="ru">$50K доступно</span>
                             </div>
-                            <div class="text-xl font-bold text-[#5c5243] mb-2">$140,000 <span class="text-sm font-normal text-ink-light">+ $50K at $0.01</span></div>
+                            <div class="text-xl font-bold text-[#5c5243] mb-2">$140,000 <span class="text-sm font-normal text-ink-light"><span data-lang="en">+ $50K at $0.01</span><span data-lang="ru">+ $50K по $0.01</span></span></div>
                             <p class="text-sm text-ink-light mb-3 leading-relaxed font-medium" data-lang="en">Founder invested $140K. Final allocation: $50,000 at $0.01/token until March 10. Last chance before Seed Round at $0.05.</p>
                             <p class="text-sm text-ink-light mb-3 leading-relaxed font-medium" data-lang="ru">Основатель вложил $140K. Финальная аллокация: $50,000 по $0.01/токен до 10 марта. Последний шанс до Seed Round по $0.05.</p>
                             <div class="flex flex-wrap gap-2">
                                 <span class="bg-[#8c7a6b]/30 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-sm">check</span> 245 components
+                                    <span class="material-symbols-outlined text-sm">check</span> <span data-lang="en">245 components</span><span data-lang="ru">245 компонентов</span>
                                 </span>
                                 <span class="bg-[#8c7a6b]/30 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-sm">check</span> 84 pages
+                                    <span class="material-symbols-outlined text-sm">check</span> <span data-lang="en">84 pages</span><span data-lang="ru">84 страницы</span>
                                 </span>
                                 <span class="bg-[#8c7a6b]/30 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-sm">check</span> MVP 82%
+                                    <span class="material-symbols-outlined text-sm">check</span> <span data-lang="en">MVP 82%</span><span data-lang="ru">MVP 82%</span>
                                 </span>
                             </div>
                         </div>
@@ -1044,7 +1063,8 @@
                         </div>
                         <div class="flex-1">
                             <div class="flex items-center gap-3 mb-1 flex-wrap">
-                                <h3 class="text-lg font-bold text-engraved">Seed</h3>
+                                <h3 class="text-lg font-bold text-engraved" data-lang="en">Seed</h3>
+                                <h3 class="text-lg font-bold text-engraved" data-lang="ru">Seed</h3>
                                 <span class="status-active text-xs px-3 py-1 rounded-full font-bold" data-lang="en">Starts March 10</span>
                                 <span class="status-active text-xs px-3 py-1 rounded-full font-bold" data-lang="ru">Старт 10 марта</span>
                             </div>
@@ -1058,30 +1078,31 @@
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="bg-[#d0c6b8]/60 rounded-xl p-3">
                                     <div class="text-sm font-bold text-engraved flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-base">smartphone</span> Product
+                                        <span class="material-symbols-outlined text-base">smartphone</span> <span data-lang="en">Product</span><span data-lang="ru">Продукт</span>
                                     </div>
                                     <div class="text-xs text-ink-light font-medium" data-lang="en">iOS/Android Release</div>
                                     <div class="text-xs text-ink-light font-medium" data-lang="ru">Релиз iOS/Android</div>
                                 </div>
                                 <div class="bg-[#d0c6b8]/60 rounded-xl p-3">
                                     <div class="text-sm font-bold text-engraved flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-base">handshake</span> B2B
+                                        <span class="material-symbols-outlined text-base">handshake</span> <span data-lang="en">B2B</span><span data-lang="ru">B2B</span>
                                     </div>
                                     <div class="text-xs text-ink-light font-medium" data-lang="en">Partnerships</div>
                                     <div class="text-xs text-ink-light font-medium" data-lang="ru">Партнёрства</div>
                                 </div>
                                 <div class="bg-[#d0c6b8]/60 rounded-xl p-3">
                                     <div class="text-sm font-bold text-engraved flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-base">neurology</span> AI
+                                        <span class="material-symbols-outlined text-base">neurology</span> <span data-lang="en">AI</span><span data-lang="ru">ИИ</span>
                                     </div>
                                     <div class="text-xs text-ink-light font-medium" data-lang="en">Expert LLM Training</div>
                                     <div class="text-xs text-ink-light font-medium" data-lang="ru">Обучение LLM экспертов</div>
                                 </div>
                                 <div class="bg-[#d0c6b8]/60 rounded-xl p-3">
                                     <div class="text-sm font-bold text-engraved flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-base">account_balance</span> DAO
+                                        <span class="material-symbols-outlined text-base">account_balance</span> <span data-lang="en">DAO</span><span data-lang="ru">DAO</span>
                                     </div>
-                                    <div class="text-xs text-ink-light font-medium">Knowledge Hub</div>
+                                    <div class="text-xs text-ink-light font-medium" data-lang="en">Knowledge Hub</div>
+                                    <div class="text-xs text-ink-light font-medium" data-lang="ru">Центр Знаний</div>
                                 </div>
                             </div>
                         </div>
@@ -1100,7 +1121,8 @@
                         </div>
                         <div class="flex-1">
                             <div class="flex items-center gap-3 mb-1">
-                                <h3 class="text-lg font-bold text-engraved">Series A</h3>
+                                <h3 class="text-lg font-bold text-engraved" data-lang="en">Series A</h3>
+                                <h3 class="text-lg font-bold text-engraved" data-lang="ru">Series A</h3>
                                 <span class="bg-[#c2b8a9]/60 text-[#3d3226] text-xs px-3 py-1 rounded-full font-bold" data-lang="en">Next Stage</span>
                                 <span class="bg-[#c2b8a9]/60 text-[#3d3226] text-xs px-3 py-1 rounded-full font-bold" data-lang="ru">Следующий</span>
                             </div>
@@ -1109,13 +1131,13 @@
                             <p class="text-sm text-ink-light mb-3 leading-relaxed font-medium" data-lang="ru">Захват международного рынка и создание инфраструктуры. Масштабирование на регионы с высоким чеком.</p>
                             <div class="flex flex-wrap gap-2">
                                 <span class="bg-[#c2b8a9]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-sm">public</span> Global Scaling
+                                    <span class="material-symbols-outlined text-sm">public</span> <span data-lang="en">Global Scaling</span><span data-lang="ru">Глобальное масштабирование</span>
                                 </span>
                                 <span class="bg-[#c2b8a9]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-sm">watch</span> Hardware
+                                    <span class="material-symbols-outlined text-sm">watch</span> <span data-lang="en">Hardware</span><span data-lang="ru">Оборудование</span>
                                 </span>
                                 <span class="bg-[#c2b8a9]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-sm">school</span> Knowledge
+                                    <span class="material-symbols-outlined text-sm">school</span> <span data-lang="en">Knowledge</span><span data-lang="ru">Знания</span>
                                 </span>
                             </div>
                         </div>
@@ -1134,7 +1156,8 @@
                         </div>
                         <div class="flex-1">
                             <div class="flex items-center gap-3 mb-1">
-                                <h3 class="text-lg font-bold text-engraved">Series B+</h3>
+                                <h3 class="text-lg font-bold text-engraved" data-lang="en">Series B+</h3>
+                                <h3 class="text-lg font-bold text-engraved" data-lang="ru">Series B+</h3>
                                 <span class="bg-[#d0c6b8]/60 text-[#3d3226] text-xs px-3 py-1 rounded-full font-bold" data-lang="en">Scaling</span>
                                 <span class="bg-[#d0c6b8]/60 text-[#3d3226] text-xs px-3 py-1 rounded-full font-bold" data-lang="ru">Масштабирование</span>
                             </div>
@@ -1143,13 +1166,13 @@
                             <p class="text-sm text-ink-light mb-3 leading-relaxed font-medium" data-lang="ru">Создание «Health-Metaverse» и поглощение рынков. Институциональная интеграция.</p>
                             <div class="flex flex-wrap gap-2">
                                 <span class="bg-[#d0c6b8]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-sm">local_hospital</span> Institutional
+                                    <span class="material-symbols-outlined text-sm">local_hospital</span> <span data-lang="en">Institutional</span><span data-lang="ru">Институциональный</span>
                                 </span>
                                 <span class="bg-[#d0c6b8]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-sm">rocket_launch</span> M&A
+                                    <span class="material-symbols-outlined text-sm">rocket_launch</span> <span data-lang="en">M&A</span><span data-lang="ru">M&A</span>
                                 </span>
                                 <span class="bg-[#d0c6b8]/40 text-[#2d2418] text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-sm">hub</span> Expansion
+                                    <span class="material-symbols-outlined text-sm">hub</span> <span data-lang="en">Expansion</span><span data-lang="ru">Расширение</span>
                                 </span>
                             </div>
                         </div>
@@ -1440,7 +1463,8 @@
                     <div class="module-ivory p-6 relative">
                         <div class="screw-matte screw-tl"></div>
                         <div class="screw-matte screw-tr"></div>
-                        <h3 class="text-lg font-bold text-ink mb-2">Seed Investor</h3>
+                        <h3 class="text-lg font-bold text-ink mb-2" data-lang="en">Seed Investor</h3>
+                        <h3 class="text-lg font-bold text-ink mb-2" data-lang="ru">Seed Инвестор</h3>
                         <div class="text-3xl font-bold text-ink mb-5">$5K - $50K</div>
                         <ul class="space-y-3">
                             <li class="flex items-center gap-3 text-sm text-ink font-medium">
@@ -1484,7 +1508,8 @@
                         </div>
                         <div class="screw-matte screw-tl"></div>
                         <div class="screw-matte screw-tr"></div>
-                        <h3 class="text-lg font-bold text-ink mb-2 mt-2">Strategic Partner</h3>
+                        <h3 class="text-lg font-bold text-ink mb-2 mt-2" data-lang="en">Strategic Partner</h3>
+                        <h3 class="text-lg font-bold text-ink mb-2 mt-2" data-lang="ru">Стратегический Партнёр</h3>
                         <div class="text-3xl font-bold text-ink mb-5">$50K+</div>
                         <ul class="space-y-3">
                             <li class="flex items-center gap-3 text-sm text-ink font-medium">
@@ -1547,7 +1572,8 @@
                         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
                         </svg>
-                        <span>@foxampy</span>
+                        <span data-lang="en">@foxampy</span>
+                        <span data-lang="ru">@foxampy</span>
                     </a>
                 </div>
             </div>
@@ -1583,22 +1609,22 @@
                     <h4 class="text-sm font-bold text-engraved uppercase tracking-wider mb-4" data-lang="en">Economy</h4>
                     <h4 class="text-sm font-bold text-engraved uppercase tracking-wider mb-4" data-lang="ru">Экономика</h4>
                     <ul class="space-y-2">
-                        <li><a href="#tokenomics" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium">UNITY Token</a></li>
-                        <li><a href="#" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium">DAO</a></li>
-                        <li><a href="docs/WHITEPAPER.pdf" download class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium">Whitepaper</a></li>
+                        <li><a href="#tokenomics" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium" data-lang="en">UNITY Token</a><a href="#tokenomics" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium" data-lang="ru">Токен UNITY</a></li>
+                        <li><a href="#" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium" data-lang="en">DAO</a><a href="#" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium" data-lang="ru">DAO</a></li>
+                        <li><a href="docs/WHITEPAPER.pdf" download class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium" data-lang="en">Whitepaper</a><a href="docs/WHITEPAPER.pdf" download class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium" data-lang="ru">Whitepaper</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-sm font-bold text-engraved uppercase tracking-wider mb-4" data-lang="en">Contact</h4>
                     <h4 class="text-sm font-bold text-engraved uppercase tracking-wider mb-4" data-lang="ru">Контакты</h4>
                     <ul class="space-y-2">
-                        <li><a href="https://t.me/foxampy" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium">Telegram: @foxampy</a></li>
+                        <li><a href="https://t.me/foxampy" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium"><span data-lang="en">Telegram: @foxampy</span><span data-lang="ru">Telegram: @foxampy</span></a></li>
                         <li><a href="https://ethoslife.onrender.com" class="text-sm text-ink-light hover:text-[#5c5243] transition-colors font-medium">ethoslife.onrender.com</a></li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-[#8c7a6b]/30 pt-6 flex flex-col md:flex-row justify-between items-center gap-3">
-                <p class="text-xs text-ink-light font-medium">© 2026 EthosLife Inc. All rights reserved.</p>
+                <p class="text-xs text-ink-light font-medium"><span data-lang="en">© 2026 EthosLife Inc. All rights reserved.</span><span data-lang="ru">© 2026 EthosLife Inc. Все права защищены.</span></p>
                 <p class="text-xs text-ink-light font-medium" data-lang="en">Confidential</p>
                 <p class="text-xs text-ink-light font-medium" data-lang="ru">Конфиденциально</p>
             </div>
@@ -1625,29 +1651,73 @@
 
     <script>
         // Language switching
-        let currentLang = 'en';
-        
+        let currentLang = localStorage.getItem('ethoslife-language') || 'en';
+
         function setLanguage(lang) {
             currentLang = lang;
-            
-            // Update buttons
+            localStorage.setItem('ethoslife-language', lang);
+
+            // Update all language buttons (mobile and desktop)
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            document.getElementById('lang-' + lang).classList.add('active');
             
-            // Update content visibility
+            // Update mobile buttons
+            const mobileBtn = document.getElementById('lang-' + lang);
+            if (mobileBtn) mobileBtn.classList.add('active');
+            
+            // Update desktop buttons
+            const desktopBtn = document.getElementById('lang-' + lang + '-desktop');
+            if (desktopBtn) desktopBtn.classList.add('active');
+
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+
+            // Update content visibility - preserve original display type
             document.querySelectorAll('[data-lang]').forEach(el => {
                 if (el.getAttribute('data-lang') === lang) {
-                    el.style.display = 'block';
+                    // Restore original display
+                    const originalDisplay = el.dataset.originalDisplay;
+                    if (originalDisplay) {
+                        el.style.display = originalDisplay;
+                    } else {
+                        // Default to inline for spans, block for others
+                        el.style.display = el.tagName === 'SPAN' ? 'inline' : 'block';
+                    }
                 } else {
                     el.style.display = 'none';
                 }
             });
             
-            // Update HTML lang attribute
-            document.documentElement.lang = lang;
+            // Close dropdown if open
+            const dropdown = document.getElementById('langDropdown');
+            if (dropdown) dropdown.classList.add('hidden');
         }
+
+        // Language dropdown toggle
+        function toggleLangDropdown() {
+            const dropdown = document.getElementById('langDropdown');
+            const button = document.getElementById('desktopLangBtn');
+            
+            if (dropdown.classList.contains('hidden')) {
+                // Position dropdown next to button
+                const rect = button.getBoundingClientRect();
+                dropdown.style.top = (rect.bottom + 10) + 'px';
+                dropdown.style.right = (window.innerWidth - rect.right) + 'px';
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('langDropdown');
+            const button = document.getElementById('desktopLangBtn');
+            if (dropdown && button && !dropdown.contains(event.target) && !button.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
         
         // Mobile Menu
         function toggleMobileMenu() {
@@ -1689,30 +1759,39 @@
             const targetDate = new Date('2026-03-10T00:00:00');
             const now = new Date();
             const diff = targetDate - now;
-            
+
             const countdownEl = document.getElementById('seed-countdown');
             if (!countdownEl) return;
-            
+
             if (diff <= 0) {
-                countdownEl.innerHTML = '<span data-lang="en">Seed Round is LIVE!</span><span data-lang="ru">Seed Round начался!</span>';
+                // Show live message with proper language switching
+                countdownEl.innerHTML = '<span data-lang="en" class="lang-countdown">Seed Round is LIVE!</span><span data-lang="ru" class="lang-countdown">Seed Round начался!</span>';
+                setLanguage(currentLang); // Re-apply language
                 return;
             }
-            
+
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            
-            if (currentLang === 'en') {
-                countdownEl.textContent = days + ' days ' + hours + ' hours until price $0.05';
-            } else {
-                countdownEl.textContent = days + ' дн. ' + hours + ' ч. до цены $0.05';
-            }
+
+            // Update with proper language
+            countdownEl.innerHTML = `<span data-lang="en" class="lang-countdown">${days} days ${hours} hours until price $0.05</span><span data-lang="ru" class="lang-countdown">${days} дн. ${hours} ч. до цены $0.05</span>`;
+            setLanguage(currentLang); // Re-apply language
         }
         
         updateSeedCountdown();
         setInterval(updateSeedCountdown, 60000);
-        
-        // Initialize
-        setLanguage('en');
+
+        // Store original display values before initialization
+        document.querySelectorAll('[data-lang]').forEach(el => {
+            if (!el.dataset.originalDisplay) {
+                const computedStyle = window.getComputedStyle(el);
+                el.dataset.originalDisplay = computedStyle.display || 
+                    (el.tagName === 'SPAN' ? 'inline' : 'block');
+            }
+        });
+
+        // Initialize with saved language
+        setLanguage(currentLang);
 
         // Team Cards Toggle
         function toggleTeamCard(card) {
