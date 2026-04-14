@@ -197,7 +197,7 @@ const LandingV2 = () => {
               </div>
             </div>
 
-            <h2 className="text-2xl md:text-4xl font-bold text-[#2d2418] mb-6 max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-4xl font-bold text-[var(--text-primary)] mb-6 max-w-4xl mx-auto">
               {t('landing.hero.title')}
               <br />
               <span className="text-gradient-emerald">
@@ -205,7 +205,7 @@ const LandingV2 = () => {
               </span>
             </h2>
 
-            <p className="text-lg md:text-xl text-[#5c5243] mb-10 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-[var(--text-secondary)] mb-10 max-w-2xl mx-auto">
               {t('landing.hero.description')}
             </p>
 
@@ -231,18 +231,18 @@ const LandingV2 = () => {
               </motion.button>
             </div>
 
-            <div className="mt-12 flex flex-wrap justify-center gap-6 text-sm text-[#5c5243]">
+            <div className="mt-12 flex flex-wrap justify-center gap-6 text-sm text-[var(--text-secondary)]">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                <span>Бесплатно навсегда</span>
+                <span>{t('landing.hero.freeForever')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                <span>Без кредитной карты</span>
+                <span>{t('landing.hero.noCreditCard')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                <span>2 минуты на регистрацию</span>
+                <span>{t('landing.hero.quickRegistration')}</span>
               </div>
             </div>
           </motion.div>

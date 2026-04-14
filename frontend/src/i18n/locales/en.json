@@ -599,7 +599,10 @@
       "subtitle": "We make this habit easy, rewarding, and effective",
       "description": "7 health modules. 1 platform. 0 switching. All your health—from genetics to social connections—in one interface.",
       "ctaPrimary": "Start Free",
-      "ctaSecondary": "Watch Demo"
+      "ctaSecondary": "Watch Demo",
+      "freeForever": "Free forever",
+      "noCreditCard": "No credit card required",
+      "quickRegistration": "2 minutes to register"
     },
     "features": {
       "title": "Everything for Your Health",
@@ -962,5 +965,24 @@
         "tagline": "Join us in building the future of health"
       }
     }
+  },
+  "languageSelector": {
+    "selectLanguage": "Select Language",
+    "recent": "Recent",
+    "allLanguages": "All Languages",
+    "noLanguages": "No languages found",
+    "search": "Search languages..."
+  },
+  "footer": {
+    "company": "Company",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookiePolicy": "Cookie Policy",
+    "disclaimer": "Disclaimer",
+    "stayUpdated": "Stay Updated",
+    "stayUpdatedDesc": "Get the latest health tips and updates",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe"
   }
 }

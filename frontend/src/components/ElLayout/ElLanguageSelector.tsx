@@ -179,20 +179,49 @@ export const ElLanguageSelector: React.FC<ElLanguageSelectorProps> = ({
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
               className={cn(
-                'absolute right-0 mt-2 w-64 rounded-2xl z-50',
+                'absolute right-0 mt-2 w-72 rounded-2xl z-50',
                 'bg-[var(--bone-200)]',
                 'shadow-[12px_12px_24px_rgba(44,40,34,0.15),-12px_-12px_24px_rgba(255,255,255,0.7)]',
-                'overflow-hidden p-2'
+                'overflow-hidden'
               )}
             >
-              {languages.slice(0, 8).map((language) => (
-                <LanguageItem
-                  key={language.code}
-                  language={language}
-                  isActive={currentLanguage.code === language.code}
-                  onClick={() => handleLanguageChange(language)}
-                />
-              ))}
+              {/* Search Input */}
+              <div className="p-3 border-b border-[var(--bone-400)]/30">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-tertiary)]" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={t('languageSelector.search')}
+                    className={cn(
+                      'w-full pl-10 pr-4 py-2 rounded-xl text-sm',
+                      'bg-[var(--bone-300)]',
+                      'shadow-[inset_3px_3px_6px_rgba(44,40,34,0.08),inset_-3px_-3px_6px_rgba(255,255,255,0.5)]',
+                      'text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]',
+                      'focus:outline-none focus:ring-2 focus:ring-[var(--neon-cyan)]/30'
+                    )}
+                    autoFocus
+                  />
+                </div>
+              </div>
+              
+              {/* Language List with scroll */}
+              <div className="max-h-80 overflow-y-auto p-2">
+                {filteredLanguages.map((language) => (
+                  <LanguageItem
+                    key={language.code}
+                    language={language}
+                    isActive={currentLanguage.code === language.code}
+                    onClick={() => handleLanguageChange(language)}
+                  />
+                ))}
+                {filteredLanguages.length === 0 && (
+                  <div className="px-3 py-4 text-center text-sm text-[var(--text-tertiary)]">
+                    {t('languageSelector.noLanguages')}
+                  </div>
+                )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
