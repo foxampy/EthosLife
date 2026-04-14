@@ -651,48 +651,121 @@
     "pricing": {
       "title": "Simple Pricing",
       "subtitle": "Start free. Upgrade when you're ready.",
-      "free": {
-        "name": "Free",
-        "price": "0",
-        "period": "forever",
-        "features": [
-          "Basic health tracking",
-          "3 modules of choice",
-          "5 AI requests per day",
-          "Community access",
-          "Basic analytics"
-        ]
-      },
-      "premium": {
-        "name": "Premium",
-        "price": "9.99",
-        "period": "per month",
-        "features": [
-          "All 7 health modules",
-          "Unlimited AI coach",
-          "Advanced analytics",
-          "All integrations",
-          "Priority support",
-          "Personal plans"
-        ],
-        "popular": "Most Popular"
-      },
       "popularChoice": "Popular Choice",
-      "startFree": "Start Free",
-      "try14Days": "Try 14 Days",
-      "startPro": "Start Pro",
-      "pro": {
-        "name": "Pro",
-        "price": "19.99",
-        "period": "per month",
-        "features": [
-          "Everything in Premium",
-          "Personal AI coach",
-          "1-on-1 specialist sessions",
-          "Family plan (5 people)",
-          "B2B access",
-          "API access"
-        ]
+      "free": "Free",
+      "savings": "Save",
+      "period": {
+        "month": "month",
+        "year": "year"
+      },
+      "hero": {
+        "title": "Simple and Honest Pricing",
+        "subtitle": "Start free. Upgrade when you're ready.",
+        "noHiddenFees": "No hidden fees."
+      },
+      "billing": {
+        "monthly": "Monthly",
+        "yearly": "Yearly"
+      },
+      "plans": {
+        "free": {
+          "name": "Free",
+          "description": "To start your health journey",
+          "features": {
+            "healthTracking": "Basic health tracking",
+            "modules": "3 modules of choice",
+            "aiRequests": "5 AI requests per day",
+            "community": "Community access",
+            "analytics": "Basic analytics",
+            "wearables": "Wearables integrations",
+            "personalPlans": "Personal plans",
+            "prioritySupport": "Priority support"
+          },
+          "cta": "Start Free"
+        },
+        "premium": {
+          "name": "Premium",
+          "description": "For maximum results",
+          "features": {
+            "allModules": "All 7 health modules",
+            "unlimitedAI": "Unlimited AI coach",
+            "advancedAnalytics": "Advanced analytics",
+            "allIntegrations": "All integrations",
+            "prioritySupport": "Priority support",
+            "personalPlans": "Personal plans",
+            "freeTrial": "14 days free",
+            "familyAccess": "Family access"
+          },
+          "cta": "Try 14 Days"
+        },
+        "pro": {
+          "name": "Pro",
+          "description": "For professionals and families",
+          "features": {
+            "everythingPremium": "Everything in Premium",
+            "personalAI": "Personal AI coach",
+            "oneOnOne": "1-on-1 sessions (4/month)",
+            "familyPlan": "Family plan (5 people)",
+            "b2bAccess": "B2B access",
+            "apiAccess": "API access",
+            "earlyAccess": "Early access to features",
+            "personalManager": "Personal manager"
+          },
+          "cta": "Start Pro"
+        }
+      },
+      "comparison": {
+        "title": "Plan Comparison",
+        "subtitle": "Detailed comparison of all features",
+        "feature": "Feature",
+        "healthTracking": "Health tracking",
+        "aiCoach": "AI coach",
+        "analytics": "Analytics",
+        "integrations": "Integrations",
+        "support": "Support",
+        "familyAccess": "Family access",
+        "apiAccess": "API access",
+        "personalManager": "Personal manager"
+      },
+      "faqs": {
+        "changePlan": {
+          "question": "Can I change my plan later?",
+          "answer": "Yes, you can upgrade or downgrade your plan at any time in your account settings."
+        },
+        "trial": {
+          "question": "How does the 14-day trial work?",
+          "answer": "After registration, you get full access to Premium for 14 days. No card required. After the trial, you can continue free or subscribe."
+        },
+        "afterTrial": {
+          "question": "What happens after the trial?",
+          "answer": "Your account will automatically switch to the Free plan. You can subscribe to Premium or Pro at any time."
+        },
+        "yearlyDiscount": {
+          "question": "Is there a discount for yearly plans?",
+          "answer": "Yes! Yearly Premium and Pro plans give a 17% discount compared to monthly billing."
+        },
+        "cancelSubscription": {
+          "question": "Can I cancel my subscription?",
+          "answer": "Yes, you can cancel your subscription at any time in settings. Access will remain until the end of the paid period."
+        }
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Answers to common questions about pricing"
+      },
+      "b2b": {
+        "title": "B2B Solutions",
+        "subtitle": "Corporate wellness solution for your company",
+        "sickDays": "Reduced sick days",
+        "productivity": "Increased productivity",
+        "perEmployee": "Per employee",
+        "cta": "Request company demo"
+      },
+      "finalCta": {
+        "title": "Ready to start?",
+        "subtitle": "Join 100,000+ users today",
+        "cta": "Start free now",
+        "subtext": "Free • No credit card • 14 days Premium included"
       }
     },
     "testimonials": {

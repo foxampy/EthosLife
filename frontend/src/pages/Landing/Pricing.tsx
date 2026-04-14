@@ -1,79 +1,81 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { 
-  CheckCircle2, 
-  X, 
-  HelpCircle, 
-  Star, 
-  TrendingUp, 
-  Shield, 
+import {
+  CheckCircle2,
+  X,
+  HelpCircle,
+  Star,
+  TrendingUp,
+  Shield,
   Zap,
   Users,
   ArrowRight
 } from 'lucide-react';
 
 const PricingV2 = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
 
   const plans = [
     {
-      name: 'Free',
-      description: 'Для начала пути к здоровью',
+      name: t('pricing.plans.free.name'),
+      description: t('pricing.plans.free.description'),
       monthlyPrice: 0,
       yearlyPrice: 0,
       features: [
-        { text: 'Базовый трекинг здоровья', included: true },
-        { text: '3 модуля на выбор', included: true },
-        { text: '5 AI-запросов в день', included: true },
-        { text: 'Доступ к сообществу', included: true },
-        { text: 'Базовая аналитика', included: true },
-        { text: 'Интеграции с wearables', included: false },
-        { text: 'Персональные планы', included: false },
-        { text: 'Приоритетная поддержка', included: false }
+        { text: t('pricing.plans.free.features.healthTracking'), included: true },
+        { text: t('pricing.plans.free.features.modules'), included: true },
+        { text: t('pricing.plans.free.features.aiRequests'), included: true },
+        { text: t('pricing.plans.free.features.community'), included: true },
+        { text: t('pricing.plans.free.features.analytics'), included: true },
+        { text: t('pricing.plans.free.features.wearables'), included: false },
+        { text: t('pricing.plans.free.features.personalPlans'), included: false },
+        { text: t('pricing.plans.free.features.prioritySupport'), included: false }
       ],
-      cta: 'Начать бесплатно',
+      cta: t('pricing.plans.free.cta'),
       popular: false,
       color: 'from-slate-500 to-gray-500'
     },
     {
-      name: 'Premium',
-      description: 'Для максимальных результатов',
+      name: t('pricing.plans.premium.name'),
+      description: t('pricing.plans.premium.description'),
       monthlyPrice: 9.99,
       yearlyPrice: 99.99,
       savings: '17%',
       features: [
-        { text: 'Все 7 модулей здоровья', included: true },
-        { text: 'Безлимитный AI-коуч', included: true },
-        { text: 'Расширенная аналитика', included: true },
-        { text: 'Все интеграции', included: true },
-        { text: 'Приоритетная поддержка', included: true },
-        { text: 'Персональные планы', included: true },
-        { text: '14 дней бесплатно', included: true },
-        { text: 'Семейный доступ', included: false }
+        { text: t('pricing.plans.premium.features.allModules'), included: true },
+        { text: t('pricing.plans.premium.features.unlimitedAI'), included: true },
+        { text: t('pricing.plans.premium.features.advancedAnalytics'), included: true },
+        { text: t('pricing.plans.premium.features.allIntegrations'), included: true },
+        { text: t('pricing.plans.premium.features.prioritySupport'), included: true },
+        { text: t('pricing.plans.premium.features.personalPlans'), included: true },
+        { text: t('pricing.plans.premium.features.freeTrial'), included: true },
+        { text: t('pricing.plans.premium.features.familyAccess'), included: false }
       ],
-      cta: 'Попробовать 14 дней',
+      cta: t('pricing.plans.premium.cta'),
       popular: true,
       color: 'from-emerald-500 to-cyan-500'
     },
     {
-      name: 'Pro',
-      description: 'Для профессионалов и семей',
+      name: t('pricing.plans.pro.name'),
+      description: t('pricing.plans.pro.description'),
       monthlyPrice: 19.99,
       yearlyPrice: 199.99,
       savings: '17%',
       features: [
-        { text: 'Всё из Premium', included: true },
-        { text: 'Персональный AI-коуч', included: true },
-        { text: '1-on-1 сессии (4/месяц)', included: true },
-        { text: 'Семейный план (5 человек)', included: true },
-        { text: 'B2B доступ', included: true },
-        { text: 'API доступ', included: true },
-        { text: 'Ранний доступ к фичам', included: true },
-        { text: 'Персональный менеджер', included: true }
+        { text: t('pricing.plans.pro.features.everythingPremium'), included: true },
+        { text: t('pricing.plans.pro.features.personalAI'), included: true },
+        { text: t('pricing.plans.pro.features.oneOnOne'), included: true },
+        { text: t('pricing.plans.pro.features.familyPlan'), included: true },
+        { text: t('pricing.plans.pro.features.b2bAccess'), included: true },
+        { text: t('pricing.plans.pro.features.apiAccess'), included: true },
+        { text: t('pricing.plans.pro.features.earlyAccess'), included: true },
+        { text: t('pricing.plans.pro.features.personalManager'), included: true }
       ],
-      cta: 'Начать Pro',
+      cta: t('pricing.plans.pro.cta'),
       popular: false,
       color: 'from-violet-500 to-purple-500'
     }
@@ -81,36 +83,36 @@ const PricingV2 = () => {
 
   const faqs = [
     {
-      question: 'Могу ли я изменить тариф позже?',
-      answer: 'Да, вы можете повысить или понизить тариф в любой момент в настройках аккаунта.'
+      question: t('pricing.faqs.changePlan.question'),
+      answer: t('pricing.faqs.changePlan.answer')
     },
     {
-      question: 'Как работает 14-дневный триал?',
-      answer: 'После регистрации вы получаете полный доступ к Premium на 14 дней. Карта не требуется. После триала можете продолжить бесплатно или подписаться.'
+      question: t('pricing.faqs.trial.question'),
+      answer: t('pricing.faqs.trial.answer')
     },
     {
-      question: 'Что происходит после триала?',
-      answer: 'Ваш аккаунт автоматически перейдёт на Free план. Вы можете подписаться на Premium или Pro в любое время.'
+      question: t('pricing.faqs.afterTrial.question'),
+      answer: t('pricing.faqs.afterTrial.answer')
     },
     {
-      question: 'Есть ли скидка на годовой план?',
-      answer: 'Да! Годовые планы Premium и Pro дают скидку 17% по сравнению с помесячной оплатой.'
+      question: t('pricing.faqs.yearlyDiscount.question'),
+      answer: t('pricing.faqs.yearlyDiscount.answer')
     },
     {
-      question: 'Могу ли я отменить подписку?',
-      answer: 'Да, отменить подписку можно в любой момент в настройках. Доступ сохранится до конца оплаченного периода.'
+      question: t('pricing.faqs.cancelSubscription.question'),
+      answer: t('pricing.faqs.cancelSubscription.answer')
     }
   ];
 
   const comparisonFeatures = [
-    'Трекинг здоровья',
-    'AI-коуч',
-    'Аналитика',
-    'Интеграции',
-    'Поддержка',
-    'Семейный доступ',
-    'API доступ',
-    'Персональный менеджер'
+    t('pricing.comparison.healthTracking'),
+    t('pricing.comparison.aiCoach'),
+    t('pricing.comparison.analytics'),
+    t('pricing.comparison.integrations'),
+    t('pricing.comparison.support'),
+    t('pricing.comparison.familyAccess'),
+    t('pricing.comparison.apiAccess'),
+    t('pricing.comparison.personalManager')
   ];
 
   return (
@@ -123,18 +125,18 @@ const PricingV2 = () => {
             animate={{ opacity: 1, y: 0 }}
           >
             <h1 className="text-5xl md:text-6xl font-bold text-[#2d2418] mb-6">
-              Простые и честные цены
+              {t('pricing.hero.title')}
             </h1>
             <p className="text-xl text-[#5c5243] max-w-2xl mx-auto mb-10">
-              Начните бесплатно. Обновите когда будете готовы.
+              {t('pricing.hero.subtitle')}
               <br />
-              Никаких скрытых платежей.
+              {t('pricing.hero.noHiddenFees')}
             </p>
 
             {/* Billing Toggle */}
             <div className="flex items-center justify-center gap-4 mb-12">
               <span className={`text-lg font-medium ${billingPeriod === 'monthly' ? 'text-[#2d2418]' : 'text-[#5c5243]'}`}>
-                Ежемесячно
+                {t('pricing.billing.monthly')}
               </span>
               <button
                 onClick={() => setBillingPeriod(billingPeriod === 'monthly' ? 'yearly' : 'monthly')}
@@ -149,7 +151,7 @@ const PricingV2 = () => {
                 />
               </button>
               <span className={`text-lg font-medium ${billingPeriod === 'yearly' ? 'text-[#2d2418]' : 'text-[#5c5243]'}`}>
-                Ежегодно
+                {t('pricing.billing.yearly')}
                 <span className="ml-2 px-2 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full">
                   -17%
                 </span>
@@ -176,7 +178,7 @@ const PricingV2 = () => {
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-sm font-bold rounded-full whitespace-nowrap z-10">
-                    Популярный выбор
+                    {t('pricing.popularChoice')}
                   </div>
                 )}
 
@@ -190,16 +192,16 @@ const PricingV2 = () => {
                           ${billingPeriod === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice}
                         </span>
                         <span className="text-[#5c5243]">
-                          /{billingPeriod === 'monthly' ? 'месяц' : 'год'}
+                          /{billingPeriod === 'monthly' ? t('pricing.period.month') : t('pricing.period.year')}
                         </span>
                       </>
                     ) : (
-                      <span className="text-5xl font-bold text-[#2d2418]">Бесплатно</span>
+                      <span className="text-5xl font-bold text-[#2d2418]">{t('pricing.free')}</span>
                     )}
                   </div>
                   {plan.savings && billingPeriod === 'yearly' && (
                     <div className="inline-block px-3 py-1 bg-emerald-100 text-emerald-700 text-sm font-bold rounded-full">
-                      Экономия {plan.savings}
+                      {t('pricing.savings')} {plan.savings}
                     </div>
                   )}
                 </div>
@@ -247,10 +249,10 @@ const PricingV2 = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-[#2d2418] mb-4">
-              Сравнение тарифов
+              {t('pricing.comparison.title')}
             </h2>
             <p className="text-xl text-[#5c5243]">
-              Подробное сравнение всех функций
+              {t('pricing.comparison.subtitle')}
             </p>
           </motion.div>
 
@@ -259,7 +261,7 @@ const PricingV2 = () => {
               <table className="w-full">
                 <thead className="bg-[#5c5243]/10">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-[#2d2418]">Функция</th>
+                    <th className="px-6 py-4 text-left text-sm font-bold text-[#2d2418]">{t('pricing.comparison.feature')}</th>
                     <th className="px-6 py-4 text-center text-sm font-bold text-[#2d2418]">Free</th>
                     <th className="px-6 py-4 text-center text-sm font-bold text-emerald-600">Premium</th>
                     <th className="px-6 py-4 text-center text-sm font-bold text-[#2d2418]">Pro</th>
@@ -301,10 +303,10 @@ const PricingV2 = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-[#2d2418] mb-4">
-              Частые вопросы
+              {t('pricing.faq.title')}
             </h2>
             <p className="text-xl text-[#5c5243]">
-              Ответы на популярные вопросы о тарифах
+              {t('pricing.faq.subtitle')}
             </p>
           </motion.div>
 
@@ -343,24 +345,24 @@ const PricingV2 = () => {
             <div className="flex items-center justify-center gap-3 mb-6">
               <Users className="w-12 h-12 text-emerald-500" />
               <h2 className="text-4xl md:text-5xl font-bold text-[#2d2418]">
-                B2B Решения
+                {t('pricing.b2b.title')}
               </h2>
             </div>
             <p className="text-xl text-[#5c5243] mb-8 max-w-2xl mx-auto">
-              Корпоративное wellness решение для вашей компании
+              {t('pricing.b2b.subtitle')}
             </p>
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="neu-pressed p-6">
                 <div className="text-3xl font-bold text-emerald-500 mb-2">25%</div>
-                <div className="text-sm text-[#5c5243]">Снижение больничных</div>
+                <div className="text-sm text-[#5c5243]">{t('pricing.b2b.sickDays')}</div>
               </div>
               <div className="neu-pressed p-6">
                 <div className="text-3xl font-bold text-emerald-500 mb-2">40%</div>
-                <div className="text-sm text-[#5c5243]">Рост продуктивности</div>
+                <div className="text-sm text-[#5c5243]">{t('pricing.b2b.productivity')}</div>
               </div>
               <div className="neu-pressed p-6">
                 <div className="text-3xl font-bold text-emerald-500 mb-2">$5/мес</div>
-                <div className="text-sm text-[#5c5243]">За сотрудника</div>
+                <div className="text-sm text-[#5c5243]">{t('pricing.b2b.perEmployee')}</div>
               </div>
             </div>
             <motion.button
@@ -369,7 +371,7 @@ const PricingV2 = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Запросить демо для компании
+              {t('pricing.b2b.cta')}
             </motion.button>
           </motion.div>
         </div>
@@ -384,10 +386,10 @@ const PricingV2 = () => {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-bold text-[#2d2418] mb-6">
-              Готовы начать?
+              {t('pricing.finalCta.title')}
             </h2>
             <p className="text-xl text-[#5c5243] mb-8 max-w-2xl mx-auto">
-              Присоединяйтесь к 100,000+ пользователей уже сегодня
+              {t('pricing.finalCta.subtitle')}
             </p>
             <motion.button
               onClick={() => navigate('/register')}
@@ -395,11 +397,11 @@ const PricingV2 = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Начать бесплатно сейчас
+              {t('pricing.finalCta.cta')}
               <ArrowRight className="w-6 h-6" />
             </motion.button>
             <p className="mt-6 text-sm text-[#5c5243]">
-              Бесплатно • Без кредитной карты • 14 дней Premium в подарок
+              {t('pricing.finalCta.subtext')}
             </p>
           </motion.div>
         </div>

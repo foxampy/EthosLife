@@ -7,6 +7,7 @@
   },
   "nav": {
     "home": "Startseite",
+    "investorPitch": "Investoren Pitch",
     "dashboard": "Übersicht",
     "health": "Gesundheit",
     "nutrition": "Ernährung",
@@ -185,7 +186,18 @@
       "macroGoals": "Makroziele",
       "dailyTarget": "Tägliches Ziel",
       "consumed": "Konsumiert",
-      "remaining": "Verbleibend"
+      "remaining": "Verbleibend",
+      "hydration": "Hydratation",
+      "glasses": "Gläser",
+      "noItems": "Noch keine Einträge",
+      "addFood": "Lebensmittel Hinzufügen",
+      "searchFoods": "Lebensmittel Suchen...",
+      "quickAdd": "Schnell Hinzufügen",
+      "aiScan": "KI-Scan",
+      "foodName": "Lebensmittelname",
+      "proteinShort": "P",
+      "carbsShort": "KH",
+      "fatsShort": "F"
     },
     "movement": {
       "title": "Bewegung",
@@ -201,11 +213,49 @@
       "workoutHistory": "Workout-Verlauf",
       "personalRecords": "Persönliche Rekorde",
       "weeklyGoal": "Wochenziel",
-      "streak": "Tagesserie"
+      "streak": "Tagesserie",
+      "activeWorkout": "Aktives Workout",
+      "ready": "Bereit",
+      "workoutPlayer": "Workout-Player",
+      "restTimer": "Pausentimer",
+      "recoveryScore": "Erholungs-Score",
+      "muscleFatigue": "Muskelermüdung",
+      "gpsTracker": "GPS-Tracker",
+      "weeklySchedule": "Wochenplan",
+      "pace": "Tempo",
+      "warmup": "Aufwärmen",
+      "active": "Aktiv",
+      "cooldown": "Abwärmen",
+      "strength": "Kraft",
+      "flexibility": "Flexibilität",
+      "move": "Bewegen",
+      "stand": "Stehen",
+      "records": "Rekorde",
+      "programs": "Programme",
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte",
+      "fullBody": "Ganzer Körper",
+      "upperLower": "Oben/Unten",
+      "pushPullLegs": "Drücken/Ziehen/Beine",
+      "previousBest": "Bisherige Bestleistung",
+      "reps": "Wiederholungen",
+      "weight": "Gewicht",
+      "volume": "Volumen",
+      "weightTrend": "Gewichtstrend",
+      "current": "Aktuell",
+      "heartRate": "Herzfrequenz",
+      "floors": "Stockwerke",
+      "recovery": {
+        "score": "Score",
+        "great": "Gute Erholung! Bereit für Intensität.",
+        "moderate": "Mäßige Erholung. Erwäge ein leichteres Training.",
+        "poor": "Schlechte Erholung. Fokus auf Ruhe heute."
+      }
     },
     "sleep": {
       "title": "Schlaf",
-      "subtitle": "Überwachen und verbessern Sie Ihren Schlaf",
+      "subtitle": "Schlafqualität verfolgen, analysieren und verbessern",
       "duration": "Dauer",
       "quality": "Qualität",
       "bedtime": "Schlafenszeit",
@@ -218,39 +268,183 @@
       "optimal": "Optimal",
       "sleepHygiene": "Schlafhygiene",
       "smartAlarm": "Intelligenter Wecker",
-      "sleepSounds": "Schlafgeräusche"
+      "sleepSounds": "Schlafgeräusche",
+      "sleepScore": "Schlaf-Score",
+      "target": "Ziel",
+      "average": "Durchschnitt",
+      "best": "Beste",
+      "surplusMessage": "Super! Du hast einen Schlafüberschuss. Behalte dieses gesunde Muster bei.",
+      "debtMessage": "Du brauchst mehr Schlaf zur Erholung. Versuche heute Abend 30 Minuten früher ins Bett zu gehen.",
+      "smartWindow": "Intelligentes Fenster",
+      "optimalWakeTime": "Optimale Aufwachzeit",
+      "wakeDuringLight": "Weckt dich während der leichten Schlafphase",
+      "weeklyTrends": "Wöchentliche Trends",
+      "consistency": "Konsistenz",
+      "environment": "Schlafumgebung",
+      "temperature": "Temperatur",
+      "humidity": "Luftfeuchtigkeit",
+      "noise": "Lärm",
+      "lightLevel": "Licht",
+      "chronotype": "Chronotyp",
+      "takeTest": "Test Machen",
+      "takeTestAgain": "Erneut Testen",
+      "recommendations": "Empfehlungen",
+      "overview": "Übersicht",
+      "timeline": "Zeitstrahl",
+      "trends": "Trends",
+      "chronotypes": {
+        "lion": "Löwe",
+        "lionDesc": "Frühaufsteher, am wachsamsten mittags",
+        "bear": "Bär",
+        "bearDesc": "Folgt der Sonne, am produktivsten mittags",
+        "wolf": "Wolf",
+        "wolfDesc": "Nachteule, am kreativsten nachts",
+        "dolphin": "Delfin",
+        "dolphinDesc": "Leichter Schläfer, ängstlich aber intelligent"
+      },
+      "assessmentsList": {
+        "phq9": "Depressions-Screening",
+        "gad7": "Angst-Screening",
+        "pss": "Stress-Skala"
+      },
+      "crisis": {
+        "USA": "Crisis Lifeline (USA)",
+        "UK": "Samaritans (UK)",
+        "Global": "Weltweite Unterstützung"
+      }
     },
     "psychology": {
       "title": "Psychologie",
-      "subtitle": "Mentale Gesundheit und Wohlbefinden",
+      "subtitle": "Pflege dein mentales Wohlbefinden",
       "mood": "Stimmung",
-      "stress": "Stresslevel",
-      "anxiety": "Angst",
+      "energy": "Energie",
+      "stress": "Stress",
+      "orb": "Stimmungs-Orb",
+      "checkIn": "Tägliches Check-in",
+      "howFeeling": "Wie fühlst du dich?",
+      "energyLevel": "Energieniveau",
+      "stressLevel": "Stresslevel",
+      "saveCheckIn": "Check-in Speichern",
+      "breathingGuide": "Atemanleitung",
+      "breathingDesc": "4-7-8-Technik zur Entspannung",
+      "inhale": "Einatmen",
+      "hold": "Anhalten",
+      "exhale": "Ausatmen",
+      "startBreathing": "Atmen Starten",
+      "stop": "Stopp",
+      "timeline": "Stimmungsverlauf",
+      "streak": "Serie",
+      "cbtTools": "KVT-Tools",
+      "thoughtRecord": "Gedankenprotokoll",
+      "negativeThought": "Negativer Gedanke",
+      "evidenceFor": "Beweise Dafür",
+      "evidenceAgainst": "Beweise Dagegen",
+      "saveRecord": "Protokoll Speichern",
       "meditation": "Meditation",
-      "journal": "Tagebuch",
-      "therapy": "Therapie",
-      "moodTracker": "Stimmungstracker",
-      "howAreYou": "Wie fühlen Sie sich heute?",
-      "breathing": "Atemübungen",
-      "cbt": "KVT-Tools",
-      "mindfulness": "Achtsamkeit"
+      "morningCalm": "Morgenruhe",
+      "stressRelief": "Stressabbau",
+      "focusBoost": "Fokus Steigern",
+      "gratitude": "Dankbarkeitstagebuch",
+      "gratitudePrompt": "Wofür bist du dankbar?",
+      "gratitudeAdded": "Dankbarkeitseintrag hinzugefügt!",
+      "gratitudeSample1": "Heute sonniges Wetter",
+      "gratitudeSample2": "Tolles Gespräch mit einem Freund",
+      "gratitudeSample3": "Köstliches selbstgekochtes Essen",
+      "highStressAlert": "Hoher Stress erkannt. Versuche eine Atemübung oder einen kurzen Spaziergang.",
+      "assessments": "Bewertungen",
+      "assessmentInstruction": "In den letzten 2 Wochen, wie oft hast du dich gestört gefühlt durch:",
+      "crisisSupport": "Krisenunterstützung",
+      "needHelp": "Jetzt Hilfe Brauchen?",
+      "crisisSupportDesc": "Tippen für Krisenunterstützungs-Ressourcen",
+      "assessmentScale": {
+        "0": "Überhaupt nicht",
+        "1": "Einige Tage",
+        "2": "Mehr als die Hälfte",
+        "3": "Fast jeden Tag"
+      },
+      "moodLevels": {
+        "veryLow": "Sehr Niedrig",
+        "low": "Niedrig",
+        "belowAvg": "Unter Durchschn.",
+        "neutral": "Neutral",
+        "okay": "Okay",
+        "good": "Gut",
+        "veryGood": "Sehr Gut",
+        "great": "Großartig",
+        "excellent": "Ausgezeichnet",
+        "amazing": "Unglaublich"
+      },
+      "stressLabels": {
+        "relaxed": "Entspannt",
+        "mild": "Leicht",
+        "moderate": "Mäßig",
+        "high": "Hoch",
+        "severe": "Schwer"
+      },
+      "techniques": {
+        "breathing478": "4-7-8 Atmung",
+        "boxBreathing": "Box-Atmung",
+        "grounding": "5-4-3-2-1 Erdung",
+        "bodyScan": "Körper-Scan",
+        "worryTime": "Sorgenzeit"
+      }
     },
     "medicine": {
       "title": "Medizin",
-      "subtitle": "Verfolgen Sie Medikamente und Gesundheitsdaten",
+      "subtitle": "Verwalten Sie Ihre Gesundheit und Behandlungen",
       "medications": "Medikamente",
       "vitamins": "Vitamine und Nahrungsergänzungsmittel",
       "prescriptions": "Rezepte",
       "reminders": "Erinnerungen",
       "refills": "Nachfüllungen",
-      "symptoms": "Symptome",
-      "doctors": "Ärzte",
-      "appointments": "Termine",
+      "todaySchedule": "Heutiger Zeitplan",
+      "symptomTracker": "Symptom-Tracker",
+      "healthTimeline": "Gesundheits-Zeitstrahl",
       "labResults": "Laborergebnisse",
+      "appointments": "Termine",
+      "doctors": "Ärzte",
+      "vitals": "Vitalzeichen",
+      "adherence": "Einhaltung",
+      "take": "Einnehmen",
+      "skip": "Überspringen",
+      "taken": "Eingenommen",
+      "skipped": "Übersprungen",
+      "withFood": "Mit Essen",
+      "withoutFood": "Auf nüchternen Magen",
+      "either": "Jederzeit",
+      "pillsRemaining": "Tabletten verbleibend",
+      "logSymptom": "Symptom Erfassen",
       "addMedication": "Medikament Hinzufügen",
       "dosage": "Dosierung",
       "frequency": "Häufigkeit",
-      "time": "Zeit"
+      "time": "Zeit",
+      "severity": "Schweregrad",
+      "pain": "Schmerzen",
+      "digestive": "Verdauung",
+      "respiratory": "Atemwege",
+      "neurological": "Neurologisch",
+      "mild": "Leicht",
+      "moderate": "Mäßig",
+      "severe": "Schwer",
+      "upcoming": "Bevorstehend",
+      "completed": "Abgeschlossen",
+      "documents": "Dokumente",
+      "discharge": "Entlassung",
+      "insurance": "Versicherung",
+      "vaccines": "Impfstoffe",
+      "past": "Vergangenheit",
+      "metrics": "Gesundheitsmetriken",
+      "latest": "Neueste",
+      "avg7d": "Durchschnitt (7T)",
+      "inRange": "Im Bereich",
+      "bloodPressure": "Blutdruck",
+      "weightMetric": "Gewicht",
+      "temperature": "Temperatur",
+      "glucose": "Glukose",
+      "spo2": "SpO2",
+      "aiAssistant": "KI-Assistent",
+      "lowRefillsTitle": "Wenige Nachfüllungen",
+      "refillDescription": "Nachfüllung empfohlen für {{names}}"
     },
     "relationships": {
       "title": "Beziehungen",
@@ -437,6 +631,18 @@
       "habits": {
         "title": "Gewohnheiten",
         "description": "Bauen Sie nachhaltige gesunde Gewohnheiten mit Gamifizierung auf"
+      },
+      "community": {
+        "title": "Community",
+        "description": "Unterstützung von Gleichgesinnten und Spezialisten"
+      },
+      "gamification": {
+        "title": "Gamifizierung",
+        "description": "Errungenschaften, Herausforderungen, Bestenlisten"
+      },
+      "privacy": {
+        "title": "Datenschutz",
+        "description": "Deine Daten sind zuverlässig geschützt"
       }
     },
     "pricing": {
@@ -468,6 +674,10 @@
         ],
         "popular": "Beliebteste"
       },
+      "popularChoice": "Beliebte Wahl",
+      "startFree": "Kostenlos Starten",
+      "try14Days": "14 Tage Testen",
+      "startPro": "Pro Starten",
       "pro": {
         "name": "Pro",
         "price": "19.99",
@@ -533,6 +743,7 @@
     "financials": "Finanzprojektionen",
     "risks": "Risikofaktoren",
     "contact": "Kontakt & Rechtliches",
+    "version": "Version {{version}}",
     "executiveSummary.heading": "Menschliche Gesundheit neu denken",
     "executiveSummary.p1": "EthosLife ist ein Human Operating System (HOS) -- eine umfassende, KI-gestutzte Gesundheitsplattform, die 7 kritische Module vereint: Ernahrung, Bewegung, Schlaf, Psychologie, Medizin, Beziehungen und Gewohnheiten. Unsere Mission ist es, optimale Gesundheit fur jeden Menschen auf dem Planeten zuganglich, messbar und nachhaltig zu machen.",
     "executiveSummary.p2": "Der globale digitale Gesundheitsmarkt wird bis 2030 voraussichtlich $2,4 Bio. erreichen, doch die aktuelle Landschaft ist fragmentiert. Nutzer verwenden 5-7 verschiedene Apps, was zu Datensilos, inkonsistenten Erkenntnissen und geringer Engagement fuhrt. EthosLife lost dieses Problem durch eine einzige integrierte Plattform.",
@@ -610,72 +821,335 @@
     }
   },
   "investorPitch": {
-    "title": "EthosLife -- Investor Pitch",
-    "preseed": "Pre-Seed Prasentation -- EthosLife: Das Human Operating System. Eine KI-gestutzte einheitliche Gesundheitsplattform, die Ernahrung, Bewegung, Schlaf, Psychologie, Medizin, Beziehungen und Gewohnheiten integriert. Wir suchen $2M, um Product-Market-Fit zu erreichen und unsere mobilen Apps zu starten.",
+    "title": "Investoren Pitch",
+    "subtitle": "EthosLife — Pre-Seed Runde $250.000",
+    "slideOf": "von",
+    "downloadPdf": "PDF herunterladen",
+    "backToHome": "Startseite",
+    "toc": "Folien",
     "slides": {
+      "title": {
+        "title": "EthosLife",
+        "subtitle": "Menschliches Betriebssystem für Gesundheit",
+        "round": "Pre-Seed Runde: $250.000",
+        "confidential": "Vertraulich — April 2026"
+      },
       "problem": {
         "title": "Das Problem",
-        "content": "Das digitale Gesundheitsokosystem ist tiefgreifend fragmentiert. Durchschnittliche Nutzer verwenden 5-7 separate Apps fur Ernahrung, Bewegung, Schlaf und Meditation. Dies schafft Datensilos, in denen keine App ganzheitliche Einblicke geben kann. 78% der Nutzer geben ihre Apps innerhalb von 30 Tagen auf. Die kombinierten Kosten von 5-7 Premium-Diensten betragen $50-100+/Monat."
+        "points": [
+          "Menschen nutzen 10+ Gesundheits-Apps, die nicht miteinander kommunizieren",
+          "80% geben Gesundheits-Apps innerhalb von 30 Tagen auf — keine Motivation",
+          "Kein ganzheitlicher Gesundheitsblick: Ernährung, Schlaf, Psychologie, Bewegung sind isoliert",
+          "Spezialisten und Gesundheitszentren haben keine einheitliche Entdeckungsplattform",
+          "Null Anreizsystem für langfristige gesunde Gewohnheiten"
+        ],
+        "summary": "Der Health-Tech-Markt ist fragmentiert, das Engagement bricht ein, und Nutzer bleiben ohne umfassende Lösung."
       },
       "solution": {
-        "title": "Unsere Losung",
-        "content": "EthosLife: Eine Plattform. Sieben Module. Kein Wechseln. Unsere KI-Engine kreuzanalysiert Daten aller Module fur Einblicke, die keine einzelne App liefern kann. Der KI-Coach fungiert als personlicher Assistent und lernt aus Ihrem Verhalten. Das Gamification-System mit UNITY-Token verwandelt gesunde Gewohnheiten in eine lohnende Reise."
+        "title": "Die Lösung",
+        "points": [
+          "7 integrierte Gesundheitsmodule in EINER Plattform — kein Wechseln nötig",
+          "KI-Gesundheitscoach mit 6 spezialisierten Personas, die alle Gesundheitsdaten lesen",
+          "Soziales Netzwerk für Verantwortung und Community-Unterstützung",
+          "Marktplatz verbindet Nutzer mit verifizierten Spezialisten und Gesundheitszentren",
+          "25 Sprachen — von Tag eins global"
+        ],
+        "summary": "EthosLife vereint alle Aspekte der Gesundheit in einer intelligenten, motivierenden und zugänglichen Plattform."
       },
       "market": {
-        "title": "Marktanalyse",
-        "content": "Globaler digitaler Gesundheitsmarkt: $350B in 2025, projektiert auf $2.4T bis 2030 (CAGR 27%). Schlusselsegmente: Fitness-Apps ($14B), Telehealth ($455B), Wellness & psychische Gesundheit ($275B), Wearables ($185B). EthosLife operiert an der Schnittstelle all dieser Segmente. Zielgruppe: 25-45 Jahre, gesundheitsbewusst, technikaffin."
+        "title": "Marktchance",
+        "stats": [
+          {
+            "label": "Wellness-Markt",
+            "value": "$5,6B"
+          },
+          {
+            "label": "Digital Health bis 2030",
+            "value": "$660B"
+          },
+          {
+            "label": "Mental Health Apps",
+            "value": "$7B"
+          },
+          {
+            "label": "Zielnutzer",
+            "value": "200M+"
+          }
+        ],
+        "summary": "Massiver und wachsender Markt ohne integrierte Wettbewerber."
       },
       "competitive": {
         "title": "Wettbewerbsvorteil",
-        "content": "Einzelne Spieler dominieren separate Kategorien: MyFitnessPal (Ernahrung), Strava (Fitness), Calm (Mediation). Aber KEINER bietet eine integrierte Losung. Unser Wettbewerbsvorteil: 7 integrierte Module mit KI-Kreuzanalyse, die Einzelzweck-Konkurrenten nicht replizieren konnen. Wir schaffen einen Netzwerkeffekt, bei dem jedes zusatzliche Modul den Wert aller anderen erhoht."
+        "summary": "Wir sind die EINZIGE Plattform, die 7 Gesundheitsmodule, KI, Social und Marktplatz kombiniert.",
+        "competitors": [
+          {
+            "name": "MyFitnessPal",
+            "modules": 1,
+            "ai": false,
+            "social": false,
+            "marketplace": false,
+            "token": false
+          },
+          {
+            "name": "Calm",
+            "modules": 1,
+            "ai": false,
+            "social": false,
+            "marketplace": false,
+            "token": false
+          },
+          {
+            "name": "Strava",
+            "modules": 1,
+            "ai": false,
+            "social": true,
+            "marketplace": false,
+            "token": false
+          },
+          {
+            "name": "Whoop",
+            "modules": 2,
+            "ai": true,
+            "social": false,
+            "marketplace": false,
+            "token": false
+          },
+          {
+            "name": "EthosLife",
+            "modules": 7,
+            "ai": true,
+            "social": true,
+            "marketplace": true,
+            "token": true
+          }
+        ]
       },
       "businessModel": {
-        "title": "Geschaftsmodell",
-        "content": "5 diversifizierte Einnahmestrome:\n1. Abonnements (45%): Premium $9.99/Mo, Pro $19.99/Mo, B2B Enterprise\n2. Marktplatz-Provision (25%): 15-20% bei Spezialistenberatungen\n3. Token-Okonomie (15%): Verkaufe, Staking und Transaktionsgebuhren\n4. Dateneinblicke (10%): Anonymisierte Daten fur Forschung\n5. Strategische Partnerschaften (5%): Versicherungen, Wearables"
+        "title": "Geschäftsmodell",
+        "streams": [
+          {
+            "name": "Abonnements",
+            "desc": "Kostenlos / $9,99 Premium / $19,99 Pro pro Monat",
+            "icon": "credit-card"
+          },
+          {
+            "name": "Marktplatz-Provision",
+            "desc": "15% Spezialistenberatungen, 10% Zentrumsbuchungen, 5% Produktverkäufe",
+            "icon": "store"
+          },
+          {
+            "name": "B2B SaaS",
+            "desc": "Betriebliches Gesundheitsmanagement für $5/Mitarbeiter/Monat",
+            "icon": "building"
+          },
+          {
+            "name": "Token-Ökonomie",
+            "desc": "Token-Verkauf, Staking-Gebühren, Transaktionsgebühren",
+            "icon": "coins"
+          }
+        ]
       },
       "token": {
-        "title": "UNITY-Token-Okosystem",
-        "content": "UNITY: Nativer Utility- und Governance-Token. Gesamtangebot: 1.000.000.000. Verteilung: 35% Community-Belohnungen, 20% Offentlicher Verkauf, 15% Team (3J Vesting), 15% Entwicklung, 10% Liquiditat, 5% Reserve. Nutzer verdienen durch Check-ins, Streaks, Meilensteine und Empfehlungen. Nutzen: Premium, Beratungen, Marktplatz, Staking (8-15% APY), DAO-Governance."
+        "title": "UNITY-Token-Ökosystem",
+        "totalSupply": "1.000.000.000 UNITY",
+        "earningWays": [
+          "Plattform-Promotion — Inhalte erstellen, Bewertungen schreiben, Beiträge teilen",
+          "Empfehlungen — 10% der Einkäufe eingeladener Freunde verdienen",
+          "Wissenschaftliche Forschung — Gesundheitsforschungsarbeiten und Programme erstellen und verifizieren",
+          "Content-Erstellung — Leitfäden schreiben, Kurse und Wellnessprogramme entwickeln",
+          "Experten-Verifizierung — zertifizierte Fachleute verifizieren Gesundheitsinhalte",
+          "Token-Kauf — Während Seed-Runde zu $0,011/UNITY kaufen",
+          "Staking-Belohnungen — Passives Einkommen mit 25-35% APY"
+        ],
+        "utility": "Cashback bis zu 30% · 50% Abo-Rabatt · Spezialisten-Zahlungen · Staking 25-35% APY · DAO-Governance"
       },
       "traction": {
-        "title": "Traktion & Kennzahlen",
-        "content": "Aktuelle Wachstumskennzahlen:\n- Web-Plattform mit Kern-Gesundheitsmodulen gestartet\n- KI-Coach v1 in Betrieb und sich stetig verbessernd\n- Fruhe Community aktiver Early Adopters\n- Engagement-Rate uber Branchendurchschnitt\n- Wochenweise steigende Nutzerbindung\n- Spezialisten-Pipeline im Aufbau"
+        "title": "Traktion",
+        "stats": [
+          {
+            "label": "Codezeilen",
+            "value": "50.000+"
+          },
+          {
+            "label": "Erstellte Seiten",
+            "value": "80+"
+          },
+          {
+            "label": "Komponenten",
+            "value": "60+"
+          },
+          {
+            "label": "Sprachen",
+            "value": "25"
+          },
+          {
+            "label": "Routen",
+            "value": "55+"
+          },
+          {
+            "label": "Gesundheitsmodule",
+            "value": "7"
+          }
+        ],
+        "summary": "MVP ist bereits gebaut und funktionsfähig — nicht nur eine Idee."
       },
       "roadmap": {
         "title": "Roadmap",
-        "content": "Q1-Q2 2026: Web-Launch, Kern-Module, KI v1, TGE\nQ3-Q4 2026: Mobile Apps Beta, Marktplatz, Gamifizierung, KI v2, DAO-Rahmen\nQ1-Q2 2027: Wearable-Integrationen, B2B-Wellness, Pro-Tier, Familienplan\nQ3-Q4 2027: Vollstandiges DAO, 10+ Sprachen, Datenforschung, KI-Vorhersage\n2028+: Smart Camera, genetische Daten, VR-Fitness, 100M+ Nutzer"
+        "phases": [
+          {
+            "quarter": "Q2 2026",
+            "title": "Pre-Seed Finanzierung",
+            "desc": "$250K — MVP-Abschluss und Marketing-Start",
+            "status": "current"
+          },
+          {
+            "quarter": "Q3-Q4 2026",
+            "title": "MVP-Veröffentlichung",
+            "desc": "Öffentlicher Start, 50K Nutzer, Mobile App-Entwicklung beginnt",
+            "status": "upcoming"
+          },
+          {
+            "quarter": "Q1-Q2 2027",
+            "title": "Mobile Apps",
+            "desc": "iOS + Android Start, Spezialisten-Marktplatz-Erweiterung",
+            "status": "upcoming"
+          },
+          {
+            "quarter": "Q3 2027",
+            "title": "Seed Token-Verkauf",
+            "desc": "$1,65M zu $0,011/UNITY, Staking-Plattform-Start",
+            "status": "upcoming"
+          },
+          {
+            "quarter": "Q4 2027",
+            "title": "Wachstum",
+            "desc": "500K Nutzer, DAO-Governance, B2B-Start",
+            "status": "upcoming"
+          },
+          {
+            "quarter": "2028+",
+            "title": "Skalierung",
+            "desc": "Börsennotierung, Wearables, 10M+ Nutzer",
+            "status": "upcoming"
+          }
+        ]
       },
       "useOfFunds": {
-        "title": "Mittelverwendung",
-        "content": "Wir suchen $2M Pre-Seed-Runde:\n- 40% Produktentwicklung: Engineering, Design, Cloud-Infrastruktur, mobile Entwicklung\n- 25% Marketing & Akquise: Growth Marketing, Partnerschaften, Referral-Programme\n- 20% Team: Key Hires in Engineering, Data Science, Gesundheitswissenschaften\n- 10% Recht & Compliance: Token-Struktur, Regulierungen, Patente\n- 5% Betriebsreserve: 18 Monate Runway bis zu Schlusselmeilensteinen"
+        "title": "Mittelverwendung — Pre-Seed $250K",
+        "items": [
+          {
+            "category": "Entwicklung",
+            "amount": "$100.000",
+            "percent": 40,
+            "desc": "Plattform vervollständigen, Mobile Apps, KI-Integration"
+          },
+          {
+            "category": "Marketing & Werbung",
+            "amount": "$50.000",
+            "percent": 20,
+            "desc": "Nutzergewinnung, PR, Social-Media-Kampagnen"
+          },
+          {
+            "category": "Inhalte & Programme",
+            "amount": "$40.000",
+            "percent": 16,
+            "desc": "Gesundheitsprogramme, Forschungsarbeiten, Kurse"
+          },
+          {
+            "category": "Recht & Compliance",
+            "amount": "$25.000",
+            "percent": 10,
+            "desc": "Token-Rechtsstruktur, Lizenzen, IP-Schutz"
+          },
+          {
+            "category": "Infrastruktur",
+            "amount": "$20.000",
+            "percent": 8,
+            "desc": "Server, Tools, Hosting"
+          },
+          {
+            "category": "Reserve",
+            "amount": "$15.000",
+            "percent": 6,
+            "desc": "Puffer für unerwartete Kosten"
+          }
+        ]
       },
       "projections": {
         "title": "Finanzprojektionen",
-        "content": "Jahr 1 (2026): 100K Nutzer, 10K Premium, $1.2M ARR\nJahr 2 (2027): 500K Nutzer, 50K Premium, $8M ARR, Break-even Q4\nJahr 3 (2028): 2M Nutzer, 200K Premium, $35M ARR, positiver Cashflow\nJahr 5 (2030): 10M+ Nutzer, 1M Premium, $150M+ ARR\nExit-Multiples: Health-Tech-IPOs durchschnittlich 8-12x Umsatz"
-      },
-      "tokenSale": {
-        "title": "Token-Verkaufsdetails",
-        "content": "Offentlicher Token-Verkauf -- Fruhzugang fur Investoren\nStartpreis: Bestimmt durch Preisfindungsmechanismus\nVesting fur Fruhinvesoren: 6 Monate Cliff, 12 Monate linear\nSofortiger Nutzen: Einlosbar fur Abonnements und Marktplatzdienste\nDeflationarer Mechanismus: 2% Burn bei ausgewahlten Transaktionen\nCompliance: Rechtsgutachten in Schlusseljurisdiktionen"
-      },
-      "team": {
-        "title": "Grunderteam",
-        "content": "Multidisziplinares Team mit 50+ Jahren kombinierter Erfahrung in Health-Tech. Umfasst: Full-Stack-Ingenieure mit React, Node.js, Cloud Expertise; Gesundheitswissenschaftler mit PhDs in Ernahrung, Physiologie und Psychologie; KI/ML-Forscher mit benutzerdefinierten Gesundheitsmodellen; Ausgezeichnete Produktdesigner; Geschaftsfuhrer mit nachgewiesener Erfolgsbilanz in Health-Tech."
-      },
-      "highlights": {
-        "title": "Investment-Highlights",
-        "content": "1. $2.4B Bio. Markt mit 27% CAGR -- eine der groBten Gelegenheiten in Tech\n2. Einzigartiges Wertversprechen -- 7 integrierte Module vs. fragmentierte Losungen\n3. Diversifiziertes Geschaftsmodell -- 5 Einnahmestrome, nicht von einem abhangig\n4. Token mit echtem Nutzen -- Nicht spekulativ, an reale Dienste gebunden\n5. Erfahrenes Team -- 50+ Jahre kombiniert in Health-Tech\n6. Fruhe Traktion -- Funktionale Plattform mit aktiven Nutzern\n7. Datenvorteil -- Cross-Modul-Einblicke unmoglich zu replizieren"
+        "years": [
+          {
+            "year": "Jahr 1",
+            "users": "50K",
+            "revenue": "$600K",
+            "subs": "5K",
+            "mrr": "$50K"
+          },
+          {
+            "year": "Jahr 2",
+            "users": "250K",
+            "revenue": "$3M",
+            "subs": "25K",
+            "mrr": "$250K"
+          },
+          {
+            "year": "Jahr 3",
+            "users": "1M",
+            "revenue": "$12M",
+            "subs": "100K",
+            "mrr": "$1M"
+          },
+          {
+            "year": "Jahr 4",
+            "users": "3M",
+            "revenue": "$36M",
+            "subs": "300K",
+            "mrr": "$3M"
+          },
+          {
+            "year": "Jahr 5",
+            "users": "10M",
+            "revenue": "$120M",
+            "subs": "1M",
+            "mrr": "$10M"
+          }
+        ]
       },
       "theAsk": {
         "title": "Die Investition",
-        "content": "Wir suchen $2M Pre-Seed-Runde fur:\n- iOS und Android Mobile Apps starten\n- Engineering und Gesundheitswissenschaften-Team ausbauen\n- Growth-Marketing-Strategie ausfuhren\n- Strategische Partnerschaften etablieren\n- 100K Nutzer und $1.2M ARR in 18 Monaten erreichen\n\nWir bieten Equity + UNITY-Token-Allokation fur Fruhinvesoren. Kontakt: partnerships@ethoslife.com"
+        "raising": "$250.000 Pre-Seed",
+        "instrument": "SAFE / Wandeldarlehen",
+        "valuationCap": "$5M Bewertungsobergrenze",
+        "use": "MVP vervollständigen → Start → 50K Nutzer → Token-Verkauf vorbereiten",
+        "nextRound": "Seed Token-Verkauf: $1,65M zu $0,011/UNITY (6 Monate nach MVP)",
+        "exitPotential": "Exit-Potenzial: $500M-1B+ (Calm $2B, Whoop $3,6B)"
       },
       "contact": {
         "title": "Kontakt",
-        "content": "Wir sind offen fur Fragen, Partnerschaftsanfragen und Investitionsdiskussionen. Unser Team antwortet innerhalb von 48 Stunden.\n\nEmail: info@ethoslife.com\nPartnerschaften: partnerships@ethoslife.com\nTelegram: t.me/ethoslife\nTwitter: @EthosLife"
+        "website": "Website: ethoslife.com",
+        "email": "Email: invest@ethoslife.com",
+        "github": "GitHub: github.com/foxampy/EthosLife",
+        "whitepaper": "WhitePaper: ethoslife.com/whitepaper",
+        "tagline": "Baue mit uns die Zukunft der Gesundheit"
       }
-    },
-    "downloadPdf": "PDF herunterladen",
-    "prev": "Zuruck",
-    "next": "Weiter"
+    }
+  },
+  "languageSelector": {
+    "selectLanguage": "Select Language",
+    "recent": "Recent",
+    "allLanguages": "All Languages",
+    "noLanguages": "No languages found"
+  },
+  "footer": {
+    "company": "Company",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookiePolicy": "Cookie Policy",
+    "disclaimer": "Disclaimer",
+    "stayUpdated": "Stay Updated",
+    "stayUpdatedDesc": "Get the latest health tips and updates",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe"
   }
 }

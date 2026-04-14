@@ -61,7 +61,8 @@
     "friendsV1": "الأصدقاء (كلاسيكي)",
     "groupsV1": "المجموعات (كلاسيكي)",
     "messagesV1": "الرسائل (كلاسيكي)",
-    "leadersV1": "القادة (كلاسيكي)"
+    "leadersV1": "القادة (كلاسيكي)",
+    "investorPitch": "Investor Pitch"
   },
   "common": {
     "search": "بحث",
@@ -185,7 +186,18 @@
       "macroGoals": "أهداف المغذيات",
       "dailyTarget": "الهدف اليومي",
       "consumed": "المستهلك",
-      "remaining": "المتبقي"
+      "remaining": "المتبقي",
+      "hydration": "Hydration",
+      "glasses": "glasses",
+      "noItems": "No items yet",
+      "addFood": "Add Food",
+      "searchFoods": "Search foods...",
+      "quickAdd": "Quick Add",
+      "aiScan": "AI Scan",
+      "foodName": "Food name",
+      "proteinShort": "P",
+      "carbsShort": "C",
+      "fatsShort": "F"
     },
     "movement": {
       "title": "الحركة",
@@ -201,7 +213,45 @@
       "workoutHistory": "سجل التدريبات",
       "personalRecords": "الأرقام القياسية الشخصية",
       "weeklyGoal": "الهدف الأسبوعي",
-      "streak": "أيام متتالية"
+      "streak": "أيام متتالية",
+      "activeWorkout": "Active Workout",
+      "ready": "Ready",
+      "workoutPlayer": "Workout Player",
+      "restTimer": "Rest Timer",
+      "recoveryScore": "Recovery Score",
+      "muscleFatigue": "Muscle Fatigue",
+      "gpsTracker": "GPS Tracker",
+      "weeklySchedule": "Weekly Schedule",
+      "pace": "Pace",
+      "warmup": "Warm Up",
+      "active": "Active",
+      "cooldown": "Cool Down",
+      "strength": "Strength",
+      "flexibility": "Flexibility",
+      "move": "Move",
+      "stand": "Stand",
+      "records": "Records",
+      "programs": "Programs",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "fullBody": "Full Body",
+      "upperLower": "Upper/Lower",
+      "pushPullLegs": "Push/Pull/Legs",
+      "previousBest": "Previous Best",
+      "reps": "Reps",
+      "weight": "Weight",
+      "volume": "Volume",
+      "weightTrend": "Weight Trend",
+      "current": "Current",
+      "heartRate": "Heart Rate",
+      "floors": "Floors",
+      "recovery": {
+        "score": "Score",
+        "great": "Great recovery! Ready for intensity.",
+        "moderate": "Moderate recovery. Consider lighter workout.",
+        "poor": "Poor recovery. Focus on rest today."
+      }
     },
     "sleep": {
       "title": "النوم",
@@ -218,7 +268,50 @@
       "optimal": "مثالي",
       "sleepHygiene": "نظافة النوم",
       "smartAlarm": "منبه ذكي",
-      "sleepSounds": "أصوات النوم"
+      "sleepSounds": "أصوات النوم",
+      "sleepScore": "Sleep Score",
+      "target": "Target",
+      "average": "Average",
+      "best": "Best",
+      "surplusMessage": "Great! You have a sleep surplus. Maintain this healthy pattern.",
+      "debtMessage": "You need more sleep to recover. Try going to bed 30 minutes earlier tonight.",
+      "smartWindow": "Smart Window",
+      "optimalWakeTime": "Optimal Wake Time",
+      "wakeDuringLight": "Wakes you during light sleep phase",
+      "weeklyTrends": "Weekly Trends",
+      "consistency": "Consistency",
+      "environment": "Sleep Environment",
+      "temperature": "Temperature",
+      "humidity": "Humidity",
+      "noise": "Noise",
+      "lightLevel": "Light",
+      "chronotype": "Chronotype",
+      "takeTest": "Take Test",
+      "takeTestAgain": "Take Test Again",
+      "recommendations": "Recommendations",
+      "overview": "Overview",
+      "timeline": "Timeline",
+      "trends": "Trends",
+      "chronotypes": {
+        "lion": "Lion",
+        "lionDesc": "Early riser, most alert at noon",
+        "bear": "Bear",
+        "bearDesc": "Follows the sun, most productive mid-day",
+        "wolf": "Wolf",
+        "wolfDesc": "Night owl, most creative at night",
+        "dolphin": "Dolphin",
+        "dolphinDesc": "Light sleeper, anxious but intelligent"
+      },
+      "assessmentsList": {
+        "phq9": "Depression screening",
+        "gad7": "Anxiety screening",
+        "pss": "Stress scale"
+      },
+      "crisis": {
+        "USA": "Crisis Lifeline (USA)",
+        "UK": "Samaritans (UK)",
+        "Global": "Worldwide Support"
+      }
     },
     "psychology": {
       "title": "علم النفس",
@@ -233,7 +326,76 @@
       "howAreYou": "كيف تشعر اليوم؟",
       "breathing": "تمارين التنفس",
       "cbt": "أدوات العلاج المعرفي السلوكي",
-      "mindfulness": "اليقظة الذهنية"
+      "mindfulness": "اليقظة الذهنية",
+      "energy": "Energy",
+      "orb": "Mood Orb",
+      "checkIn": "Daily Check-in",
+      "howFeeling": "How are you feeling?",
+      "energyLevel": "Energy Level",
+      "stressLevel": "Stress Level",
+      "saveCheckIn": "Save Check-in",
+      "breathingGuide": "Breathing Guide",
+      "breathingDesc": "4-7-8 Technique for relaxation",
+      "inhale": "Inhale",
+      "hold": "Hold",
+      "exhale": "Exhale",
+      "startBreathing": "Start Breathing",
+      "stop": "Stop",
+      "timeline": "Mood Timeline",
+      "streak": "Streak",
+      "cbtTools": "CBT Tools",
+      "thoughtRecord": "Thought Record",
+      "negativeThought": "Negative Thought",
+      "evidenceFor": "Evidence For",
+      "evidenceAgainst": "Evidence Against",
+      "saveRecord": "Save Record",
+      "morningCalm": "Morning Calm",
+      "stressRelief": "Stress Relief",
+      "focusBoost": "Focus Boost",
+      "gratitude": "Gratitude Journal",
+      "gratitudePrompt": "What are you grateful for?",
+      "gratitudeAdded": "Gratitude entry added!",
+      "gratitudeSample1": "Sunny weather today",
+      "gratitudeSample2": "Great conversation with a friend",
+      "gratitudeSample3": "Delicious home-cooked meal",
+      "highStressAlert": "High stress detected. Try a breathing exercise or take a short walk.",
+      "assessments": "Assessments",
+      "assessmentInstruction": "Over the last 2 weeks, how often have you been bothered by:",
+      "crisisSupport": "Crisis Support",
+      "needHelp": "Need Help Now?",
+      "crisisSupportDesc": "Tap for crisis support resources",
+      "assessmentScale": {
+        "0": "Not at all",
+        "1": "Several days",
+        "2": "More than half",
+        "3": "Nearly every day"
+      },
+      "moodLevels": {
+        "veryLow": "Very Low",
+        "low": "Low",
+        "belowAvg": "Below Avg",
+        "neutral": "Neutral",
+        "okay": "Okay",
+        "good": "Good",
+        "veryGood": "Very Good",
+        "great": "Great",
+        "excellent": "Excellent",
+        "amazing": "Amazing"
+      },
+      "stressLabels": {
+        "relaxed": "Relaxed",
+        "mild": "Mild",
+        "moderate": "Moderate",
+        "high": "High",
+        "severe": "Severe"
+      },
+      "techniques": {
+        "breathing478": "4-7-8 Breathing",
+        "boxBreathing": "Box Breathing",
+        "grounding": "5-4-3-2-1 Grounding",
+        "bodyScan": "Body Scan",
+        "worryTime": "Worry Time"
+      }
     },
     "medicine": {
       "title": "الطب",
@@ -250,7 +412,48 @@
       "addMedication": "إضافة دواء",
       "dosage": "الجرعة",
       "frequency": "التكرار",
-      "time": "الوقت"
+      "time": "الوقت",
+      "todaySchedule": "Today's Schedule",
+      "symptomTracker": "Symptom Tracker",
+      "healthTimeline": "Health Timeline",
+      "vitals": "Vital Signs",
+      "adherence": "Adherence",
+      "take": "Take",
+      "skip": "Skip",
+      "taken": "Taken",
+      "skipped": "Skipped",
+      "withFood": "With food",
+      "withoutFood": "On empty stomach",
+      "either": "Any time",
+      "pillsRemaining": "pills remaining",
+      "logSymptom": "Log Symptom",
+      "severity": "Severity",
+      "pain": "Pain",
+      "digestive": "Digestive",
+      "respiratory": "Respiratory",
+      "neurological": "Neurological",
+      "mild": "Mild",
+      "moderate": "Moderate",
+      "severe": "Severe",
+      "upcoming": "Upcoming",
+      "completed": "Completed",
+      "documents": "Documents",
+      "discharge": "Discharge",
+      "insurance": "Insurance",
+      "vaccines": "Vaccines",
+      "past": "Past",
+      "metrics": "Health Metrics",
+      "latest": "Latest",
+      "avg7d": "Avg (7d)",
+      "inRange": "In Range",
+      "bloodPressure": "Blood Pressure",
+      "weightMetric": "Weight",
+      "temperature": "Temperature",
+      "glucose": "Glucose",
+      "spo2": "SpO2",
+      "aiAssistant": "AI Assistant",
+      "lowRefillsTitle": "Low Refills",
+      "refillDescription": "Refill suggested for {{names}}"
     },
     "relationships": {
       "title": "العلاقات",
@@ -437,6 +640,18 @@
       "habits": {
         "title": "العادات",
         "description": "ابنِ عادات صحية دائمة مع التفاعل"
+      },
+      "community": {
+        "title": "Community",
+        "description": "Support from like-minded people and specialists"
+      },
+      "gamification": {
+        "title": "Gamification",
+        "description": "Achievements, challenges, leaderboards"
+      },
+      "privacy": {
+        "title": "Privacy",
+        "description": "Your data is under reliable protection"
       }
     },
     "pricing": {
@@ -480,7 +695,11 @@
           "وصول B2B",
           "وصول API"
         ]
-      }
+      },
+      "popularChoice": "Popular Choice",
+      "startFree": "Start Free",
+      "try14Days": "Try 14 Days",
+      "startPro": "Start Pro"
     },
     "testimonials": {
       "title": "قصص النجاح",
@@ -503,5 +722,443 @@
     "serverError": "خطأ في الخادم. يرجى المحاولة لاحقاً",
     "validation": "يرجى التحقق من المدخلات والمحاولة مرة أخرى",
     "rateLimit": "طلبات كثيرة جداً. يرجى الانتظار قليلاً"
+  },
+  "whitepaper": {
+    "title": "EthosLife WhitePaper",
+    "subtitle": "A comprehensive document outlining our vision, technology, tokenomics, and roadmap for building the Human Operating System — a unified health ecosystem powered by AI and community governance.",
+    "backToHome": "Back to Home",
+    "downloadPdf": "Download PDF",
+    "tableOfContents": "Table of Contents",
+    "lastUpdated": "April 5, 2026",
+    "confidential": "Confidential",
+    "keyPoints": "Key Points",
+    "keyPointsList": {
+      "item1": "7 integrated health modules in one unified platform",
+      "item2": "AI-powered personal health coach for every user",
+      "item3": "UNITY token ecosystem with DAO governance",
+      "item4": "$1.5T+ addressable market across health tech and wellness",
+      "item5": "Sustainable multi-revenue business model with clear path to profitability"
+    },
+    "executiveSummary": "Executive Summary",
+    "problem": "The Problem",
+    "solution": "Our Solution",
+    "modules": "Health Modules",
+    "technology": "Technology Stack",
+    "tokenomics": "Tokenomics",
+    "market": "Market Analysis",
+    "businessModel": "Business Model",
+    "roadmap": "Roadmap",
+    "team": "Team & Advisors",
+    "financials": "Financial Projections",
+    "risks": "Risk Factors",
+    "contact": "Contact & Legal",
+    "version": "Version {{version}}",
+    "executiveSummary.heading": "Reimagining Human Health",
+    "executiveSummary.p1": "EthosLife is a Human Operating System (HOS) — a comprehensive, AI-powered health platform that unifies 7 critical health modules: Nutrition, Movement, Sleep, Psychology, Medicine, Relationships, and Habits. Our mission is to make optimal health accessible, measurable, and sustainable for every person on the planet.",
+    "executiveSummary.p2": "The global digital health market is projected to reach $2.4 trillion by 2030, yet the current landscape is fragmented. Users juggle 5-7 different apps for tracking various aspects of their health, resulting in data silos, inconsistent insights, and poor engagement. EthosLife solves this fragmentation by providing a single, integrated platform where all health data works together.",
+    "executiveSummary.p3": "With our native UNITY token, AI coaching engine, DAO governance model, and multi-sided marketplace connecting users with health specialists, EthosLife creates a sustainable ecosystem that rewards healthy behavior and generates value for all participants.",
+    "problem.heading": "Fragmented Health Tech Landscape",
+    "problem.p1": "The current digital health ecosystem is deeply fragmented. An average health-conscious individual uses separate applications for: nutrition tracking (MyFitnessPal), workout logging (Strava), sleep monitoring (Sleep Cycle), meditation (Headspace), medication management (Medisafe), and social health (various platforms). This fragmentation creates several critical problems.",
+    "problem.p2": "First, data silos prevent holistic health insights. When your nutrition app doesn't know about your sleep quality, and your sleep tracker doesn't know about your stress levels, neither can provide truly personalized recommendations. The most impactful health insights come from cross-correlating data across multiple dimensions.",
+    "problem.p3": "Second, engagement drops dramatically. Research shows that 78% of health app users abandon their apps within 30 days. The root cause: without interconnected data and intelligent guidance, users see no meaningful results and lose motivation.",
+    "problem.p4": "Third, the cost is prohibitive. Subscribing to 5-7 premium health services costs $50-100+ per month. For most people, this is unsustainable. Meanwhile, the health specialists who could help — nutritionists, trainers, therapists — struggle to find and retain clients through traditional channels.",
+    "solution.heading": "One Platform. Seven Modules. Zero Switching.",
+    "solution.p1": "EthosLife consolidates all health tracking and coaching into a single, beautifully designed platform. Our AI engine cross-analyzes data from all 7 modules to deliver insights that no single-purpose app can match — for example: \"When you sleep 8+ hours, your workout performance improves by 23%\" or \"Your mood scores are 31% higher on days you eat 5+ servings of vegetables.\"",
+    "solution.p2": "The AI Coach acts as your personal health assistant, understanding patterns across your entire health profile and providing actionable, contextual recommendations. It learns from your behavior, adapts to your goals, and evolves with your needs over time.",
+    "solution.p3": "Our gamification system with UNITY token rewards turns healthy habits into a rewarding journey. Users earn tokens for completing challenges, maintaining streaks, achieving goals, and helping others in the community. Tokens can be redeemed for premium features, specialist sessions, or physical products in our marketplace.",
+    "solution.p4": "The specialist marketplace connects certified health professionals directly with users seeking guidance. Nutritionists, fitness coaches, psychologists, and other specialists can offer consultations, create programs, and build their practice within the EthosLife ecosystem.",
+    "solution.p5": "DAO governance ensures that the community has a voice in platform decisions. UNITY token holders can propose and vote on feature priorities, community guidelines, fund allocation, and platform evolution — creating a truly user-owned health platform.",
+    "modules.heading": "Seven Integrated Health Modules",
+    "modules.p1": "Nutrition: AI-powered meal planning, macro tracking, food barcode scanning, recipe recommendations, and hydration monitoring. The module learns your preferences, dietary restrictions, and goals to suggest optimal meal plans.",
+    "modules.p2": "Movement: Personalized workout programs, exercise library with video demos, GPS tracking for outdoor activities, recovery scoring, muscle fatigue analysis, and weekly scheduling. Supports strength training, cardio, flexibility, and HIIT.",
+    "modules.p3": "Sleep: Sleep phase analysis, smart alarm, chronotype assessment, sleep hygiene scoring, and environmental monitoring (temperature, humidity, noise). Provides actionable recommendations for improving sleep quality.",
+    "modules.p4": "Psychology: Daily mood tracking, energy and stress monitoring, CBT tools, breathing exercises (4-7-8 technique), gratitude journal, guided meditations, and mental health assessments (PHQ-9, GAD-7, PSS).",
+    "modules.p5": "Medicine: Medication tracking with smart reminders, symptom logging, vital signs monitoring (blood pressure, glucose, SpO2), lab results storage, health timeline, appointment management, and vaccine records.",
+    "modules.p6": "Relationships: Social connection tracking, quality time metrics, communication analysis, conflict resolution tools, and social battery monitoring. Helps users maintain healthy social connections.",
+    "modules.p7": "Habits: Habit builder with streak tracking, habit stacking, chain method, customizable reminders, and progress analytics. Uses proven behavioral science techniques to make healthy habits stick.",
+    "technology.heading": "AI-First Architecture",
+    "technology.p1": "EthosLife is built on a modern, scalable technology stack. The frontend uses React with TypeScript, ensuring type safety and developer productivity. Our design system (El) implements neumorphic UI patterns with smooth framer-motion animations for a premium user experience.",
+    "technology.p2": "The backend runs on Node.js with Express, connected to PostgreSQL for relational data and Redis for caching and session management. Our AI engine leverages multiple LLM providers for the coaching system, with custom models trained on health and wellness data for domain-specific accuracy.",
+    "technology.p3": "Data privacy is paramount. We implement end-to-end encryption for sensitive health data, comply with GDPR and HIPAA regulations, and never sell user data to third parties. All data exports are available to users in CSV, JSON, or PDF formats.",
+    "technology.p4": "Blockchain integration through the UNITY smart contract enables token transactions, staking rewards, and DAO governance. The contract is audited and deployed on an EVM-compatible chain with low gas fees for micro-transactions.",
+    "tokenomics.heading": "UNITY Token Ecosystem",
+    "tokenomics.p1": "UNITY is the native utility and governance token of the EthosLife ecosystem with a fixed total supply of 1,000,000,000 tokens. It serves multiple functions: rewarding healthy behavior, enabling governance participation, facilitating marketplace transactions, and providing staking yields.",
+    "tokenomics.p2": "Token Distribution: 35% Community Rewards & Ecosystem (distributed over 10 years through health challenges and engagement), 20% Public Sale (fair launch with no VC allocation advantage), 15% Team & Advisors (3-year vesting with 1-year cliff), 15% Development Fund (protocol improvements and partnerships), 10% Liquidity Pool, 5% Reserve Fund.",
+    "tokenomics.p3": "Users earn UNITY tokens through: completing daily health check-ins (+5 TOKENS), maintaining workout streaks (+10-50 TOKENS), achieving health milestones (+100-1000 TOKENS), participating in community challenges (+20-200 TOKENS), referring friends (+50 TOKENS per referral), and contributing helpful content to the community.",
+    "tokenomics.p4": "Token Utility: Redeem for Premium subscriptions (9.99 USD/month equivalent), book specialist consultations, purchase health products in marketplace, stake for additional rewards (8-15% APY), vote on DAO proposals, and access exclusive features and early releases.",
+    "tokenomics.p5": "Staking mechanism allows users to lock their UNITY tokens for 30/90/180/365 day periods to earn additional tokens and governance power. Longer staking periods yield higher APY and voting weight, incentivizing long-term commitment to the ecosystem.",
+    "market.heading": "Total Addressable Market",
+    "market.p1": "The global digital health market was valued at $350 billion in 2025 and is projected to reach $2.4 trillion by 2030, growing at a CAGR of 27%. This massive growth is driven by increasing health awareness, aging populations, rising healthcare costs, and widespread smartphone adoption.",
+    "market.p2": "Key market segments: Health & Fitness Apps ($14B by 2028), Telehealth & Virtual Care ($455B by 2030), Wellness & Mental Health ($275B by 2030), Wearable Health Devices ($185B by 2030), Health Data Analytics ($95B by 2030). EthosLife operates at the intersection of all these segments.",
+    "market.p3": "Competitive landscape analysis shows that while individual players dominate single categories (MyFitnessPal for nutrition, Strava for fitness, Calm for meditation), no platform offers an integrated solution. This creates a significant white-space opportunity for a unified health OS.",
+    "market.p4": "Our target user persona: health-conscious individuals aged 25-45, tech-savvy, willing to invest in their wellbeing, frustrated by app fragmentation. Secondary markets: B2B wellness programs for companies, health specialists seeking digital client management tools, and research institutions seeking anonymized health data insights.",
+    "businessModel.heading": "Multi-Sided Revenue Engine",
+    "businessModel.p1": "EthosLife employs a diversified revenue model with 5 primary streams, ensuring resilience and sustainable growth. Our freemium approach maximizes user acquisition while premium tiers drive monetization.",
+    "businessModel.p2": "Subscriptions (45% of revenue): Premium ($9.99/month) includes all 7 modules, unlimited AI coaching, advanced analytics, and integrations. Pro ($19.99/month) adds personal AI coach, 1-on-1 specialist sessions, and family plan for 5 members. B2B Enterprise plans for corporate wellness programs.",
+    "businessModel.p3": "Marketplace Commission (25% of revenue): EthosLife takes a 15-20% commission on specialist consultations, program sales, and product marketplace transactions. This aligns our incentives with specialist success — we only earn when they earn.",
+    "businessModel.p4": "Token Economy (15% of revenue): Token sale proceeds, staking fees, and transaction fees within the UNITY ecosystem. The deflationary token mechanism (2% burn on certain transactions) creates long-term value appreciation.",
+    "businessModel.p5": "Data Insights & Partnerships (10% of revenue): Anonymized, aggregated health insights sold to research institutions and health organizations (with explicit user consent). Strategic partnerships with insurance companies, wearable manufacturers, and healthcare providers.",
+    "roadmap.heading": "Strategic Development Roadmap",
+    "roadmap.p1": "Q1-Q2 2026 (Foundation): Web platform launch with core health modules (Nutrition, Movement, Sleep, Psychology), AI coaching v1, user authentication, and basic community features. Token generation event and initial liquidity provisioning.",
+    "roadmap.p2": "Q3-Q4 2026 (Growth): Mobile apps (iOS & Android) beta launch, specialist marketplace, gamification system with UNITY rewards, advanced AI coaching v2 with cross-module insights, and initial DAO governance framework.",
+    "roadmap.p3": "Q1-Q2 2027 (Expansion): Wearable integrations (Apple Watch, Fitbit, Garmin, Oura Ring, Whoop), B2B wellness programs launch, Pro tier with personal AI coach, family plan, and hardware prototypes for posture wearables.",
+    "roadmap.p4": "Q3-Q4 2027 (Scale): Full DAO governance implementation, international expansion (10+ languages), health data research partnerships, Posture Wearables commercial launch, and advanced AI health prediction models.",
+    "roadmap.p5": "2028 and Beyond (Vision): Smart Camera for automatic health monitoring, genetic data integration, VR fitness programs, global health impact measurement, and EthosLife as the default personal health operating system for 100M+ users.",
+    "team.heading": "World-Class Team & Advisors",
+    "team.p1": "EthosLife is built by a multidisciplinary team of experts across health sciences, software engineering, AI/ML, product design, and business strategy. Our combined experience spans 50+ years in health technology, having built and scaled products used by millions worldwide.",
+    "team.p2": "Core team includes: experienced full-stack engineers specializing in React, Node.js, and cloud infrastructure; health scientists with PhDs in nutrition, exercise physiology, and psychology; AI/ML researchers developing custom models for health coaching and prediction; product designers creating intuitive, accessible interfaces; and business development leaders with proven track records in health tech partnerships.",
+    "team.p3": "Advisory board comprises practicing physicians, registered dietitians, certified fitness professionals, licensed psychologists, and blockchain experts who guide our scientific validity, clinical accuracy, and regulatory compliance. We also partner with leading universities for research validation and clinical studies.",
+    "financials.heading": "Financial Projections & Milestones",
+    "financials.p1": "Year 1 (2026): Target 100,000 registered users, 10,000 Premium subscribers, $1.2M ARR. Focus on product-market fit, user acquisition, and community building. Operating expenses: $2.5M (team, infrastructure, marketing).",
+    "financials.p2": "Year 2 (2027): Target 500,000 users, 50,000 Premium subscribers, marketplace launch with 500+ specialists. Projected $8M ARR. Mobile app launch and wearable integrations drive growth. Break-even expected by Q4 2027.",
+    "financials.p3": "Year 3 (2028): Target 2M users, 200,000 Premium subscribers, B2B programs with 50+ corporate clients. Projected $35M ARR. International expansion and hardware product launch. Profitable operations with positive cash flow.",
+    "financials.p4": "Year 5 (2030): Target 10M+ users, 1M Premium subscribers, established marketplace with 10,000+ specialists, and hardware ecosystem. Projected $150M+ ARR. Position for IPO or strategic acquisition by major health/tech company.",
+    "risks.heading": "Risk Factors & Mitigation",
+    "risks.p1": "Regulatory Risk: Health data is subject to strict regulations (GDPR, HIPAA). Mitigation: Dedicated compliance team, regular audits, privacy-by-design architecture, and legal counsel specializing in health tech regulation.",
+    "risks.p2": "Market Risk: Competition from well-funded incumbents (Apple Health, Google Fit) and new entrants. Mitigation: Focus on our unique value proposition — 7 integrated modules with AI cross-analysis that single-purpose competitors cannot replicate. Build strong community moat through engagement and network effects.",
+    "risks.p3": "Technology Risk: AI model accuracy, platform scalability, and data security. Mitigation: Continuous model improvement with human expert review, cloud-native scalable architecture, regular penetration testing, bug bounty program, and comprehensive disaster recovery plan.",
+    "risks.p4": "Token/Market Risk: Cryptocurrency volatility and regulatory uncertainty. Mitigation: Utility-focused token design (not speculative), compliant token distribution, legal opinions in key jurisdictions, and diversified revenue model that doesn't depend on token price.",
+    "contact.heading": "Get in Touch",
+    "contact.p1": "We welcome questions, partnership inquiries, and investment discussions. Reach out through any of the channels below, and our team will respond within 48 hours.",
+    "contact.p2": "General Inquiries: info@ethoslife.com | Investment & Partnerships: partnerships@ethoslife.com | Press & Media: press@ethoslife.com | Support: support@ethoslife.com | Telegram: t.me/ethoslife | Twitter: @EthosLife",
+    "cta.title": "Join the Health Revolution",
+    "cta.description": "EthosLife is not just an app — it's a movement to make optimal health accessible to everyone. Join 100,000+ users who are already building healthier, happier lives.",
+    "cta.startFree": "Start Free Today",
+    "cta.contactUs": "Contact Our Team",
+    "footer": {
+      "rights": "All rights reserved."
+    }
+  },
+  "investorPitch": {
+    "title": "Investor Presentation",
+    "subtitle": "EthosLife — Pre-Seed Round $250,000",
+    "slideOf": "of",
+    "downloadPdf": "Download PDF",
+    "backToHome": "Home",
+    "toc": "Slides",
+    "slides": {
+      "title": {
+        "title": "EthosLife",
+        "subtitle": "Human Operating System for Health",
+        "round": "Pre-Seed Round: $250,000",
+        "confidential": "Confidential — April 2026"
+      },
+      "problem": {
+        "title": "The Problem",
+        "points": [
+          "People use 10+ health apps that don't communicate with each other",
+          "80% abandon health apps within 30 days — no motivation to continue",
+          "No holistic health view: nutrition, sleep, psychology, movement are siloed",
+          "Specialists and health centers have no unified discovery platform",
+          "Zero incentive system for maintaining healthy habits long-term"
+        ],
+        "summary": "The health tech market is fragmented, engagement is collapsing, and users are left without a comprehensive solution."
+      },
+      "solution": {
+        "title": "The Solution",
+        "points": [
+          "7 integrated health modules in ONE platform — no switching needed",
+          "AI health coach with 6 specialized personas reading all your health data",
+          "Social network for accountability and community support",
+          "Marketplace connecting users with verified specialists and health centers",
+          "25 languages — global from day one"
+        ],
+        "summary": "EthosLife unifies all aspects of health into one intelligent, motivating, and accessible platform."
+      },
+      "market": {
+        "title": "Market Opportunity",
+        "stats": [
+          {
+            "label": "Wellness Market",
+            "value": "$5.6T"
+          },
+          {
+            "label": "Digital Health by 2030",
+            "value": "$660B"
+          },
+          {
+            "label": "Mental Health Apps",
+            "value": "$7B"
+          },
+          {
+            "label": "Target Users",
+            "value": "200M+"
+          }
+        ],
+        "summary": "Massive and growing market with zero integrated competitors."
+      },
+      "competitive": {
+        "title": "Competitive Advantage",
+        "summary": "We are the ONLY platform that combines 7 health modules, AI, social, and marketplace.",
+        "competitors": [
+          {
+            "name": "MyFitnessPal",
+            "modules": 1,
+            "ai": false,
+            "social": false,
+            "marketplace": false,
+            "token": false
+          },
+          {
+            "name": "Calm",
+            "modules": 1,
+            "ai": false,
+            "social": false,
+            "marketplace": false,
+            "token": false
+          },
+          {
+            "name": "Strava",
+            "modules": 1,
+            "ai": false,
+            "social": true,
+            "marketplace": false,
+            "token": false
+          },
+          {
+            "name": "Whoop",
+            "modules": 2,
+            "ai": true,
+            "social": false,
+            "marketplace": false,
+            "token": false
+          },
+          {
+            "name": "EthosLife",
+            "modules": 7,
+            "ai": true,
+            "social": true,
+            "marketplace": true,
+            "token": true
+          }
+        ]
+      },
+      "businessModel": {
+        "title": "Business Model",
+        "streams": [
+          {
+            "name": "Subscriptions",
+            "desc": "Free / $9.99 Premium / $19.99 Pro per month",
+            "icon": "credit-card"
+          },
+          {
+            "name": "Marketplace Commission",
+            "desc": "15% specialist consultations, 10% center bookings, 5% product sales",
+            "icon": "store"
+          },
+          {
+            "name": "B2B SaaS",
+            "desc": "Corporate wellness at $5/employee/month",
+            "icon": "building"
+          },
+          {
+            "name": "Token Economy",
+            "desc": "Token sale, staking fees, transaction fees",
+            "icon": "coins"
+          }
+        ]
+      },
+      "token": {
+        "title": "UNITY Token Ecosystem",
+        "totalSupply": "1,000,000,000 UNITY",
+        "earningWays": [
+          "Platform Promotion — create content, write reviews, share posts",
+          "Referrals — earn 10% of invited friends' purchases",
+          "Scientific Research — create and verify health research papers and programs",
+          "Content Creation — write guides, develop courses and wellness programs",
+          "Expert Verification — certified professionals verify health content",
+          "Token Purchase — buy during Seed round at $0.011/UNITY",
+          "Staking Rewards — passive income at 25-35% APY"
+        ],
+        "utility": "Cashback up to 30% · 50% subscription discount · Specialist payments · Staking 25-35% APY · DAO governance"
+      },
+      "traction": {
+        "title": "Traction",
+        "stats": [
+          {
+            "label": "Lines of Code",
+            "value": "50,000+"
+          },
+          {
+            "label": "Pages Built",
+            "value": "80+"
+          },
+          {
+            "label": "Components",
+            "value": "60+"
+          },
+          {
+            "label": "Languages",
+            "value": "25"
+          },
+          {
+            "label": "Routes",
+            "value": "55+"
+          },
+          {
+            "label": "Health Modules",
+            "value": "7"
+          }
+        ],
+        "summary": "MVP is already built and functional — not just an idea."
+      },
+      "roadmap": {
+        "title": "Roadmap",
+        "phases": [
+          {
+            "quarter": "Q2 2026",
+            "title": "Pre-Seed Raise",
+            "desc": "$250K — MVP completion and marketing launch",
+            "status": "current"
+          },
+          {
+            "quarter": "Q3-Q4 2026",
+            "title": "MVP Release",
+            "desc": "Public launch, 50K users, mobile app development starts",
+            "status": "upcoming"
+          },
+          {
+            "quarter": "Q1-Q2 2027",
+            "title": "Mobile Apps",
+            "desc": "iOS + Android launch, specialist marketplace expansion",
+            "status": "upcoming"
+          },
+          {
+            "quarter": "Q3 2027",
+            "title": "Seed Token Sale",
+            "desc": "$1.65M at $0.011/UNITY, staking platform launch",
+            "status": "upcoming"
+          },
+          {
+            "quarter": "Q4 2027",
+            "title": "Growth",
+            "desc": "500K users, DAO governance, B2B launch",
+            "status": "upcoming"
+          },
+          {
+            "quarter": "2028+",
+            "title": "Scale",
+            "desc": "Exchange listing, wearables, 10M+ users",
+            "status": "upcoming"
+          }
+        ]
+      },
+      "useOfFunds": {
+        "title": "Use of Funds — Pre-Seed $250K",
+        "items": [
+          {
+            "category": "Development",
+            "amount": "$100,000",
+            "percent": 40,
+            "desc": "Complete platform, mobile apps, AI integration"
+          },
+          {
+            "category": "Marketing & Advertising",
+            "amount": "$50,000",
+            "percent": 20,
+            "desc": "User acquisition, PR, social media campaigns"
+          },
+          {
+            "category": "Content & Programs",
+            "amount": "$40,000",
+            "percent": 16,
+            "desc": "Health programs, research papers, courses"
+          },
+          {
+            "category": "Legal & Compliance",
+            "amount": "$25,000",
+            "percent": 10,
+            "desc": "Token legal structure, licenses, IP protection"
+          },
+          {
+            "category": "Infrastructure",
+            "amount": "$20,000",
+            "percent": 8,
+            "desc": "Servers, tools, hosting"
+          },
+          {
+            "category": "Contingency",
+            "amount": "$15,000",
+            "percent": 6,
+            "desc": "Buffer for unexpected costs"
+          }
+        ]
+      },
+      "projections": {
+        "title": "Financial Projections",
+        "years": [
+          {
+            "year": "Year 1",
+            "users": "50K",
+            "revenue": "$600K",
+            "subs": "5K",
+            "mrr": "$50K"
+          },
+          {
+            "year": "Year 2",
+            "users": "250K",
+            "revenue": "$3M",
+            "subs": "25K",
+            "mrr": "$250K"
+          },
+          {
+            "year": "Year 3",
+            "users": "1M",
+            "revenue": "$12M",
+            "subs": "100K",
+            "mrr": "$1M"
+          },
+          {
+            "year": "Year 4",
+            "users": "3M",
+            "revenue": "$36M",
+            "subs": "300K",
+            "mrr": "$3M"
+          },
+          {
+            "year": "Year 5",
+            "users": "10M",
+            "revenue": "$120M",
+            "subs": "1M",
+            "mrr": "$10M"
+          }
+        ]
+      },
+      "theAsk": {
+        "title": "The Investment",
+        "raising": "$250,000 Pre-Seed",
+        "instrument": "SAFE / Convertible Note",
+        "valuationCap": "$5M valuation cap",
+        "use": "Complete MVP → Launch → 50K users → Prepare Token Sale",
+        "nextRound": "Seed Token Sale: $1.65M at $0.011/UNITY (6 months after MVP)",
+        "exitPotential": "Exit potential: $500M-1B+ (Calm $2B, Whoop $3.6B)"
+      },
+      "contact": {
+        "title": "Contact Us",
+        "website": "Website: ethoslife.com",
+        "email": "Email: invest@ethoslife.com",
+        "github": "GitHub: github.com/foxampy/EthosLife",
+        "whitepaper": "WhitePaper: ethoslife.com/whitepaper",
+        "tagline": "Join us in building the future of health"
+      }
+    }
+  },
+  "languageSelector": {
+    "selectLanguage": "Select Language",
+    "recent": "Recent",
+    "allLanguages": "All Languages",
+    "noLanguages": "No languages found"
+  },
+  "footer": {
+    "company": "Company",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookiePolicy": "Cookie Policy",
+    "disclaimer": "Disclaimer",
+    "stayUpdated": "Stay Updated",
+    "stayUpdatedDesc": "Get the latest health tips and updates",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe"
   }
 }
