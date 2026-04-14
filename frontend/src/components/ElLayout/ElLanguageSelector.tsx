@@ -82,13 +82,15 @@ export const ElLanguageSelector: React.FC<ElLanguageSelectorProps> = ({
   showFlags = true,
   className,
 }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [recentLanguages, setRecentLanguages] = useState<string[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const currentLanguage = languages.find(l => l.code === i18n.language) || languages[0];
+  // Normalize language code (handle 'ru-RU' -> 'ru', 'en-US' -> 'en')
+  const normalizedLang = i18n.language?.split('-')[0]?.toLowerCase() || 'en';
+  const currentLanguage = languages.find(l => l.code === normalizedLang) || languages[0];
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -128,6 +130,18 @@ export const ElLanguageSelector: React.FC<ElLanguageSelectorProps> = ({
     setSearchQuery('');
   };
 
+  // Sync i18n language changes with component state
+  useEffect(() => {
+    const handleLanguageChanged = (lng: string) => {
+      // Force re-render when language changes
+      setRecentLanguages(prev => [...prev]);
+    };
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, [i18n]);
+
   const filteredLanguages = languages.filter(lang =>
     lang.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     lang.nativeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -141,21 +155,48 @@ export const ElLanguageSelector: React.FC<ElLanguageSelectorProps> = ({
 
   if (variant === 'minimal') {
     return (
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          'flex items-center gap-2 px-3 py-2 rounded-xl',
-          'bg-[var(--bone-200)]',
-          'shadow-[4px_4px_8px_rgba(44,40,34,0.08),-4px_-4px_8px_rgba(255,255,255,0.6)]',
-          'hover:shadow-[6px_6px_12px_rgba(44,40,34,0.1),-6px_-6px_12px_rgba(255,255,255,0.55)]',
-          'text-[var(--text-secondary)] font-medium text-sm',
-          'transition-all duration-200',
-          className
-        )}
-      >
-        <span className="text-lg">{currentLanguage.flag}</span>
-        <span className="uppercase">{currentLanguage.code}</span>
-      </button>
+      <div ref={dropdownRef} className={cn('relative', className)}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={cn(
+            'flex items-center gap-2 px-3 py-2 rounded-xl',
+            'bg-[var(--bone-200)]',
+            'shadow-[4px_4px_8px_rgba(44,40,34,0.08),-4px_-4px_8px_rgba(255,255,255,0.6)]',
+            'hover:shadow-[6px_6px_12px_rgba(44,40,34,0.1),-6px_-6px_12px_rgba(255,255,255,0.55)]',
+            'text-[var(--text-primary)] font-bold text-sm',
+            'transition-all duration-200'
+          )}
+        >
+          <span className="uppercase font-bold">{currentLanguage.code}</span>
+        </button>
+
+        {/* Minimal Dropdown */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className={cn(
+                'absolute right-0 mt-2 w-64 rounded-2xl z-50',
+                'bg-[var(--bone-200)]',
+                'shadow-[12px_12px_24px_rgba(44,40,34,0.15),-12px_-12px_24px_rgba(255,255,255,0.7)]',
+                'overflow-hidden p-2'
+              )}
+            >
+              {languages.slice(0, 8).map((language) => (
+                <LanguageItem
+                  key={language.code}
+                  language={language}
+                  isActive={currentLanguage.code === language.code}
+                  onClick={() => handleLanguageChange(language)}
+                />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     );
   }
 
@@ -226,7 +267,7 @@ export const ElLanguageSelector: React.FC<ElLanguageSelectorProps> = ({
             <div className="p-4 border-b border-[var(--bone-400)]/30">
               <div className="flex items-center gap-2 mb-3">
                 <Globe className="w-5 h-5 text-[var(--text-secondary)]" />
-                <span className="font-semibold text-[var(--text-primary)]">Select Language</span>
+                <span className="font-semibold text-[var(--text-primary)]">{t('languageSelector.selectLanguage')}</span>
               </div>
               
               {/* Search */}
@@ -255,7 +296,7 @@ export const ElLanguageSelector: React.FC<ElLanguageSelectorProps> = ({
             {recentLanguageObjects.length > 0 && !searchQuery && (
               <div className="p-2 border-b border-[var(--bone-400)]/30">
                 <div className="px-3 py-1 text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
-                  Recent
+                  {t('languageSelector.recent')}
                 </div>
                 {recentLanguageObjects.map((language) => (
                   <LanguageItem
@@ -272,7 +313,7 @@ export const ElLanguageSelector: React.FC<ElLanguageSelectorProps> = ({
             <div className="max-h-80 overflow-y-auto p-2">
               {!searchQuery && (
                 <div className="px-3 py-1 text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
-                  All Languages
+                  {t('languageSelector.allLanguages')}
                 </div>
               )}
               {filteredLanguages.map((language) => (
@@ -285,7 +326,7 @@ export const ElLanguageSelector: React.FC<ElLanguageSelectorProps> = ({
               ))}
               {filteredLanguages.length === 0 && (
                 <div className="px-3 py-4 text-center text-[var(--text-tertiary)]">
-                  No languages found
+                  {t('languageSelector.noLanguages')}
                 </div>
               )}
             </div>

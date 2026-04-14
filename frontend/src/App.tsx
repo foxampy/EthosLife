@@ -18,8 +18,7 @@ import { motion } from 'framer-motion';
 import { useAuthStore } from './store/authStore';
 import AppRoutes from './routes/AppRoutes';
 
-// Import i18n configuration
-import './i18n/config';
+// i18n is initialized in main.tsx
 
 // Loading Component
 const PageLoader: React.FC = () => (

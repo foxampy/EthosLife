@@ -140,12 +140,13 @@ p {
   border-radius: 2rem;
   padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 
+  box-shadow:
     var(--shadow-neu),
     inset 1px 1px 3px rgba(255, 255, 255, 0.9),
     inset -1px -1px 4px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
+  color: var(--text-ink);
 }
 
 .neu-card::before {
