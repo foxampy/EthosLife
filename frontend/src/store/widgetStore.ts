@@ -4,7 +4,6 @@
  */
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 export type WidgetSize = 'small' | 'medium' | 'large' | 'full';
 
@@ -58,8 +57,7 @@ const defaultWidgets: WidgetInstance[] = [
 ];
 
 export const useWidgetStore = create<WidgetStore>()(
-  persist(
-    (set, get) => ({
+  (set, get) => ({
       widgets: defaultWidgets,
       isEditMode: false,
 
@@ -126,11 +124,7 @@ export const useWidgetStore = create<WidgetStore>()(
       resetToDefaults: () => {
         set({ widgets: defaultWidgets });
       },
-    }),
-    {
-      name: 'ethoslife-widgets',
-    }
-  )
+    })
 );
 
 // Available widget definitions

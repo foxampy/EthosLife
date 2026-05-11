@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { ElHeader } from './ElHeader';
+import { BottomNav } from './BottomNav';
 import { Heart, Github, Twitter, MessageCircle, Mail } from 'lucide-react';
 
 function cn(...inputs: ClassValue[]) {
@@ -27,6 +28,7 @@ export interface ElLayoutProps {
   showFooter?: boolean;
   showHeader?: boolean;
   fullWidth?: boolean;
+  isAppPage?: boolean;
 }
 
 // ============================================
@@ -39,19 +41,21 @@ export const ElLayout: React.FC<ElLayoutProps> = ({
   showFooter = true,
   showHeader = true,
   fullWidth = false,
+  isAppPage = false,
 }) => {
   const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--bone-300)] via-[var(--bone-200)] to-[var(--bone-300)]">
-      {/* Header */}
-      {showHeader && <ElHeader />}
+      {/* Header — compact on app pages (no burger, just logo) */}
+      {showHeader && <ElHeader hideMenu={isAppPage} />}
 
       {/* Main Content */}
       <main
         className={cn(
           'transition-all duration-300',
-          showHeader && 'pt-16 lg:pt-18',
+          showHeader && 'pt-14',
+          isAppPage && 'pb-20',
           !fullWidth && 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
           className
         )}
@@ -65,8 +69,11 @@ export const ElLayout: React.FC<ElLayoutProps> = ({
         </motion.div>
       </main>
 
-      {/* Footer */}
-      {showFooter && <ElFooter />}
+      {/* Footer only on landing pages */}
+      {showFooter && !isAppPage && <ElFooter />}
+
+      {/* Bottom Navigation on app pages */}
+      {isAppPage && <BottomNav />}
     </div>
   );
 };

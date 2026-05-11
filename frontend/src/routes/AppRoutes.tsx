@@ -96,6 +96,12 @@ const GroupsV1 = React.lazy(() => import('../pages/Social/V1/GroupsV1'));
 const MessagesV1 = React.lazy(() => import('../pages/Social/V1/MessagesV1'));
 const LeadersV1 = React.lazy(() => import('../pages/Social/V1/LeadersV1'));
 
+// Contacts
+const ContactsPage = React.lazy(() => import('../pages/Contacts/ContactsPage'));
+
+// Shop
+const ProductsPage = React.lazy(() => import('../pages/Shop/ProductsPage'));
+
 // Design & Utilities
 const DesignSystemDemo = React.lazy(() => import('../pages/Unified/DesignSystemDemo'));
 const NotFound404 = React.lazy(() => import('../pages/NotFound404'));
@@ -129,21 +135,22 @@ export const AppRoutes: React.FC = () => {
         <Route path="/register" element={<PageLayout><Register /></PageLayout>} />
 
         {/* =============== DASHBOARD =============== */}
-        <Route path="/dashboard" element={<PageLayout><Dashboard /></PageLayout>} />
-        <Route path="/dashboard-v2" element={<PageLayout><Dashboard2 /></PageLayout>} />
-        <Route path="/dashboard-preview" element={<PageLayout><Dashboard2Preview /></PageLayout>} />
+        <Route path="/dashboard" element={<PageLayout isAppPage><Dashboard2 /></PageLayout>} />
+        <Route path="/dashboard-v1" element={<PageLayout isAppPage><Dashboard /></PageLayout>} />
+        <Route path="/dashboard-v2" element={<PageLayout isAppPage><Dashboard2 /></PageLayout>} />
+        <Route path="/dashboard-preview" element={<PageLayout isAppPage><Dashboard2Preview /></PageLayout>} />
 
         {/* =============== HEALTH MODULES =============== */}
         <Route path="/health" element={<Navigate to="/health/nutrition" replace />} />
 
         {/* Primary Health Routes */}
-        <Route path="/health/nutrition" element={<PageLayout><Nutrition /></PageLayout>} />
-        <Route path="/health/movement" element={<PageLayout><Movement /></PageLayout>} />
-        <Route path="/health/sleep" element={<PageLayout><Sleep /></PageLayout>} />
-        <Route path="/health/psychology" element={<PageLayout><Psychology /></PageLayout>} />
-        <Route path="/health/medicine" element={<PageLayout><Medicine /></PageLayout>} />
-        <Route path="/health/relationships" element={<PageLayout><Relationships /></PageLayout>} />
-        <Route path="/health/habits" element={<PageLayout><Habits /></PageLayout>} />
+        <Route path="/health/nutrition" element={<PageLayout isAppPage><Nutrition /></PageLayout>} />
+        <Route path="/health/movement" element={<PageLayout isAppPage><Movement /></PageLayout>} />
+        <Route path="/health/sleep" element={<PageLayout isAppPage><Sleep /></PageLayout>} />
+        <Route path="/health/psychology" element={<PageLayout isAppPage><Psychology /></PageLayout>} />
+        <Route path="/health/medicine" element={<PageLayout isAppPage><Medicine /></PageLayout>} />
+        <Route path="/health/relationships" element={<PageLayout isAppPage><Relationships /></PageLayout>} />
+        <Route path="/health/habits" element={<PageLayout isAppPage><Habits /></PageLayout>} />
 
         {/* =============== LEGACY HEALTH ROUTES (V1) =============== */}
         <Route path="/health/fitness" element={<PageLayout><FitnessV1 /></PageLayout>} />
@@ -165,18 +172,25 @@ export const AppRoutes: React.FC = () => {
         <Route path="/leaders" element={<PageLayout><LeadersV1 /></PageLayout>} />
 
         {/* =============== AI & FEATURES =============== */}
-        <Route path="/social" element={<PageLayout><SocialFeed /></PageLayout>} />
-        <Route path="/ai-chat" element={<PageLayout><AIChatUnified /></PageLayout>} />
-        <Route path="/ai" element={<PageLayout><AIChatUnified /></PageLayout>} />
-        <Route path="/analytics" element={<PageLayout><Analytics /></PageLayout>} />
-        <Route path="/gamification" element={<PageLayout><Gamification /></PageLayout>} />
-        <Route path="/achievements" element={<PageLayout><Gamification /></PageLayout>} />
-        <Route path="/specialists" element={<PageLayout><Specialists /></PageLayout>} />
-        <Route path="/centers" element={<PageLayout><Centers /></PageLayout>} />
+        <Route path="/social" element={<PageLayout isAppPage><SocialFeed /></PageLayout>} />
+        <Route path="/ai/chat" element={<PageLayout isAppPage><AIChatUnified /></PageLayout>} />
+        <Route path="/ai-chat" element={<PageLayout isAppPage><AIChatUnified /></PageLayout>} />
+        <Route path="/ai" element={<PageLayout isAppPage><AIChatUnified /></PageLayout>} />
+        <Route path="/analytics" element={<PageLayout isAppPage><Analytics /></PageLayout>} />
+        <Route path="/gamification" element={<PageLayout isAppPage><Gamification /></PageLayout>} />
+        <Route path="/achievements" element={<PageLayout isAppPage><Gamification /></PageLayout>} />
+        <Route path="/specialists" element={<PageLayout isAppPage><Specialists /></PageLayout>} />
+        <Route path="/centers" element={<PageLayout isAppPage><Centers /></PageLayout>} />
+
+        {/* =============== CONTACTS =============== */}
+        <Route path="/contacts" element={<PageLayout isAppPage><ContactsPage /></PageLayout>} />
+
+        {/* =============== SHOP =============== */}
+        <Route path="/shop" element={<PageLayout isAppPage><ProductsPage /></PageLayout>} />
 
         {/* =============== USER =============== */}
-        <Route path="/profile" element={<PageLayout><Profile /></PageLayout>} />
-        <Route path="/settings" element={<PageLayout><Settings /></PageLayout>} />
+        <Route path="/profile" element={<PageLayout isAppPage><Profile /></PageLayout>} />
+        <Route path="/settings" element={<PageLayout isAppPage><Settings /></PageLayout>} />
         <Route path="/tokenomics" element={<PageLayout><TokenomicsV1 /></PageLayout>} />
 
         {/* =============== DESIGN SYSTEM =============== */}
