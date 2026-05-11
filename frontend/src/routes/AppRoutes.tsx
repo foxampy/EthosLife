@@ -96,6 +96,9 @@ const GroupsV1 = React.lazy(() => import('../pages/Social/V1/GroupsV1'));
 const MessagesV1 = React.lazy(() => import('../pages/Social/V1/MessagesV1'));
 const LeadersV1 = React.lazy(() => import('../pages/Social/V1/LeadersV1'));
 
+// Contacts
+const ContactsPage = React.lazy(() => import('../pages/Contacts/ContactsPage'));
+
 // Design & Utilities
 const DesignSystemDemo = React.lazy(() => import('../pages/Unified/DesignSystemDemo'));
 const NotFound404 = React.lazy(() => import('../pages/NotFound404'));
@@ -173,6 +176,9 @@ export const AppRoutes: React.FC = () => {
         <Route path="/achievements" element={<PageLayout><Gamification /></PageLayout>} />
         <Route path="/specialists" element={<PageLayout><Specialists /></PageLayout>} />
         <Route path="/centers" element={<PageLayout><Centers /></PageLayout>} />
+
+        {/* =============== CONTACTS =============== */}
+        <Route path="/contacts" element={<PageLayout><ContactsPage /></PageLayout>} />
 
         {/* =============== USER =============== */}
         <Route path="/profile" element={<PageLayout><Profile /></PageLayout>} />
