@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, UserPlus, Star, MessageCircle, ShoppingBag, Check } from 'lucide-react';
+import { useAppStore } from '../../store/appStore';
 
 const neuCard = {
   background: '#e8e0d5',
@@ -36,13 +37,14 @@ const mockContacts: Contact[] = [
 ];
 
 export default function ContactsPage() {
+  const { contacts } = useAppStore();
   const [tab, setTab] = useState<'friends' | 'specialists'>('friends');
   const [search, setSearch] = useState('');
 
-  const friends = mockContacts.filter(
+  const friends = contacts.filter(
     (c) => c.type === 'friend' && c.name.toLowerCase().includes(search.toLowerCase())
   );
-  const specialists = mockContacts.filter(
+  const specialists = contacts.filter(
     (c) => c.type === 'specialist' && c.name.toLowerCase().includes(search.toLowerCase())
   );
 

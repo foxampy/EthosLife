@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Plus, Bot, User, MessageSquare } from 'lucide-react';
+import { useAppStore } from '../../store/appStore';
 
 // Demo AI responses
 const demoResponses: Record<string, string> = {
@@ -59,25 +60,10 @@ const neuCard = {
   borderRadius: '20px',
 };
 
-// ==================== Types ====================
-
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-}
-
-interface AISession {
-  id: string;
-  title: string;
-  lastMessage: string;
-  messages: ChatMessage[];
-}
-
 // ==================== Main Component ====================
 
 export default function AIChatUnified() {
-  const [sessions, setSessions] = useState<AISession[]>([]);
-  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const { aiSessions: sessions, activeSessionId, createAISession, addAIMessage, setActiveSession } = useAppStore();
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showSessions, setShowSessions] = useState(false);
@@ -90,56 +76,19 @@ export default function AIChatUnified() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  const createSession = (): string => {
-    const id = Date.now().toString();
-    const newSession: AISession = {
-      id,
-      title: `Чат ${sessions.length + 1}`,
-      lastMessage: '',
-      messages: [],
-    };
-    setSessions((prev) => [...prev, newSession]);
-    setActiveSessionId(id);
-    return id;
-  };
-
   const sendMessage = async (text: string) => {
     if (!text.trim() || isTyping) return;
 
     let sessionId = activeSessionId;
-    if (!sessionId) {
-      sessionId = createSession();
-    }
+    if (!sessionId) sessionId = createAISession();
 
-    const userMsg: ChatMessage = { role: 'user', content: text };
-
-    setSessions((prev) =>
-      prev.map((s) =>
-        s.id === sessionId
-          ? {
-              ...s,
-              messages: [...s.messages, userMsg],
-              lastMessage: text,
-              title: s.messages.length === 0 ? text.slice(0, 28) + (text.length > 28 ? '…' : '') : s.title,
-            }
-          : s
-      )
-    );
+    addAIMessage(sessionId, 'user', text);
     setInput('');
     setIsTyping(true);
 
     await new Promise((r) => setTimeout(r, 700 + Math.random() * 500));
 
-    const response = getAIResponse(text);
-    const assistantMsg: ChatMessage = { role: 'assistant', content: response };
-
-    setSessions((prev) =>
-      prev.map((s) =>
-        s.id === sessionId
-          ? { ...s, messages: [...s.messages, assistantMsg], lastMessage: response.slice(0, 60) }
-          : s
-      )
-    );
+    addAIMessage(sessionId, 'assistant', getAIResponse(text));
     setIsTyping(false);
   };
 
@@ -148,7 +97,7 @@ export default function AIChatUnified() {
       {/* Sessions sidebar (desktop) */}
       <div className="hidden md:flex flex-col w-60 p-3 gap-2 border-r border-black/5">
         <button
-          onClick={createSession}
+          onClick={createAISession}
           className="flex items-center gap-2 p-3 rounded-xl text-white text-sm font-medium"
           style={{ background: 'linear-gradient(135deg, #5c5243, #8c7a6b)' }}
         >
@@ -158,7 +107,7 @@ export default function AIChatUnified() {
           {sessions.map((s) => (
             <button
               key={s.id}
-              onClick={() => setActiveSessionId(s.id)}
+              onClick={() => setActiveSession(s.id)}
               className="w-full text-left p-3 rounded-xl transition-all"
               style={{
                 background: s.id === activeSessionId ? 'rgba(92,82,67,0.1)' : 'transparent',
@@ -186,7 +135,7 @@ export default function AIChatUnified() {
           <h2 className="font-bold text-[#2d2418] flex-1 truncate">
             {activeSession?.title || 'ИИ-ассистент'}
           </h2>
-          <button onClick={createSession} className="p-2 rounded-xl" style={neuCard}>
+          <button onClick={createAISession} className="p-2 rounded-xl" style={neuCard}>
             <Plus className="w-4 h-4 text-[#8c7a6b]" />
           </button>
         </div>
@@ -205,7 +154,7 @@ export default function AIChatUnified() {
                 {sessions.map((s) => (
                   <button
                     key={s.id}
-                    onClick={() => { setActiveSessionId(s.id); setShowSessions(false); }}
+                    onClick={() => { setActiveSession(s.id); setShowSessions(false); }}
                     className="w-full text-left p-2.5 rounded-lg text-sm"
                     style={{ background: s.id === activeSessionId ? 'rgba(92,82,67,0.1)' : 'transparent', color: '#2d2418' }}
                   >
