@@ -1,500 +1,166 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useVersion } from '../../contexts/VersionContext';
-import { useTranslation } from 'react-i18next';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import {
-  Heart,
-  Brain,
-  Activity,
-  Users,
-  Zap,
-  Shield,
-  TrendingUp,
-  Award,
-  CheckCircle2,
-  ArrowRight,
-  Play,
-  Star,
-  Globe,
-  Smartphone,
-  Lock
-} from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Heart, Target, Brain, Users, TrendingUp, Zap, CheckCircle2, Star } from 'lucide-react';
 
-const LandingV2 = () => {
-  const navigate = useNavigate();
-  const { isV2, toggleVersion } = useVersion();
-  const { t } = useTranslation();
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
+const features = [
+  { icon: Heart, label: 'Здоровье', desc: 'Питание, движение, сон, тело', color: '#f472b6', bg: 'from-rose-400/20 to-pink-400/10' },
+  { icon: Target, label: 'Цели и привычки', desc: 'Ставь, следи, достигай', color: '#34d399', bg: 'from-emerald-400/20 to-green-400/10' },
+  { icon: Brain, label: 'Психология', desc: 'Ментальное здоровье и рост', color: '#a78bfa', bg: 'from-violet-400/20 to-purple-400/10' },
+  { icon: Zap, label: 'ИИ-ассистент', desc: 'Персональные рекомендации 24/7', color: '#fbbf24', bg: 'from-amber-400/20 to-yellow-400/10' },
+  { icon: Users, label: 'Социум', desc: 'Друзья, специалисты, команда', color: '#60a5fa', bg: 'from-blue-400/20 to-cyan-400/10' },
+  { icon: TrendingUp, label: 'Прогресс', desc: 'Аналитика и геймификация', color: '#fb923c', bg: 'from-orange-400/20 to-amber-400/10' },
+];
 
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+const stats = [
+  { value: '12 000+', label: 'активных пользователей' },
+  { value: '240 000', label: 'привычек сформировано' },
+  { value: '98 000', label: 'целей достигнуто' },
+  { value: '4.9★', label: 'средняя оценка' },
+];
 
-  const features = [
-    {
-      icon: <Heart className="w-8 h-8 text-white" />,
-      title: t('landing.modules.nutrition.title'),
-      description: t('landing.modules.nutrition.description'),
-      gradient: 'from-rose-400 to-pink-500',
-      neumorph: true
-    },
-    {
-      icon: <Brain className="w-8 h-8 text-white" />,
-      title: t('landing.modules.mental.title'),
-      description: t('landing.modules.mental.description'),
-      gradient: 'from-violet-400 to-purple-500',
-      neumorph: true
-    },
-    {
-      icon: <Activity className="w-8 h-8 text-white" />,
-      title: t('analytics.title'),
-      description: t('analytics.trends'),
-      gradient: 'from-blue-400 to-cyan-500',
-      neumorph: true
-    },
-    {
-      icon: <Users className="w-8 h-8 text-white" />,
-      title: t('social.title'),
-      description: t('landing.features.marketplace'),
-      gradient: 'from-emerald-400 to-green-500',
-      neumorph: true
-    },
-    {
-      icon: <Zap className="w-8 h-8 text-white" />,
-      title: t('landing.features.aiCoach'),
-      description: t('landing.features.gamification'),
-      gradient: 'from-amber-400 to-orange-500',
-      neumorph: true
-    },
-    {
-      icon: <Shield className="w-8 h-8 text-white" />,
-      title: t('settings.privacy'),
-      description: t('settings.connectedDevices'),
-      gradient: 'from-slate-400 to-gray-500',
-      neumorph: true
-    },
-    {
-      icon: <Users className="w-8 h-8 text-white" />,
-      title: t('landing.features.community.title'),
-      description: t('landing.features.community.description'),
-      gradient: 'from-emerald-400 to-green-500',
-      neumorph: true
-    },
-    {
-      icon: <Zap className="w-8 h-8 text-white" />,
-      title: t('landing.features.gamification.title'),
-      description: t('landing.features.gamification.description'),
-      gradient: 'from-amber-400 to-orange-500',
-      neumorph: true
-    },
-    {
-      icon: <Shield className="w-8 h-8 text-white" />,
-      title: t('landing.features.privacy.title'),
-      description: t('landing.features.privacy.description'),
-      gradient: 'from-slate-400 to-gray-500',
-      neumorph: true
-    }
-  ];
+const steps = [
+  { num: '01', title: 'Создай профиль', desc: 'Расскажи о своих целях и образе жизни' },
+  { num: '02', title: 'Составь план', desc: 'ИИ поможет выстроить твою систему' },
+  { num: '03', title: 'Отслеживай рост', desc: 'Каждый день — шаг к лучшей версии себя' },
+];
 
-  const stats = [
-    { value: '100K+', label: t('landing.stats.users'), icon: <Users className="w-6 h-6" /> },
-    { value: '4.9★', label: t('landing.stats.rating'), icon: <Star className="w-6 h-6" /> },
-    { value: '67%', label: t('landing.stats.improvement'), icon: <TrendingUp className="w-6 h-6" /> },
-    { value: '24/7', label: t('landing.stats.support'), icon: <Zap className="w-6 h-6" /> }
-  ];
-
-  const testimonials = [
-    {
-      name: 'Мария К.',
-      role: 'Предприниматель',
-      avatar: '👩',
-      text: 'EthosLife изменил мой подход к здоровью. За 3 месяца потеряла 12кг и улучшила сон на 40%!',
-      rating: 5
-    },
-    {
-      name: 'Александр В.',
-      role: 'Нутрициолог',
-      avatar: '👨‍⚕️',
-      text: 'Использую для работы с клиентами. 40+ постоянных клиентов через платформу за 2 месяца.',
-      rating: 5
-    },
-    {
-      name: 'Елена Р.',
-      role: 'HR Директор',
-      avatar: '👩‍💼',
-      text: 'Внедрили для сотрудников. Продуктивность выросла на 25%, больничные снизились на 30%.',
-      rating: 5
-    }
-  ];
-
-  const pricingPlans = [
-    {
-      name: 'Free',
-      price: '0',
-      period: t('landing.pricing.free.period'),
-      description: t('landing.pricing.free.name'),
-      features: t('landing.pricing.free.features', { returnObjects: true }) as string[],
-      cta: t('landing.pricing.startFree'),
-      popular: false
-    },
-    {
-      name: 'Premium',
-      price: '9.99',
-      period: t('landing.pricing.premium.period'),
-      description: t('landing.pricing.premium.name'),
-      features: t('landing.pricing.premium.features', { returnObjects: true }) as string[],
-      cta: t('landing.pricing.try14Days'),
-      popular: true
-    },
-    {
-      name: 'Pro',
-      price: '19.99',
-      period: t('landing.pricing.pro.period'),
-      description: t('landing.pricing.pro.name'),
-      features: t('landing.pricing.pro.features', { returnObjects: true }) as string[],
-      cta: t('landing.pricing.startPro'),
-      popular: false
-    }
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-[#dcd3c6] via-[#e8e0d5] to-[#f5f0eb]">
-      {/* Hero Section */}
-      <motion.section 
-        style={{ opacity, scale }}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      >
-        {/* Animated Background */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-emerald-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-amber-400/20 to-orange-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <motion.div
-                className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#5c5243] via-[#8c7a6b] to-[#a89880] flex items-center justify-center text-white font-bold text-2xl shadow-2xl"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-              >
-                🌱
-              </motion.div>
-              <div>
-                <h1 className="text-5xl md:text-7xl font-bold text-[#2d2418]">EthosLife</h1>
-                <p className="text-lg text-[#5c5243]">Human Operating System</p>
-              </div>
-            </div>
-
-            <h2 className="text-2xl md:text-4xl font-bold text-[var(--text-primary)] mb-6 max-w-4xl mx-auto">
-              {t('landing.hero.title')}
-              <br />
-              <span className="text-gradient-emerald">
-                {t('landing.hero.subtitle')}
-              </span>
-            </h2>
-
-            <p className="text-lg md:text-xl text-[var(--text-secondary)] mb-10 max-w-2xl mx-auto">
-              {t('landing.hero.description')}
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <motion.button
-                onClick={() => navigate('/register')}
-                className="group px-8 py-4 bg-gradient-to-r from-[#5c5243] to-[#8c7a6b] text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 flex items-center gap-3"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t('landing.hero.ctaPrimary')}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-
-              <motion.button
-                onClick={() => navigate('/features')}
-                className="px-8 py-4 bg-white/70 backdrop-blur-sm text-[#5c5243] font-bold text-lg rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-3"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Play className="w-5 h-5" />
-                {t('landing.hero.ctaSecondary')}
-              </motion.button>
-            </div>
-
-            <div className="mt-12 flex flex-wrap justify-center gap-6 text-sm text-[var(--text-secondary)]">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                <span>{t('landing.hero.freeForever')}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                <span>{t('landing.hero.noCreditCard')}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                <span>{t('landing.hero.quickRegistration')}</span>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6"
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                className="neu-card p-6 text-center"
-                whileHover={{ scale: 1.05, y: -5 }}
-              >
-                <div className="flex justify-center mb-3 text-emerald-500">
-                  {stat.icon}
-                </div>
-                <div className="text-3xl md:text-4xl font-bold text-[#2d2418] mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-[#5c5243]">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Features Section */}
-      <section className="py-24 px-4">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2d2418] mb-4">
-              {t('landing.features.title')}
-            </h2>
-            <p className="text-xl text-[#5c5243] max-w-2xl mx-auto">
-              {t('landing.features.subtitle')}
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-[#e4dfd5] rounded-3xl p-6 shadow-[8px_8px_16px_rgba(44,40,34,0.12),-8px_-8px_16px_rgba(255,255,255,0.6)] hover:shadow-[12px_12px_24px_rgba(44,40,34,0.15),-12px_-12px_24px_rgba(255,255,255,0.7)] transition-all duration-300 group"
-                whileHover={{ scale: 1.02, y: -3 }}
-              >
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-white mb-5 group-hover:scale-110 transition-transform shadow-[4px_4px_8px_rgba(0,0,0,0.2)]`}>
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-bold text-[#2d2418] mb-3">{feature.title}</h3>
-                <p className="text-[#5c5243] leading-relaxed text-sm">{feature.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section className="py-24 px-4 bg-gradient-to-br from-emerald-50 to-cyan-50">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2d2418] mb-4">
-              {t('landing.pricing.title')}
-            </h2>
-            <p className="text-xl text-[#5c5243] max-w-2xl mx-auto">
-              {t('landing.pricing.subtitle')}
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className={`relative neu-card p-8 ${plan.popular ? 'border-2 border-emerald-500 scale-105' : ''}`}
-                whileHover={{ scale: plan.popular ? 1.05 : 1.02 }}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-sm font-bold rounded-full">
-                    {t('landing.pricing.popularChoice')}
-                  </div>
-                )}
-
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-[#2d2418] mb-2">{plan.name}</h3>
-                  <div className="flex items-baseline justify-center gap-1 mb-2">
-                    <span className="text-5xl font-bold text-[#2d2418]">${plan.price}</span>
-                    <span className="text-[#5c5243]">/{plan.period}</span>
-                  </div>
-                  <p className="text-[#5c5243]">{plan.description}</p>
-                </div>
-
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-[#5c5243]">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <motion.button
-                  onClick={() => navigate('/register')}
-                  className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 ${
-                    plan.popular
-                      ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg hover:shadow-xl'
-                      : 'bg-[#5c5243] text-[#e4dfd5] hover:bg-[#8c7a6b]'
-                  }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {plan.cta}
-                </motion.button>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-24 px-4">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2d2418] mb-4">
-              Истории успеха
-            </h2>
-            <p className="text-xl text-[#5c5243]">
-              Более 100,000 пользователей уже изменили свою жизнь
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="neu-card p-8 md:p-12"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            key={activeTestimonial}
-          >
-            <div className="flex items-center gap-4 mb-6">
-              <div className="text-6xl">{testimonials[activeTestimonial].avatar}</div>
-              <div>
-                <div className="text-xl font-bold text-[#2d2418]">
-                  {testimonials[activeTestimonial].name}
-                </div>
-                <div className="text-[#5c5243]">{testimonials[activeTestimonial].role}</div>
-              </div>
-              <div className="ml-auto flex gap-1">
-                {[...Array(testimonials[activeTestimonial].rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-amber-500 text-amber-500" />
-                ))}
-              </div>
-            </div>
-            <p className="text-lg text-[#5c5243] leading-relaxed italic">
-              "{testimonials[activeTestimonial].text}"
-            </p>
-          </motion.div>
-
-          <div className="flex justify-center gap-2 mt-8">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveTestimonial(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
-                  index === activeTestimonial
-                    ? 'bg-[#5c5243] w-8'
-                    : 'bg-[#5c5243]/30'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-24 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="neu-card p-12 md:p-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2d2418] mb-6">
-              {t('landing.hero.title')}
-            </h2>
-            <p className="text-xl text-[#5c5243] mb-8 max-w-2xl mx-auto">
-              {t('landing.testimonials.subtitle')}
-            </p>
-            <motion.button
-              onClick={() => navigate('/register')}
-              className="px-12 py-5 bg-gradient-to-r from-[#5c5243] to-[#8c7a6b] text-white font-bold text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {t('landing.hero.ctaPrimary')}
-            </motion.button>
-            <p className="mt-6 text-sm text-[#5c5243]">
-              {t('common.free')} • {t('landing.pricing.free.period')} • 2 min
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-[#c9b8a6]/30 py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#5c5243] to-[#8c7a6b] flex items-center justify-center text-white font-bold">
-                🌱
-              </div>
-              <span className="text-lg font-bold text-[#2d2418]">EthosLife</span>
-            </div>
-            <div className="flex flex-wrap justify-center gap-6 text-sm text-[#5c5243]">
-              <a href="/features" className="hover:text-[#2d2418] transition-colors">{t('nav.features')}</a>
-              <a href="/pricing" className="hover:text-[#2d2418] transition-colors">{t('nav.pricing')}</a>
-              <a href="/team" className="hover:text-[#2d2418] transition-colors">{t('nav.team')}</a>
-              <a href="/faq" className="hover:text-[#2d2418] transition-colors">{t('nav.faq')}</a>
-              <a href="/blog" className="hover:text-[#2d2418] transition-colors">{t('nav.blog')}</a>
-            </div>
-            <div className="text-sm text-[#5c5243]">
-              © 2026 EthosLife. Все права защищены.
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
+const neuCard = {
+  background: 'var(--bone-200, #e8e0d5)',
+  boxShadow: '8px 8px 16px rgba(44,40,34,0.1), -8px -8px 16px rgba(255,255,255,0.7)',
+  borderRadius: '24px',
 };
 
-export default LandingV2;
+export default function Landing() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #dcd3c6 0%, #e8e0d5 50%, #dcd3c6 100%)' }}>
+
+      {/* Hero */}
+      <section className="relative overflow-hidden px-6 pt-16 pb-12 text-center max-w-2xl mx-auto">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <div className="flex justify-center mb-6">
+            <div
+              className="w-20 h-20 rounded-3xl flex items-center justify-center text-4xl"
+              style={{ background: 'linear-gradient(135deg, #5c5243, #8c7a6b)', boxShadow: '0 8px 32px rgba(92,82,67,0.4)' }}
+            >
+              🌱
+            </div>
+          </div>
+
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-5 text-sm font-medium text-[#5c5243]"
+            style={neuCard}>
+            <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+            Human Operating System
+          </div>
+
+          <h1 className="text-4xl md:text-5xl font-bold text-[#2d2418] leading-tight mb-4">
+            Твоя система<br />
+            <span style={{ background: 'linear-gradient(135deg, #5c5243, #8c7a6b)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              жизни и роста
+            </span>
+          </h1>
+
+          <p className="text-lg text-[#6b5d52] mb-8 leading-relaxed">
+            Одна платформа для здоровья, привычек, целей и прогресса.<br />
+            Все сферы жизни — под контролем.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <motion.button
+              onClick={() => navigate('/dashboard')}
+              whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+              className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-white font-semibold text-base"
+              style={{ background: 'linear-gradient(135deg, #5c5243, #8c7a6b)', boxShadow: '0 8px 24px rgba(92,82,67,0.35)' }}
+            >
+              Начать бесплатно <ArrowRight className="w-5 h-5" />
+            </motion.button>
+            <motion.button
+              onClick={() => navigate('/investor-pitch')}
+              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+              className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-semibold text-base text-[#2d2418]"
+              style={neuCard}
+            >
+              Для инвесторов
+            </motion.button>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Stats */}
+      <section className="px-6 pb-10 max-w-2xl mx-auto">
+        <div className="grid grid-cols-2 gap-3">
+          {stats.map((s, i) => (
+            <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * i }}
+              className="text-center p-4 rounded-2xl" style={neuCard}>
+              <p className="text-2xl font-bold text-[#5c5243]">{s.value}</p>
+              <p className="text-xs text-[#a09282] mt-1">{s.label}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="px-6 pb-10 max-w-2xl mx-auto">
+        <h2 className="text-2xl font-bold text-center text-[#2d2418] mb-6">Всё что нужно для роста</h2>
+        <div className="grid grid-cols-2 gap-3">
+          {features.map((f, i) => (
+            <motion.div
+              key={f.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 * i }}
+              className={`p-4 rounded-2xl bg-gradient-to-br ${f.bg} cursor-pointer`}
+              style={{ boxShadow: '6px 6px 12px rgba(44,40,34,0.08), -6px -6px 12px rgba(255,255,255,0.6)' }}
+              onClick={() => navigate('/dashboard')}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <f.icon className="w-6 h-6 mb-2" style={{ color: f.color }} />
+              <p className="font-semibold text-[#2d2418] text-sm">{f.label}</p>
+              <p className="text-xs text-[#8c7a6b] mt-0.5">{f.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="px-6 pb-10 max-w-2xl mx-auto">
+        <h2 className="text-2xl font-bold text-center text-[#2d2418] mb-6">Как это работает</h2>
+        <div className="space-y-3">
+          {steps.map((s, i) => (
+            <motion.div key={s.num} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 * i }}
+              className="flex items-center gap-4 p-4 rounded-2xl" style={neuCard}>
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-bold flex-shrink-0"
+                style={{ background: 'linear-gradient(135deg, #5c5243, #8c7a6b)' }}>
+                {s.num}
+              </div>
+              <div>
+                <p className="font-semibold text-[#2d2418]">{s.title}</p>
+                <p className="text-sm text-[#6b5d52]">{s.desc}</p>
+              </div>
+              <CheckCircle2 className="w-5 h-5 text-emerald-400 ml-auto flex-shrink-0" />
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="px-6 pb-24 max-w-2xl mx-auto text-center">
+        <motion.div className="p-8 rounded-3xl" style={neuCard} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
+          <h3 className="text-2xl font-bold text-[#2d2418] mb-2">Начни сегодня</h3>
+          <p className="text-[#6b5d52] mb-6">Первые 30 дней бесплатно. Без кредитной карты.</p>
+          <motion.button
+            onClick={() => navigate('/dashboard')}
+            whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            className="w-full py-4 rounded-2xl text-white font-bold text-lg"
+            style={{ background: 'linear-gradient(135deg, #5c5243, #8c7a6b)', boxShadow: '0 8px 24px rgba(92,82,67,0.35)' }}
+          >
+            Открыть EthosLife →
+          </motion.button>
+        </motion.div>
+      </section>
+    </div>
+  );
+}
