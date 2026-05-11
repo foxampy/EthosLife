@@ -38,7 +38,7 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const ElHeader: React.FC = () => {
+export const ElHeader: React.FC<{ hideMenu?: boolean }> = ({ hideMenu = false }) => {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [healthMenuOpen, setHealthMenuOpen] = useState(false);
@@ -137,15 +137,17 @@ export const ElHeader: React.FC = () => {
               {/* Language Selector */}
               <ElLanguageSelector variant="minimal" className="hidden sm:flex" />
 
-              {/* Burger Menu Button */}
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsMenuOpen(true)}
-                className="p-2.5 rounded-xl bg-[#e4dfd5] text-[#5c5243] shadow-[4px_4px_8px_rgba(44,40,34,0.1),-4px_-4px_8px_rgba(255,255,255,0.6)] min-h-[44px] min-w-[44px] flex items-center justify-center"
-                aria-label="Open menu"
-              >
-                <Menu className="w-5 h-5" />
-              </motion.button>
+              {/* Burger Menu Button — only on landing pages; app pages use BottomNav */}
+              {!hideMenu && (
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setIsMenuOpen(true)}
+                  className="p-2.5 rounded-xl bg-[#e4dfd5] text-[#5c5243] shadow-[4px_4px_8px_rgba(44,40,34,0.1),-4px_-4px_8px_rgba(255,255,255,0.6)] min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  aria-label="Open menu"
+                >
+                  <Menu className="w-5 h-5" />
+                </motion.button>
+              )}
             </div>
           </div>
         </div>
