@@ -1,452 +1,234 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Search, Filter, ShoppingCart, Star, ChevronDown,
-  Pill, Watch, Dumbbell, Brain, Moon, BookOpen, Box,
-  SlidersHorizontal, X
-} from 'lucide-react';
-import { NeuButton, NeuCard, NeuInput } from '../../components/Neumorphism';
-import { useAuthStore } from '../../store/authStore';
-import { api } from '../../services/api';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ShoppingCart, Star, Check, Zap, Crown } from 'lucide-react';
 
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  price: number;
-  compare_at_price?: number;
-  images: string[];
-  rating: number;
-  reviews_count: number;
-  stock_quantity?: number;
-}
+type ShopTab = 'products' | 'services' | 'subscriptions' | 'memberships';
 
-interface Category {
-  id: string;
-  name: string;
-  icon: string;
-}
+const tabs = [
+  { id: 'products' as ShopTab, label: '🛒 Товары' },
+  { id: 'services' as ShopTab, label: '💼 Услуги' },
+  { id: 'subscriptions' as ShopTab, label: '⭐ Подписки' },
+  { id: 'memberships' as ShopTab, label: '🏋️ Абонементы' },
+];
 
-const categoryIcons: Record<string, React.ReactNode> = {
-  'supplements': <Pill className="w-5 h-5" />,
-  'wearables': <Watch className="w-5 h-5" />,
-  'fitness': <Dumbbell className="w-5 h-5" />,
-  'meditation': <Brain className="w-5 h-5" />,
-  'sleep': <Moon className="w-5 h-5" />,
-  'books': <BookOpen className="w-5 h-5" />,
+const productsData = [
+  { id: 'p1', name: 'Умные весы EthosScale', price: '4 990 ₽', emoji: '⚖️', category: 'здоровье', rating: 4.8, reviews: 342 },
+  { id: 'p2', name: 'Трекер сна SleepBand', price: '7 490 ₽', emoji: '😴', category: 'здоровье', rating: 4.7, reviews: 189 },
+  { id: 'p3', name: 'Дневник привычек (печатный)', price: '990 ₽', emoji: '📓', category: 'планирование', rating: 4.9, reviews: 567 },
+  { id: 'p4', name: 'Набор для медитации', price: '2 490 ₽', emoji: '🧘', category: 'здоровье', rating: 4.8, reviews: 234 },
+  { id: 'p5', name: 'Протеин Premium', price: '3 290 ₽', emoji: '💪', category: 'спорт', rating: 4.6, reviews: 891 },
+  { id: 'p6', name: 'Коврик для йоги', price: '1 990 ₽', emoji: '🟩', category: 'спорт', rating: 4.7, reviews: 445 },
+];
+
+const servicesData = [
+  { id: 's1', name: 'Консультация нутрициолога', price: '2 500 ₽', duration: '60 мин', emoji: '🥗', rating: 4.9, reviews: 128 },
+  { id: 's2', name: 'Персональная тренировка', price: '3 000 ₽', duration: '60 мин', emoji: '💪', rating: 4.8, reviews: 256 },
+  { id: 's3', name: 'Сессия с психологом', price: '3 500 ₽', duration: '50 мин', emoji: '🧠', rating: 4.9, reviews: 94 },
+  { id: 's4', name: 'Анализ сна и режима', price: '1 800 ₽', duration: '30 мин', emoji: '😴', rating: 4.7, reviews: 67 },
+  { id: 's5', name: 'Составление плана питания', price: '4 200 ₽', duration: '90 мин', emoji: '📋', rating: 4.9, reviews: 312 },
+];
+
+const subscriptionsData = [
+  {
+    id: 'sub1', name: 'Basic', price: '490 ₽', period: 'мес',
+    features: ['Базовые трекеры здоровья', 'ИИ — 50 запросов в месяц', 'До 5 активных целей', 'Стандартная аналитика'],
+    emoji: '🌱', popular: false,
+  },
+  {
+    id: 'sub2', name: 'Pro', price: '990 ₽', period: 'мес',
+    features: ['Все трекеры здоровья', 'ИИ — безлимит', 'Безлимит целей и привычек', 'Расширенная аналитика', 'Приоритетная поддержка'],
+    emoji: '⚡', popular: true,
+  },
+  {
+    id: 'sub3', name: 'Premium', price: '2 490 ₽', period: 'мес',
+    features: ['Всё из Pro', '2 консультации специалистов', 'Персональный план развития', 'Доступ к закрытому сообществу', 'Персональный куратор'],
+    emoji: '👑', popular: false,
+  },
+];
+
+const membershipsData = [
+  { id: 'm1', name: 'Абонемент на 10 тренировок', price: '8 500 ₽', validity: '3 месяца', emoji: '🏋️', savings: '' },
+  { id: 'm2', name: 'Годовая программа "Здоровье"', price: '24 900 ₽', validity: '12 месяцев', emoji: '🏆', savings: 'Экономия 40%' },
+  { id: 'm3', name: 'Пакет консультаций ×5', price: '9 900 ₽', validity: '6 месяцев', emoji: '💊', savings: 'Экономия 20%' },
+  { id: 'm4', name: 'Групповые тренировки ×20', price: '6 800 ₽', validity: '2 месяца', emoji: '👥', savings: '' },
+];
+
+const neuCard = {
+  background: '#e8e0d5',
+  boxShadow: '8px 8px 16px rgba(44,40,34,0.1), -8px -8px 16px rgba(255,255,255,0.7)',
+  borderRadius: '20px',
+};
+
+const neuInset = {
+  background: '#e8e0d5',
+  boxShadow: 'inset 3px 3px 6px rgba(44,40,34,0.08), inset -3px -3px 6px rgba(255,255,255,0.6)',
+  borderRadius: '16px',
 };
 
 export default function ProductsPage() {
-  const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { user } = useAuthStore();
-  
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [total, setTotal] = useState(0);
-  const [cartCount, setCartCount] = useState(0);
-  
-  // Filters
-  const [search, setSearch] = useState(searchParams.get('search') || '');
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
-  const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '');
-  const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '');
-  const [sort, setSort] = useState(searchParams.get('sort') || 'newest');
-  const [showFilters, setShowFilters] = useState(false);
-  
-  const limit = 12;
-  const [offset, setOffset] = useState(0);
+  const [activeTab, setActiveTab] = useState<ShopTab>('products');
+  const [cart, setCart] = useState<string[]>([]);
 
-  useEffect(() => {
-    fetchProducts();
-    fetchCategories();
-    fetchCartCount();
-  }, [selectedCategory, sort, offset, searchParams]);
-
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      if (selectedCategory) params.set('category', selectedCategory);
-      if (minPrice) params.set('minPrice', minPrice);
-      if (maxPrice) params.set('maxPrice', maxPrice);
-      if (search) params.set('search', search);
-      params.set('sort', sort);
-      params.set('limit', limit.toString());
-      params.set('offset', offset.toString());
-
-      const response = await api.get(`/products?${params.toString()}`);
-      setProducts(response.data.products);
-      setTotal(response.data.total);
-    } catch (error) {
-      console.error('Failed to fetch products:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await api.get('/products/categories');
-      setCategories(response.data.categories);
-    } catch (error) {
-      console.error('Failed to fetch categories:', error);
-    }
-  };
-
-  const fetchCartCount = async () => {
-    try {
-      const response = await api.get('/cart');
-      setCartCount(response.data.itemCount || 0);
-    } catch (error) {
-      // Guest cart might fail without session
-    }
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const params = new URLSearchParams(searchParams);
-    if (search) params.set('search', search);
-    else params.delete('search');
-    setSearchParams(params);
-    setOffset(0);
-  };
-
-  const handleCategoryChange = (categoryId: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (categoryId === selectedCategory) {
-      setSelectedCategory('');
-      params.delete('category');
-    } else {
-      setSelectedCategory(categoryId);
-      params.set('category', categoryId);
-    }
-    setSearchParams(params);
-    setOffset(0);
-  };
-
-  const handleAddToCart = async (productId: string) => {
-    try {
-      await api.post('/cart/add', { productId, quantity: 1 });
-      setCartCount(prev => prev + 1);
-      // Could show toast here
-    } catch (error) {
-      console.error('Failed to add to cart:', error);
-    }
-  };
-
-  const ProductCard = ({ product }: { product: Product }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4 }}
-      className="group"
-    >
-      <NeuCard className="overflow-hidden h-full flex flex-col">
-        {/* Image */}
-        <div 
-          className="relative aspect-square overflow-hidden cursor-pointer bg-[#d4cfc5]"
-          onClick={() => navigate(`/products/${product.id}`)}
-        >
-          {product.images?.[0] ? (
-            <img
-              src={product.images[0]}
-              alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <Box className="w-16 h-16 text-[#a39a8b]" />
-            </div>
-          )}
-          {product.compare_at_price && (
-            <div className="absolute top-3 left-3 px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-lg">
-              Sale
-            </div>
-          )}
-        </div>
-
-        {/* Content */}
-        <div className="p-4 flex-1 flex flex-col">
-          <div className="flex items-center gap-1 mb-2">
-            {categoryIcons[product.category?.toLowerCase()] || <Box className="w-4 h-4" />}
-            <span className="text-xs text-[#7a7268] capitalize">{product.category}</span>
-          </div>
-          
-          <h3 
-            className="font-semibold text-[#2d2418] mb-1 line-clamp-2 cursor-pointer hover:text-[#5c5243]"
-            onClick={() => navigate(`/products/${product.id}`)}
-          >
-            {product.name}
-          </h3>
-          
-          <div className="flex items-center gap-1 mb-3">
-            <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-            <span className="text-sm text-[#5c5243]">
-              {product.rating?.toFixed(1) || '5.0'}
-            </span>
-            <span className="text-sm text-[#a39a8b]">
-              ({product.reviews_count || 0})
-            </span>
-          </div>
-
-          <div className="mt-auto flex items-center justify-between">
-            <div className="flex items-baseline gap-2">
-              <span className="text-xl font-bold text-[#5c5243]">
-                ${product.price}
-              </span>
-              {product.compare_at_price && (
-                <span className="text-sm text-[#a39a8b] line-through">
-                  ${product.compare_at_price}
-                </span>
-              )}
-            </div>
-            
-            <NeuButton
-              size="sm"
-              onClick={() => handleAddToCart(product.id)}
-              disabled={product.stock_quantity === 0}
-            >
-              Add
-            </NeuButton>
-          </div>
-        </div>
-      </NeuCard>
-    </motion.div>
-  );
+  const addToCart = (id: string) => setCart((prev) => [...prev, id]);
+  const isInCart = (id: string) => cart.includes(id);
 
   return (
-    <div className="min-h-screen bg-[#e4dfd5] pb-20">
+    <div className="min-h-screen pb-24 px-4 pt-4" style={{ background: 'linear-gradient(135deg, #dcd3c6 0%, #e8e0d5 100%)' }}>
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#e4dfd5]/95 backdrop-blur-sm border-b border-[#d4cfc5]">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            {/* Logo */}
-            <button 
-              onClick={() => navigate('/dashboard')}
-              className="text-xl font-bold text-[#2d2418]"
-            >
-              EthosLife
-            </button>
-
-            {/* Search */}
-            <form onSubmit={handleSearch} className="flex-1 max-w-xl">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7a7268]" />
-                <NeuInput
-                  type="text"
-                  placeholder="Search products..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </form>
-
-            {/* Actions */}
-            <div className="flex items-center gap-2">
-              <NeuButton
-                variant="flat"
-                size="sm"
-                onClick={() => setShowFilters(!showFilters)}
-                className={showFilters ? 'text-[#5c5243]' : ''}
-              >
-                <Filter className="w-4 h-4 mr-1" />
-                Filters
-              </NeuButton>
-              
-              <NeuButton
-                variant="flat"
-                size="sm"
-                onClick={() => navigate('/cart')}
-                className="relative"
-              >
-                <ShoppingCart className="w-4 h-4 mr-1" />
-                Cart
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#5c5243] text-white text-xs rounded-full flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
-              </NeuButton>
-            </div>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-xl font-bold text-[#2d2418]">Магазин</h1>
+        {cart.length > 0 && (
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-medium"
+            style={{ background: 'linear-gradient(135deg, #5c5243, #8c7a6b)', color: 'white' }}>
+            <ShoppingCart className="w-4 h-4" />
+            {cart.length}
           </div>
+        )}
+      </div>
 
-          {/* Categories */}
-          <div className="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-hide">
-            {categories.map((cat) => (
+      {/* Tabs */}
+      <div className="grid grid-cols-4 gap-1 p-1.5 rounded-2xl mb-4" style={neuInset}>
+        {tabs.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setActiveTab(t.id)}
+            className="py-2 rounded-xl text-xs font-medium transition-all"
+            style={{
+              background: activeTab === t.id ? 'linear-gradient(135deg, #5c5243, #8c7a6b)' : 'transparent',
+              color: activeTab === t.id ? 'white' : '#8c7a6b',
+              boxShadow: activeTab === t.id ? '0 4px 8px rgba(92,82,67,0.25)' : 'none',
+            }}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Products */}
+      {activeTab === 'products' && (
+        <div className="grid grid-cols-2 gap-3">
+          {productsData.map((p, i) => (
+            <motion.div key={p.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+              className="p-4" style={neuCard}>
+              <div className="text-3xl mb-3 text-center">{p.emoji}</div>
+              <p className="font-semibold text-[#2d2418] text-sm mb-1 text-center leading-tight">{p.name}</p>
+              <div className="flex items-center justify-center gap-1 mb-3">
+                <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                <span className="text-xs text-[#a09282]">{p.rating} ({p.reviews})</span>
+              </div>
+              <p className="text-center font-bold text-[#5c5243] mb-3">{p.price}</p>
               <button
-                key={cat.id}
-                onClick={() => handleCategoryChange(cat.id)}
-                className={`
-                  flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap
-                  transition-all duration-200
-                  ${selectedCategory === cat.id
-                    ? 'bg-[#5c5243] text-white shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3)]'
-                    : 'bg-[#e4dfd5] shadow-[4px_4px_8px_rgba(44,40,34,0.1),-4px_-4px_8px_rgba(255,255,255,0.5)] hover:shadow-[6px_6px_12px_rgba(44,40,34,0.12),-6px_-6px_12px_rgba(255,255,255,0.55)]'
-                  }
-                `}
+                onClick={() => addToCart(p.id)}
+                className="w-full py-2 rounded-xl text-xs font-medium transition-all"
+                style={{
+                  background: isInCart(p.id) ? 'rgba(52,211,153,0.1)' : 'linear-gradient(135deg, #5c5243, #8c7a6b)',
+                  color: isInCart(p.id) ? '#10b981' : 'white',
+                  boxShadow: isInCart(p.id) ? 'none' : '0 4px 8px rgba(92,82,67,0.2)',
+                }}
               >
-                {categoryIcons[cat.id] || <Box className="w-4 h-4" />}
-                <span className="text-sm font-medium">{cat.name}</span>
+                {isInCart(p.id) ? '✓ В корзине' : 'В корзину'}
               </button>
-            ))}
-          </div>
+            </motion.div>
+          ))}
         </div>
-      </header>
+      )}
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex gap-6">
-          {/* Filters Sidebar */}
-          <AnimatePresence>
-            {showFilters && (
-              <motion.aside
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 280, opacity: 1 }}
-                exit={{ width: 0, opacity: 0 }}
-                className="shrink-0 overflow-hidden"
-              >
-                <NeuCard className="h-fit">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-[#2d2418]">Filters</h3>
-                    <button onClick={() => setShowFilters(false)}>
-                      <X className="w-5 h-5 text-[#7a7268]" />
-                    </button>
-                  </div>
-
-                  {/* Price Range */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-medium text-[#5c5243] mb-3">Price Range</h4>
-                    <div className="flex items-center gap-2">
-                      <NeuInput
-                        type="number"
-                        placeholder="Min"
-                        value={minPrice}
-                        onChange={(e) => setMinPrice(e.target.value)}
-                        className="w-24"
-                      />
-                      <span className="text-[#7a7268]">-</span>
-                      <NeuInput
-                        type="number"
-                        placeholder="Max"
-                        value={maxPrice}
-                        onChange={(e) => setMaxPrice(e.target.value)}
-                        className="w-24"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Sort */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-medium text-[#5c5243] mb-3">Sort By</h4>
-                    <select
-                      value={sort}
-                      onChange={(e) => setSort(e.target.value)}
-                      className="w-full p-3 bg-[#e4dfd5] rounded-xl border-none shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1),inset_-2px_-2px_4px_rgba(255,255,255,0.5)] focus:outline-none focus:ring-2 focus:ring-[#5c5243]/30"
-                    >
-                      <option value="newest">Newest</option>
-                      <option value="price_asc">Price: Low to High</option>
-                      <option value="price_desc">Price: High to Low</option>
-                      <option value="popular">Most Popular</option>
-                    </select>
-                  </div>
-
-                  <NeuButton 
-                    variant="secondary" 
-                    className="w-full"
-                    onClick={() => {
-                      setMinPrice('');
-                      setMaxPrice('');
-                      setSelectedCategory('');
-                      setSort('newest');
-                    }}
-                  >
-                    Clear Filters
-                  </NeuButton>
-                </NeuCard>
-              </motion.aside>
-            )}
-          </AnimatePresence>
-
-          {/* Products Grid */}
-          <div className="flex-1">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-[#7a7268]">
-                Showing {products.length} of {total} products
-              </p>
-              
-              {/* Mobile Sort */}
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-[#7a7268]">Sort:</span>
-                <select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value)}
-                  className="p-2 bg-[#e4dfd5] rounded-lg border-none shadow-[inset_2px_2px_4px_rgba(44,40,34,0.1),inset_-2px_-2px_4px_rgba(255,255,255,0.5)] text-sm"
-                >
-                  <option value="newest">Newest</option>
-                  <option value="price_asc">Price ↑</option>
-                  <option value="price_desc">Price ↓</option>
-                  <option value="popular">Popular</option>
-                </select>
+      {/* Services */}
+      {activeTab === 'services' && (
+        <div className="space-y-3">
+          {servicesData.map((s, i) => (
+            <motion.div key={s.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+              className="flex items-center gap-4 p-4" style={neuCard}>
+              <div className="text-3xl flex-shrink-0">{s.emoji}</div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-[#2d2418] text-sm">{s.name}</p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                  <span className="text-xs text-[#a09282]">{s.rating} · {s.duration}</span>
+                </div>
               </div>
-            </div>
+              <div className="text-right flex-shrink-0">
+                <p className="font-bold text-[#5c5243] text-sm">{s.price}</p>
+                <button className="mt-1 px-3 py-1.5 rounded-lg text-xs font-medium text-white"
+                  style={{ background: 'linear-gradient(135deg, #5c5243, #8c7a6b)' }}>
+                  Записаться
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
 
-            {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {[...Array(8)].map((_, i) => (
-                  <div key={i} className="animate-pulse">
-                    <div className="aspect-square bg-[#d4cfc5] rounded-3xl mb-4" />
-                    <div className="h-4 bg-[#d4cfc5] rounded mb-2" />
-                    <div className="h-4 bg-[#d4cfc5] rounded w-2/3" />
+      {/* Subscriptions */}
+      {activeTab === 'subscriptions' && (
+        <div className="space-y-3">
+          {subscriptionsData.map((s, i) => (
+            <motion.div key={s.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+              className="p-5 relative overflow-hidden" style={neuCard}>
+              {s.popular && (
+                <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-xs font-medium text-white"
+                  style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}>
+                  Популярный
+                </div>
+              )}
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl">{s.emoji}</span>
+                <div>
+                  <p className="font-bold text-[#2d2418] text-lg">{s.name}</p>
+                  <p className="text-[#5c5243] font-semibold">{s.price} / {s.period}</p>
+                </div>
+              </div>
+              <div className="space-y-2 mb-4">
+                {s.features.map((f, j) => (
+                  <div key={j} className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                    <span className="text-sm text-[#6b5d52]">{f}</span>
                   </div>
                 ))}
               </div>
-            ) : products.length === 0 ? (
-              <div className="text-center py-20">
-                <Box className="w-16 h-16 text-[#a39a8b] mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-[#2d2418] mb-2">No products found</h3>
-                <p className="text-[#7a7268]">Try adjusting your filters or search query</p>
-              </div>
-            ) : (
-              <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                  ))}
-                </div>
-
-                {/* Pagination */}
-                {total > limit && (
-                  <div className="flex justify-center gap-2 mt-8">
-                    <NeuButton
-                      variant="flat"
-                      size="sm"
-                      onClick={() => setOffset(Math.max(0, offset - limit))}
-                      disabled={offset === 0}
-                    >
-                      Previous
-                    </NeuButton>
-                    <span className="px-4 py-2 text-[#5c5243]">
-                      Page {Math.floor(offset / limit) + 1} of {Math.ceil(total / limit)}
-                    </span>
-                    <NeuButton
-                      variant="flat"
-                      size="sm"
-                      onClick={() => setOffset(offset + limit)}
-                      disabled={offset + limit >= total}
-                    >
-                      Next
-                    </NeuButton>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
+              <button className="w-full py-3 rounded-xl font-semibold text-sm"
+                style={{
+                  background: s.popular ? 'linear-gradient(135deg, #5c5243, #8c7a6b)' : '#e8e0d5',
+                  color: s.popular ? 'white' : '#5c5243',
+                  boxShadow: s.popular
+                    ? '0 6px 16px rgba(92,82,67,0.3)'
+                    : '4px 4px 8px rgba(44,40,34,0.1), -4px -4px 8px rgba(255,255,255,0.7)',
+                }}>
+                Выбрать план
+              </button>
+            </motion.div>
+          ))}
         </div>
-      </div>
+      )}
+
+      {/* Memberships */}
+      {activeTab === 'memberships' && (
+        <div className="space-y-3">
+          {membershipsData.map((m, i) => (
+            <motion.div key={m.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+              className="flex items-center gap-4 p-4 relative" style={neuCard}>
+              <div className="text-3xl flex-shrink-0">{m.emoji}</div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-[#2d2418] text-sm">{m.name}</p>
+                <p className="text-xs text-[#a09282] mt-0.5">Действует {m.validity}</p>
+                {m.savings && (
+                  <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-medium text-emerald-600"
+                    style={{ background: 'rgba(52,211,153,0.1)' }}>
+                    {m.savings}
+                  </span>
+                )}
+              </div>
+              <div className="text-right flex-shrink-0">
+                <p className="font-bold text-[#5c5243]">{m.price}</p>
+                <button className="mt-1 px-3 py-1.5 rounded-lg text-xs font-medium text-white"
+                  style={{ background: 'linear-gradient(135deg, #5c5243, #8c7a6b)' }}>
+                  Купить
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
