@@ -27,33 +27,55 @@ interface BottomPanelProps {
   isAiThinking: boolean
 }
 
-// ─── Constants ────────────────────────────────────────────────────────────────
+// ─── Premium graphite palette ─────────────────────────────────────────────────
 
-const CATEGORY_COLORS: Record<DayPlanItem['category'], string> = {
-  habit:  'rgba(255,200,80,0.8)',
-  goal:   'rgba(180,100,255,0.8)',
-  social: 'rgba(80,200,255,0.8)',
-  health: 'rgba(80,255,140,0.8)',
+// No blue anywhere. Warm amber / silver / sage / pearl accents only.
+const CAT_COLOR: Record<DayPlanItem['category'], string> = {
+  habit:  'rgba(210,175,80,0.9)',    // warm amber
+  goal:   'rgba(225,220,205,0.85)',  // warm pearl
+  social: 'rgba(175,190,200,0.85)',  // cool silver
+  health: 'rgba(145,190,155,0.85)',  // muted sage
+}
+const CAT_LABEL: Record<DayPlanItem['category'], string> = {
+  habit:  'привычка',
+  goal:   'цель',
+  social: 'связи',
+  health: 'здоровье',
+}
+const CAT_BG: Record<DayPlanItem['category'], string> = {
+  habit:  'rgba(210,175,80,0.1)',
+  goal:   'rgba(225,220,205,0.07)',
+  social: 'rgba(175,190,200,0.08)',
+  health: 'rgba(145,190,155,0.08)',
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+// Russian short weekday names
+const RU_WEEKDAYS = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб']
+const RU_MONTHS   = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек']
+
+function addDays(base: Date, n: number): Date {
+  const d = new Date(base)
+  d.setDate(d.getDate() + n)
+  return d
+}
+
+function fmtShortDate(d: Date): string {
+  return `${d.getDate()} ${RU_MONTHS[d.getMonth()]}`
 }
 
 // ─── Thinking dots ────────────────────────────────────────────────────────────
 
 const ThinkingDots: React.FC = () => (
-  <div className="flex items-center gap-1.5 px-1 py-0.5">
+  <div style={{ display: 'flex', gap: 5, alignItems: 'center', padding: '2px 0' }}>
     {[0, 1, 2].map((i) => (
       <motion.span
         key={i}
-        style={{ fontSize: 8, color: 'rgba(100,140,255,0.8)', display: 'block' }}
-        animate={{ opacity: [0.25, 1, 0.25] }}
-        transition={{
-          duration: 1.2,
-          repeat: Infinity,
-          delay: i * 0.2,
-          ease: 'easeInOut',
-        }}
-      >
-        ⬤
-      </motion.span>
+        style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(200,195,185,0.5)', display: 'block' }}
+        animate={{ opacity: [0.2, 1, 0.2], scale: [0.8, 1, 0.8] }}
+        transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.18, ease: 'easeInOut' }}
+      />
     ))}
   </div>
 )
@@ -68,76 +90,43 @@ export const BottomPanel: React.FC<BottomPanelProps> = ({
   onCompleteItem,
   isAiThinking,
 }) => {
-  const [isExpanded, setIsExpanded]             = useState(false)
-  const [inputText, setInputText]               = useState('')
-  const [optimisticDone, setOptimisticDone]     = useState<Set<number>>(new Set())
-  const [keyboardOffset, setKeyboardOffset]     = useState(0)
+  const [calendarOpen, setCalendarOpen] = useState(false)
+  const [chatOpen,     setChatOpen]     = useState(false)
+  const [inputText,    setInputText]    = useState('')
+  const [doneDays,     setDoneDays]     = useState<Set<number>>(new Set())
+  const [keyboardOffset, setKeyboardOffset] = useState(0)
 
-  const messagesEndRef  = useRef<HTMLDivElement>(null)
-  const inputRef        = useRef<HTMLInputElement>(null)
-  const planRowRef      = useRef<HTMLDivElement>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const inputRef       = useRef<HTMLInputElement>(null)
 
-  // ── Today's item index ─────────────────────────────────────────────────────
+  // Base date = today (day 1 of plan)
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
 
-  const todayIdx = dayPlan.findIndex((i) => i.isToday)
-  const todayItem = todayIdx >= 0 ? dayPlan[todayIdx] : dayPlan[dayPlan.length - 1]
+  // Today item = day 1 (or first uncompleted)
+  const todayItem = dayPlan[0] ?? null
+  const isItemDone = (item: DayPlanItem) =>
+    doneDays.has(item.day) ? !item.completed : !!item.completed
 
-  // visible slice: today ± 2
-  const visiblePlan = (() => {
-    if (!dayPlan.length) return []
-    const center = todayIdx >= 0 ? todayIdx : 0
-    const start  = Math.max(0, center - 2)
-    const end    = Math.min(dayPlan.length, center + 3)
-    return dayPlan.slice(start, end)
-  })()
+  // Next 14 days slice for calendar
+  const calendarSlice = dayPlan.slice(0, 14)
+
+  // ── Keyboard handling ──────────────────────────────────────────────────────
+  useEffect(() => {
+    const vv = window.visualViewport
+    if (!vv) return
+    const handler = () => setKeyboardOffset(Math.max(0, window.innerHeight - vv.height - vv.offsetTop))
+    vv.addEventListener('resize', handler)
+    vv.addEventListener('scroll', handler)
+    return () => { vv.removeEventListener('resize', handler); vv.removeEventListener('scroll', handler) }
+  }, [])
 
   // ── Auto-scroll messages ───────────────────────────────────────────────────
-
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [aiMessages.length, isAiThinking])
 
-  // ── Scroll plan row to today ───────────────────────────────────────────────
-
-  useEffect(() => {
-    if (isVisible && planRowRef.current) {
-      const todayEl = planRowRef.current.querySelector('[data-today="true"]') as HTMLElement | null
-      if (todayEl) {
-        todayEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
-      }
-    }
-  }, [isVisible])
-
-  // ── Visual viewport / keyboard handling ────────────────────────────────────
-
-  useEffect(() => {
-    const vv = window.visualViewport
-    if (!vv) return
-
-    const handler = () => {
-      const offset = window.innerHeight - vv.height - vv.offsetTop
-      setKeyboardOffset(Math.max(0, offset))
-    }
-
-    vv.addEventListener('resize', handler)
-    vv.addEventListener('scroll', handler)
-    return () => {
-      vv.removeEventListener('resize', handler)
-      vv.removeEventListener('scroll', handler)
-    }
-  }, [])
-
-  // ── Expanded height ────────────────────────────────────────────────────────
-
-  const expandedHeight =
-    typeof window !== 'undefined'
-      ? window.innerWidth < 768
-        ? Math.min(window.innerHeight * 0.5, 360)
-        : window.innerHeight * 0.4
-      : 360
-
   // ── Handlers ──────────────────────────────────────────────────────────────
-
   const handleSend = useCallback(() => {
     const text = inputText.trim()
     if (!text) return
@@ -145,48 +134,33 @@ export const BottomPanel: React.FC<BottomPanelProps> = ({
     setInputText('')
   }, [inputText, onSendMessage])
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault()
-        handleSend()
-      }
-    },
-    [handleSend],
-  )
+  const handleItemToggle = useCallback((item: DayPlanItem) => {
+    setDoneDays((prev) => {
+      const next = new Set(prev)
+      next.has(item.day) ? next.delete(item.day) : next.add(item.day)
+      return next
+    })
+    onCompleteItem(item.day)
+  }, [onCompleteItem])
 
-  const handleItemClick = useCallback(
-    (item: DayPlanItem) => {
-      setOptimisticDone((prev) => {
-        const next = new Set(prev)
-        if (next.has(item.day)) next.delete(item.day)
-        else next.add(item.day)
-        return next
-      })
-      onCompleteItem(item.day)
-    },
-    [onCompleteItem],
-  )
+  const expandedChatHeight =
+    typeof window !== 'undefined'
+      ? window.innerWidth < 768 ? Math.min(window.innerHeight * 0.52, 380) : 340
+      : 340
 
-  const handleExpand = useCallback(() => {
-    setIsExpanded(true)
-    setTimeout(() => inputRef.current?.focus(), 300)
-  }, [])
+  // ── Panel background ───────────────────────────────────────────────────────
+  const panelStyle: React.CSSProperties = {
+    background: 'rgba(9,9,14,0.92)',
+    backdropFilter: 'blur(24px)',
+    WebkitBackdropFilter: 'blur(24px)',
+    borderTop: '1px solid rgba(255,255,255,0.07)',
+  }
 
-  const handleCollapse = useCallback(() => {
-    setIsExpanded(false)
-    inputRef.current?.blur()
-  }, [])
-
-  // ── Item helpers ───────────────────────────────────────────────────────────
-
-  const isItemDone = (item: DayPlanItem) =>
-    optimisticDone.has(item.day) ? !item.completed : !!item.completed
+  const dividerStyle: React.CSSProperties = {
+    borderTop: '1px solid rgba(255,255,255,0.055)',
+  }
 
   // ─────────────────────────────────────────────────────────────────────────
-  // Render
-  // ─────────────────────────────────────────────────────────────────────────
-
   return (
     <AnimatePresence>
       {isVisible && (
@@ -196,393 +170,284 @@ export const BottomPanel: React.FC<BottomPanelProps> = ({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: '100%', opacity: 0 }}
           transition={{ type: 'spring', damping: 28, stiffness: 200, delay: 0.3 }}
-          style={{
-            position: 'absolute',
-            bottom: keyboardOffset,
-            left: 0,
-            right: 0,
-            background: 'rgba(6,6,16,0.82)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            borderTop: '1px solid rgba(80,100,255,0.18)',
-            zIndex: 50,
-          }}
+          style={{ position: 'absolute', bottom: keyboardOffset, left: 0, right: 0, zIndex: 30, ...panelStyle }}
         >
-          {/* ── Section 1: Day Plan Row ─────────────────────────────────── */}
-          <div
-            style={{
-              height: 52,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              padding: '0 16px',
-              gap: 4,
-            }}
-          >
-            {/* Header row */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexShrink: 0,
-              }}
-            >
-              <span
-                style={{
-                  color: 'rgba(100,140,255,0.5)',
-                  fontSize: 10,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.15em',
-                  lineHeight: 1,
-                }}
-              >
-                СЕГОДНЯ
-              </span>
-              {todayItem && (
-                <span
+
+          {/* ── Section 1: Today's plan ──────────────────────────────────── */}
+          <div style={{ padding: '10px 16px 0' }}>
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 10, letterSpacing: '0.14em', color: 'rgba(160,155,145,0.55)', textTransform: 'uppercase' }}>
+                  план
+                </span>
+                <span style={{ fontSize: 10, color: 'rgba(130,125,118,0.45)', letterSpacing: '0.05em' }}>
+                  {fmtShortDate(today)}
+                </span>
+              </div>
+              {dayPlan.length > 0 && (
+                <button
+                  onClick={() => setCalendarOpen((v) => !v)}
                   style={{
-                    color: 'rgba(100,140,255,0.5)',
-                    fontSize: 10,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.1em',
-                    lineHeight: 1,
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontSize: 11, color: 'rgba(155,150,140,0.55)',
+                    display: 'flex', alignItems: 'center', gap: 4, padding: '2px 0',
+                    letterSpacing: '0.04em',
                   }}
                 >
-                  День {todayItem.day}
-                </span>
+                  {calendarOpen ? 'свернуть' : '14 дней ↑'}
+                </button>
               )}
             </div>
 
-            {/* Scrollable pills */}
-            {dayPlan.length === 0 ? (
-              <span style={{ color: 'rgba(120,140,200,0.4)', fontSize: 12 }}>
-                Онбординг завершается — план строится...
-              </span>
-            ) : (
-              <div
-                ref={planRowRef}
+            {/* Today's card */}
+            {todayItem ? (
+              <button
+                onClick={() => handleItemToggle(todayItem)}
                 style={{
+                  width: '100%',
                   display: 'flex',
-                  gap: 8,
-                  overflowX: 'auto',
-                  flexShrink: 0,
-                  // hide scrollbar cross-browser
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none',
+                  alignItems: 'center',
+                  gap: 10,
+                  background: isItemDone(todayItem) ? 'rgba(145,190,155,0.07)' : CAT_BG[todayItem.category],
+                  border: `1px solid ${isItemDone(todayItem) ? 'rgba(145,190,155,0.2)' : 'rgba(255,255,255,0.07)'}`,
+                  borderRadius: 12,
+                  padding: '10px 14px',
+                  marginBottom: 10,
+                  cursor: 'pointer',
+                  textAlign: 'left',
                 }}
-                className="no-scrollbar"
               >
-                {visiblePlan.map((item) => {
-                  const done     = isItemDone(item)
-                  const isToday  = item.isToday || item.day === todayItem?.day
-                  const dotColor = CATEGORY_COLORS[item.category]
-
-                  return (
-                    <button
-                      key={item.day}
-                      data-today={isToday ? 'true' : undefined}
-                      onClick={() => handleItemClick(item)}
-                      style={{
-                        flexShrink: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 6,
-                        background: done
-                          ? 'rgba(80,255,140,0.12)'
-                          : 'rgba(255,255,255,0.04)',
-                        border: done
-                          ? '1px solid rgba(80,255,140,0.35)'
-                          : '1px solid rgba(100,140,255,0.2)',
-                        borderRadius: 20,
-                        padding: '6px 14px',
-                        fontSize: 13,
-                        color: done
-                          ? 'rgba(80,255,140,0.9)'
-                          : 'rgba(200,220,255,0.8)',
-                        whiteSpace: 'nowrap',
-                        cursor: 'pointer',
-                        outline: isToday ? '1px solid rgba(100,140,255,0.35)' : 'none',
-                        outlineOffset: 1,
-                        transition: 'background 0.2s, border-color 0.2s, color 0.2s',
-                      }}
-                    >
-                      {/* Category dot */}
-                      <span
-                        style={{
-                          width: 6,
-                          height: 6,
-                          borderRadius: '50%',
-                          background: dotColor,
-                          flexShrink: 0,
-                          display: 'inline-block',
-                        }}
-                      />
-                      {item.action}
-                    </button>
-                  )
-                })}
-              </div>
+                {/* Checkbox */}
+                <div style={{
+                  width: 18, height: 18, borderRadius: 5, flexShrink: 0,
+                  border: `1.5px solid ${isItemDone(todayItem) ? 'rgba(145,190,155,0.7)' : 'rgba(200,195,185,0.25)'}`,
+                  background: isItemDone(todayItem) ? 'rgba(145,190,155,0.25)' : 'transparent',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {isItemDone(todayItem) && <span style={{ fontSize: 10, color: 'rgba(145,190,155,0.9)' }}>✓</span>}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    fontSize: 14, color: isItemDone(todayItem) ? 'rgba(155,150,140,0.5)' : 'rgba(232,226,215,0.92)',
+                    lineHeight: 1.35, textDecoration: isItemDone(todayItem) ? 'line-through' : 'none',
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  }}>
+                    {todayItem.action}
+                  </div>
+                </div>
+                <span style={{
+                  fontSize: 10, color: CAT_COLOR[todayItem.category], flexShrink: 0,
+                  background: CAT_BG[todayItem.category], borderRadius: 6, padding: '2px 7px',
+                }}>
+                  {CAT_LABEL[todayItem.category]}
+                </span>
+              </button>
+            ) : (
+              <p style={{ fontSize: 13, color: 'rgba(130,125,115,0.45)', marginBottom: 10, textAlign: 'center' }}>
+                Завершите онбординг — план формируется...
+              </p>
             )}
           </div>
 
-          {/* ── Section 2: AI Chat ──────────────────────────────────────── */}
-          <motion.div
-            animate={{ height: isExpanded ? expandedHeight : 52 }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            style={{
-              overflow: 'hidden',
-              borderTop: '1px solid rgba(80,100,255,0.1)',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            {/* Expanded: messages area */}
-            {isExpanded && (
-              <div
-                style={{
-                  flex: 1,
-                  overflowY: 'auto',
-                  padding: '12px 16px 8px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 12,
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none',
-                }}
-                className="no-scrollbar"
+          {/* ── Section 1b: Calendar (animated) ─────────────────────────── */}
+          <AnimatePresence>
+            {calendarOpen && calendarSlice.length > 1 && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ type: 'spring', damping: 32, stiffness: 280 }}
+                style={{ overflow: 'hidden', ...dividerStyle }}
               >
-                {aiMessages.length === 0 && !isAiThinking && (
-                  <p
-                    style={{
-                      color: 'rgba(120,140,200,0.4)',
-                      fontSize: 13,
-                      textAlign: 'center',
-                      marginTop: 'auto',
-                    }}
-                  >
-                    Задай вопрос своему AI-наставнику
-                  </p>
-                )}
-
-                {aiMessages.map((msg) => {
-                  const isAssistant = msg.role === 'assistant'
-                  return (
-                    <div
-                      key={msg.id}
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: isAssistant ? 'flex-start' : 'flex-end',
-                        gap: 3,
-                      }}
-                    >
-                      {isAssistant && (
-                        <span
-                          style={{
-                            color: 'rgba(120,160,255,0.7)',
-                            fontSize: 11,
-                            paddingLeft: 2,
-                          }}
-                        >
-                          ✦ AI
-                        </span>
-                      )}
-                      <div
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(7, 1fr)',
+                    gap: 4,
+                    padding: '10px 12px 12px',
+                    overflowX: 'auto',
+                  }}
+                >
+                  {calendarSlice.map((item, idx) => {
+                    const date = addDays(today, idx)
+                    const isToday = idx === 0
+                    const done = isItemDone(item)
+                    return (
+                      <button
+                        key={item.day}
+                        onClick={() => handleItemToggle(item)}
+                        title={item.action}
                         style={{
-                          maxWidth: '80%',
-                          background: isAssistant
-                            ? 'rgba(20,25,50,0.9)'
-                            : 'rgba(60,80,200,0.35)',
-                          border: isAssistant
-                            ? '1px solid rgba(100,140,255,0.2)'
-                            : '1px solid rgba(100,140,255,0.3)',
-                          borderRadius: 16,
-                          padding: '10px 14px',
-                          fontSize: 14,
-                          lineHeight: 1.5,
-                          color: 'rgba(220,230,255,0.92)',
-                          wordBreak: 'break-word',
+                          display: 'flex', flexDirection: 'column', alignItems: 'center',
+                          gap: 3, padding: '7px 2px 8px',
+                          background: isToday
+                            ? 'rgba(210,175,80,0.1)'
+                            : done ? 'rgba(145,190,155,0.06)' : 'rgba(255,255,255,0.025)',
+                          border: isToday
+                            ? '1px solid rgba(210,175,80,0.28)'
+                            : '1px solid rgba(255,255,255,0.045)',
+                          borderRadius: 10, cursor: 'pointer',
                         }}
                       >
-                        {msg.content}
+                        <span style={{ fontSize: 9, color: 'rgba(140,135,125,0.5)', letterSpacing: '0.03em' }}>
+                          {RU_WEEKDAYS[date.getDay()]}
+                        </span>
+                        <span style={{
+                          fontSize: 13, fontWeight: isToday ? 600 : 400,
+                          color: isToday ? 'rgba(210,175,80,0.9)' : done ? 'rgba(145,190,155,0.6)' : 'rgba(215,208,196,0.75)',
+                        }}>
+                          {date.getDate()}
+                        </span>
+                        {/* Category dot */}
+                        <span style={{
+                          width: 4, height: 4, borderRadius: '50%',
+                          background: done ? 'rgba(145,190,155,0.6)' : CAT_COLOR[item.category],
+                          display: 'block',
+                          opacity: done ? 0.5 : 0.85,
+                        }} />
+                      </button>
+                    )
+                  })}
+                </div>
+                {/* Selected day task preview */}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* ── Section 2: AI Chat ──────────────────────────────────────── */}
+          <div style={dividerStyle}>
+            <motion.div
+              animate={{ height: chatOpen ? expandedChatHeight : 52 }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
+            >
+              {/* Messages area */}
+              {chatOpen && (
+                <div
+                  style={{
+                    flex: 1, overflowY: 'auto', padding: '12px 16px 6px',
+                    display: 'flex', flexDirection: 'column', gap: 10,
+                    scrollbarWidth: 'none', msOverflowStyle: 'none',
+                  }}
+                  className="no-scrollbar"
+                >
+                  {aiMessages.length === 0 && !isAiThinking && (
+                    <p style={{ color: 'rgba(130,125,115,0.4)', fontSize: 13, textAlign: 'center', marginTop: 'auto' }}>
+                      Задай вопрос своему AI-наставнику
+                    </p>
+                  )}
+
+                  {aiMessages.map((msg) => {
+                    const isAI = msg.role === 'assistant'
+                    return (
+                      <div key={msg.id} style={{ display: 'flex', flexDirection: 'column', alignItems: isAI ? 'flex-start' : 'flex-end', gap: 2 }}>
+                        {isAI && (
+                          <span style={{ fontSize: 10, color: 'rgba(175,170,160,0.5)', paddingLeft: 2, letterSpacing: '0.06em' }}>
+                            ✦ наставник
+                          </span>
+                        )}
+                        <div style={{
+                          maxWidth: '82%',
+                          background: isAI ? 'rgba(22,20,18,0.95)' : 'rgba(40,38,34,0.9)',
+                          border: isAI ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(210,175,80,0.18)',
+                          borderRadius: isAI ? '14px 14px 14px 4px' : '14px 14px 4px 14px',
+                          padding: '10px 14px',
+                          fontSize: 14, lineHeight: 1.55,
+                          color: 'rgba(228,222,210,0.92)',
+                          wordBreak: 'break-word',
+                        }}>
+                          {msg.content}
+                        </div>
+                      </div>
+                    )
+                  })}
+
+                  {isAiThinking && (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}>
+                      <span style={{ fontSize: 10, color: 'rgba(175,170,160,0.5)', paddingLeft: 2, letterSpacing: '0.06em' }}>
+                        ✦ наставник
+                      </span>
+                      <div style={{
+                        background: 'rgba(22,20,18,0.95)',
+                        border: '1px solid rgba(255,255,255,0.07)',
+                        borderRadius: '14px 14px 14px 4px',
+                        padding: '10px 14px',
+                      }}>
+                        <ThinkingDots />
                       </div>
                     </div>
-                  )
-                })}
+                  )}
+                  <div ref={messagesEndRef} />
+                </div>
+              )}
 
-                {/* Thinking indicator */}
-                {isAiThinking && (
-                  <div
+              {/* Input row */}
+              <div
+                style={{
+                  height: 52, flexShrink: 0, display: 'flex', alignItems: 'center',
+                  gap: 10, padding: '0 14px',
+                  cursor: chatOpen ? 'default' : 'pointer',
+                }}
+                onClick={!chatOpen ? () => { setChatOpen(true); setTimeout(() => inputRef.current?.focus(), 300) } : undefined}
+              >
+                <span style={{ fontSize: 15, color: 'rgba(175,170,158,0.45)', flexShrink: 0, userSelect: 'none' }}>✦</span>
+
+                {chatOpen ? (
+                  <input
+                    ref={inputRef}
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }}
+                    placeholder="Спроси наставника..."
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'flex-start',
-                      gap: 3,
+                      flex: 1,
+                      background: 'rgba(255,255,255,0.04)',
+                      border: '1px solid rgba(255,255,255,0.09)',
+                      borderRadius: 12,
+                      color: 'rgba(228,222,210,0.92)',
+                      fontSize: 15, padding: '9px 13px',
+                      outline: 'none',
+                      caretColor: 'rgba(210,175,80,0.8)',
                     }}
-                  >
-                    <span
-                      style={{
-                        color: 'rgba(120,160,255,0.7)',
-                        fontSize: 11,
-                        paddingLeft: 2,
-                      }}
-                    >
-                      ✦ AI
-                    </span>
-                    <div
-                      style={{
-                        background: 'rgba(20,25,50,0.9)',
-                        border: '1px solid rgba(100,140,255,0.2)',
-                        borderRadius: 16,
-                        padding: '10px 14px',
-                      }}
-                    >
-                      <ThinkingDots />
-                    </div>
-                  </div>
+                  />
+                ) : (
+                  <span style={{ flex: 1, color: 'rgba(140,135,125,0.45)', fontSize: 15, userSelect: 'none' }}>
+                    Спроси наставника...
+                  </span>
                 )}
 
-                <div ref={messagesEndRef} />
-              </div>
-            )}
-
-            {/* Input row (always visible within section 2) */}
-            <div
-              style={{
-                height: 52,
-                flexShrink: 0,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                padding: '0 16px',
-                cursor: isExpanded ? 'default' : 'pointer',
-              }}
-              onClick={!isExpanded ? handleExpand : undefined}
-            >
-              {/* Sparkle icon */}
-              <span
-                style={{
-                  color: 'rgba(100,140,255,0.6)',
-                  fontSize: 16,
-                  flexShrink: 0,
-                  userSelect: 'none',
-                }}
-              >
-                ✦
-              </span>
-
-              {/* Input field */}
-              {isExpanded ? (
-                <input
-                  ref={inputRef}
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Спроси своего AI..."
-                  style={{
-                    flex: 1,
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(100,140,255,0.2)',
-                    borderRadius: 14,
-                    color: 'rgba(220,230,255,0.9)',
-                    fontSize: 15,
-                    padding: '10px 14px',
-                    outline: 'none',
-                    caretColor: 'rgba(100,140,255,0.9)',
-                  }}
-                />
-              ) : (
-                <span
-                  style={{
-                    flex: 1,
-                    color: 'rgba(120,140,180,0.5)',
-                    fontSize: 15,
-                    userSelect: 'none',
-                  }}
-                >
-                  Спроси своего AI...
-                </span>
-              )}
-
-              {/* Send button (expanded) / Expand icon (collapsed) */}
-              {isExpanded ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  {/* Send */}
-                  <button
-                    onClick={handleSend}
-                    disabled={!inputText.trim()}
-                    style={{
-                      width: 40,
-                      height: 40,
-                      background: inputText.trim()
-                        ? 'rgba(80,100,255,0.8)'
-                        : 'rgba(80,100,255,0.25)',
-                      border: 'none',
-                      borderRadius: 12,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: inputText.trim() ? 'pointer' : 'default',
-                      flexShrink: 0,
-                      transition: 'background 0.2s',
-                      outline: 'none',
-                    }}
-                  >
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 18 18"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                {chatOpen ? (
+                  <div style={{ display: 'flex', gap: 7, alignItems: 'center' }}>
+                    <button
+                      onClick={handleSend}
+                      disabled={!inputText.trim()}
+                      style={{
+                        width: 38, height: 38, borderRadius: 11, border: 'none',
+                        background: inputText.trim() ? 'rgba(210,175,80,0.85)' : 'rgba(210,175,80,0.2)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        cursor: inputText.trim() ? 'pointer' : 'default',
+                        transition: 'background 0.2s', flexShrink: 0,
+                      }}
                     >
-                      <path
-                        d="M3 9H15M15 9L10 4M15 9L10 14"
-                        stroke="rgba(220,230,255,0.95)"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
+                      <svg width="17" height="17" viewBox="0 0 18 18" fill="none">
+                        <path d="M3 9H15M15 9L10 4M15 9L10 14" stroke="rgba(20,16,10,0.9)" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => { setChatOpen(false); inputRef.current?.blur() }}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(150,145,135,0.5)', fontSize: 18, flexShrink: 0, padding: 0, display: 'flex', alignItems: 'center' }}
+                    >
+                      ↓
+                    </button>
+                  </div>
+                ) : (
+                  <span style={{ color: 'rgba(150,145,135,0.45)', fontSize: 16, userSelect: 'none', flexShrink: 0 }}>↑</span>
+                )}
+              </div>
+            </motion.div>
+          </div>
 
-                  {/* Collapse */}
-                  <button
-                    onClick={handleCollapse}
-                    style={{
-                      width: 32,
-                      height: 32,
-                      background: 'transparent',
-                      border: 'none',
-                      color: 'rgba(100,140,255,0.5)',
-                      fontSize: 18,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      outline: 'none',
-                      padding: 0,
-                    }}
-                    aria-label="Свернуть"
-                  >
-                    ↓
-                  </button>
-                </div>
-              ) : (
-                <span
-                  style={{
-                    color: 'rgba(100,140,255,0.5)',
-                    fontSize: 18,
-                    userSelect: 'none',
-                    flexShrink: 0,
-                  }}
-                >
-                  ↑
-                </span>
-              )}
-            </div>
-          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
