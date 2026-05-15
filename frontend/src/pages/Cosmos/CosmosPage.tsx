@@ -9,7 +9,7 @@
 
 import React, { useEffect, useCallback, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu } from 'lucide-react'
+import { Menu, X, Star, Target, Users, EyeOff } from 'lucide-react'
 
 import { useCosmosStore, CLUSTER_GLOW_COLORS } from './cosmosStore'
 import { CosmosCanvas } from './CosmosCanvas'
@@ -18,7 +18,7 @@ import { MagicMoment } from './MagicMoment'
 import { BottomPanel } from './BottomPanel'
 import { BurgerMenuPanel } from '../../components/ElLayout/BurgerMenuPanel'
 import { analyzeAnswer, finalizeOnboarding } from './aiAnalyzer'
-import type { OnboardingAnswer } from './types'
+import type { OnboardingAnswer, Node, ClusterId } from './types'
 
 // ─── Greeting copy ────────────────────────────────────────────────────────────
 
@@ -72,6 +72,7 @@ export const CosmosPage: React.FC = () => {
   const [magicStep, setMagicStep] = useState(0)
   const [showGreeting, setShowGreeting] = useState(phase === 'GREETING')
   const [burgerOpen, setBurgerOpen] = useState(false)
+  const [selectedNode, setSelectedNode] = useState<Node | null>(null)
 
   // ── Mount effect: drive GREETING → ONBOARDING transition ──────────────────
   useEffect(() => {
@@ -307,6 +308,7 @@ export const CosmosPage: React.FC = () => {
         <CosmosCanvas
           phase={canvasPhase}
           magicStep={magicStep}
+          onNodeSelect={setSelectedNode}
         />
       </div>
 
@@ -387,6 +389,36 @@ export const CosmosPage: React.FC = () => {
         />
       )}
 
+      {/* ── Node detail panel ─────────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {selectedNode && (
+          <motion.div
+            key={selectedNode.id}
+            initial={{ opacity: 0, y: 24, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.97 }}
+            transition={{ type: 'spring', damping: 22, stiffness: 280 }}
+            style={{
+              position: 'absolute',
+              left: 16,
+              right: 16,
+              bottom: phase === 'COSMOS_HOME' ? 120 : 32,
+              zIndex: 40,
+              background: 'rgba(18, 18, 24, 0.92)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: 16,
+              padding: '20px 20px 18px',
+            }}
+          >
+            <NodeDetailPanel
+              node={selectedNode}
+              onClose={() => setSelectedNode(null)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── Burger menu button (always top-right) ────────────────────────────── */}
       <button
         onClick={() => setBurgerOpen(true)}
@@ -419,3 +451,78 @@ export const CosmosPage: React.FC = () => {
 }
 
 export default CosmosPage
+
+// ─── Node Detail Panel ────────────────────────────────────────────────────────
+
+const CLUSTER_LABELS: Record<ClusterId, string> = {
+  ego: 'Личность',
+  social: 'Отношения',
+  goal: 'Цели',
+  shadow: 'Тени',
+}
+
+const CLUSTER_ICONS: Record<ClusterId, React.FC<{ size: number }>> = {
+  ego: ({ size }) => <Star size={size} />,
+  social: ({ size }) => <Users size={size} />,
+  goal: ({ size }) => <Target size={size} />,
+  shadow: ({ size }) => <EyeOff size={size} />,
+}
+
+function NodeDetailPanel({ node, onClose }: { node: Node; onClose: () => void }) {
+  const glowColor = CLUSTER_GLOW_COLORS[node.clusterId as ClusterId] ?? 'rgba(200,200,200,0.6)'
+  const Icon = CLUSTER_ICONS[node.clusterId as ClusterId] ?? Star
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 8,
+            background: 'rgba(255,255,255,0.06)',
+            border: `1px solid ${glowColor.replace('0.', '0.')}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: glowColor.replace('rgba(', '').replace(/,\s*[\d.]+\)/, '').split(',').map((v) => parseInt(v)).join(', '),
+            boxShadow: `0 0 12px ${glowColor}`,
+          }}>
+            <Icon size={15} />
+          </div>
+          <div>
+            <div style={{ fontSize: 17, fontWeight: 600, color: 'rgba(240,235,225,0.95)', letterSpacing: '-0.01em' }}>
+              {node.label}
+            </div>
+            <div style={{ fontSize: 11, color: 'rgba(170,165,155,0.7)', marginTop: 1 }}>
+              {CLUSTER_LABELS[node.clusterId as ClusterId] ?? node.clusterId}
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={onClose}
+          style={{ background: 'none', border: 'none', color: 'rgba(180,175,165,0.6)', cursor: 'pointer', padding: 4 }}
+        >
+          <X size={18} />
+        </button>
+      </div>
+
+      {node.description && (
+        <p style={{ fontSize: 13, color: 'rgba(210,205,195,0.8)', lineHeight: 1.6, margin: '0 0 14px' }}>
+          {node.description}
+        </p>
+      )}
+
+      {/* Weight bar */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{ fontSize: 11, color: 'rgba(150,145,138,0.65)' }}>Значимость</span>
+        <div style={{ flex: 1, height: 3, background: 'rgba(255,255,255,0.08)', borderRadius: 2, overflow: 'hidden' }}>
+          <div style={{
+            width: `${Math.round(node.weight * 100)}%`,
+            height: '100%',
+            background: glowColor,
+            borderRadius: 2,
+            transition: 'width 0.4s ease',
+          }} />
+        </div>
+        <span style={{ fontSize: 11, color: 'rgba(150,145,138,0.65)' }}>{Math.round(node.weight * 100)}%</span>
+      </div>
+    </div>
+  )
+}

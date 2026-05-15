@@ -23,30 +23,43 @@ type EdgeInput = AnswerAnalysis['edges'][number]
 
 const GROK_API_KEY = import.meta.env.VITE_GROK_API_KEY as string | undefined
 
-const GROK_URL = 'https://api.x.ai/v1/responses'
+// xAI Grok uses the OpenAI-compatible chat completions endpoint
+const GROK_URL = 'https://api.x.ai/v1/chat/completions'
 const GROK_MODEL = 'grok-3'
 
-const SYSTEM_PROMPT = `You are a personality graph builder for EthosLife — a Human Operating System.
-Your task: analyze user's onboarding answer and return a structured JSON graph.
+const SYSTEM_PROMPT = `You are a deep personality analyst for EthosLife — a Human Operating System.
+Your role: extract a rich semantic knowledge graph from the user's answer. This graph will render as an interactive Obsidian-style constellation map showing who this person truly is.
 
-Rules:
-1. Extract 4-8 semantic "nodes" (key concepts, themes, emotions, values)
-2. Each node: id (string), label (1-3 words), weight (0.1-1.0), clusterId ('ego'|'social'|'goal'|'shadow'), description (one phrase)
-3. Create edges: source (node id), target (node id), weight (0.1-1.0), type ('strong'|'weak'|'tension')
-4. Strong edge (>0.6): direct semantic link
-5. Weak edge (<0.4): thematic resonance
-6. Tension edge: contradictory values
-7. clusterId: ego=identity/values/traits, social=relationships/society, goal=aspirations, shadow=things to release/fears
-8. Return ONLY valid JSON, no markdown, no explanation
+Extract 10-14 nodes representing different facets visible in the answer:
+- Core values and beliefs hidden in word choices
+- Personality traits and archetypes
+- Emotional patterns and inner drives
+- Life themes that keep recurring
+- Behavioral tendencies (how they act, not just what they say)
+- Shadow patterns: fears, avoidances, things to overcome
+- Aspirations and desires, even implicit ones
+- Social orientation: how they relate to others
+- Identity markers: how they see themselves
+- Growth edges: where they're being called to grow
 
-JSON format:
-{"nodes":[{"id":"n1","label":"Freedom","weight":0.9,"clusterId":"ego","description":"Core drive"}],"edges":[{"source":"n1","target":"n2","weight":0.8,"type":"strong"}],"insight":"One sentence insight"}`
+RULES:
+1. Each node must have: id (short unique string), label (2-4 words max), weight (0.1-1.0 — higher = more central), clusterId (ego|social|goal|shadow), description (one revealing sentence)
+2. ego = identity/values/self-image. social = relationships/others/world. goal = aspirations/desires/direction. shadow = fears/avoidances/patterns to release
+3. Create 12-18 edges connecting related nodes: source, target, weight (0.1-1.0), type (strong|weak|tension)
+4. strong (>0.6) = direct meaningful link. weak (<0.4) = thematic resonance. tension = contradiction or opposing force
+5. Return ONLY raw JSON — no markdown, no code fences, no explanation whatsoever
 
-const FINAL_SYSTEM_PROMPT = `You are finalizing a personality constellation map for EthosLife.
-Given all nodes from 6 onboarding answers, determine the final layout and create a 30-day plan.
+JSON schema (no deviations):
+{"nodes":[{"id":"string","label":"2-4 words","weight":0.1-1.0,"clusterId":"ego|social|goal|shadow","description":"one sentence"}],"edges":[{"source":"id","target":"id","weight":0.1-1.0,"type":"strong|weak|tension"}],"insight":"2-sentence deep psychological observation"}`
 
-Return ONLY valid JSON:
-{"egoCenter":["nodeId1"],"socialRing":["nodeId2"],"goalSatellite":["nodeId3"],"shadowCluster":["nodeId4"],"dayPlan":[{"day":1,"action":"...","category":"habit"}],"personalityInsight":"2-3 sentence summary"}`
+const FINAL_SYSTEM_PROMPT = `You are synthesizing a complete personality constellation for EthosLife.
+Given all extracted nodes from 6 onboarding answers, create the final map and a personalized 30-day plan.
+
+dayPlan actions must be specific, actionable, personal to this person based on their nodes.
+personalityInsight must be a profound 2-3 sentence portrait of who this person is.
+
+Return ONLY raw JSON:
+{"egoCenter":["nodeId1"],"socialRing":["nodeId2"],"goalSatellite":["nodeId3"],"shadowCluster":["nodeId4"],"dayPlan":[{"day":1,"action":"specific personalized action","category":"habit|goal|social|health"}],"personalityInsight":"profound 2-3 sentence personality portrait"}`
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -89,330 +102,267 @@ export function parseAnswerDeterministic(answer: OnboardingAnswer): AnswerAnalys
 
   switch (qi) {
     case 0: {
-      // Quote question
+      // Quote — reveals inner values, philosophy, emotional orientation
       const raw = text.trim()
-
-      // Try to extract quoted text
+      const lowerRaw = raw.toLowerCase()
       const quoteMatch = raw.match(/["""](.*?)["""]/s)
-      const quoteText = quoteMatch ? quoteMatch[1].trim() : raw
-
-      // Try to detect author (everything after " — " or " - " or " by ")
-      const authorMatch = raw.match(/(?:—|-|by)\s+([A-Z][a-zA-Z\s.]{2,30})$/)
+      const quoteText = (quoteMatch ? quoteMatch[1] : raw).trim()
+      const authorMatch = raw.match(/(?:—|-|by)\s+([A-Za-zА-Яа-я\s.]{2,30})$/)
       const author = authorMatch ? authorMatch[1].trim() : ''
 
-      // Mood keywords
-      const moodMap: Record<string, string> = {
-        inspiring: 'inspiring',
-        dark: 'dark',
-        motivational: 'motivational',
-        peaceful: 'peaceful',
-        powerful: 'motivational',
-        serene: 'peaceful',
-        gloomy: 'dark',
-        hope: 'inspiring',
-        fight: 'motivational',
-        struggle: 'dark',
-        calm: 'peaceful',
-        rise: 'inspiring',
-        fire: 'motivational',
+      const moodMap: Record<string, { label: string; cluster: ClusterId }> = {
+        свобод: { label: 'Свобода', cluster: 'ego' },
+        борь: { label: 'Борьба', cluster: 'shadow' },
+        вдохновен: { label: 'Вдохновение', cluster: 'goal' },
+        спокой: { label: 'Спокойствие', cluster: 'ego' },
+        рост: { label: 'Рост', cluster: 'goal' },
+        сил: { label: 'Сила', cluster: 'ego' },
+        люб: { label: 'Любовь', cluster: 'social' },
+        мечт: { label: 'Мечта', cluster: 'goal' },
+        страх: { label: 'Преодоление страха', cluster: 'shadow' },
+        смысл: { label: 'Поиск смысла', cluster: 'ego' },
+        courage: { label: 'Courage', cluster: 'ego' },
+        freedom: { label: 'Freedom', cluster: 'ego' },
+        growth: { label: 'Growth', cluster: 'goal' },
+        love: { label: 'Love', cluster: 'social' },
+        fear: { label: 'Facing Fear', cluster: 'shadow' },
       }
-      const lowerRaw = raw.toLowerCase()
-      const detectedMood =
-        Object.keys(moodMap).find((k) => lowerRaw.includes(k)) ?? 'inspiring'
 
-      const n1: NodeInput = {
-        id: makeId('q0', 'quote_essence'),
-        label: quoteText.slice(0, 30),
-        description: 'Core quote that resonates',
-        weight: 0.9,
-        clusterId: 'ego' as ClusterId,
-        questionIndex: qi,
+      const n_core: NodeInput = { id: makeId('q0', 'quote_core'), label: quoteText.slice(0, 28), description: 'Цитата, которую выбрал человек — окно в его ценности', weight: 0.95, clusterId: 'ego', questionIndex: qi }
+      const n_wisdom: NodeInput = { id: makeId('q0', 'wisdom'), label: 'Стремление к мудрости', description: 'Выбор цитаты говорит о рефлексивности и глубине', weight: 0.7, clusterId: 'ego', questionIndex: qi }
+      const n_inspire: NodeInput = { id: makeId('q0', 'inspiration'), label: 'Источник силы', description: 'Слова как якорь и источник внутренней энергии', weight: 0.65, clusterId: 'goal', questionIndex: qi }
+      const n_identity: NodeInput = { id: makeId('q0', 'identity'), label: 'Идентичность через слова', description: 'Цитата как зеркало внутреннего «Я»', weight: 0.75, clusterId: 'ego', questionIndex: qi }
+      const n_aspire: NodeInput = { id: makeId('q0', 'aspiration'), label: 'Устремлённость', description: 'Желание стать тем, о чём говорит цитата', weight: 0.6, clusterId: 'goal', questionIndex: qi }
+      nodes.push(n_core, n_wisdom, n_inspire, n_identity, n_aspire)
+
+      // Detect mood/theme
+      const foundMood = Object.entries(moodMap).find(([k]) => lowerRaw.includes(k))
+      if (foundMood) {
+        const n_mood: NodeInput = { id: makeId('q0', 'mood'), label: foundMood[1].label, description: 'Эмоциональный тон цитаты', weight: 0.8, clusterId: foundMood[1].cluster, questionIndex: qi }
+        nodes.push(n_mood)
+        edges.push({ source: n_core.id, target: n_mood.id, weight: 0.85, type: 'strong' })
+        edges.push({ source: n_mood.id, target: n_aspire.id, weight: 0.55, type: 'weak' })
       }
-      const n2: NodeInput = {
-        id: makeId('q0', 'mood'),
-        label: moodMap[detectedMood] ?? 'inspiring',
-        description: 'Emotional tone of chosen quote',
-        weight: 0.6,
-        clusterId: 'ego' as ClusterId,
-        questionIndex: qi,
-      }
-      nodes.push(n1, n2)
 
       if (author) {
-        const n3: NodeInput = {
-          id: makeId('q0', 'author_vibe'),
-          label: author.slice(0, 20),
-          description: 'Author or source of wisdom',
-          weight: 0.5,
-          clusterId: 'ego' as ClusterId,
-          questionIndex: qi,
-        }
-        nodes.push(n3)
-        edges.push({ source: n1.id, target: n3.id, weight: 0.4, type: 'weak' as EdgeType })
-        edges.push({ source: n2.id, target: n3.id, weight: 0.3, type: 'weak' as EdgeType })
+        const n_author: NodeInput = { id: makeId('q0', 'author'), label: author.slice(0, 22), description: 'Ориентир — авторитет или герой', weight: 0.55, clusterId: 'ego', questionIndex: qi }
+        nodes.push(n_author)
+        edges.push({ source: n_core.id, target: n_author.id, weight: 0.5, type: 'weak' })
       }
 
-      edges.push({ source: n1.id, target: n2.id, weight: 0.7, type: 'strong' as EdgeType })
+      const n_depth: NodeInput = { id: makeId('q0', 'depth'), label: 'Глубина мышления', description: 'Цитата говорит об интеллектуальной чувствительности', weight: 0.6, clusterId: 'ego', questionIndex: qi }
+      const n_change: NodeInput = { id: makeId('q0', 'change'), label: 'Желание перемен', description: 'Вдохновляющий текст часто указывает на запрос трансформации', weight: 0.5, clusterId: 'goal', questionIndex: qi }
+      nodes.push(n_depth, n_change)
+
+      edges.push({ source: n_core.id, target: n_wisdom.id, weight: 0.75, type: 'strong' })
+      edges.push({ source: n_core.id, target: n_identity.id, weight: 0.8, type: 'strong' })
+      edges.push({ source: n_wisdom.id, target: n_inspire.id, weight: 0.6, type: 'strong' })
+      edges.push({ source: n_identity.id, target: n_aspire.id, weight: 0.6, type: 'weak' })
+      edges.push({ source: n_inspire.id, target: n_change.id, weight: 0.55, type: 'weak' })
+      edges.push({ source: n_wisdom.id, target: n_depth.id, weight: 0.65, type: 'strong' })
       break
     }
 
     case 1: {
-      // Character question
+      // Character/archetype — reveals self-image, shadow projection, role in the world
       const raw = text.trim()
-
-      // Detect universe/fandom keywords
-      const universeKeywords: string[] = [
-        'marvel', 'dc', 'star wars', 'harry potter', 'lord of the rings',
-        'game of thrones', 'anime', 'manga', 'disney', 'pixar',
-        'netflix', 'tolkien', 'comic', 'superhero',
-      ]
       const lowerRaw = raw.toLowerCase()
-      const detectedUniverse =
-        universeKeywords.find((u) => lowerRaw.includes(u)) ?? 'fiction'
 
-      // Detect core trait
-      const traitMap: Record<string, string> = {
-        brave: 'brave',
-        courage: 'brave',
-        smart: 'smart',
-        intelligent: 'smart',
-        clever: 'smart',
-        rebel: 'rebel',
-        outsider: 'rebel',
-        leader: 'leader',
-        king: 'leader',
-        queen: 'leader',
-        hero: 'brave',
-        wizard: 'smart',
-        warrior: 'brave',
-        trickster: 'rebel',
+      const universeMap: Record<string, string> = { 'marvel': 'Marvel', 'dc': 'DC', 'star wars': 'Star Wars', 'гарри': 'Harry Potter', 'harry potter': 'Harry Potter', 'толкин': 'Tolkien', 'властелин': 'Tolkien', 'игра престолов': 'GoT', 'game of thrones': 'GoT', 'аниме': 'Аниме', 'anime': 'Аниме', 'дисней': 'Disney', 'pixar': 'Pixar' }
+      const traitMap: Record<string, { label: string; shadow: string }> = {
+        'герой': { label: 'Героизм', shadow: 'Страх не справиться' }, 'hero': { label: 'Героizm', shadow: 'Fear of failure' },
+        'бунтар': { label: 'Бунт', shadow: 'Отчуждение' }, 'rebel': { label: 'Бунт', shadow: 'Isolation' },
+        'мудр': { label: 'Мудрость', shadow: 'Холодность' }, 'wizard': { label: 'Мудрость', shadow: 'Coldness' },
+        'лидер': { label: 'Лидерство', shadow: 'Одиночество' }, 'leader': { label: 'Лидерство', shadow: 'Loneliness' },
+        'воин': { label: 'Воля', shadow: 'Гнев' }, 'warrior': { label: 'Воля', shadow: 'Anger' },
+        'детектив': { label: 'Проницательность', shadow: 'Недоверие' }, 'detective': { label: 'Проницательность', shadow: 'Distrust' },
       }
-      const detectedTrait =
-        Object.keys(traitMap).find((k) => lowerRaw.includes(k)) ?? 'bold'
 
-      const n1: NodeInput = {
-        id: makeId('q1', 'character_name'),
-        label: raw.slice(0, 25),
-        description: 'Chosen character archetype',
-        weight: 0.9,
-        clusterId: 'ego' as ClusterId,
-        questionIndex: qi,
+      const n_char: NodeInput = { id: makeId('q1', 'character'), label: raw.slice(0, 26), description: 'Выбранный архетип как зеркало самовосприятия', weight: 0.95, clusterId: 'ego', questionIndex: qi }
+      const n_archetype: NodeInput = { id: makeId('q1', 'archetype'), label: 'Архетип героя', description: 'Роль, которую человек хочет играть в жизни', weight: 0.85, clusterId: 'ego', questionIndex: qi }
+      const n_selfimage: NodeInput = { id: makeId('q1', 'self_image'), label: 'Образ себя', description: 'Идеализированное «Я» через фантастический образ', weight: 0.8, clusterId: 'ego', questionIndex: qi }
+      const n_projection: NodeInput = { id: makeId('q1', 'projection'), label: 'Ролевая проекция', description: 'Качества персонажа как желаемые качества', weight: 0.7, clusterId: 'goal', questionIndex: qi }
+      const n_myth: NodeInput = { id: makeId('q1', 'mythology'), label: 'Мифологичность', description: 'Стремление жить в большом нарративе', weight: 0.55, clusterId: 'ego', questionIndex: qi }
+      nodes.push(n_char, n_archetype, n_selfimage, n_projection, n_myth)
+
+      const foundTrait = Object.entries(traitMap).find(([k]) => lowerRaw.includes(k))
+      if (foundTrait) {
+        const [, { label, shadow }] = foundTrait
+        const n_trait: NodeInput = { id: makeId('q1', 'core_trait'), label, description: 'Доминирующая черта персонажа', weight: 0.85, clusterId: 'ego', questionIndex: qi }
+        const n_shadow: NodeInput = { id: makeId('q1', 'shadow_trait'), label: shadow, description: 'Тень архетипа — то, с чем работает', weight: 0.65, clusterId: 'shadow', questionIndex: qi }
+        nodes.push(n_trait, n_shadow)
+        edges.push({ source: n_char.id, target: n_trait.id, weight: 0.9, type: 'strong' })
+        edges.push({ source: n_trait.id, target: n_shadow.id, weight: 0.45, type: 'tension' })
       }
-      const n2: NodeInput = {
-        id: makeId('q1', 'core_trait'),
-        label: traitMap[detectedTrait] ?? detectedTrait,
-        description: 'Dominant personality trait',
-        weight: 0.8,
-        clusterId: 'ego' as ClusterId,
-        questionIndex: qi,
+
+      const foundUniverse = Object.entries(universeMap).find(([k]) => lowerRaw.includes(k))
+      if (foundUniverse) {
+        const n_universe: NodeInput = { id: makeId('q1', 'universe'), label: foundUniverse[1], description: 'Мир, который резонирует с мировоззрением', weight: 0.5, clusterId: 'ego', questionIndex: qi }
+        nodes.push(n_universe)
+        edges.push({ source: n_char.id, target: n_universe.id, weight: 0.5, type: 'weak' })
       }
-      const n3: NodeInput = {
-        id: makeId('q1', 'universe'),
-        label: detectedUniverse,
-        description: 'World this character inhabits',
-        weight: 0.5,
-        clusterId: 'ego' as ClusterId,
-        questionIndex: qi,
-      }
-      nodes.push(n1, n2, n3)
-      edges.push({ source: n1.id, target: n2.id, weight: 0.85, type: 'strong' as EdgeType })
-      edges.push({ source: n1.id, target: n3.id, weight: 0.4, type: 'weak' as EdgeType })
-      edges.push({ source: n2.id, target: n3.id, weight: 0.3, type: 'weak' as EdgeType })
+
+      const n_purpose: NodeInput = { id: makeId('q1', 'purpose'), label: 'Ощущение предназначения', description: 'Идентификация с героем указывает на поиск миссии', weight: 0.7, clusterId: 'goal', questionIndex: qi }
+      const n_values: NodeInput = { id: makeId('q1', 'values'), label: 'Ценностный ориентир', description: 'Персонаж воплощает то, что ценно', weight: 0.65, clusterId: 'ego', questionIndex: qi }
+      nodes.push(n_purpose, n_values)
+
+      edges.push({ source: n_char.id, target: n_archetype.id, weight: 0.85, type: 'strong' })
+      edges.push({ source: n_archetype.id, target: n_selfimage.id, weight: 0.75, type: 'strong' })
+      edges.push({ source: n_selfimage.id, target: n_projection.id, weight: 0.65, type: 'weak' })
+      edges.push({ source: n_projection.id, target: n_purpose.id, weight: 0.6, type: 'strong' })
+      edges.push({ source: n_archetype.id, target: n_values.id, weight: 0.7, type: 'strong' })
+      edges.push({ source: n_myth.id, target: n_purpose.id, weight: 0.5, type: 'weak' })
       break
     }
 
     case 2: {
-      // "Give up" question — shadow nodes
+      // What to give up — shadow clusters, blockages, patterns
       const sources: string[] = chips && chips.length > 0
         ? chips
-        : text.split(/[,،;]/).map((s) => s.trim()).filter(Boolean)
+        : text.split(/[,،;.\n]/).map((s) => s.trim()).filter((s) => s.length > 1)
 
-      sources.forEach((item, idx) => {
-        const weight = Math.max(0.9 - idx * 0.15, 0.3)
-        const n: NodeInput = {
-          id: makeId('q2', item),
-          label: item.slice(0, 25),
-          description: 'Pattern or habit to release',
-          weight,
-          clusterId: 'shadow' as ClusterId,
-          questionIndex: qi,
-        }
-        nodes.push(n)
+      // Each stated item + its deeper implications
+      sources.slice(0, 6).forEach((item, idx) => {
+        const weight = Math.max(0.92 - idx * 0.12, 0.45)
+        const n_item: NodeInput = { id: makeId('q2', item + idx), label: item.slice(0, 26), description: 'Паттерн или привычка для освобождения', weight, clusterId: 'shadow', questionIndex: qi }
+        nodes.push(n_item)
+        if (idx > 0) edges.push({ source: nodes[0].id, target: n_item.id, weight: 0.35, type: 'weak' })
       })
 
-      // Connect shadow nodes weakly
-      for (let i = 0; i < nodes.length - 1; i++) {
-        edges.push({ source: nodes[i].id, target: nodes[i + 1].id, weight: 0.3, type: 'weak' as EdgeType })
+      // Derived nodes about letting go
+      const n_release: NodeInput = { id: makeId('q2', 'release'), label: 'Запрос на освобождение', description: 'Осознанное желание перемен и отпускания', weight: 0.8, clusterId: 'goal', questionIndex: qi }
+      const n_block: NodeInput = { id: makeId('q2', 'blockage'), label: 'Внутренние блоки', description: 'То, что мешает двигаться вперёд', weight: 0.75, clusterId: 'shadow', questionIndex: qi }
+      const n_courage: NodeInput = { id: makeId('q2', 'courage'), label: 'Смелость признать', description: 'Способность честно назвать проблему', weight: 0.7, clusterId: 'ego', questionIndex: qi }
+      const n_growth: NodeInput = { id: makeId('q2', 'growth_desire'), label: 'Желание роста', description: 'Отказ от старого ради нового', weight: 0.65, clusterId: 'goal', questionIndex: qi }
+      const n_aware: NodeInput = { id: makeId('q2', 'self_awareness'), label: 'Самосознание', description: 'Человек видит собственные паттерны', weight: 0.72, clusterId: 'ego', questionIndex: qi }
+      nodes.push(n_release, n_block, n_courage, n_growth, n_aware)
+
+      if (nodes.length > 0) {
+        edges.push({ source: nodes[0].id, target: n_block.id, weight: 0.7, type: 'strong' })
+        edges.push({ source: n_block.id, target: n_release.id, weight: 0.75, type: 'tension' })
+        edges.push({ source: n_release.id, target: n_growth.id, weight: 0.8, type: 'strong' })
+        edges.push({ source: n_aware.id, target: n_block.id, weight: 0.6, type: 'strong' })
+        edges.push({ source: n_courage.id, target: n_release.id, weight: 0.65, type: 'strong' })
       }
       break
     }
 
     case 3: {
-      // Goal question
+      // Goals — aspirations, direction, deeper motivations behind goals
       const raw = text.trim()
-
-      // Split into up to 3 sub-goals using common separators
-      const subGoals = raw
-        .split(/[,،;.]|and\s+|also\s+/i)
-        .map((s) => s.trim())
-        .filter((s) => s.length > 2)
-        .slice(0, 3)
-
+      const subGoals = raw.split(/[,،;.\n]|и\s+|также\s+/i).map((s) => s.trim()).filter((s) => s.length > 2).slice(0, 5)
       if (subGoals.length === 0) subGoals.push(raw)
 
       subGoals.forEach((goal, idx) => {
-        const weight = idx === 0 ? 0.9 : Math.max(0.7 - idx * 0.1, 0.4)
-        const n: NodeInput = {
-          id: makeId('q3', goal),
-          label: goal.slice(0, 25),
-          description: idx === 0 ? 'Primary goal' : 'Supporting goal',
-          weight,
-          clusterId: 'goal' as ClusterId,
-          questionIndex: qi,
-        }
-        nodes.push(n)
+        const weight = idx === 0 ? 0.92 : Math.max(0.75 - idx * 0.1, 0.45)
+        nodes.push({ id: makeId('q3', goal + idx), label: goal.slice(0, 26), description: idx === 0 ? 'Главная цель' : 'Поддерживающая цель', weight, clusterId: 'goal', questionIndex: qi })
       })
 
-      // Connect goals strongly (main → sub)
-      for (let i = 1; i < nodes.length; i++) {
-        edges.push({ source: nodes[0].id, target: nodes[i].id, weight: 0.65, type: 'strong' as EdgeType })
+      // Deeper psychological meaning of goals
+      const n_direction: NodeInput = { id: makeId('q3', 'direction'), label: 'Направление жизни', description: 'Куда движется человек в глобальном смысле', weight: 0.85, clusterId: 'goal', questionIndex: qi }
+      const n_drive: NodeInput = { id: makeId('q3', 'inner_drive'), label: 'Внутренний драйв', description: 'Энергия, стоящая за целями', weight: 0.8, clusterId: 'ego', questionIndex: qi }
+      const n_impact: NodeInput = { id: makeId('q3', 'impact'), label: 'Стремление к влиянию', description: 'Желание оставить след или изменить что-то', weight: 0.7, clusterId: 'goal', questionIndex: qi }
+      const n_commitment: NodeInput = { id: makeId('q3', 'commitment'), label: 'Приверженность', description: 'Степень серьёзности намерений', weight: 0.65, clusterId: 'ego', questionIndex: qi }
+      const n_fear_fail: NodeInput = { id: makeId('q3', 'fear_failure'), label: 'Страх не достичь', description: 'Тень амбиций — страх неудачи', weight: 0.5, clusterId: 'shadow', questionIndex: qi }
+      nodes.push(n_direction, n_drive, n_impact, n_commitment, n_fear_fail)
+
+      if (nodes.length > 0) {
+        edges.push({ source: nodes[0].id, target: n_direction.id, weight: 0.85, type: 'strong' })
+        edges.push({ source: n_direction.id, target: n_drive.id, weight: 0.7, type: 'strong' })
+        edges.push({ source: n_drive.id, target: n_impact.id, weight: 0.65, type: 'weak' })
+        edges.push({ source: n_commitment.id, target: n_direction.id, weight: 0.6, type: 'strong' })
+        edges.push({ source: n_drive.id, target: n_fear_fail.id, weight: 0.4, type: 'tension' })
+        for (let i = 1; i < Math.min(nodes.length - 5, 5); i++) {
+          edges.push({ source: nodes[0].id, target: nodes[i].id, weight: 0.6, type: 'strong' })
+        }
       }
       break
     }
 
     case 4: {
-      // Work/day question — ego + social mix
+      // Work & daily life — energy type, rhythms, professional identity
       const raw = text.trim()
       const lowerRaw = raw.toLowerCase()
 
-      const workTypeMap: Record<string, string> = {
-        freelance: 'freelance',
-        remote: 'freelance',
-        office: 'office',
-        corporate: 'office',
-        creative: 'creative',
-        design: 'creative',
-        art: 'creative',
-        technical: 'technical',
-        engineer: 'technical',
-        dev: 'technical',
-        code: 'technical',
-        manage: 'leader',
-        lead: 'leader',
-        teach: 'social',
-        coach: 'social',
+      const workTypeMap: Record<string, { label: string; cluster: ClusterId }> = {
+        фриланс: { label: 'Фриланс', cluster: 'ego' }, freelance: { label: 'Freelance', cluster: 'ego' },
+        удалённ: { label: 'Удалёнка', cluster: 'ego' }, remote: { label: 'Remote', cluster: 'ego' },
+        офис: { label: 'Офис', cluster: 'social' }, office: { label: 'Office', cluster: 'social' },
+        творч: { label: 'Творчество', cluster: 'goal' }, creative: { label: 'Creative', cluster: 'goal' },
+        дизайн: { label: 'Дизайн', cluster: 'goal' }, design: { label: 'Design', cluster: 'goal' },
+        техн: { label: 'Технологии', cluster: 'ego' }, engineer: { label: 'Engineering', cluster: 'ego' },
+        код: { label: 'Программирование', cluster: 'ego' }, code: { label: 'Coding', cluster: 'ego' },
+        управля: { label: 'Управление', cluster: 'social' }, manage: { label: 'Management', cluster: 'social' },
+        учу: { label: 'Обучение других', cluster: 'social' }, teach: { label: 'Teaching', cluster: 'social' },
       }
-      const routineMap: Record<string, string> = {
-        morning: 'morning person',
-        early: 'morning person',
-        night: 'night owl',
-        late: 'night owl',
-        busy: 'busy',
-        hectic: 'busy',
-        calm: 'calm',
-        slow: 'calm',
-        flexible: 'flexible',
-      }
+      const found = Object.entries(workTypeMap).find(([k]) => lowerRaw.includes(k))
 
-      const detectedWork =
-        Object.keys(workTypeMap).find((k) => lowerRaw.includes(k)) ?? 'general'
-      const detectedRoutine =
-        Object.keys(routineMap).find((k) => lowerRaw.includes(k)) ?? 'balanced'
+      const n_work: NodeInput = { id: makeId('q4', 'work_core'), label: found ? found[1].label : 'Профессиональная жизнь', description: 'Основная профессиональная сфера', weight: 0.85, clusterId: found ? found[1].cluster : 'ego', questionIndex: qi }
+      const n_rhythm: NodeInput = { id: makeId('q4', 'rhythm'), label: lowerRaw.includes('утр') || lowerRaw.includes('morn') ? 'Жаворонок' : lowerRaw.includes('ноч') || lowerRaw.includes('night') ? 'Сова' : 'Гибкий ритм', description: 'Биологический и жизненный ритм', weight: 0.7, clusterId: 'ego', questionIndex: qi }
+      const n_energy: NodeInput = { id: makeId('q4', 'energy'), label: lowerRaw.includes('команд') || lowerRaw.includes('team') ? 'Командная энергия' : 'Сольная энергия', description: 'Откуда черпает силы — из команды или одиночества', weight: 0.75, clusterId: 'social', questionIndex: qi }
+      const n_focus: NodeInput = { id: makeId('q4', 'focus'), label: 'Фокус внимания', description: 'Способность концентрироваться и продуктивность', weight: 0.65, clusterId: 'ego', questionIndex: qi }
+      const n_purpose_work: NodeInput = { id: makeId('q4', 'work_purpose'), label: 'Смысл в работе', description: 'Насколько работа связана с призванием', weight: 0.7, clusterId: 'goal', questionIndex: qi }
+      const n_routine: NodeInput = { id: makeId('q4', 'routine_quality'), label: 'Качество дня', description: 'Удовлетворённость ежедневной рутиной', weight: 0.6, clusterId: 'ego', questionIndex: qi }
+      const n_stress: NodeInput = { id: makeId('q4', 'stress'), label: 'Рабочий стресс', description: 'Напряжения и давления в профессиональной жизни', weight: 0.55, clusterId: 'shadow', questionIndex: qi }
+      const n_identity_work: NodeInput = { id: makeId('q4', 'identity_work'), label: 'Профессиональная идентичность', description: 'Насколько работа определяет личность', weight: 0.72, clusterId: 'ego', questionIndex: qi }
+      nodes.push(n_work, n_rhythm, n_energy, n_focus, n_purpose_work, n_routine, n_stress, n_identity_work)
 
-      const n1: NodeInput = {
-        id: makeId('q4', 'work_type'),
-        label: workTypeMap[detectedWork] ?? 'general work',
-        description: 'Primary work style',
-        weight: 0.75,
-        clusterId: 'ego' as ClusterId,
-        questionIndex: qi,
-      }
-      const n2: NodeInput = {
-        id: makeId('q4', 'routine'),
-        label: routineMap[detectedRoutine] ?? 'balanced',
-        description: 'Daily rhythm pattern',
-        weight: 0.6,
-        clusterId: 'ego' as ClusterId,
-        questionIndex: qi,
-      }
-      const n3: NodeInput = {
-        id: makeId('q4', 'social_work'),
-        label: lowerRaw.includes('team') || lowerRaw.includes('people')
-          ? 'collaborative'
-          : 'independent',
-        description: 'Social dimension of work',
-        weight: 0.55,
-        clusterId: 'social' as ClusterId,
-        questionIndex: qi,
-      }
-      nodes.push(n1, n2, n3)
-      edges.push({ source: n1.id, target: n2.id, weight: 0.6, type: 'strong' as EdgeType })
-      edges.push({ source: n1.id, target: n3.id, weight: 0.45, type: 'weak' as EdgeType })
-      edges.push({ source: n2.id, target: n3.id, weight: 0.35, type: 'weak' as EdgeType })
+      edges.push({ source: n_work.id, target: n_rhythm.id, weight: 0.65, type: 'strong' })
+      edges.push({ source: n_work.id, target: n_energy.id, weight: 0.7, type: 'strong' })
+      edges.push({ source: n_work.id, target: n_identity_work.id, weight: 0.75, type: 'strong' })
+      edges.push({ source: n_rhythm.id, target: n_focus.id, weight: 0.6, type: 'weak' })
+      edges.push({ source: n_purpose_work.id, target: n_work.id, weight: 0.65, type: 'weak' })
+      edges.push({ source: n_stress.id, target: n_focus.id, weight: 0.45, type: 'tension' })
+      edges.push({ source: n_routine.id, target: n_stress.id, weight: 0.4, type: 'weak' })
       break
     }
 
     case 5: {
-      // Social circle question
+      // Social world — relationships, belonging, intimacy, loneliness
       const raw = text.trim()
       const lowerRaw = raw.toLowerCase()
 
-      const introExtro = lowerRaw.includes('introvert') || lowerRaw.includes('alone') || lowerRaw.includes('solo')
-        ? 'introvert'
-        : lowerRaw.includes('extrovert') || lowerRaw.includes('social') || lowerRaw.includes('party')
-          ? 'extrovert'
-          : 'selective'
-
-      const relationKeywords: string[] = ['family', 'friends', 'colleagues', 'partner', 'mentor', 'community']
-      const foundRelations = relationKeywords.filter((k) => lowerRaw.includes(k))
-      const primaryRelation = foundRelations[0] ?? 'close circle'
-
-      const n1: NodeInput = {
-        id: makeId('q5', 'social_style'),
-        label: introExtro,
-        description: 'Core social orientation',
-        weight: 0.85,
-        clusterId: 'social' as ClusterId,
-        questionIndex: qi,
+      const orientMap: Record<string, string> = {
+        интроверт: 'Интроверт', introvert: 'Интроверт', один: 'Интроверт', alone: 'Интроверт',
+        экстраверт: 'Экстраверт', extrovert: 'Экстраверт', общительн: 'Экстраверт', social: 'Экстраверт',
+        амбиверт: 'Амбиверт',
       }
-      const n2: NodeInput = {
-        id: makeId('q5', 'relation_type'),
-        label: primaryRelation,
-        description: 'Primary relationship sphere',
-        weight: 0.7,
-        clusterId: 'social' as ClusterId,
-        questionIndex: qi,
-      }
-      nodes.push(n1, n2)
+      const orientation = Object.entries(orientMap).find(([k]) => lowerRaw.includes(k))?.[1] ?? 'Амбиверт'
 
-      if (foundRelations.length > 1) {
-        const n3: NodeInput = {
-          id: makeId('q5', 'secondary_relation'),
-          label: foundRelations[1],
-          description: 'Secondary relationship sphere',
-          weight: 0.5,
-          clusterId: 'social' as ClusterId,
-          questionIndex: qi,
-        }
-        nodes.push(n3)
-        edges.push({ source: n2.id, target: n3.id, weight: 0.4, type: 'weak' as EdgeType })
-        edges.push({ source: n1.id, target: n3.id, weight: 0.35, type: 'weak' as EdgeType })
-      }
+      const relKeywords: Array<{ key: string; label: string }> = [
+        { key: 'семь', label: 'Семья' }, { key: 'family', label: 'Семья' },
+        { key: 'друз', label: 'Друзья' }, { key: 'friend', label: 'Друзья' },
+        { key: 'партнёр', label: 'Партнёр' }, { key: 'partner', label: 'Партнёр' }, { key: 'любим', label: 'Партнёр' },
+        { key: 'коллег', label: 'Коллеги' }, { key: 'colleague', label: 'Коллеги' },
+        { key: 'ментор', label: 'Наставник' }, { key: 'mentor', label: 'Наставник' },
+        { key: 'сообществ', label: 'Сообщество' }, { key: 'community', label: 'Сообщество' },
+      ]
+      const foundRelations = relKeywords.filter(({ key }) => lowerRaw.includes(key))
 
-      edges.push({ source: n1.id, target: n2.id, weight: 0.75, type: 'strong' as EdgeType })
+      const n_orient: NodeInput = { id: makeId('q5', 'orientation'), label: orientation, description: 'Базовая социальная ориентация', weight: 0.9, clusterId: 'social', questionIndex: qi }
+      const n_belonging: NodeInput = { id: makeId('q5', 'belonging'), label: 'Принадлежность', description: 'Потребность в ощущении «своих»', weight: 0.8, clusterId: 'social', questionIndex: qi }
+      const n_trust: NodeInput = { id: makeId('q5', 'trust'), label: 'Доверие', description: 'Способность и желание доверять', weight: 0.75, clusterId: 'social', questionIndex: qi }
+      const n_depth_rel: NodeInput = { id: makeId('q5', 'depth'), label: 'Глубина связей', description: 'Предпочтение глубоких vs поверхностных отношений', weight: 0.7, clusterId: 'social', questionIndex: qi }
+      const n_lonely: NodeInput = { id: makeId('q5', 'loneliness'), label: 'Одиночество', description: 'Опыт изоляции или желание уединения', weight: 0.55, clusterId: 'shadow', questionIndex: qi }
+      const n_impact_social: NodeInput = { id: makeId('q5', 'social_impact'), label: 'Влияние на людей', description: 'Желание оказывать влияние или поддержку', weight: 0.65, clusterId: 'goal', questionIndex: qi }
+      nodes.push(n_orient, n_belonging, n_trust, n_depth_rel, n_lonely, n_impact_social)
+
+      foundRelations.slice(0, 4).forEach(({ label }, idx) => {
+        const n: NodeInput = { id: makeId('q5', 'rel_' + idx), label, description: 'Ключевая сфера отношений', weight: 0.7 - idx * 0.1, clusterId: 'social', questionIndex: qi }
+        nodes.push(n)
+        edges.push({ source: n_belonging.id, target: n.id, weight: 0.65, type: 'strong' })
+      })
+
+      edges.push({ source: n_orient.id, target: n_belonging.id, weight: 0.8, type: 'strong' })
+      edges.push({ source: n_belonging.id, target: n_trust.id, weight: 0.75, type: 'strong' })
+      edges.push({ source: n_trust.id, target: n_depth_rel.id, weight: 0.7, type: 'strong' })
+      edges.push({ source: n_orient.id, target: n_lonely.id, weight: 0.4, type: 'tension' })
+      edges.push({ source: n_depth_rel.id, target: n_impact_social.id, weight: 0.55, type: 'weak' })
       break
     }
 
     default: {
-      // Generic fallback for unknown question indices
-      const fallbackNode: NodeInput = {
-        id: makeId(`q${qi}`, text.slice(0, 15)),
-        label: text.slice(0, 20),
-        description: 'User response',
-        weight: 0.5,
-        clusterId: 'ego' as ClusterId,
-        questionIndex: qi,
-      }
+      const fallbackNode: NodeInput = { id: makeId(`q${qi}`, text.slice(0, 15)), label: text.slice(0, 22), description: 'Ответ пользователя', weight: 0.6, clusterId: 'ego', questionIndex: qi }
       nodes.push(fallbackNode)
       break
     }
@@ -448,7 +398,7 @@ export function buildContextSummary(answers: OnboardingAnswer[]): string {
     .join(' | ')
 }
 
-async function callGrok(prompt: string): Promise<string> {
+async function callGrok(systemPrompt: string, userPrompt: string): Promise<string> {
   if (!GROK_API_KEY) throw new Error('No Grok API key')
 
   const res = await fetch(GROK_URL, {
@@ -459,25 +409,23 @@ async function callGrok(prompt: string): Promise<string> {
     },
     body: JSON.stringify({
       model: GROK_MODEL,
-      input: prompt,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
     }),
   })
 
   if (!res.ok) {
-    throw new Error(`Grok API error: ${res.status} ${res.statusText}`)
+    const errBody = await res.text().catch(() => '')
+    throw new Error(`Grok API error: ${res.status} ${res.statusText} — ${errBody}`)
   }
 
   const data = await res.json() as {
-    output?: Array<{ content?: Array<{ text?: string }> }>
     choices?: Array<{ message?: { content?: string } }>
   }
 
-  // Responses API format: data.output[0].content[0].text
-  const text =
-    data.output?.[0]?.content?.[0]?.text ??
-    // OpenAI-compat fallback
-    data.choices?.[0]?.message?.content
-
+  const text = data.choices?.[0]?.message?.content
   if (!text) throw new Error('Empty Grok response')
   return text
 }
@@ -486,11 +434,10 @@ async function analyzeWithGrok(
   answer: OnboardingAnswer,
   context: string,
 ): Promise<AnswerAnalysis> {
-  const prompt =
-    SYSTEM_PROMPT +
-    `\n\nQuestion: ${answer.questionText}\nAnswer: ${answer.answer}${answer.chips?.length ? `\nSelected chips: ${answer.chips.join(', ')}` : ''}\nContext: ${context}`
+  const userPrompt =
+    `Question: ${answer.questionText}\nAnswer: ${answer.answer}${answer.chips?.length ? `\nSelected chips: ${answer.chips.join(', ')}` : ''}${context ? `\n\nPrevious context about this person: ${context}` : ''}`
 
-  const rawText = await callGrok(prompt)
+  const rawText = await callGrok(SYSTEM_PROMPT, userPrompt)
 
   // Strip potential markdown code fences
   const cleaned = rawText.replace(/```(?:json)?\s*/gi, '').replace(/```/g, '').trim()
@@ -543,11 +490,10 @@ async function finalizeWithGrok(
     .join(', ')
   const answersSummary = buildContextSummary(allAnswers)
 
-  const prompt =
-    FINAL_SYSTEM_PROMPT +
-    `\n\nAll nodes: [${nodesSummary}]\n\nAll answers context: ${answersSummary}`
+  const userPrompt =
+    `All personality nodes extracted so far: [${nodesSummary}]\n\nAll 6 answers: ${answersSummary}`
 
-  const rawText = await callGrok(prompt)
+  const rawText = await callGrok(FINAL_SYSTEM_PROMPT, userPrompt)
   const cleaned = rawText.replace(/```(?:json)?\s*/gi, '').replace(/```/g, '').trim()
 
   const parsed = JSON.parse(cleaned) as {

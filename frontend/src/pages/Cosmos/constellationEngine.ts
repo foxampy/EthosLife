@@ -47,9 +47,9 @@ export function initBackgroundStars(width: number, height: number): BackgroundSt
 export function initNodePositions(nodes: Node[], width: number, height: number): Node[] {
   const centerX = width / 2
   const centerY = height / 2
-  // Spread within 20% of canvas dimensions from center (40% total)
-  const spreadX = width * 0.20
-  const spreadY = height * 0.20
+  // Spread nodes across a larger area so the graph feels spacious
+  const spreadX = width * 0.35
+  const spreadY = height * 0.35
 
   return nodes.map((node): Node => ({
     ...node,
@@ -120,6 +120,10 @@ export function tickPhysics(state: PhysicsState): PhysicsState {
 
   // ── Integrate positions, dampen, clamp, bounce
   for (const node of nodes) {
+    // Fade in opacity so nodes become visible after spawning
+    node.opacity = Math.min(1, node.opacity + 0.018)
+    node.labelOpacity = Math.max(0, Math.min(1, node.opacity - 0.35))
+
     // Damping
     node.vx *= DAMPING
     node.vy *= DAMPING

@@ -13,11 +13,12 @@ import type {
 
 const STORAGE_KEY = 'ethoslife_cosmos'
 
+// Premium graphite palette — warm amber / cool silver / pearl / rust. No blue.
 export const CLUSTER_GLOW_COLORS: Record<ClusterId, string> = {
-  ego: 'rgba(255, 200, 80, 0.8)',
-  social: 'rgba(80, 200, 255, 0.8)',
-  goal: 'rgba(180, 100, 255, 0.8)',
-  shadow: 'rgba(255, 100, 100, 0.6)',
+  ego: 'rgba(210, 175, 80, 0.8)',       // warm amber gold
+  social: 'rgba(175, 190, 200, 0.65)',  // cool platinum silver
+  goal: 'rgba(235, 225, 205, 0.75)',    // warm pearl
+  shadow: 'rgba(155, 80, 75, 0.55)',    // muted rust
 }
 
 export function computeNodeRadius(weight: number): number {
