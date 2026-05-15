@@ -1,7 +1,4 @@
 {
-  "protection": {
-    "deployment": false
-  },
   "buildCommand": "npm install && npm run build",
   "outputDirectory": "dist",
   "devCommand": "npm run dev",

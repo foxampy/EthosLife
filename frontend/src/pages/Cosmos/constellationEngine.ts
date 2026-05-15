@@ -3,11 +3,11 @@ import type { Node, Edge, BackgroundStar } from './types'
 // ─── Physics constants ────────────────────────────────────────────────────────
 
 const DAMPING          = 0.82   // high damping → settles fast, doesn't oscillate
-const REPULSION        = 180    // node-to-node repulsion (was 800 — that's why they flew apart)
-const REPULSION_RADIUS = 130    // only repel nodes within this distance
-const CLUSTER_GRAVITY  = 0.022  // pull toward cluster center every frame
-const EDGE_SPRING      = 0.055  // spring along graph edges
-const EDGE_REST_LEN    = 70     // rest length in px for strong edge; weak = 1.5×
+const REPULSION        = 220    // slightly stronger push so nodes don't bunch up
+const REPULSION_RADIUS = 180    // wider exclusion zone → more breathing room
+const CLUSTER_GRAVITY  = 0.018  // slightly softer pull so cluster stays spread
+const EDGE_SPRING      = 0.045  // softer spring → longer equilibrium distance
+const EDGE_REST_LEN    = 100    // longer rest length → nodes sit further apart
 const MAX_VELOCITY     = 3.5
 const BACKGROUND_STAR_COUNT = 160
 

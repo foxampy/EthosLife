@@ -467,10 +467,10 @@ function drawNodes(ctx: CanvasRenderingContext2D, nodes: Node[], frame: number):
     const cy = node.y + by
     const r = node.radius
 
-    // Layer 1: wide diffuse glow halo (radial gradient, no shadowBlur overhead)
-    const haloR = r * 5.5
-    const haloGrad = ctx.createRadialGradient(cx, cy, r * 0.5, cx, cy, haloR)
-    const glowOpacity = node.opacity * node.weight * 0.35
+    // Layer 1: subtle diffuse halo — kept dim so nodes don't bleed into each other
+    const haloR = r * 4.0
+    const haloGrad = ctx.createRadialGradient(cx, cy, r * 0.6, cx, cy, haloR)
+    const glowOpacity = node.opacity * node.weight * 0.18  // reduced from 0.35
     haloGrad.addColorStop(0, node.glowColor.replace(/[\d.]+\)$/, `${glowOpacity})`))
     haloGrad.addColorStop(1, node.glowColor.replace(/[\d.]+\)$/, '0)'))
     ctx.beginPath()
@@ -478,30 +478,22 @@ function drawNodes(ctx: CanvasRenderingContext2D, nodes: Node[], frame: number):
     ctx.fillStyle = haloGrad
     ctx.fill()
 
-    // Layer 2: tight inner glow ring
-    ctx.shadowBlur = (8 + node.weight * 12) / (window.devicePixelRatio || 1)
+    // Layer 2: soft inner ring — shadowBlur kept low
+    ctx.shadowBlur = (4 + node.weight * 6) / (window.devicePixelRatio || 1)
     ctx.shadowColor = node.glowColor
 
     ctx.beginPath()
     ctx.arc(cx, cy, r, 0, Math.PI * 2)
-    ctx.fillStyle = `rgba(245, 240, 232, ${node.opacity * 0.88})`
+    ctx.fillStyle = `rgba(238, 233, 222, ${node.opacity * 0.82})`
     ctx.fill()
 
     ctx.shadowBlur = 0
 
-    // Layer 3: pure white hot core
+    // Layer 3: bright core dot
     ctx.beginPath()
-    ctx.arc(cx, cy, r * 0.38, 0, Math.PI * 2)
-    ctx.fillStyle = `rgba(255, 255, 255, ${node.opacity})`
+    ctx.arc(cx, cy, r * 0.42, 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(255, 255, 255, ${node.opacity * 0.92})`
     ctx.fill()
-
-    // Layer 4: tiny center spark (adds depth / premium feel)
-    if (r > 3 && node.opacity > 0.6) {
-      ctx.beginPath()
-      ctx.arc(cx, cy, r * 0.12, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(255, 255, 255, ${node.opacity})`
-      ctx.fill()
-    }
   }
   ctx.shadowBlur = 0
 }
