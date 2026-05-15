@@ -219,21 +219,22 @@ export const CosmosPage: React.FC = () => {
         const GROK_KEY = import.meta.env.VITE_GROK_API_KEY as string | undefined
 
         if (GROK_KEY) {
-          const prompt = [
-            'You are a personal AI coach inside EthosLife — a Human Operating System.',
-            `Context about this user: ${context}`,
-            `User message: ${text}`,
-            'Respond in the same language as the user message.',
-            'Be warm, concise, and specific to their goals. Max 3 sentences.',
-          ].join('\n')
+          const systemPrompt = 'You are a personal AI coach inside EthosLife — a Human Operating System. Be warm, concise, and specific to the user\'s goals. Max 3 sentences. Respond in the same language as the user message.'
+          const userPrompt = `Context about this user: ${context}\n\nUser message: ${text}`
 
-          const response = await fetch('https://api.x.ai/v1/responses', {
+          const response = await fetch('https://api.x.ai/v1/chat/completions', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${GROK_KEY}`,
             },
-            body: JSON.stringify({ model: 'grok-3', input: prompt }),
+            body: JSON.stringify({
+              model: 'grok-3',
+              messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: userPrompt },
+              ],
+            }),
           })
 
           if (!response.ok) {
@@ -241,13 +242,9 @@ export const CosmosPage: React.FC = () => {
           }
 
           const data = await response.json() as {
-            output?: Array<{ content?: Array<{ text?: string }> }>
             choices?: Array<{ message?: { content?: string } }>
           }
-          const reply: string =
-            data.output?.[0]?.content?.[0]?.text ??
-            data.choices?.[0]?.message?.content ??
-            'Подумаю об этом...'
+          const reply: string = data.choices?.[0]?.message?.content ?? 'Подумаю об этом...'
 
           addAiMessage({
             id: Date.now().toString(),

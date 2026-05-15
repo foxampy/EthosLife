@@ -87,8 +87,9 @@ export const CosmosCanvas: React.FC<CosmosCanvasProps> = ({
     const w = canvas.parentElement?.clientWidth ?? window.innerWidth
     const h = canvas.parentElement?.clientHeight ?? window.innerHeight
 
-    // Center camera so graph starts centered
-    cameraRef.current = { x: w / 2, y: h / 2, scale: 1 }
+    // Camera at (0,0,1): world coords map directly to screen coords.
+    // Nodes spawn around (w/2, h/2) in world space → appear centered on screen.
+    cameraRef.current = { x: 0, y: 0, scale: 1 }
 
     const positionedNodes = initNodePositions(nodes, w, h)
     physicsRef.current = {

@@ -47,9 +47,9 @@ export function initBackgroundStars(width: number, height: number): BackgroundSt
 export function initNodePositions(nodes: Node[], width: number, height: number): Node[] {
   const centerX = width / 2
   const centerY = height / 2
-  // Spread nodes across a larger area so the graph feels spacious
-  const spreadX = width * 0.35
-  const spreadY = height * 0.35
+  // Keep nodes within 28% of center — all visible on screen at default zoom
+  const spreadX = width * 0.28
+  const spreadY = height * 0.28
 
   return nodes.map((node): Node => ({
     ...node,
