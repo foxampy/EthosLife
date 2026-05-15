@@ -92,30 +92,28 @@ const QUESTIONS: Question[] = [
 ]
 
 // ---------------------------------------------------------------------------
-// Shared style tokens
+// Shared style tokens — premium graphite + amber, zero blue
 // ---------------------------------------------------------------------------
 
-const BUBBLE_BG = 'rgba(8, 8, 20, 0.88)'
-const BUBBLE_BORDER = '1px solid rgba(100, 140, 255, 0.25)'
-const BUBBLE_SHADOW =
-  '0 8px 40px rgba(0,0,0,0.6), 0 0 60px rgba(80,100,255,0.08)'
+const BUBBLE_BG     = 'rgba(10, 10, 14, 0.94)'
+const BUBBLE_BORDER = '1px solid rgba(255, 255, 255, 0.09)'
+const BUBBLE_SHADOW = '0 12px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04)'
 
-const INPUT_BG = 'rgba(255,255,255,0.04)'
-const INPUT_BORDER_IDLE = '1px solid rgba(100,140,255,0.2)'
-const INPUT_BORDER_FOCUS = '1px solid rgba(100,140,255,0.5)'
-const INPUT_SHADOW_FOCUS = '0 0 0 3px rgba(80,100,255,0.12)'
+const INPUT_BG          = 'rgba(255,255,255,0.04)'
+const INPUT_BORDER_IDLE = '1px solid rgba(255,255,255,0.1)'
+const INPUT_BORDER_FOCUS= '1px solid rgba(210,175,80,0.55)'
+const INPUT_SHADOW_FOCUS= '0 0 0 3px rgba(210,175,80,0.1)'
 
-const CHIP_BG_IDLE = 'rgba(30,35,60,0.8)'
-const CHIP_BORDER_IDLE = '1px solid rgba(100,140,255,0.4)'
-const CHIP_TEXT_IDLE = 'rgba(160,180,220,0.8)'
+const CHIP_BG_IDLE       = 'rgba(255,255,255,0.04)'
+const CHIP_BORDER_IDLE   = '1px solid rgba(255,255,255,0.12)'
+const CHIP_TEXT_IDLE     = 'rgba(200,195,185,0.75)'
 
-const CHIP_BG_SELECTED = 'rgba(80,100,255,0.3)'
-const CHIP_BORDER_SELECTED = '1px solid rgba(120,160,255,0.7)'
-const CHIP_SHADOW_SELECTED = '0 0 8px rgba(80,100,255,0.35)'
+const CHIP_BG_SELECTED   = 'rgba(210,175,80,0.18)'
+const CHIP_BORDER_SELECTED = '1px solid rgba(210,175,80,0.55)'
+const CHIP_SHADOW_SELECTED = '0 0 8px rgba(210,175,80,0.2)'
 
-const BTN_BG =
-  'linear-gradient(135deg, rgba(80,100,255,0.9), rgba(120,80,255,0.9))'
-const BTN_SHADOW = '0 4px 20px rgba(80,100,255,0.4)'
+const BTN_BG     = 'rgba(210,175,80,0.88)'
+const BTN_SHADOW = '0 4px 20px rgba(210,175,80,0.25)'
 
 // ---------------------------------------------------------------------------
 // Dot loader (analyzing state)
@@ -139,7 +137,7 @@ const AnalyzingDots: React.FC = () => (
           width: 8,
           height: 8,
           borderRadius: '50%',
-          background: 'rgba(120,160,255,0.8)',
+          background: 'rgba(210,175,80,0.8)',
         }}
         animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }}
         transition={{
@@ -153,9 +151,10 @@ const AnalyzingDots: React.FC = () => (
     <span
       style={{
         marginLeft: 8,
-        color: 'rgba(120,160,255,0.8)',
+        color: 'rgba(210,175,80,0.75)',
         fontSize: 14,
-        fontWeight: 500,
+        fontWeight: 400,
+        letterSpacing: '0.04em',
       }}
     >
       Анализирую...
@@ -345,10 +344,10 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
           {/* Question number indicator */}
           <div
             style={{
-              color: 'rgba(100,140,255,0.6)',
+              color: 'rgba(210,175,80,0.55)',
               fontSize: 11,
-              fontWeight: 600,
-              letterSpacing: '0.08em',
+              fontWeight: 500,
+              letterSpacing: '0.12em',
               textTransform: 'uppercase',
             }}
           >
@@ -358,10 +357,11 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
           {/* Question text */}
           <div
             style={{
-              color: '#ffffff',
+              color: 'rgba(240,235,225,0.95)',
               fontSize: 18,
-              fontWeight: 600,
+              fontWeight: 500,
               lineHeight: 1.4,
+              letterSpacing: '-0.01em',
             }}
           >
             {question.text}
@@ -371,7 +371,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
           {question.subtitle && (
             <div
               style={{
-                color: 'rgba(160,180,220,0.7)',
+                color: 'rgba(165,160,150,0.65)',
                 fontSize: 13,
                 lineHeight: 1.4,
                 marginTop: -6,
@@ -415,7 +415,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                 background: INPUT_BG,
                 border: inputFocused ? INPUT_BORDER_FOCUS : INPUT_BORDER_IDLE,
                 borderRadius: 14,
-                color: 'rgba(220,230,255,0.9)',
+                color: 'rgba(232,226,215,0.92)',
                 fontSize: 15,
                 padding: '12px 16px',
                 resize: 'none',
@@ -441,7 +441,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                 background: INPUT_BG,
                 border: inputFocused ? INPUT_BORDER_FOCUS : INPUT_BORDER_IDLE,
                 borderRadius: 14,
-                color: 'rgba(220,230,255,0.9)',
+                color: 'rgba(232,226,215,0.92)',
                 fontSize: 15,
                 padding: '12px 16px',
                 outline: 'none',
@@ -468,13 +468,13 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
               style={{
                 background: isSubmitDisabled
-                  ? 'rgba(60,70,120,0.5)'
+                  ? 'rgba(255,255,255,0.05)'
                   : BTN_BG,
                 borderRadius: 14,
                 padding: '12px 24px',
                 fontWeight: 600,
                 fontSize: 15,
-                color: isSubmitDisabled ? 'rgba(160,180,220,0.4)' : '#ffffff',
+                color: isSubmitDisabled ? 'rgba(165,160,150,0.35)' : 'rgba(20,16,10,0.95)',
                 boxShadow: isSubmitDisabled ? 'none' : BTN_SHADOW,
                 border: 'none',
                 cursor: isSubmitDisabled ? 'not-allowed' : 'pointer',

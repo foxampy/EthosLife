@@ -81,17 +81,18 @@ export const MagicMoment: React.FC<MagicMomentProps> = ({
             }}
           >
             <div style={{
-              fontSize: '13px',
+              fontSize: '14px',
               lineHeight: '1.7',
-              color: 'rgba(180, 210, 255, 0.75)',
+              color: 'rgba(232, 226, 215, 0.82)',
               letterSpacing: '0.02em',
               fontStyle: 'italic',
-              padding: '16px 20px',
-              background: 'rgba(8, 8, 20, 0.6)',
-              borderRadius: '16px',
-              border: '1px solid rgba(100, 140, 255, 0.15)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
+              padding: '18px 22px',
+              background: 'rgba(10, 10, 14, 0.88)',
+              borderRadius: '18px',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
             }}>
               {personalityInsight}
             </div>

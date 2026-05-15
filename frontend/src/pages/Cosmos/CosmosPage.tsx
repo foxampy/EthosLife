@@ -16,8 +16,10 @@ import { CosmosCanvas } from './CosmosCanvas'
 import { OnboardingFlow } from './OnboardingFlow'
 import { MagicMoment } from './MagicMoment'
 import { BottomPanel } from './BottomPanel'
+import { AuthPanel } from './AuthPanel'
 import { BurgerMenuPanel } from '../../components/ElLayout/BurgerMenuPanel'
 import { analyzeAnswer, finalizeOnboarding } from './aiAnalyzer'
+import { supabase } from '../../lib/supabase'
 import type { OnboardingAnswer, Node, ClusterId } from './types'
 
 // ─── Greeting copy ────────────────────────────────────────────────────────────
@@ -73,6 +75,15 @@ export const CosmosPage: React.FC = () => {
   const [showGreeting, setShowGreeting] = useState(phase === 'GREETING')
   const [burgerOpen, setBurgerOpen] = useState(false)
   const [selectedNode, setSelectedNode] = useState<Node | null>(null)
+  const [showAuth, setShowAuth] = useState(false)
+  const [userId, setUserId] = useState<string | null>(null)
+
+  // Check if already logged in
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) setUserId(data.user.id)
+    })
+  }, [])
 
   // ── Mount effect: drive GREETING → ONBOARDING transition ──────────────────
   useEffect(() => {
@@ -195,7 +206,9 @@ export const CosmosPage: React.FC = () => {
   const handleMagicComplete = useCallback(() => {
     setMagicMomentComplete(true)
     setPhase('COSMOS_HOME')
-  }, [setMagicMomentComplete, setPhase])
+    // Show auth panel if not logged in yet
+    if (!userId) setShowAuth(true)
+  }, [setMagicMomentComplete, setPhase, userId])
 
   // ── AI chat handler (COSMOS_HOME) ──────────────────────────────────────────
   const handleAiMessage = useCallback(
@@ -368,6 +381,17 @@ export const CosmosPage: React.FC = () => {
           onSendMessage={handleAiMessage}
           onCompleteItem={completeTodayItem}
           isAiThinking={isAiAnalyzing}
+        />
+      )}
+
+      {/* ── Auth panel — appears after magic moment if not logged in ─────────── */}
+      {showAuth && !userId && (
+        <AuthPanel
+          onSuccess={(id) => {
+            setUserId(id)
+            setShowAuth(false)
+          }}
+          onDismiss={() => setShowAuth(false)}
         />
       )}
 
