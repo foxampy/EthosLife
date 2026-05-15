@@ -21,11 +21,14 @@ type EdgeInput = AnswerAnalysis['edges'][number]
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const GROK_API_KEY = import.meta.env.VITE_GROK_API_KEY as string | undefined
-
-// xAI Grok uses the OpenAI-compatible chat completions endpoint
-const GROK_URL = 'https://api.x.ai/v1/chat/completions'
+// Route through /api/grok proxy (Vercel Edge Function in prod, Vite proxy in dev).
+// The API key never touches the browser bundle.
+const GROK_URL = '/api/grok'
 const GROK_MODEL = 'grok-3'
+
+// We no longer gate on a browser-side key; the proxy handles auth.
+// isAiAvailable() remains usable as a feature flag if needed.
+const GROK_ENABLED = true
 
 const SYSTEM_PROMPT = `You are a deep personality analyst for EthosLife — a Human Operating System.
 Your role: extract a rich semantic knowledge graph from the user's answer. This graph will render as an interactive Obsidian-style constellation map showing who this person truly is.
@@ -399,14 +402,9 @@ export function buildContextSummary(answers: OnboardingAnswer[]): string {
 }
 
 async function callGrok(systemPrompt: string, userPrompt: string): Promise<string> {
-  if (!GROK_API_KEY) throw new Error('No Grok API key')
-
   const res = await fetch(GROK_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${GROK_API_KEY}`,
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: GROK_MODEL,
       messages: [
@@ -589,7 +587,7 @@ function finalizeDeterministic(
 // ─── PART 3: Public API ───────────────────────────────────────────────────────
 
 export function isAiAvailable(): boolean {
-  return Boolean(GROK_API_KEY && GROK_API_KEY.trim().length > 0)
+  return GROK_ENABLED
 }
 
 export async function analyzeAnswer(

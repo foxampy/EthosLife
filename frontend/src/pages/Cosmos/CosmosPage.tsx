@@ -151,10 +151,11 @@ export const CosmosPage: React.FC = () => {
           y: 0,
           vx: 0,
           vy: 0,
-          radius: 3 + n.weight * 8,
+          radius: 1.8 + n.weight * 4.5,   // smaller, more premium (2–6 px)
           glowColor: CLUSTER_GLOW_COLORS[n.clusterId],
           opacity: 0,
           labelOpacity: 0,
+          phase: Math.random() * Math.PI * 2,  // unique breathing phase per node
         }))
 
         // Assign stable IDs to edges so canvas can deduplicate
@@ -216,50 +217,34 @@ export const CosmosPage: React.FC = () => {
           .join(', ')
         const context = `User personality: ${personalityInsight || 'unknown'}. Goals: ${goalLabels || 'not yet set'}.`
 
-        const GROK_KEY = import.meta.env.VITE_GROK_API_KEY as string | undefined
+        const systemPrompt = 'You are a personal AI coach inside EthosLife — a Human Operating System. Be warm, concise, and specific to the user\'s goals. Max 3 sentences. Respond in the same language as the user message.'
+        const userPrompt = `Context about this user: ${context}\n\nUser message: ${text}`
 
-        if (GROK_KEY) {
-          const systemPrompt = 'You are a personal AI coach inside EthosLife — a Human Operating System. Be warm, concise, and specific to the user\'s goals. Max 3 sentences. Respond in the same language as the user message.'
-          const userPrompt = `Context about this user: ${context}\n\nUser message: ${text}`
+        const response = await fetch('/api/grok', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'grok-3',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt },
+            ],
+          }),
+        })
 
-          const response = await fetch('https://api.x.ai/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${GROK_KEY}`,
-            },
-            body: JSON.stringify({
-              model: 'grok-3',
-              messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: userPrompt },
-              ],
-            }),
-          })
+        if (!response.ok) throw new Error(`Grok API error: ${response.status}`)
 
-          if (!response.ok) {
-            throw new Error(`Grok API error: ${response.status}`)
-          }
-
-          const data = await response.json() as {
-            choices?: Array<{ message?: { content?: string } }>
-          }
-          const reply: string = data.choices?.[0]?.message?.content ?? 'Подумаю об этом...'
-
-          addAiMessage({
-            id: Date.now().toString(),
-            role: 'assistant',
-            content: reply,
-            timestamp: Date.now(),
-          })
-        } else {
-          addAiMessage({
-            id: Date.now().toString(),
-            role: 'assistant',
-            content: 'Для AI-ответа добавь VITE_GROK_API_KEY в .env',
-            timestamp: Date.now(),
-          })
+        const data = await response.json() as {
+          choices?: Array<{ message?: { content?: string } }>
         }
+        const reply: string = data.choices?.[0]?.message?.content ?? 'Подумаю об этом...'
+
+        addAiMessage({
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: reply,
+          timestamp: Date.now(),
+        })
       } catch {
         addAiMessage({
           id: Date.now().toString(),

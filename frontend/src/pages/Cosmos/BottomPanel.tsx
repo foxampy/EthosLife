@@ -51,7 +51,6 @@ const CAT_BG: Record<DayPlanItem['category'], string> = {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-// Russian short weekday names
 const RU_WEEKDAYS = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб']
 const RU_MONTHS   = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек']
 
@@ -63,6 +62,72 @@ function addDays(base: Date, n: number): Date {
 
 function fmtShortDate(d: Date): string {
   return `${d.getDate()} ${RU_MONTHS[d.getMonth()]}`
+}
+
+// ─── Time-aware schedule ──────────────────────────────────────────────────────
+
+interface ScheduleEvent {
+  id: string
+  hour: number      // 24h
+  minute: number
+  label: string
+  emoji: string
+  category: DayPlanItem['category']
+  completed: boolean
+}
+
+// Fixed daily schedule slots
+const DAILY_SLOTS: Omit<ScheduleEvent, 'id' | 'completed'>[] = [
+  { hour: 7,  minute: 30, label: 'Утренняя тренировка',                  emoji: '🏃', category: 'health' },
+  { hour: 8,  minute: 30, label: 'Завтрак',                               emoji: '☀️', category: 'habit'  },
+  { hour: 13, minute: 0,  label: 'Обед',                                  emoji: '🍽️', category: 'habit'  },
+  { hour: 19, minute: 0,  label: 'Ужин',                                  emoji: '🌙', category: 'habit'  },
+  { hour: 20, minute: 30, label: 'Лекция по психологии и философии',      emoji: '📖', category: 'goal'   },
+]
+
+// Returns the correct meal label based on time of day
+function mealLabel(hour: number, minute: number): string {
+  const mins = hour * 60 + minute
+  if (mins < 11 * 60) return 'Завтрак'
+  if (mins < 16 * 60) return 'Обед'
+  return 'Ужин'
+}
+
+// Build the 3 nearest upcoming schedule events from NOW
+function getUpcomingEvents(doneIds: Set<string>): ScheduleEvent[] {
+  const now = new Date()
+  const nowMins = now.getHours() * 60 + now.getMinutes()
+
+  const result: ScheduleEvent[] = []
+  let dayOffset = 0
+
+  while (result.length < 3 && dayOffset < 3) {
+    for (const slot of DAILY_SLOTS) {
+      if (result.length >= 3) break
+      const slotMins = slot.hour * 60 + slot.minute
+      // Skip if today and already passed (with 5-min grace)
+      if (dayOffset === 0 && slotMins < nowMins - 5) continue
+
+      // Fix meal label based on which meal slot this is
+      const label = slot.label === 'Завтрак' || slot.label === 'Обед' || slot.label === 'Ужин'
+        ? (dayOffset === 0 ? mealLabel(slot.hour, slot.minute) : 'Завтрак')
+        : slot.label
+
+      const id = `${dayOffset}_${slot.hour}_${slot.minute}`
+      result.push({
+        id,
+        ...slot,
+        label: dayOffset === 0 ? label : slot.label,
+        completed: doneIds.has(id),
+      })
+    }
+    dayOffset++
+  }
+  return result.slice(0, 3)
+}
+
+function fmtTime(h: number, m: number): string {
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
 }
 
 // ─── Thinking dots ────────────────────────────────────────────────────────────
@@ -93,22 +158,27 @@ export const BottomPanel: React.FC<BottomPanelProps> = ({
   const [calendarOpen, setCalendarOpen] = useState(false)
   const [chatOpen,     setChatOpen]     = useState(false)
   const [inputText,    setInputText]    = useState('')
+  const [doneEventIds, setDoneEventIds] = useState<Set<string>>(new Set())
   const [doneDays,     setDoneDays]     = useState<Set<number>>(new Set())
   const [keyboardOffset, setKeyboardOffset] = useState(0)
+  const [, forceUpdate] = useState(0)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef       = useRef<HTMLInputElement>(null)
 
-  // Base date = today (day 1 of plan)
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  // Today item = day 1 (or first uncompleted)
-  const todayItem = dayPlan[0] ?? null
+  // Refresh every minute so upcoming events update as time passes
+  useEffect(() => {
+    const t = setInterval(() => forceUpdate((n) => n + 1), 60_000)
+    return () => clearInterval(t)
+  }, [])
+
+  const upcomingEvents = getUpcomingEvents(doneEventIds)
   const isItemDone = (item: DayPlanItem) =>
     doneDays.has(item.day) ? !item.completed : !!item.completed
 
-  // Next 14 days slice for calendar
   const calendarSlice = dayPlan.slice(0, 14)
 
   // ── Keyboard handling ──────────────────────────────────────────────────────
@@ -142,6 +212,9 @@ export const BottomPanel: React.FC<BottomPanelProps> = ({
     })
     onCompleteItem(item.day)
   }, [onCompleteItem])
+
+  // Suppress unused warning — handleItemToggle is still used by calendar
+  void handleItemToggle
 
   const expandedChatHeight =
     typeof window !== 'undefined'
@@ -200,54 +273,83 @@ export const BottomPanel: React.FC<BottomPanelProps> = ({
               )}
             </div>
 
-            {/* Today's card */}
-            {todayItem ? (
-              <button
-                onClick={() => handleItemToggle(todayItem)}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  background: isItemDone(todayItem) ? 'rgba(145,190,155,0.07)' : CAT_BG[todayItem.category],
-                  border: `1px solid ${isItemDone(todayItem) ? 'rgba(145,190,155,0.2)' : 'rgba(255,255,255,0.07)'}`,
-                  borderRadius: 12,
-                  padding: '10px 14px',
-                  marginBottom: 10,
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                }}
-              >
-                {/* Checkbox */}
-                <div style={{
-                  width: 18, height: 18, borderRadius: 5, flexShrink: 0,
-                  border: `1.5px solid ${isItemDone(todayItem) ? 'rgba(145,190,155,0.7)' : 'rgba(200,195,185,0.25)'}`,
-                  background: isItemDone(todayItem) ? 'rgba(145,190,155,0.25)' : 'transparent',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {isItemDone(todayItem) && <span style={{ fontSize: 10, color: 'rgba(145,190,155,0.9)' }}>✓</span>}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{
-                    fontSize: 14, color: isItemDone(todayItem) ? 'rgba(155,150,140,0.5)' : 'rgba(232,226,215,0.92)',
-                    lineHeight: 1.35, textDecoration: isItemDone(todayItem) ? 'line-through' : 'none',
-                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                  }}>
-                    {todayItem.action}
-                  </div>
-                </div>
-                <span style={{
-                  fontSize: 10, color: CAT_COLOR[todayItem.category], flexShrink: 0,
-                  background: CAT_BG[todayItem.category], borderRadius: 6, padding: '2px 7px',
-                }}>
-                  {CAT_LABEL[todayItem.category]}
-                </span>
-              </button>
-            ) : (
-              <p style={{ fontSize: 13, color: 'rgba(130,125,115,0.45)', marginBottom: 10, textAlign: 'center' }}>
-                Завершите онбординг — план формируется...
-              </p>
-            )}
+            {/* Upcoming 3 events */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 10 }}>
+              {upcomingEvents.map((event, idx) => {
+                const isFirst = idx === 0
+                return (
+                  <button
+                    key={event.id}
+                    onClick={() => setDoneEventIds((prev) => {
+                      const next = new Set(prev)
+                      next.has(event.id) ? next.delete(event.id) : next.add(event.id)
+                      return next
+                    })}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      background: event.completed
+                        ? 'rgba(145,190,155,0.06)'
+                        : isFirst ? CAT_BG[event.category] : 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${event.completed
+                        ? 'rgba(145,190,155,0.15)'
+                        : isFirst ? 'rgba(255,255,255,0.09)' : 'rgba(255,255,255,0.04)'}`,
+                      borderRadius: isFirst ? 12 : 10,
+                      padding: isFirst ? '10px 14px' : '8px 12px',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      opacity: event.completed ? 0.55 : 1,
+                    }}
+                  >
+                    {/* Checkbox */}
+                    <div style={{
+                      width: isFirst ? 18 : 15, height: isFirst ? 18 : 15,
+                      borderRadius: 4, flexShrink: 0,
+                      border: `1.5px solid ${event.completed ? 'rgba(145,190,155,0.65)' : 'rgba(200,195,185,0.22)'}`,
+                      background: event.completed ? 'rgba(145,190,155,0.22)' : 'transparent',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      {event.completed && <span style={{ fontSize: 9, color: 'rgba(145,190,155,0.9)' }}>✓</span>}
+                    </div>
+
+                    {/* Time */}
+                    <span style={{
+                      fontSize: isFirst ? 12 : 11,
+                      color: 'rgba(150,145,135,0.5)',
+                      flexShrink: 0,
+                      fontVariantNumeric: 'tabular-nums',
+                      letterSpacing: '0.02em',
+                    }}>
+                      {fmtTime(event.hour, event.minute)}
+                    </span>
+
+                    {/* Emoji + label */}
+                    <span style={{ fontSize: isFirst ? 14 : 13 }}>{event.emoji}</span>
+                    <span style={{
+                      flex: 1, minWidth: 0,
+                      fontSize: isFirst ? 14 : 13,
+                      color: event.completed ? 'rgba(155,150,140,0.45)' : isFirst ? 'rgba(232,226,215,0.92)' : 'rgba(200,195,185,0.7)',
+                      textDecoration: event.completed ? 'line-through' : 'none',
+                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                    }}>
+                      {event.label}
+                    </span>
+
+                    {/* Category badge (only for first item) */}
+                    {isFirst && (
+                      <span style={{
+                        fontSize: 10, color: CAT_COLOR[event.category], flexShrink: 0,
+                        background: CAT_BG[event.category], borderRadius: 6, padding: '2px 7px',
+                      }}>
+                        {CAT_LABEL[event.category]}
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
           {/* ── Section 1b: Calendar (animated) ─────────────────────────── */}

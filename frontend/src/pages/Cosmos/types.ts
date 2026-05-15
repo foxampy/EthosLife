@@ -19,6 +19,7 @@ export interface Node {
   glowColor: string
   opacity: number
   labelOpacity: number
+  phase: number  // per-node random phase offset for 3D breathing oscillation
 }
 
 export interface Edge {
@@ -46,7 +47,7 @@ export interface OnboardingAnswer {
 }
 
 export interface AnswerAnalysis {
-  nodes: Omit<Node, 'x' | 'y' | 'vx' | 'vy' | 'radius' | 'glowColor' | 'opacity' | 'labelOpacity'>[]
+  nodes: Omit<Node, 'x' | 'y' | 'vx' | 'vy' | 'radius' | 'glowColor' | 'opacity' | 'labelOpacity' | 'phase'>[]
   edges: Omit<Edge, 'id'>[]
   insight: string
 }

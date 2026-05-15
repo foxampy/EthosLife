@@ -18,6 +18,19 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
+    proxy: {
+      '/api/grok': {
+        target: 'https://api.x.ai',
+        changeOrigin: true,
+        rewrite: (_path) => '/v1/chat/completions',
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            const key = process.env.VITE_GROK_API_KEY || process.env.GROK_API_KEY || ''
+            if (key) proxyReq.setHeader('Authorization', `Bearer ${key}`)
+          })
+        },
+      },
+    },
   },
   build: {
     outDir: 'dist',

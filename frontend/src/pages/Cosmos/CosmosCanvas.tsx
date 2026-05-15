@@ -4,6 +4,7 @@ import {
   tickPhysics,
   initBackgroundStars,
   initNodePositions,
+  getBreathingOffset,
   type PhysicsState,
 } from './constellationEngine'
 import type { Node, Edge, BackgroundStar } from './types'
@@ -378,10 +379,10 @@ export const CosmosCanvas: React.FC<CosmosCanvasProps> = ({
     ctx.translate(cam.x, cam.y)
     ctx.scale(cam.scale, cam.scale)
 
-    drawEdges(ctx, state.edges, nodeMap)
+    drawEdges(ctx, state.edges, nodeMap, state.frame)
     if (phase === 'MAGIC_MOMENT') drawMagicOverlay(ctx, state.width, state.height, magicStep)
-    drawNodes(ctx, state.nodes)
-    drawLabels(ctx, state.nodes, cam.scale)
+    drawNodes(ctx, state.nodes, state.frame)
+    drawLabels(ctx, state.nodes, cam.scale, state.frame)
 
     ctx.restore()
 
@@ -420,68 +421,111 @@ function drawBackgroundStars(ctx: CanvasRenderingContext2D, stars: BackgroundSta
   }
 }
 
-function drawEdges(ctx: CanvasRenderingContext2D, edges: Edge[], nodeMap: Record<string, Node>): void {
+function drawEdges(
+  ctx: CanvasRenderingContext2D,
+  edges: Edge[],
+  nodeMap: Record<string, Node>,
+  frame: number,
+): void {
   for (const edge of edges) {
     const src = nodeMap[edge.source]
     const tgt = nodeMap[edge.target]
     if (!src || !tgt) continue
     if (src.opacity < 0.05 || tgt.opacity < 0.05) continue
 
+    const srcB = getBreathingOffset(src, frame)
+    const tgtB = getBreathingOffset(tgt, frame)
+    const sx = src.x + srcB.bx
+    const sy = src.y + srcB.by
+    const tx = tgt.x + tgtB.bx
+    const ty = tgt.y + tgtB.by
+
     const visAlpha = Math.min(src.opacity, tgt.opacity)
     const alpha = edge.type === 'strong'
-      ? edge.weight * 0.55 * visAlpha
-      : edge.weight * 0.22 * visAlpha
+      ? edge.weight * 0.48 * visAlpha
+      : edge.weight * 0.18 * visAlpha
 
     const color = edge.type === 'tension'
-      ? `rgba(160, 80, 72, ${alpha})`      // muted rust for tension
-      : `rgba(175, 178, 185, ${alpha})`    // platinum silver
+      ? `rgba(160, 80, 72, ${alpha})`
+      : `rgba(175, 178, 185, ${alpha})`
 
     ctx.beginPath()
-    ctx.moveTo(src.x, src.y)
-    ctx.lineTo(tgt.x, tgt.y)
+    ctx.moveTo(sx, sy)
+    ctx.lineTo(tx, ty)
     ctx.strokeStyle = color
-    ctx.lineWidth = edge.type === 'strong' ? 1.0 : 0.45
+    ctx.lineWidth = edge.type === 'strong' ? 0.7 : 0.35
     ctx.stroke()
   }
 }
 
-function drawNodes(ctx: CanvasRenderingContext2D, nodes: Node[]): void {
+function drawNodes(ctx: CanvasRenderingContext2D, nodes: Node[], frame: number): void {
   for (const node of nodes) {
     if (node.opacity <= 0.02) continue
 
+    const { bx, by } = getBreathingOffset(node, frame)
+    const cx = node.x + bx
+    const cy = node.y + by
     const r = node.radius
 
-    // Outer glow — uses cluster color
-    ctx.shadowBlur = (16 + node.weight * 22) / (window.devicePixelRatio || 1)
+    // Layer 1: wide diffuse glow halo (radial gradient, no shadowBlur overhead)
+    const haloR = r * 5.5
+    const haloGrad = ctx.createRadialGradient(cx, cy, r * 0.5, cx, cy, haloR)
+    const glowOpacity = node.opacity * node.weight * 0.35
+    haloGrad.addColorStop(0, node.glowColor.replace(/[\d.]+\)$/, `${glowOpacity})`))
+    haloGrad.addColorStop(1, node.glowColor.replace(/[\d.]+\)$/, '0)'))
+    ctx.beginPath()
+    ctx.arc(cx, cy, haloR, 0, Math.PI * 2)
+    ctx.fillStyle = haloGrad
+    ctx.fill()
+
+    // Layer 2: tight inner glow ring
+    ctx.shadowBlur = (8 + node.weight * 12) / (window.devicePixelRatio || 1)
     ctx.shadowColor = node.glowColor
 
-    // Halo ring
     ctx.beginPath()
-    ctx.arc(node.x, node.y, r, 0, Math.PI * 2)
-    ctx.fillStyle = `rgba(255, 252, 245, ${node.opacity * 0.85})`
+    ctx.arc(cx, cy, r, 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(245, 240, 232, ${node.opacity * 0.88})`
     ctx.fill()
 
-    // Bright inner core
     ctx.shadowBlur = 0
+
+    // Layer 3: pure white hot core
     ctx.beginPath()
-    ctx.arc(node.x, node.y, r * 0.45, 0, Math.PI * 2)
+    ctx.arc(cx, cy, r * 0.38, 0, Math.PI * 2)
     ctx.fillStyle = `rgba(255, 255, 255, ${node.opacity})`
     ctx.fill()
+
+    // Layer 4: tiny center spark (adds depth / premium feel)
+    if (r > 3 && node.opacity > 0.6) {
+      ctx.beginPath()
+      ctx.arc(cx, cy, r * 0.12, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(255, 255, 255, ${node.opacity})`
+      ctx.fill()
+    }
   }
   ctx.shadowBlur = 0
 }
 
-function drawLabels(ctx: CanvasRenderingContext2D, nodes: Node[], camScale: number): void {
+function drawLabels(
+  ctx: CanvasRenderingContext2D,
+  nodes: Node[],
+  camScale: number,
+  frame: number,
+): void {
   ctx.textAlign = 'center'
-  // Scale font inversely so labels stay readable at all zoom levels
-  const baseFontSize = Math.max(9, Math.min(14, 11 / camScale))
+  const baseFontSize = Math.max(8, Math.min(13, 10 / camScale))
 
   for (const node of nodes) {
     if (node.labelOpacity <= 0.05) continue
-    const fontSize = baseFontSize + node.weight * 2
-    ctx.font = `${fontSize}px -apple-system, "SF Pro Display", BlinkMacSystemFont, sans-serif`
-    ctx.fillStyle = `rgba(235, 230, 218, ${node.labelOpacity * 0.9})`
-    ctx.fillText(node.label, node.x, node.y + node.radius + 14)
+
+    const { bx, by } = getBreathingOffset(node, frame)
+    const cx = node.x + bx
+    const cy = node.y + by
+
+    const fontSize = baseFontSize + node.weight * 1.8
+    ctx.font = `300 ${fontSize}px -apple-system, "SF Pro Display", BlinkMacSystemFont, sans-serif`
+    ctx.fillStyle = `rgba(235, 230, 218, ${node.labelOpacity * 0.88})`
+    ctx.fillText(node.label, cx, cy + node.radius + 11)
   }
 }
 

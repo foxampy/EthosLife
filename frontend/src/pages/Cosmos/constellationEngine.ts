@@ -11,6 +11,12 @@ const EDGE_REST_LEN    = 70     // rest length in px for strong edge; weak = 1.5
 const MAX_VELOCITY     = 3.5
 const BACKGROUND_STAR_COUNT = 160
 
+// ─── 3-D breathing constants ──────────────────────────────────────────────────
+// Each node oscillates slightly in apparent depth / position using sin curves.
+// This is purely a 2-D trick (offset x,y with trig) — no actual 3-D projection.
+const BREATH_AMP = 2.8   // max pixel drift for the depth-breathing effect
+const BREATH_SPEED = 0.008  // radians per frame (~cycle every 13 s at 60 fps)
+
 // ─── Public State ─────────────────────────────────────────────────────────────
 
 export interface PhysicsState {
@@ -89,13 +95,13 @@ export function initNodePositions(nodes: Node[], width: number, height: number):
 
   return nodes.map((node): Node => {
     const seed = clusterSeed[node.clusterId] ?? { x: cx, y: cy }
-    // Spawn within 60px of cluster center so they settle quickly
     return {
       ...node,
       x: seed.x + rand(-60, 60),
       y: seed.y + rand(-60, 60),
       vx: rand(-0.5, 0.5),
       vy: rand(-0.5, 0.5),
+      phase: node.phase ?? rand(0, Math.PI * 2),
     }
   })
 }
@@ -253,6 +259,21 @@ export function arrangeForMagicMoment(
     if (!target) return { ...node }
     return { ...node, x: node.x + (target.x - node.x) * t, y: node.y + (target.y - node.y) * t }
   })
+}
+
+// ─── 3-D breathing offset (call each draw frame, not each physics tick) ──────
+// Returns the visual pixel nudge for a node at the given frame counter.
+// Physics coords (node.x, node.y) are unchanged — this is display-only.
+
+export function getBreathingOffset(
+  node: { phase: number; weight: number },
+  frame: number,
+): { bx: number; by: number } {
+  const t = frame * BREATH_SPEED
+  return {
+    bx: Math.sin(t + node.phase) * BREATH_AMP * node.weight,
+    by: Math.cos(t * 0.71 + node.phase) * BREATH_AMP * node.weight * 0.65,
+  }
 }
 
 export function getFinalClusterPositions(
