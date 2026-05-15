@@ -9,12 +9,14 @@
 
 import React, { useEffect, useCallback, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Menu } from 'lucide-react'
 
 import { useCosmosStore, CLUSTER_GLOW_COLORS } from './cosmosStore'
 import { CosmosCanvas } from './CosmosCanvas'
 import { OnboardingFlow } from './OnboardingFlow'
 import { MagicMoment } from './MagicMoment'
 import { BottomPanel } from './BottomPanel'
+import { BurgerMenuPanel } from '../../components/ElLayout/BurgerMenuPanel'
 import { analyzeAnswer, finalizeOnboarding } from './aiAnalyzer'
 import type { OnboardingAnswer } from './types'
 
@@ -68,8 +70,8 @@ export const CosmosPage: React.FC = () => {
   } = useCosmosStore()
 
   const [magicStep, setMagicStep] = useState(0)
-  // showGreeting drives the AnimatePresence — start true only for GREETING phase
   const [showGreeting, setShowGreeting] = useState(phase === 'GREETING')
+  const [burgerOpen, setBurgerOpen] = useState(false)
 
   // ── Mount effect: drive GREETING → ONBOARDING transition ──────────────────
   useEffect(() => {
@@ -384,6 +386,34 @@ export const CosmosPage: React.FC = () => {
           isAiThinking={isAiAnalyzing}
         />
       )}
+
+      {/* ── Burger menu button (always top-right) ────────────────────────────── */}
+      <button
+        onClick={() => setBurgerOpen(true)}
+        style={{
+          position: 'absolute',
+          top: 16,
+          right: 16,
+          zIndex: 50,
+          width: 40,
+          height: 40,
+          borderRadius: 10,
+          background: 'rgba(255,255,255,0.07)',
+          border: '1px solid rgba(255,255,255,0.12)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'rgba(200,210,255,0.85)',
+          cursor: 'pointer',
+        }}
+        aria-label="Menu"
+      >
+        <Menu size={20} />
+      </button>
+
+      {/* ── Burger menu panel ─────────────────────────────────────────────────── */}
+      {burgerOpen && <BurgerMenuPanel onClose={() => setBurgerOpen(false)} />}
     </div>
   )
 }

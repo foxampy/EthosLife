@@ -116,7 +116,7 @@ export const AppRoutes: React.FC = () => {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* =============== LANDING PAGES =============== */}
-        <Route path="/" element={<PageLayout><Landing /></PageLayout>} />
+        <Route path="/" element={<CosmosPage />} />
         <Route path="/landing" element={<PageLayout><Landing /></PageLayout>} />
         <Route path="/landing2" element={<PageLayout><Landing2 /></PageLayout>} />
         <Route path="/landing3" element={<PageLayout><Landing3 /></PageLayout>} />
