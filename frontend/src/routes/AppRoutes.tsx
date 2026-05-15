@@ -102,6 +102,9 @@ const ContactsPage = React.lazy(() => import('../pages/Contacts/ContactsPage'));
 // Shop
 const ProductsPage = React.lazy(() => import('../pages/Shop/ProductsPage'));
 
+// Cosmos — fullscreen Human OS experience (no PageLayout)
+const CosmosPage = React.lazy(() => import('../pages/Cosmos/CosmosPage'));
+
 // Design & Utilities
 const DesignSystemDemo = React.lazy(() => import('../pages/Unified/DesignSystemDemo'));
 const NotFound404 = React.lazy(() => import('../pages/NotFound404'));
@@ -133,6 +136,9 @@ export const AppRoutes: React.FC = () => {
         {/* =============== AUTH =============== */}
         <Route path="/login" element={<PageLayout><Login /></PageLayout>} />
         <Route path="/register" element={<PageLayout><Register /></PageLayout>} />
+
+        {/* =============== COSMOS — Human OS (fullscreen, no layout wrapper) =============== */}
+        <Route path="/cosmos" element={<CosmosPage />} />
 
         {/* =============== DASHBOARD =============== */}
         <Route path="/dashboard" element={<PageLayout isAppPage><Dashboard2 /></PageLayout>} />
