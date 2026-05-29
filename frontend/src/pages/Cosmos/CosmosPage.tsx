@@ -21,6 +21,9 @@ import { BurgerMenuPanel } from '../../components/ElLayout/BurgerMenuPanel'
 import { analyzeAnswer, finalizeOnboarding } from './aiAnalyzer'
 import { supabase } from '../../lib/supabase'
 import type { OnboardingAnswer, Node, ClusterId } from './types'
+import { PlannerSidePanel } from '../Planner/PlannerSidePanel'
+import { usePWA } from '../../hooks/usePWA'
+import { useSwipePanel } from '../../hooks/useSwipePanel'
 
 // ─── Greeting copy ────────────────────────────────────────────────────────────
 
@@ -77,6 +80,9 @@ export const CosmosPage: React.FC = () => {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null)
   const [showAuth, setShowAuth] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
+  const [plannerOpen, setPlannerOpen] = useState(false)
+  usePWA(userId)
+  useSwipePanel({ onOpen: () => setPlannerOpen(true), onClose: () => setPlannerOpen(false), isOpen: plannerOpen })
 
   // Check if already logged in
   useEffect(() => {
@@ -425,6 +431,19 @@ export const CosmosPage: React.FC = () => {
         )}
       </AnimatePresence>
 
+      {/* ── Planner button ───────────────────────────────────────────────────── */}
+      <button
+        onClick={() => setPlannerOpen(true)}
+        style={{
+          position: 'fixed', top: 16, right: 56, zIndex: 35,
+          width: 36, height: 36, borderRadius: 18, border: 'none',
+          background: 'rgba(10,10,14,0.8)', color: 'rgba(210,175,80,0.8)',
+          cursor: 'pointer', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >
+        📋
+      </button>
+
       {/* ── Burger menu button (always top-right) ────────────────────────────── */}
       <button
         onClick={() => setBurgerOpen(true)}
@@ -452,6 +471,9 @@ export const CosmosPage: React.FC = () => {
 
       {/* ── Burger menu panel ─────────────────────────────────────────────────── */}
       {burgerOpen && <BurgerMenuPanel onClose={() => setBurgerOpen(false)} />}
+
+      {/* ── Planner side panel ────────────────────────────────────────────────── */}
+      <PlannerSidePanel isOpen={plannerOpen} onClose={() => setPlannerOpen(false)} />
     </div>
   )
 }

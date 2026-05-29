@@ -105,6 +105,10 @@ const ProductsPage = React.lazy(() => import('../pages/Shop/ProductsPage'));
 // Cosmos — fullscreen Human OS experience (no PageLayout)
 const CosmosPage = React.lazy(() => import('../pages/Cosmos/CosmosPage'));
 
+// Planner & Notifications
+const PlannerPage = React.lazy(() => import('../pages/Planner/PlannerPage'))
+const NotificationsPage = React.lazy(() => import('../pages/Planner/NotificationsPage'))
+
 // Design & Utilities
 const DesignSystemDemo = React.lazy(() => import('../pages/Unified/DesignSystemDemo'));
 const NotFound404 = React.lazy(() => import('../pages/NotFound404'));
@@ -198,6 +202,18 @@ export const AppRoutes: React.FC = () => {
         <Route path="/profile" element={<PageLayout isAppPage><Profile /></PageLayout>} />
         <Route path="/settings" element={<PageLayout isAppPage><Settings /></PageLayout>} />
         <Route path="/tokenomics" element={<PageLayout><TokenomicsV1 /></PageLayout>} />
+
+        {/* =============== PLANNER & NOTIFICATIONS =============== */}
+        <Route path="/planner" element={
+          <Suspense fallback={<PageLoader />}>
+            <PlannerPage />
+          </Suspense>
+        } />
+        <Route path="/notifications" element={
+          <Suspense fallback={<PageLoader />}>
+            <NotificationsPage />
+          </Suspense>
+        } />
 
         {/* =============== DESIGN SYSTEM =============== */}
         <Route path="/design-system" element={<PageLayout><DesignSystemDemo /></PageLayout>} />
